@@ -1,0 +1,11 @@
+{
+  "apps" : [
+    {
+      "name": "ai4birds-coordinate-service",
+      "interpreter": "/bin/bash",
+      "script": "launch.bash",
+      "out_file": "/var/log/ai4birds-coordinate-service.log",
+      "error_file": "/var/log/ai4birds-coordinate-service.err",
+    }
+  ]
+}

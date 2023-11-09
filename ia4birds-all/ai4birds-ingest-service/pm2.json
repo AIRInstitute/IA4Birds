@@ -1,0 +1,11 @@
+{
+  "apps" : [
+    {
+      "name": "ai4birds-ingest-service",
+      "interpreter": "/bin/bash",
+      "script": "launch.bash",
+      "out_file": "/var/log/ai4birds-ingest-service.log",
+      "error_file": "/var/log/ai4birds-ingest-service.err",
+    }
+  ]
+}
