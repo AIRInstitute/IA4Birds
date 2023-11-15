@@ -61,12 +61,11 @@ def initialize_app(flask_app):
     limiter.exempt(v1)
     cache.init_app(flask_app)
 
-    flask_app.register_blueprint(v1)
-    flask_app.config.from_object(config)
-
     for ns in namespaces:
         api.add_namespace(ns)
-
+    
+    flask_app.register_blueprint(v1)
+    flask_app.config.from_object(config)
 
 def main():
     initialize_app(app)

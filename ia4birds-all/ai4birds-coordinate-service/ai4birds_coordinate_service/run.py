@@ -11,7 +11,7 @@ from ai4birds_coordinate_service import config
 from ai4birds_coordinate_service.api.v1 import api
 from ai4birds_coordinate_service.api import namespaces
 from ai4birds_coordinate_service.core import cache, limiter
-
+from ai4birds_coordinate_service.api import namespaces
 
 app = Flask(__name__)
 

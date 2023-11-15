@@ -8,8 +8,16 @@ import os
 
 
 # api config
-PORT = 5000
+PORT = 5001
 HOST = '0.0.0.0'
 URL_PREFIX = '/ai4birds-ingest-service/v1'
 DEBUG_MODE = True
 
+
+DB_CONFIG = {
+    'host': 'localhost',
+    'port': '5432',
+    'user': 'postgres',
+    'password': 'password',
+    'database': 'example'
+}
