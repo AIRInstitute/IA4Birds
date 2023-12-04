@@ -1,0 +1,36 @@
+name: Build Ai Service
+
+on:
+  push:
+    paths:
+      - 'ia4birds-all/ai4birds-ai-service/**'
+
+jobs:
+  CheckOut:
+    name: Check out
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v1
+
+  DockerClean:
+    name: Docker clean
+    needs: CheckOut
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - name: Stop ai4birds-ai Container
+        run: sudo docker stop ai4birds-ai
+        continue-on-error: true
+      - name: Remove ai4birds-ai Container
+        run: sudo docker rm ai4birds-ai
+        continue-on-error: true
+      - name: Remove ia4birds-all-ia4birds-ai-service Image
+        run: sudo docker rmi ia4birds-all-ia4birds-ai-service
+        continue-on-error: true
+
+  DockerCompose:
+    name: Docker compose
+    needs: DockerClean
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - name: Build the docker-compose
+        run: sudo docker compose -f "docker-compose.yml" up -d --build ai4birds-ai-service

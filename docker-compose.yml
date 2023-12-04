@@ -1,0 +1,31 @@
+version: "3.9"
+  
+services: 
+
+  ai4birds-ai-service:
+      build: ./ai4birds-ia-service
+      container_name: ai4birds-ai
+      ports:
+      - 5000:5000
+      networks:
+      - ai4birds-net
+
+  ai4birds-coordinate-service:
+      build: ./ai4birds-coordinate-service
+      container_name: ai4birds-coordinate
+      ports:
+      - 5001:5000
+      networks:
+      - ai4birds-net
+     
+  ai4birds-ingest-service:
+      build: ./ai4birds-ingest-service
+      container_name: ai4birds-ingest
+      ports:
+      - 5002:5000
+      networks:
+      - ai4birds-net
+
+  networks:
+    IA4Birds-net:
+      driver: bridge
