@@ -37,9 +37,9 @@ services:
       KONG_PG_USER: postgres
       KONG_PG_PASSWORD: postgres
     links:
-      - postgres
+      - postgresql
     depends_on:
-      - postgres
+      - postgresql
 
   kong:
     image: kong:2.8.3-alpine
