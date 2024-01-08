@@ -48,8 +48,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-    networks:
-      - ai4birds-net
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgres
@@ -69,13 +67,13 @@ services:
       - "8444:8444"
       - "8000:8000"
       - "8443:8443"
+    networks:
+      - ai4birds-net
 
   konga-prepare:
     image: pantsel/konga:0.14.9
     command: "-c prepare -a postgres -u postgresql://postgres:postgres@postgres:5432/konga_db"
     restart: on-failure
-    networks:
-      - ai4birds-net
     links:
       - postgres
     depends_on:
@@ -97,6 +95,8 @@ services:
       - konga-prepare
     ports:
       - "1337:1337"
+    networks:
+      - ai4birds-net
 
   ai4birds-ai-service:
       build: ./ai4birds-ia-service
