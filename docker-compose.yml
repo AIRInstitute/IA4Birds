@@ -123,5 +123,5 @@ services:
       - ai4birds-net
 
   networks:
-    IA4Birds-net:
+    ai4birds-net:
       driver: bridge
