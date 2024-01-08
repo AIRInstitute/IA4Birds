@@ -22,14 +22,14 @@ services:
       timeout: 3s
       retries: 5
     networks:
-      - ai4birds-net
+      - birdnet 
 
   kong-prepare:
     image: kong:2.8.3-alpine
     command: "kong migrations bootstrap"
     restart: on-failure
     networks:
-      - ai4birds-net
+      - birdnet 
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgres
@@ -68,7 +68,7 @@ services:
       - "8000:8000"
       - "8443:8443"
     networks:
-      - ai4birds-net
+      - birdnet 
 
   konga-prepare:
     image: pantsel/konga:0.14.9
@@ -94,7 +94,7 @@ services:
     ports:
       - "1337:1337"
     networks:
-      - ai4birds-net
+      - birdnet 
 
   ai4birds-ai-service:
       build: ./ai4birds-ai-service
@@ -102,7 +102,7 @@ services:
       ports:
       - 5000:5000
       networks:
-      - ai4birds-net
+      - birdnet 
 
   ai4birds-coordinate-service:
       build: ./ai4birds-coordinate-service
@@ -110,7 +110,7 @@ services:
       ports:
       - 5001:5000
       networks:
-      - ai4birds-net
+      - birdnet 
      
   ai4birds-ingest-service:
       build: ./ai4birds-ingest-service
@@ -118,8 +118,8 @@ services:
       ports:
       - 5002:5000
       networks:
-      - ai4birds-net
+      - birdnet 
 
   networks:
-    ai4birds-net:
+    birdnet:
       driver: bridge
