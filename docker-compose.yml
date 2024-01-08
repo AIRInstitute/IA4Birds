@@ -29,7 +29,7 @@ services:
     command: "kong migrations bootstrap"
     restart: on-failure
     networks:
-      - birdnet 
+      - bird-net 
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgres
