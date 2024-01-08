@@ -75,9 +75,9 @@ services:
     command: "-c prepare -a postgres -u postgresql://postgres:postgres@postgres:5432/konga_db"
     restart: on-failure
     links:
-      - postgres
+      - postgresql
     depends_on:
-      - postgres
+      - postgresql
   
   konga:
     image: pantsel/konga:0.14.9
