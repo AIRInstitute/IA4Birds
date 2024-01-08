@@ -1,0 +1,33 @@
+name: Build all
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  check_out:
+    name: check out
+    runs-on: [self-hosted, linux, x64]  
+    steps:
+     - uses: actions/checkout@v1
+     - name: stop old container
+       run: sudo docker stop $(docker ps -a -q)
+       continue-on-error: true
+     - name: remove old container
+       run: sudo docker rm $(docker ps -a -q)
+       continue-on-error: true
+     - name: remove old image
+       run: sudo docker rmi $(docker images -a -q)
+       continue-on-error: true
+     - name: clear all docker
+       run: sudo docker system prune --all -f
+
+  docker_compose:
+    name: docker compose
+    needs: check_out
+    runs-on: [self-hosted, linux, x64]
+    steps:
+    - name: Build the docker-compose
+      run: sudo docker compose -f "docker-compose.yml" up -d
+      
