@@ -99,7 +99,7 @@ services:
       - "1337:1337"
 
   ai4birds-ai-service:
-      build: ./ai4birds-ia-service
+      build: ./ai4birds-ai-service
       container_name: ai4birds-ai
       ports:
       - 5000:5000
