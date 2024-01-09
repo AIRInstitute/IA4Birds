@@ -3,8 +3,8 @@ version: "3.9"
 services: 
 
   postgresql:
-    image: "postgres:14-alpine"
-    container_name: postgres
+    image: "postgres:11-alpine"
+    container_name: postgresql
     ports:
       - 5432:5432
     volumes:
@@ -23,14 +23,11 @@ services:
       - bird-net 
 
   kong-prepare:
-    image: kong:2.8.3-alpine
-    command: "kong migrations bootstrap"
+    image: kong:2.8.1-alpine
     restart: on-failure
-    networks:
-      - bird-net 
     environment:
       KONG_DATABASE: postgres
-      KONG_PG_HOST: postgres
+      KONG_PG_HOST: postgresql
       KONG_PG_DATABASE: kong
       KONG_PG_USER: postgres
       KONG_PG_PASSWORD: postgres
@@ -38,9 +35,11 @@ services:
       - postgresql
     depends_on:
       - postgresql
+    networks:
+      - bird-net 
 
   kong:
-    image: kong:2.8.3-alpine
+    image: kong:2.8.1-alpine
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
@@ -48,75 +47,39 @@ services:
       retries: 10
     environment:
       KONG_DATABASE: postgres
-      KONG_PG_HOST: postgres
-      KONG_PG_DATABASE: kong
+      KONG_PG_HOST: postgresql
       KONG_PG_USER: postgres
       KONG_PG_PASSWORD: postgres
-      KONG_ADMIN_LISTEN: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
       KONG_DB_UPDATE_FREQUENCY: 1m
+      KONG_ADMIN_GUI_URL : "http://localhost:8002"
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_PROXY_LISTEN: '0.0.0.0:8000, 0.0.0.0:8443 ssl'
+      KONG_ADMIN_LISTEN: '0.0.0.0:8001, 0.0.0.0:8444 ssl'
     depends_on:
       - kong-prepare
     ports:
-      - "8001:8001"
-      - "8444:8444"
       - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+      - "8444:8444"
       - "8443:8443"
     networks:
       - bird-net 
 
-  konga-prepare:
-    image: pantsel/konga:0.14.9
-    command: "-c prepare -a postgres -u postgresql://postgres:postgres@postgres:5432/konga_db"
-    restart: on-failure
-    links:
-      - postgresql
-    depends_on:
-      - postgresql
-  
   konga:
     image: pantsel/konga:0.14.9
     restart: unless-stopped
     environment:
-      DB_ADAPTER: postgres
-      DB_HOST: postgres
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_DATABASE: konga_db
       NODE_ENV: development
-    depends_on:
-      - konga-prepare
     ports:
       - "1337:1337"
     networks:
-      - bird-net 
+      - bird-net
+      
 
-  ai4birds-ai-service:
-      build: ./ia4birds-all/ai4birds-ai-service
-      container_name: ai4birds-ai
-      ports:
-      - 5000:5000
-      networks:
-      - bird-net 
-
-  ai4birds-coordinate-service:
-      build: ./ia4birds-all/ai4birds-coordinate-service
-      container_name: ai4birds-coordinate
-      ports:
-      - 5001:5000
-      networks:
-      - bird-net 
-     
-  ai4birds-ingest-service:
-      build: ./ia4birds-all/ai4birds-ingest-service
-      container_name: ai4birds-ingest
-      ports:
-      - 5002:5000
-      networks:
-      - bird-net 
 
 networks:
   bird-net:
