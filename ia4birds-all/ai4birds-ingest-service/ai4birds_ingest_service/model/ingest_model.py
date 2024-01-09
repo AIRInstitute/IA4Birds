@@ -5,9 +5,11 @@
 
 from datetime import datetime
 from typing import Dict, NamedTuple
+import requests, json
 
 from ai4birds_ingest_service.database.db import PostgresSingleton
 from ai4birds_ingest_service.log import logger
+from ai4birds_ingest_service.config import EBIRD_PASSWORD
 
 class DataModel(NamedTuple):
     key1: str
@@ -28,7 +30,7 @@ class Model:
         }
 
 
-    def obtener_datos(self, id: int):
+    def get(self, id: int):
         tabla = 'tabla1'  
         param1 = 'id'
 
@@ -55,7 +57,7 @@ class Model:
         finally:
             db.close()
 
-    def guardar_datos(self, data: dict):
+    def post(self, data: dict):
 
         tabla = 'tabla1'  
         param3 = 'created_at'
@@ -89,7 +91,7 @@ class Model:
         finally:
             db.close()
 
-    def eliminar_datos(self, id: int):
+    def delete(self, id: int):
 
         tabla = 'tabla1'
         param1 = 'id'
@@ -116,7 +118,7 @@ class Model:
         finally:
             db.close()
         
-    def actualizar_datos(self, id: int, data: dict):
+    def put(self, id: int, data: dict):
         print(id, data)
         tabla = 'tabla1'
         param1 = 'id'
@@ -146,3 +148,44 @@ class Model:
         finally:
             db.close()
 
+
+class EBird_Model:
+    def ebird_query(self):
+        regionCode = 'ES-CL'
+        headers = {'X-eBirdApiToken': EBIRD_PASSWORD}
+        # Last 30 days 
+        url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
+        try:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                return(json.loads(response.text))
+            else:
+                return None
+            
+        except Exception as e:
+            logger.error(f'Error get query: {e}')
+            return None
+
+class XenoCanto_Model():
+    def xenocanto_query(self):
+        query = 'cnt:spain'
+        page = 1
+        all_results = []
+
+        while True:
+            url = f'http://www.xeno-canto.org/api/2/recordings?query={query}&page={page}'
+
+            try:
+                response = requests.get(url)
+                response.raise_for_status() 
+
+                data = response.json()
+                all_results.extend(bird for bird in data['recordings'] if 'Castilla y León' in bird.get('loc'))
+            
+                if page >= data['numPages']:
+                    break
+                page += 1
+            except:
+                raise 
+        return all_results

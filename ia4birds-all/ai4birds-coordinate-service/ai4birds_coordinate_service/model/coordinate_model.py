@@ -71,3 +71,32 @@ class CheckModel:
             return {"status": f"Server Error {e}"}, 500
 
 
+class EBird:
+    def get(self):
+        url = 'http://localhost:5001/ai4birds-ingest-service/v1/ebird/'
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                response = json.loads(response.content)
+                return response 
+
+            else:
+                return {"status": "Not found"}, 404
+        
+        except Exception as e:
+            return {"status": f"Server Error {e}"}, 500
+
+class XenoCanto:
+    def get(self):
+        url = 'http://localhost:5001/ai4birds-ingest-service/v1/xenocanto/'
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                response = json.loads(response.content)
+                return response 
+
+            else:
+                return {"status": "Not found"}, 404
+        
+        except Exception as e:
+            return {"status": f"Server Error {e}"}, 500

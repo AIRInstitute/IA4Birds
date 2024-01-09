@@ -1,17 +1,18 @@
 from flask_restx import Resource
+import requests
+import json
 
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
 from ai4birds_ingest_service.core import cache, limiter
-
 from ai4birds_ingest_service.api.models.ingest_models import post_input_model, put_input_model, output_model
 from ai4birds_ingest_service.api.parsers.ingest_parsers import post_parser, get_parser, put_parser, delete_parser
+from ai4birds_ingest_service.model.ingest_model import Model, EBird_Model, XenoCanto_Model
 
-from ai4birds_ingest_service.model.ingest_model import Model
-
-ns = api.namespace('crud', description='Manage CRUD endpoint')
-
-@ns.route('/')
+ns_db = api.namespace('crud', description='Manage CRUD endpoint')
+ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
+ns_ebird = api.namespace('ebird', description='eBird requests')
+@ns_db.route('/')
 class nsCRUD(Resource):
 
     @api.expect(get_parser)
@@ -29,7 +30,7 @@ class nsCRUD(Resource):
             return handle400error(ns, 'Malformed request. Please, check the request')
         try:
             model = Model()
-            obj = model.obtener_datos(data_id)
+            obj = model.get(data_id)
             
             if obj is not None:
                 return obj.to_json()
@@ -38,7 +39,7 @@ class nsCRUD(Resource):
                 return handle404error(ns, "Not found")
 
         except Exception as e:
-            raise
+            return handle500error(ns, f"An error occurred: {str(e)}")
 
     @api.expect(post_input_model)
     @api.response(404, 'Data not found')
@@ -60,7 +61,7 @@ class nsCRUD(Resource):
         
         try:
             model = Model()
-            obj = model.guardar_datos(data_dict)
+            obj = model.post(data_dict)
             
             if obj is not None:
                 return obj.to_json()
@@ -88,7 +89,7 @@ class nsCRUD(Resource):
         
         try:
             model = Model()
-            obj = model.actualizar_datos(data_id, data_dict)
+            obj = model.put(data_id, data_dict)
             
             if obj is not None:
                 return obj.to_json()
@@ -96,8 +97,9 @@ class nsCRUD(Resource):
             else:
                 return handle404error(ns, "Not found")
 
-        except Exception as e:
-            raise
+        except:
+            return handle500error(ns, f"An error occurred: {str(e)}")
+
     @api.expect(delete_parser)
     @api.response(404, 'Data not found')
     @api.response(500, 'Unhandled errors')
@@ -114,7 +116,7 @@ class nsCRUD(Resource):
         
         try:
             model = Model()
-            obj = model.eliminar_datos(data_id)
+            obj = model.delete(data_id)
             
             if obj is not None:
                 return obj.to_json()
@@ -122,5 +124,20 @@ class nsCRUD(Resource):
             else:
                 return handle404error(ns, "Not found")
 
-        except Exception as e:
-            raise
+        except:
+            return handle500error(ns, f"An error occurred: {str(e)}")
+
+@ns_xenocanto.route('/')
+class XenoCanto(Resource):
+    def get(self):
+        model = XenoCanto_Model()
+        results = model.xenocanto_query()
+        return results
+
+@ns_ebird.route('/')
+class EBird(Resource):
+    def get(self):
+        # Gets data from the last 30 days in Castilla y León
+        model = EBird_Model()
+        results = model.ebird_query()
+        return results

@@ -9,9 +9,11 @@ from ai4birds_coordinate_service.api.v1 import api
 from ai4birds_coordinate_service.api.models.coordinate_models import get_input_model, post_input_model, put_input_model, delete_input_model, output_model
 from ai4birds_coordinate_service.api.parsers.coordinate_parsers import get_parser, post_parser, put_parser, delete_parser 
 from ai4birds_coordinate_service.utils import handle400error, handle404error, handle500error
-from ai4birds_coordinate_service.model.coordinate_model import CheckModel 
+from ai4birds_coordinate_service.model.coordinate_model import CheckModel, XenoCanto, EBird
 
 ns = api.namespace('IngestApi', description='Coordinate endpoints')
+ebird_ns = api.namespace('EBird', description='EBird requests')
+xenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') 
 
 @ns.route('/')
 class Coordinate(Resource):
@@ -72,3 +74,15 @@ class Coordinate(Resource):
         
         model = CheckModel()
         return model.delete(id)
+
+@ebird_ns.route('/')
+class EBirdCoordinate(Resource):
+    def get(self):
+        model = EBird()
+        return model.get()
+
+@xenocanto_ns.route('/')
+class XenoCantoCoordinate(Resource):
+    def get(self):
+        model = XenoCanto()
+        return model.get()
