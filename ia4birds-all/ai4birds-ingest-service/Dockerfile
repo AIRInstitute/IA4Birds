@@ -8,6 +8,9 @@ WORKDIR /app
 
 ADD . /app
 
+#Updated pip
+RUN pip install pip --upgrade
+
 # Install dependencies
 
 RUN python -m pip install -r requirements.txt
