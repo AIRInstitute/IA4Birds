@@ -10,7 +10,7 @@ cycler==0.12.0
 Flask==2.3.3
 Flask-Cors>=3.0.8
 fonttools==4.43.1
-ai4birds-ingest-service==1.0
+# ai4birds-ingest-service==1.0
 aniso8601==9.0.1
 attrs==23.1.0
 blinker==1.7.0
