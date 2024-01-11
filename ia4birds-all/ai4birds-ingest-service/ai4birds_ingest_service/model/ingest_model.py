@@ -4,12 +4,11 @@
 # Author: AIRInstitute (@AIRInstitute on GitHub)
 
 from datetime import datetime
-from typing import Dict, NamedTuple
-import requests, json
+from typing import NamedTuple
+
 
 from ai4birds_ingest_service.database.db import PostgresSingleton
 from ai4birds_ingest_service.log import logger
-from ai4birds_ingest_service.config import EBIRD_PASSWORD
 
 class DataModel(NamedTuple):
     key1: str
@@ -149,43 +148,43 @@ class Model:
             db.close()
 
 
-class EBird_Model:
-    def ebird_query(self):
-        regionCode = 'ES-CL'
-        headers = {'X-eBirdApiToken': EBIRD_PASSWORD}
-        # Last 30 days 
-        url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
-        try:
-            response = requests.get(url, headers=headers)
+# class EBird_Model:
+#     def ebird_query(self):
+#         regionCode = 'ES-CL'
+#         headers = {'X-eBirdApiToken': EBIRD_PASSWORD}
+#         # Last 30 days 
+#         url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
+#         try:
+#             response = requests.get(url, headers=headers)
 
-            if response.status_code == 200:
-                return(json.loads(response.text))
-            else:
-                return None
+#             if response.status_code == 200:
+#                 return(json.loads(response.text))
+#             else:
+#                 return None
             
-        except Exception as e:
-            logger.error(f'Error get query: {e}')
-            return None
+#         except Exception as e:
+#             logger.error(f'Error get query: {e}')
+#             return None
 
-class XenoCanto_Model():
-    def xenocanto_query(self):
-        query = 'cnt:spain'
-        page = 1
-        all_results = []
+# class XenoCanto_Model():
+#     def xenocanto_query(self):
+#         query = 'cnt:spain'
+#         page = 1
+#         all_results = []
 
-        while True:
-            url = f'http://www.xeno-canto.org/api/2/recordings?query={query}&page={page}'
+#         while True:
+#             url = f'http://www.xeno-canto.org/api/2/recordings?query={query}&page={page}'
 
-            try:
-                response = requests.get(url)
-                response.raise_for_status() 
+#             try:
+#                 response = requests.get(url)
+#                 response.raise_for_status() 
 
-                data = response.json()
-                all_results.extend(bird for bird in data['recordings'] if 'Castilla y León' in bird.get('loc'))
+#                 data = response.json()
+#                 all_results.extend(bird for bird in data['recordings'] if 'Castilla y León' in bird.get('loc'))
             
-                if page >= data['numPages']:
-                    break
-                page += 1
-            except:
-                raise 
-        return all_results
+#                 if page >= data['numPages']:
+#                     break
+#                 page += 1
+#             except:
+#                 raise 
+#         return all_results

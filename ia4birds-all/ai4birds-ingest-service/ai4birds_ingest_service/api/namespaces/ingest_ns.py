@@ -7,7 +7,9 @@ from ai4birds_ingest_service.utils import handle400error, handle404error, handle
 from ai4birds_ingest_service.core import cache, limiter
 from ai4birds_ingest_service.api.models.ingest_models import post_input_model, put_input_model, output_model
 from ai4birds_ingest_service.api.parsers.ingest_parsers import post_parser, get_parser, put_parser, delete_parser
-from ai4birds_ingest_service.model.ingest_model import Model, EBird_Model, XenoCanto_Model
+from ai4birds_ingest_service.model.ingest_model import Model
+from ai4birds_ingest_service.model.ebird_model import EBird_Model
+from ai4birds_ingest_service.model.xenocanto_model import XenoCanto_Model
 
 ns_db = api.namespace('crud', description='Manage CRUD endpoint')
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
