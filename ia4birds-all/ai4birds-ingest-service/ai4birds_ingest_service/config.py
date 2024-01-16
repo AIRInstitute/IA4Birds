@@ -8,7 +8,8 @@ import os
 
 
 # api config
-PORT = 5001
+# PORT = 5001
+PORT = 5000
 HOST = '0.0.0.0'
 URL_PREFIX = '/ai4birds-ingest-service/v1'
 DEBUG_MODE = True
@@ -24,3 +25,4 @@ DB_CONFIG={
 
 # EBird password
 EBIRD_PASSWORD = 'v1kfvin2apud'
+
