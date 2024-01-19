@@ -1,0 +1,1 @@
+https://idecyl.jcyl.es/geoserver/er/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=er:enre_cyl_excl_eoli&srsName=EPSG:25830&outputFormat=SHAPE-ZIP

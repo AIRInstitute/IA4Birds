@@ -12,12 +12,15 @@ from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser
 from ai4birds_ingest_service.model.ebird_extractor import EBird_Extractor
 from ai4birds_ingest_service.model.xenocanto_extractor import XenoCanto_Extractor
 from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
+from ai4birds_ingest_service.model.exclusionmap_extractor import ExclusionMap_extractor
 
 windmap = WindMap_Extractor()
+exclusionmap = ExclusionMap_extractor()
 
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
 ns_ebird = api.namespace('ebird', description='eBird requests')
 ns_windmap = api.namespace('windmap ', description='Iberian wind map requests')
+ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')
     
 @ns_xenocanto.route('/')
 class XenoCanto(Resource):
@@ -75,3 +78,15 @@ class WindMap(Resource):
             return handle500error(ns_windmap)
         
         return result
+
+@ns_exclusionmap.route('/')
+class ExclusionMap(Resource):
+    def get(self):
+        global exclusionmap 
+
+        try:
+            exclusionmap.exclusionMap_ingest()
+        except:
+            return handle500error(ns_exclusionmap)
+        
+        return 'Download completed'
