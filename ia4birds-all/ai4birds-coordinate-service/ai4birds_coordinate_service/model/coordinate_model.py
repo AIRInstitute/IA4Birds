@@ -101,6 +101,25 @@ class XenoCanto:
         except Exception as e:
             return {"status": f"Server Error {e}"}, 500
 
+class WindMap:
+    def get(self, lat: float, lon: float, z: int):
+        url = 'http://localhost:5001/ai4birds-ingest-service/v1/windmap/'
+        headers = {'Content-Type': 'application/json'}
+
+        try:
+            response = requests.get(url, headers=headers, params={'lat': lat, 'lon': lon, 'z': z})
+            if response.status_code == 200:
+                response = json.loads(response.content)
+                return response
+            
+            else:
+                return {"status": "Not found"}, 404
+        
+        except Exception as e:
+            return {"status": f"Server Error {e}"}, 500
+
+
+
 class ExclusionMap:
     def get(self):
         url = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'

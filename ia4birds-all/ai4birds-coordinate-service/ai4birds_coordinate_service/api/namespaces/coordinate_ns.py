@@ -9,11 +9,13 @@ from ai4birds_coordinate_service.api.v1 import api
 from ai4birds_coordinate_service.api.models.coordinate_models import get_input_model, post_input_model, put_input_model, delete_input_model, output_model
 from ai4birds_coordinate_service.api.parsers.coordinate_parsers import get_parser, post_parser, put_parser, delete_parser 
 from ai4birds_coordinate_service.utils import handle400error, handle404error, handle500error
-from ai4birds_coordinate_service.model.coordinate_model import CheckModel, XenoCanto, EBird
+from ai4birds_coordinate_service.model.coordinate_model import CheckModel, XenoCanto, EBird, WindMap, ExclusionMap
 
 ns = api.namespace('IngestApi', description='Coordinate endpoints')
 ebird_ns = api.namespace('EBird', description='EBird requests')
 xenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') 
+windmap_ns = api.namespace('WindMap', description='Windmap requests')
+exclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')
 
 @ns.route('/')
 class Coordinate(Resource):
@@ -85,4 +87,16 @@ class EBirdCoordinate(Resource):
 class XenoCantoCoordinate(Resource):
     def get(self):
         model = XenoCanto()
+        return model.get()
+
+@windmap_ns.route('/')
+class WindMapCoordinate(Resource):
+    def get(self):
+        model = WindMap()
+        return model.get()
+
+@exclusionmap_ns.route('/')
+class ExclusionMap(Resource):
+    def get(self):
+        model = ExclusionMap()
         return model.get()

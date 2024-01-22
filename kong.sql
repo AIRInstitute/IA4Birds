@@ -4,7 +4,3 @@ BEGIN
         CREATE DATABASE kong;
     END IF;
 END $$;
-
-
-
-
