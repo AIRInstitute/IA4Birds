@@ -24,6 +24,7 @@ services:
 
   kong-prepare:
     image: kong:2.8.1-alpine
+    # command: "kong migrations bootstrap"
     restart: on-failure
     environment:
       KONG_DATABASE: postgres
@@ -40,11 +41,13 @@ services:
 
   kong:
     image: kong:2.8.1-alpine
+    # command: "kong migrations up"
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
       timeout: 10s
       retries: 10
+    restart: on-failure:5
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgresql
