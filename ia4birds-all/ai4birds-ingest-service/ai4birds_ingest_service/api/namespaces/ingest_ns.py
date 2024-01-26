@@ -19,7 +19,7 @@ exclusionmap = ExclusionMap_extractor()
 
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
 ns_ebird = api.namespace('ebird', description='eBird requests')
-ns_windmap = api.namespace('windmap ', description='Iberian wind map requests')
+ns_windmap = api.namespace('windmap', description='Iberian wind map requests')
 ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')
     
 @ns_xenocanto.route('/')
@@ -44,7 +44,7 @@ class EBird(Resource):
         results = model.ebird_query()
         return results
     
-@ns_windmap.route('/windMap')
+@ns_windmap.route('/')
 class WindMap(Resource):
 
     @api.expect(windmap_model)
