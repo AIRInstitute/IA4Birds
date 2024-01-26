@@ -1,6 +1,5 @@
 # import ai4birds_ai_service.api
 
-import ai4birds_ai_service.api
 import flask
 import requests
 import json
@@ -23,8 +22,7 @@ ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
 ns_ebird = api.namespace('ebird', description='eBird requests')
 ns_windmap = api.namespace('windmap', description='Iberian wind map requests')
 ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')
-    
-ns_dataBird = api.namespaces('dataBird', description='Returns observations and recordings of birds in the region of Castilla y León')
+ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
 
 @ns_dataBird.route('/')
 class DataBird(Resource):
