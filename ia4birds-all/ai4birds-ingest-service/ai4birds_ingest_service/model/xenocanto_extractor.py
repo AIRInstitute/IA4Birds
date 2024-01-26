@@ -40,4 +40,24 @@ class XenoCanto_Extractor():
                 page += 1
             except:
                 raise 
-        return all_results
+
+            #Modificación para ajustar el formato de los resultados
+            formatted_results = []
+            for bird in all_results:
+                formatted_results.append({
+                    # Nombre científico
+                    "speciesSciName": f"{bird['gen']} {bird['sp']}",
+                    "recordings": [{
+                        "recordingId": bird['id'],
+                        "location": bird['loc'],
+                        "quality": bird['q'],
+                        "lat": bird['lat'],
+                        "lng": bird['lng'],
+                        "alt": bird['alt'],
+                        "file":bird['file'],
+                        "file-name":bird['file-name'],
+                        "time": bird['time'],
+                        "date": bird['date']
+                    }]
+                })
+            return formatted_results

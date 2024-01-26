@@ -33,7 +33,25 @@ class EBird_Extractor:
             response = requests.get(url, headers=headers)
 
             if response.status_code == 200:
-                return(json.loads(response.text))
+                #return(json.loads(response.text))
+                # Modificación para ajustar el formato de los resultados
+                formatted_results = []
+                for observation in json.loads(response.text):
+                    formatted_results.append({
+                        # Nombre científico
+                        "speciesSciName": observation['sciName'], 
+                        "observations": [{
+                            "obsDt": observation['obsDt'],
+                            "locationId": observation['locId'],
+                            "location-name": observation['locName'],
+                            "lat": observation['lat'],
+                            "lng": observation['lng'],
+                            "date": observation['obsDt'],
+                            "numObservation": observation['howMany']
+                        }]
+                    })
+                return formatted_results
+
             else:
                 return None
             
