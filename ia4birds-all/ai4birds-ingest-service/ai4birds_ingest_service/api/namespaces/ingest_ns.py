@@ -99,6 +99,9 @@ class WindMap(Resource):
 
 @ns_exclusionmap.route('/')
 class ExclusionMap(Resource):
+    """
+    Saves file *.shp 
+    """
     def get(self):
         global exclusionmap 
 

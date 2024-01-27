@@ -40,6 +40,8 @@ class EBird_Extractor:
                     formatted_results.append({
                         # Nombre científico
                         "speciesSciName": observation['sciName'], 
+                        "speciesCode": observation['speciesCode'],
+                        "comName": observation['comName'],
                         "observations": [{
                             "obsDt": observation['obsDt'],
                             "locationId": observation['locId'],
