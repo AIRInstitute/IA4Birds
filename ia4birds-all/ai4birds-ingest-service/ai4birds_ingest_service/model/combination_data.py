@@ -31,6 +31,25 @@ class CombinerDataBird:
                 "observations": observacion.get('observations', []),
                 "recordings": grabaciones
             }
+            # Agrupar todas las grabaciones de la misma especie en el mismo elemento
+            if grabaciones:
+                grabaciones_totales = [registro_combinado['recordings'] for registro_combinado in combinado if registro_combinado['sciName'] == especie]
+                grabaciones_totales.append(grabaciones)
+                registro_combinado['recordings'] = [item for sublist in grabaciones_totales for item in sublist]
+            
             combinado.append(registro_combinado)
+
+        
+        # Iterar sobre los datos de XenoCanto
+        for especie, grabacion in xenocanto_por_especie.items():
+            if especie not in [obs['sciName'] for obs in combinado]:
+                registro_combinado = {
+                    "speciesCode": grabacion.get('speciesCode'),
+                    "comName": grabacion.get('comName'),
+                    "sciName": grabacion.get('sciName'),
+                    "observations": [],
+                    "recordings": grabacion.get('recordings', [])
+                }
+                combinado.append(registro_combinado)
 
         return combinado

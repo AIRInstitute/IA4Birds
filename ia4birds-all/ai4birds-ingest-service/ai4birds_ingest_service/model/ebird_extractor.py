@@ -49,7 +49,7 @@ class EBird_Extractor:
                             "lat": observation['lat'],
                             "lng": observation['lng'],
                             "date": observation['obsDt'],
-                            "numObservation": observation['howMany']
+                            "numObservation": observation.get('howMany', None)
                         }]
                     })
                 return formatted_results
