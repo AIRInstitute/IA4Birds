@@ -12,8 +12,7 @@ from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
 Events from socket
 """
 
-# Definimos los eventos con los nombres, a los que el cliente en NODE se debe conectar
-
+# Define the events with the names to which the Node.js client should connect
 @socketio.on('connect')
 def handle_conect():
     print('User connect to socket')
@@ -26,9 +25,10 @@ def handle_desconect():
 
 @socketio.on('windmap')
 def handle_windmap(data):
-    print('Received windmap event')  # Agrega este mensaje
+    print('Received windmap event')  # Add this message
+    
     # Crear una instancia de WindMap_Extractor
-    extractor = WindMap_Extractor()
+    #extractor = WindMap_Extractor()
    
     # Obtener los parámetros latitud, longitud y altitud del mensaje enviado por el cliente
     lat = data.get('lat')
@@ -36,15 +36,15 @@ def handle_windmap(data):
     z = data.get('z')
 
     try:
-        # Verificar que los datos necesarios estén presentes
+        # Verify that the required data is present
         if lat is not None and lon is not None and z is not None:
-            # Llamar a la función windmap_ingest y capturar la respuesta
-            result = extractor.windmap_ingest(lat, lon, z)
+            # Call the windmap_ingest method and capture the response
+            result = WindMap_Extractor.windmap_ingest(lat, lon, z)
 
-            # Enviar la respuesta al cliente
+            # Send the response to the client
             socketio.emit('windmap_response', result)
         else:
-            # Enviar un mensaje de error si faltan datos
+            # Send an error message if data is missing
             socketio.emit('error', {'message': 'Missing latitude, longitude, or altitude data'})
 
     except Exception as e:

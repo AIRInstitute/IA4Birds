@@ -5,11 +5,11 @@
 
 import requests, json
 from ai4birds_ingest_service.log import logger
-# from ai4birds_ingest_service.config import EBIRD_PASSWORD
 from ai4birds_ingest_service import config
 
 class EBird_Extractor:
-    def ebird_query(self):
+    @staticmethod
+    def ebird_query():
         """
         Queries the eBird API for recent observations of birds 
         in the region of Castilla y León, Spain.
@@ -25,7 +25,6 @@ class EBird_Extractor:
             If the query fails returns None.
         """
         regionCode = 'ES-CL'
-        #headers = {'X-eBirdApiToken': EBIRD_PASSWORD}
         headers = {'X-eBirdApiToken': config.EBIRD_PASSWORD}
         # Last 30 days 
         url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
@@ -33,12 +32,11 @@ class EBird_Extractor:
             response = requests.get(url, headers=headers)
 
             if response.status_code == 200:
-                #return(json.loads(response.text))
-                # Modificación para ajustar el formato de los resultados
+                # Modification to adjust the format of the results
                 formatted_results = []
                 for observation in json.loads(response.text):
                     formatted_results.append({
-                        # Nombre científico
+                        # Scientific name of the species
                         "speciesSciName": observation['sciName'], 
                         "speciesCode": observation['speciesCode'],
                         "comName": observation['comName'],
@@ -55,6 +53,7 @@ class EBird_Extractor:
                 return formatted_results
 
             else:
+                logger.error(f'Error get query: {response.status_code}')
                 return None
             
         except Exception as e:

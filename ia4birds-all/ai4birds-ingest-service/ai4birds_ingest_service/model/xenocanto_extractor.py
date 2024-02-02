@@ -4,10 +4,11 @@
 # Author: AIRInstitute (@AIRInstitute on GitHub)
 
 import requests
+from ai4birds_ingest_service.log import logger
 
 class XenoCanto_Extractor():
-
-    def xenocanto_query(self):
+    @staticmethod
+    def xenocanto_query():
         """
         Query the Xeno-Canto API to obtain recordings of birds specific to Spain,
         filtering for those located in Castilla y León.
@@ -19,8 +20,6 @@ class XenoCanto_Extractor():
             all_results: List of dictionaries, where each dictionary contains 
             the information of a bird recording.
         """
-
-
         query = 'cnt:spain'
         page = 1
         all_results = []
@@ -39,13 +38,13 @@ class XenoCanto_Extractor():
                     break
                 page += 1
             except:
+                logger.error(f'Error get xenocanto query: {response.status_code}')
                 raise 
 
-            #Modificación para ajustar el formato de los resultados
+            # Modify to adjust the format of the results
             formatted_results = []
             for bird in all_results:
                 formatted_results.append({
-                    # Nombre científico
                     "speciesSciName": f"{bird['gen']} {bird['sp']}",
                     "recordings": [{
                         "recordingId": bird['id'],

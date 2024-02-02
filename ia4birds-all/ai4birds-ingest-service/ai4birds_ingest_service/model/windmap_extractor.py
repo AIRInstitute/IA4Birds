@@ -6,9 +6,10 @@
 import requests
 import typing
 from typing import Dict
-
+from ai4birds_ingest_service.log import logger
 
 class WindMap_Extractor():
+    @staticmethod
     def windmap_ingest(self, lat: float, lon: float, z: int) -> Dict:
         """
         Processes latitude and longitude data for the extraction of wind maps.
@@ -26,38 +27,35 @@ class WindMap_Extractor():
             :rtype: dict
         """
 
-        # Imprimir los valores de latitud y longitud
-        print(f"Latitud recibida: {lat}, Longitud recibida: {lon}")
-
         # Endpoints
         wind_profile_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WIND_PROFILE/?lat={lat}&lon={lon}&z={z}"
         daily_wind_temp_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WS/?lat={lat}&lon={lon}&z={z}"
         weibull_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WEIBULL/?lat={lat}&lon={lon}&z={z}"
-        wind_rose_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WINDROSE/?lat={lat}&lon={lon}&z={z}"  # Endpoint para rosa de vientos
+        wind_rose_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WINDROSE/?lat={lat}&lon={lon}&z={z}"  
 
-        # Obtener datos de los endpoints
+        # Get data from endpoints
         try:
             wind_profile_data = requests.get(wind_profile_endpoint).json()
         except Exception as e:
-            print(f"Error al obtener el perfil de viento: {e}")
+            logger.error(f"Error while retrieving wind profile: {e}")
             wind_profile_data = None
 
         try:
             daily_wind_temp_data = requests.get(daily_wind_temp_endpoint).json()
         except Exception as e:
-            print(f"Error al obtener datos diarios de viento y temperatura: {e}")
+            logger.error(f"Error while retrieving daily wind and temperature data: {e}")
             daily_wind_temp_data = None
 
         try:
             weibull_data = requests.get(weibull_endpoint).json()
         except Exception as e:
-            print(f"Error al obtener la distribución de Weibull: {e}")
+            logger.error(f"Error while retrieving Weibull distribution data: {e}")
             weibull_data = None
 
         try:
             wind_rose_data = requests.get(wind_rose_endpoint, params={"lat": lat, "lon": lon, "z": z}).json()
         except Exception as e:
-            print(f"Error al obtener la rosa de vientos: {e}")
+            logger.error(f"Error while retrieving wind rose data: {e}")
             wind_rose_data = None
 
         csv_file = self.download_csv(lat, lon)
@@ -70,7 +68,7 @@ class WindMap_Extractor():
             "csv_file": csv_file
         }
     
-    def download_csv(self,lat, lon):
+    def download_csv(self,lat: float, lon: float) -> str:
         """
         Download a CSV file for specific coordinates.
 
@@ -86,17 +84,17 @@ class WindMap_Extractor():
         url = f"https://www.mapaeolicoiberico.com/api/v1/downloadDataFree?lat={lat}&lon={lon}"
         response = requests.get(url, stream=True)
 
-        # Verificar si la solicitud fue exitosa
+        # Check request status
         if response.status_code == 200:
-            # Especificar la ruta y el nombre del archivo donde se guardará el CSV
+            # Save the file in csv format
             filename = f"wind_data_{lat}_{lon}.csv"
             with open(filename, 'wb') as file:
                 for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:  # filtrar los keep-alive chunks
+                    if chunk:  # filter out keep-alive new chunks
                         file.write(chunk)
             return filename
         else:
-            print("Error en la descarga del archivo CSV.")
+            logger.error(f"Error while downloading CSV file: {response.status_code}")
             return None
     
 

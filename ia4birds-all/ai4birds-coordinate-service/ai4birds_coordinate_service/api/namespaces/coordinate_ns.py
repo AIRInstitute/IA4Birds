@@ -79,24 +79,48 @@ class Coordinate(Resource):
 
 @ebird_ns.route('/')
 class EBirdCoordinate(Resource):
+    """
+    Gets data from the last 30 days in Castilla y León using eBird API.
+
+    Returns:
+        :return: Data from eBird API.
+        :rtype: dict
+    """
     def get(self):
-        model = EBird()
-        return model.get()
+        return EBird.get()
 
 @xenocanto_ns.route('/')
 class XenoCantoCoordinate(Resource):
+    """
+    Gets data from XencoCanto API in Castilla y León.
+
+    Returns:
+        :return: Data from XenoCanto API.
+        :rtype: dict
+    """
     def get(self):
-        model = XenoCanto()
-        return model.get()
+        return XenoCanto.get()
 
 @windmap_ns.route('/')
 class WindMapCoordinate(Resource):
-    def get(self):
-        model = WindMap()
-        return model.get()
+    """
+    Obtain wind map data with coordinates.
+
+    Returns:
+        :return: Result of the wind map extraction.
+        :rtype: dict
+    """
+    def get(self, lat: float, lon: float, z: int):
+        return WindMap.get(lat, lon, z)
 
 @exclusionmap_ns.route('/')
 class ExclusionMap(Resource):
+    """
+    Saves a file *.shp for the eolic exclusion map.
+
+    Returns:
+        :return: Message indicating the completion of the download.
+        :rtype: str
+    """
     def get(self):
-        model = ExclusionMap()
-        return model.get()
+        return ExclusionMap.get()

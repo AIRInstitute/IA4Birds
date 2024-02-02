@@ -6,10 +6,9 @@ from ai4birds_coordinate_service import config, logger
 class CheckModel:
 
     def get(self, id: int):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'
         headers = {'Content-Type': 'application/json'}
         try:
-            response = requests.get(url, headers=headers, params={'id': id})
+            response = requests.get(config.CRUD_URL, headers=headers, params={'id': id})
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
@@ -22,11 +21,10 @@ class CheckModel:
 
 
     def post(self, data: dict):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'
         headers = {'Content-Type': 'application/json'}
         
         try:
-            response = requests.post(url, headers=headers, json=data)
+            response = requests.post(config.CRUD_URL, headers=headers, json=data)
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
@@ -38,11 +36,10 @@ class CheckModel:
             return {"status": f"Server Error {e}"}, 500
 
     def put(self, id: int, data:dict):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'
         headers = {'Content-Type': 'application/json'}
 
         try:
-            response = requests.put(url, headers=headers, params={'id': id}, json=data)
+            response = requests.put(config.CRUD_URL, headers=headers, params={'id': id}, json=data)
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
@@ -55,11 +52,10 @@ class CheckModel:
 
 
     def delete(self, id: int):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'
         headers = {'Content-Type': 'application/json'}
 
         try:
-            response = requests.delete(url, headers=headers, params={'id': id})
+            response = requests.delete(config.CRUD_URL, headers=headers, params={'id': id})
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
@@ -72,10 +68,10 @@ class CheckModel:
 
 
 class EBird:
-    def get(self):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/ebird/'
+    @staticmethod
+    def get():
         try:
-            response = requests.get(url)
+            response = requests.get(config.EBIRD_URL)
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response 
@@ -87,10 +83,10 @@ class EBird:
             return {"status": f"Server Error {e}"}, 500
 
 class XenoCanto:
-    def get(self):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/xenocanto/'
+    @staticmethod
+    def get():
         try:
-            response = requests.get(url)
+            response = requests.get(config.XENOCANTO_URL)
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response 
@@ -102,12 +98,12 @@ class XenoCanto:
             return {"status": f"Server Error {e}"}, 500
 
 class WindMap:
-    def get(self, lat: float, lon: float, z: int):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/windmap/'
+    @staticmethod
+    def get(lat: float, lon: float, z: int):
         headers = {'Content-Type': 'application/json'}
 
         try:
-            response = requests.get(url, headers=headers, params={'lat': lat, 'lon': lon, 'z': z})
+            response = requests.get(config.WINDMAP_URL, headers=headers, params={'lat': lat, 'lon': lon, 'z': z})
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
@@ -121,10 +117,10 @@ class WindMap:
 
 
 class ExclusionMap:
-    def get(self):
-        url = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'
+    @staticmethod
+    def get():
         try:
-            response = requests.get(url)
+            response = requests.get(config.EXCLUSIONMAP_URL)
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response 
