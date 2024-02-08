@@ -115,8 +115,8 @@ class ExclusionMap(Resource):
             #ExclusionMap_extractor.exclusionMap_ingest()
             shp_path = ExclusionMap_extractor.download_and_extract_shp()
             if shp_path:
-                return send_file(shp_path, as_attachment=True, download_name=os.path.basename(shp_path),
-                                attachment_filename=os.path.basename(shp_path))
+                return send_file(shp_path, as_attachment=True, download_name=os.path.basename(shp_path))
+
             else:
                 return {"message": "Failed to download or extract SHP file."}, 500
         except:
