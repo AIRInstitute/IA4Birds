@@ -9,7 +9,7 @@ from typing import Dict
 from ai4birds_ingest_service.log import logger
 
 class WindMap_Extractor():
-    @staticmethod
+    
     def windmap_ingest(self, lat: float, lon: float, z: int) -> Dict:
         """
         Processes latitude and longitude data for the extraction of wind maps.

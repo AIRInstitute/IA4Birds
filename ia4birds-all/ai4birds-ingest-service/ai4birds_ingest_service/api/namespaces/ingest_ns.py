@@ -1,7 +1,9 @@
 
 import flask
 import requests
+from flask import send_file
 import json
+import os
 from flask_restx import Resource
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
@@ -12,7 +14,7 @@ from ai4birds_ingest_service.model.ebird_extractor import EBird_Extractor
 from ai4birds_ingest_service.model.xenocanto_extractor import XenoCanto_Extractor
 from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
 from ai4birds_ingest_service.model.exclusionmap_extractor import ExclusionMap_extractor
-from ai4birds_ingest_service.model.combination_data import combine_data as CombinerDataBird
+from ai4birds_ingest_service.model.combination_data import combine_data
 
 # Endpoints
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
@@ -33,7 +35,7 @@ class DataBird(Resource):
         """
         ebird_data = EBird_Extractor.ebird_query()
         xenocanto_data = XenoCanto_Extractor().xenocanto_query()
-        results = CombinerDataBird(ebird_data, xenocanto_data)
+        results = combine_data(data_ebird=ebird_data, data_xenocanto=xenocanto_data)
         return results
     
 @ns_xenocanto.route('/')
@@ -93,7 +95,8 @@ class WindMap(Resource):
             return handle400error(ns_windmap, 'Malformed request. Please, check the request at /v1')
         
         try:
-            result= WindMap_Extractor.windmap_ingest(lat = params['lat'], lon = params['lon'], z = params['z'])
+            extractor = WindMap_Extractor()
+            result= extractor.windmap_ingest(lat = params['lat'], lon = params['lon'], z = params['z'])
         except:
             return handle500error(ns_windmap)
         return result
@@ -109,7 +112,13 @@ class ExclusionMap(Resource):
     """
     def get(self):
         try:
-            ExclusionMap_extractor.exclusionMap_ingest()
+            #ExclusionMap_extractor.exclusionMap_ingest()
+            shp_path = ExclusionMap_extractor.download_and_extract_shp()
+            if shp_path:
+                return send_file(shp_path, as_attachment=True, download_name=os.path.basename(shp_path),
+                                attachment_filename=os.path.basename(shp_path))
+            else:
+                return {"message": "Failed to download or extract SHP file."}, 500
         except:
             return handle500error(ns_exclusionmap)
-        return 'Download completed'
+        

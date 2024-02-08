@@ -1,5 +1,5 @@
 
-def combine_data(self,data_ebird, data_xenocanto) -> list:
+def combine_data(data_ebird, data_xenocanto) -> list:
     """
     Combines bird observation data from eBird and recording data from Xeno-Canto.
 

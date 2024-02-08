@@ -5,7 +5,9 @@
 
 import requests
 import zipfile
+import tempfile
 import os
+from flask import Flask, send_file, after_this_request
 from ai4birds_ingest_service.log import logger
 
 class ExclusionMap_extractor():
@@ -29,7 +31,7 @@ class ExclusionMap_extractor():
         except Exception as e:
             logger.error(f"Error while downloading *.zip file: {e}")
             return None
-
+        
         if response.status_code == 200:
             # Save the file
             zip_filename = "file.zip"
@@ -54,6 +56,31 @@ class ExclusionMap_extractor():
         logger.info("Exclusion map file downloaded successfully.")
 
         return None
-
-
+    @staticmethod
+    def download_and_extract_shp():
+        endpoint = "https://idecyl.jcyl.es/geoserver/er/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=er:enre_cyl_excl_eoli&srsName=EPSG:25830&outputFormat=SHAPE-ZIP"
+        try:
+            response = requests.get(endpoint, stream=True)
+            if response.status_code == 200:
+                temp_dir = tempfile.mkdtemp()
+                zip_path = os.path.join(temp_dir, 'exclusion_map.zip')
+                with open(zip_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                
+                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                    shp_files = [f for f in zip_ref.namelist() if f.endswith('.shp')]
+                    if shp_files:
+                        shp_file = shp_files[0]
+                        zip_ref.extract(shp_file, path=temp_dir)
+                        return os.path.join(temp_dir, shp_file)
+                    else:
+                        logger.error("No SHP files found in the ZIP.")
+                        return None
+            else:
+                logger.error("Failed to download ZIP file.")
+                return None
+        except Exception as e:
+            logger.error(f"Exception occurred: {e}")
+            return None
 
