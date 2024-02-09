@@ -118,7 +118,10 @@ class ExclusionMap(Resource):
             
             csv_file_path = os.getenv('EXCLUSION_EOLICA_CSV_PATH')
 
-
+            if csv_file_path is None:
+                print("La ruta del archivo CSV no está definida en las variables de entorno.")
+            else:
+                print(f"Ruta del archivo CSV: {csv_file_path}")
             
             #csv_file_path = '/mnt/c/Users/ivann/OneDrive/Escritorio/Cosas Bisite/Repositorios/IA4Birds/ia4birds-all/ai4birds-ingest-service/ai4birds_ingest_service/utils/exclusion_eolica.csv'
             json_data = DataConverter.csv_to_json(csv_file_path)
@@ -143,6 +146,12 @@ class Sensitivity(Resource):
         try:
             
             csv_file_path = os.getenv('CORRDENADAS_CSV_PATH')
+            
+            if csv_file_path is None:
+                print("La ruta del archivo CSV no está definida en las variables de entorno.")
+            else:
+                print(f"Ruta del archivo CSV: {csv_file_path}")
+
             #csv_file_path = '/mnt/c/Users/ivann/OneDrive/Escritorio/Cosas Bisite/Repositorios/IA4Birds/ia4birds-all/ai4birds-ingest-service/ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'
             json_data = DataConverter.csv_to_json(csv_file_path)
 
