@@ -26,3 +26,6 @@ DB_CONFIG={
 # EBird password
 EBIRD_PASSWORD = 'v1kfvin2apud'
 
+# Files paths
+CORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'
+EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica.csv'

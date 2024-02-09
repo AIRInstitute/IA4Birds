@@ -6,6 +6,8 @@ import json
 import os
 from flask import jsonify
 from flask_restx import Resource
+from ai4birds_ingest_service import config
+from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
 from ai4birds_ingest_service.core import cache, limiter
@@ -116,20 +118,13 @@ class ExclusionMap(Resource):
     def get(self):
         try:
             
-            csv_file_path = os.getenv('EXCLUSION_EOLICA_CSV_PATH')
-
+            csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH
             if csv_file_path is None:
-                print("La ruta del archivo CSV no está definida en las variables de entorno.")
-            else:
-                print(f"Ruta del archivo CSV: {csv_file_path}")
-            
-            #csv_file_path = '/mnt/c/Users/ivann/OneDrive/Escritorio/Cosas Bisite/Repositorios/IA4Birds/ia4birds-all/ai4birds-ingest-service/ai4birds_ingest_service/utils/exclusion_eolica.csv'
-            json_data = DataConverter.csv_to_json(csv_file_path)
-
-
-            return jsonify({'data': json_data})
-
-            
+                logger.error("La ruta del archivo CSV no está definida en las variables de entorno.")
+                raise
+            else:            
+                json_data = DataConverter.csv_to_json(csv_file_path)
+                return jsonify({'data': json_data})
         except:
             return handle500error(ns_exclusionmap)
         
@@ -145,19 +140,13 @@ class Sensitivity(Resource):
     def get(self):
         try:
             
-            csv_file_path = os.getenv('CORRDENADAS_CSV_PATH')
+            csv_file_path = config.CORRDENADAS_CSV_PATH
             
             if csv_file_path is None:
-                print("La ruta del archivo CSV no está definida en las variables de entorno.")
+                logger.error("La ruta del archivo CSV no está definida en las variables de entorno.")
+                raise
             else:
-                print(f"Ruta del archivo CSV: {csv_file_path}")
-
-            #csv_file_path = '/mnt/c/Users/ivann/OneDrive/Escritorio/Cosas Bisite/Repositorios/IA4Birds/ia4birds-all/ai4birds-ingest-service/ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'
-            json_data = DataConverter.csv_to_json(csv_file_path)
-
-
-            return jsonify({'data': json_data})
-
-            
+                json_data = DataConverter.csv_to_json(csv_file_path)
+                return jsonify({'data': json_data})
         except:
             return handle500error(ns_exclusionmap)
