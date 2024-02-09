@@ -4,6 +4,7 @@ import requests
 from flask import send_file
 import json
 import os
+from flask import jsonify
 from flask_restx import Resource
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
@@ -15,12 +16,14 @@ from ai4birds_ingest_service.model.xenocanto_extractor import XenoCanto_Extracto
 from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
 from ai4birds_ingest_service.model.exclusionmap_extractor import ExclusionMap_extractor
 from ai4birds_ingest_service.model.combination_data import combine_data
+from ai4birds_ingest_service.model.data_converter import DataConverter
 
 # Endpoints
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
 ns_ebird = api.namespace('ebird', description='eBird requests')
 ns_windmap = api.namespace('windmap', description='Iberian wind map requests')
 ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')
+ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')
 ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
 
 @ns_dataBird.route('/')
@@ -112,13 +115,40 @@ class ExclusionMap(Resource):
     """
     def get(self):
         try:
-            #ExclusionMap_extractor.exclusionMap_ingest()
-            shp_path = ExclusionMap_extractor.download_and_extract_shp()
-            if shp_path:
-                return send_file(shp_path, as_attachment=True, download_name=os.path.basename(shp_path))
+            
+            csv_file_path = os.getenv('EXCLUSION_EOLICA_CSV_PATH')
 
-            else:
-                return {"message": "Failed to download or extract SHP file."}, 500
+
+            
+            #csv_file_path = '/mnt/c/Users/ivann/OneDrive/Escritorio/Cosas Bisite/Repositorios/IA4Birds/ia4birds-all/ai4birds-ingest-service/ai4birds_ingest_service/utils/exclusion_eolica.csv'
+            json_data = DataConverter.csv_to_json(csv_file_path)
+
+
+            return jsonify({'data': json_data})
+
+            
         except:
             return handle500error(ns_exclusionmap)
         
+@ns_sensitivity.route('/')
+class Sensitivity(Resource):
+    """
+    Saves a file *.shp for the eolic exclusion map.
+
+    Returns:
+        :return: Message indicating the completion of the download.
+        :rtype: str
+    """
+    def get(self):
+        try:
+            
+            csv_file_path = os.getenv('CORRDENADAS_CSV_PATH')
+            #csv_file_path = '/mnt/c/Users/ivann/OneDrive/Escritorio/Cosas Bisite/Repositorios/IA4Birds/ia4birds-all/ai4birds-ingest-service/ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'
+            json_data = DataConverter.csv_to_json(csv_file_path)
+
+
+            return jsonify({'data': json_data})
+
+            
+        except:
+            return handle500error(ns_exclusionmap)

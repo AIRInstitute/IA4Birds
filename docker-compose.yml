@@ -105,6 +105,8 @@ services:
       container_name: ai4birds-ingest
       ports:
       - 5002:5000
+      env_file: 
+      - .env
       networks:
       - bird-net 
 
