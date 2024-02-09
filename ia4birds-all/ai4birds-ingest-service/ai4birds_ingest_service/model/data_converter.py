@@ -19,7 +19,7 @@ class DataConverter:
     @staticmethod
     def csv_to_json(filepath):
         try:
-            data = pd.read_csv(filepath, sep=';', encoding='utf-8', error_bad_lines=False)
+            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
             clean_data = DataConverter.clean_invalid_characters(data)  # Llama al método estático correctamente
             json_result = clean_data.to_dict(orient='records')
             return json_result
