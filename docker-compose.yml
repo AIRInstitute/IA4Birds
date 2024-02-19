@@ -98,7 +98,7 @@ services:
     build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-frontend
     container_name: frontend
     ports:
-      - 5173:5173
+      - 80:5173
     networks:
       - bird-net
 
@@ -106,9 +106,6 @@ services:
     build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
     container_name: backend
     ports:
-      - 8080:8080
-      - 80:80
-      - 443:443
       - 3000:3000
     networks:
       - bird-net
