@@ -1,5 +1,5 @@
 import React from "react";
-import {CustomCard} from "./card/cameraCard";
+import {CustomCard} from "./card/CameraCard";
 import {Spacer} from "@nextui-org/react";
 
 const CameraComponent = () => {

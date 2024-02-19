@@ -6,7 +6,7 @@ import { HiMiniVideoCamera } from "react-icons/hi2";
 import { FaFan } from "react-icons/fa";
 import SidebarBirds from './sidebar/SidebarBirds';
 import SidebarEolic from './sidebar/SideBarEolic';
-import {  IconCrow  } from '../components/icons/Icon';
+import {  IconCrow  } from './icons/Icon';
 import castillaYLeonBorders from '../coordMap/CastillaYLeon.json';
 import { FaCheck } from "react-icons/fa6";
 import ExclusionEolicService from './services/exclusionEolicService';
