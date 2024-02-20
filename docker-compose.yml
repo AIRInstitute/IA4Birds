@@ -40,7 +40,7 @@ services:
       - bird-net 
 
   kong:
-    image: my-custom-kong:latest
+    image: kong:2.8.1-alpine
     # command: "kong migrations up"
     healthcheck:
       test: ["CMD", "kong", "health"]
