@@ -161,10 +161,11 @@ class ApiSpec(Resource):
         # except:
         #     return handle500error(ns_spec)
         try:
-            # Aquí separamos la ruta del directorio del nombre del archivo
-            api_spec_directory = path.dirname(config.API_SPEC_PATH)
-            api_spec_filename = path.basename(config.API_SPEC_PATH)
-            return send_from_directory(directory=api_spec_directory, filename=api_spec_filename)
+           # Extrae la ruta del directorio y el nombre del archivo de la ruta completa
+            api_spec_directory = os.path.dirname(config.API_SPEC_PATH)
+            api_spec_filename = os.path.basename(config.API_SPEC_PATH)
+            # Llama a send_from_directory sin nombrar los parámetros
+            return send_from_directory(api_spec_directory, api_spec_filename)
         except Exception as e:
             # Es una buena práctica registrar la excepción para saber qué salió mal
             logger.error(f'Error al enviar el archivo de especificación de la API: {e}')
