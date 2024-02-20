@@ -1,5 +1,3 @@
-
-import ai4birds_ai_service.api
 import flask
 import requests
 from flask import send_file
