@@ -166,6 +166,7 @@ class ApiSpec(Resource):
             api_spec_filename = os.path.basename(config.API_SPEC_PATH)
             
             # Imprime las rutas para depuración
+            logger.info(f"Directorio de trabajo actual: {os.getcwd()}")
             logger.info(f'Directory: {api_spec_directory}')
             logger.info(f'Filename: {api_spec_filename}')
 
