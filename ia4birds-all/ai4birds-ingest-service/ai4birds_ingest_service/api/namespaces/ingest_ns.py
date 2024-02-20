@@ -3,6 +3,7 @@ import requests
 from flask import send_file
 import json
 import os
+from os import path
 from flask import jsonify, send_from_directory
 from flask_restx import Resource
 from ai4birds_ingest_service import config
@@ -154,8 +155,17 @@ class Sensitivity(Resource):
 @ns_spec.route('/specz')
 class ApiSpec(Resource):
     def get(self):
+        # try:
+        #     api_spec_path = config.API_SPEC_PATH
+        #     return send_from_directory(directory=api_spec_path, filename='api-spec.yaml')
+        # except:
+        #     return handle500error(ns_spec)
         try:
-            api_spec_path = config.API_SPEC_PATH
-            return send_from_directory(directory=api_spec_path, filename='api-spec.yaml')
-        except:
+            # Aquí separamos la ruta del directorio del nombre del archivo
+            api_spec_directory = path.dirname(config.API_SPEC_PATH)
+            api_spec_filename = path.basename(config.API_SPEC_PATH)
+            return send_from_directory(directory=api_spec_directory, filename=api_spec_filename)
+        except Exception as e:
+            # Es una buena práctica registrar la excepción para saber qué salió mal
+            logger.error(f'Error al enviar el archivo de especificación de la API: {e}')
             return handle500error(ns_spec)
