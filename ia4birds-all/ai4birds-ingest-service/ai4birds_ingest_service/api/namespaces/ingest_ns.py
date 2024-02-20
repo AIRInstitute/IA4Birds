@@ -1,10 +1,11 @@
 
+import ai4birds_ai_service.api
 import flask
 import requests
 from flask import send_file
 import json
 import os
-from flask import jsonify
+from flask import jsonify, send_from_directory
 from flask_restx import Resource
 from ai4birds_ingest_service import config
 from ai4birds_ingest_service.log import logger
@@ -27,6 +28,7 @@ ns_windmap = api.namespace('windmap', description='Iberian wind map requests')
 ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')
 ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')
 ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
+ns_spec = api.namespace('api spec', description='Api doc')
 
 @ns_dataBird.route('/')
 class DataBird(Resource):
@@ -150,3 +152,12 @@ class Sensitivity(Resource):
                 return jsonify({'data': json_data})
         except:
             return handle500error(ns_exclusionmap)
+
+ns_spec.route('/specz')
+class ApiSpec(Resource):
+    def get(self):
+        try:
+            api_spec_path = config.API_SPEC_PATH
+            return send_from_directory(directory=api_spec_path, filename='api-spec.yaml')
+        except:
+            return handle500error(ns_spec)

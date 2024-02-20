@@ -1,0 +1,124 @@
+---
+swagger: "2.0"
+basePath: "/ai4birds-ingest-service/v1"
+paths: 
+  /dataBird/: 
+    get: 
+      responses: 
+        200: 
+          description: "Success"
+      summary: "Gets data from XencoCanto and eBird API in Castilla y León"
+      description: "Returns:
+    :return: Combined data from XenoCanto and eBird API.
+    :rtype: dict"
+      operationId: "get_data_bird"
+      tags: 
+      - "dataBird"
+  /ebird/: 
+    get: 
+      responses: 
+        200: 
+          description: "Success"
+      summary: "Gets data from the last 30 days in Castilla y León using eBird API"
+      description: "Returns:
+    :return: Data from eBird API.
+    :rtype: dict"
+      operationId: "get_e_bird"
+      tags: 
+      - "ebird"
+  /exclusionmap/: 
+    get: 
+      responses: 
+        200: 
+          description: "Success"
+      operationId: "get_exclusion_map"
+      tags: 
+      - "exclusionmap"
+  /sensitivity/: 
+    get: 
+      responses: 
+        200: 
+          description: "Success"
+      operationId: "get_sensitivity"
+      tags: 
+      - "sensitivity"
+  /windmap/: 
+    post: 
+      responses: 
+        400: 
+          description: "Invalid parameters"
+        404: 
+          description: "Data not found"
+        500: 
+          description: "Unhandled errors"
+      summary: "Obtain wind map data with coordinates"
+      description: "Returns:
+    :return: Result of the wind map extraction.
+    :rtype: dict"
+      operationId: "post_wind_map"
+      parameters: 
+      - name: "payload"
+        required: "true"
+        in: "body"
+        schema: 
+          $ref: "#/definitions/WindMapModel"
+      tags: 
+      - "windmap"
+  /xenocanto/: 
+    get: 
+      responses: 
+        200: 
+          description: "Success"
+      summary: "Gets data from XencoCanto API in Castilla y León"
+      description: "Returns:
+    :return: Data from XenoCanto API.
+    :rtype: dict"
+      operationId: "get_xeno_canto"
+      tags: 
+      - "xenocanto"
+info: 
+  title: "ai4birds-ingest-service"
+  version: "1.0"
+  description: "Project description"
+produces: 
+- "application/json"
+consumes: 
+- "application/json"
+tags: 
+- name: "xenocanto"
+  description: "Xenocanto requests"
+- name: "ebird"
+  description: "eBird requests"
+- name: "windmap"
+  description: "Iberian wind map requests"
+- name: "exclusionmap"
+  description: "Eolic exclusion map for CyL"
+- name: "sensitivity"
+  description: "Sensitivity of birds in the region of Castilla y Leon"
+- name: "dataBird"
+  description: "Returns observations and recordings of birds in the region of Castilla y Leon"
+definitions: 
+  WindMapModel: 
+    required: 
+    - "lat"
+    - "lon"
+    - "z"
+    properties: 
+      lat: 
+        type: "number"
+        description: "Latitude"
+        example: "41.85563222906876"
+      lon: 
+        type: "number"
+        description: "Longitude"
+        example: "-5.5495918821608665"
+      z: 
+        type: "integer"
+        description: "Altitude"
+        example: "50"
+    type: "object"
+responses: 
+  ParseError: 
+    description: "When a mask can't be parsed"
+  MaskError: 
+    description: "When any error occurs on mask"

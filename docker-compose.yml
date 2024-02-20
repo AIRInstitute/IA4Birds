@@ -40,7 +40,7 @@ services:
       - bird-net 
 
   kong:
-    image: kong:2.8.1-alpine
+    image: my-custom-kong:latest
     # command: "kong migrations up"
     healthcheck:
       test: ["CMD", "kong", "health"]
@@ -61,6 +61,7 @@ services:
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_PROXY_LISTEN: '0.0.0.0:8000, 0.0.0.0:8443 ssl'
       KONG_ADMIN_LISTEN: '0.0.0.0:8001, 0.0.0.0:8444 ssl'
+      KONG_PLUGINS: bundled,kong-spec-expose
     depends_on:
       - kong-prepare
     ports:
