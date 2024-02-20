@@ -151,7 +151,7 @@ class Sensitivity(Resource):
         except:
             return handle500error(ns_exclusionmap)
 
-ns_spec.route('/specz')
+@ns_spec.route('/specz')
 class ApiSpec(Resource):
     def get(self):
         try:
