@@ -164,8 +164,20 @@ class ApiSpec(Resource):
            # Extrae la ruta del directorio y el nombre del archivo de la ruta completa
             api_spec_directory = os.path.dirname(config.API_SPEC_PATH)
             api_spec_filename = os.path.basename(config.API_SPEC_PATH)
+            
+            # Imprime las rutas para depuración
+            logger.info(f'Directory: {api_spec_directory}')
+            logger.info(f'Filename: {api_spec_filename}')
+
+            # Asegúrate de que el directorio y el archivo existen
+            if not os.path.exists(api_spec_directory):
+                raise FileNotFoundError(f'Directory not found: {api_spec_directory}')
+            if not os.path.exists(os.path.join(api_spec_directory, api_spec_filename)):
+                raise FileNotFoundError(f'File not found: {api_spec_filename} in directory: {api_spec_directory}')
+            
             # Llama a send_from_directory sin nombrar los parámetros
             return send_from_directory(api_spec_directory, api_spec_filename)
+
         except Exception as e:
             # Es una buena práctica registrar la excepción para saber qué salió mal
             logger.error(f'Error al enviar el archivo de especificación de la API: {e}')
