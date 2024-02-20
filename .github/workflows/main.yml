@@ -28,6 +28,8 @@ jobs:
     needs: check_out
     runs-on: [self-hosted, linux, x64]
     steps:
+    - name: Build Custom Kong Image
+      run: sudo docker build -t my-custom-kong:latest .
     - name: Build the docker-compose
       run: sudo docker compose -f "docker-compose.yml" up -d
 
