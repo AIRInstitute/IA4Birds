@@ -43,7 +43,7 @@ class EBird_Extractor:
                         "observations": [{
                             "obsDt": observation['obsDt'],
                             "locationId": observation['locId'],
-                            "location-name": observation['locName'],
+                            "locationName": observation['locName'],
                             "lat": observation['lat'],
                             "lng": observation['lng'],
                             "date": observation['obsDt'],
