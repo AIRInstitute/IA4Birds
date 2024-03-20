@@ -18,6 +18,25 @@ class DataConverter:
         return data_frame
         
     @staticmethod
+    def sort_coordinates(coordinates):
+        # Identifica los puntos más al norte, oeste, sur y este
+        north = max(coordinates, key=lambda x: x[0])
+        south = min(coordinates, key=lambda x: x[0])
+        west = min(coordinates, key=lambda x: x[1])
+        east = max(coordinates, key=lambda x: x[1])
+
+        # Ordena las coordenadas según la especificación
+        sorted_coords = [north, west, south, east]
+
+        # Filtra duplicados para evitar repetir puntos que cumplen más de un criterio
+        unique_sorted_coords = []
+        for coord in sorted_coords:
+            if coord not in unique_sorted_coords:
+                unique_sorted_coords.append(coord)
+
+        return unique_sorted_coords
+    
+    @staticmethod
     def csv_to_json(filepath):
         try:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
@@ -28,9 +47,9 @@ class DataConverter:
             
             # Crea una columna con las coordenadas como tuplas
             clean_data['coordenadas'] = list(zip(clean_data['Latitud'], clean_data['Longitud']))
-            
+            clean_data['coordenadas'] = clean_data['coordenadas'].apply(DataConverter.sort_coordinates)
+
             # Agrupa por 'identific' y conserva todas las demás columnas
-            # Esto prepara un diccionario por cada 'identific' con todas sus coordenadas
             def aggregate_rows(x):
                 d = {}
                 d['fid'] = x['fid'].tolist()[0]  # Asumiendo 'fid' es único dentro de cada grupo de 'identific'
