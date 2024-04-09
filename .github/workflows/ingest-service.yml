@@ -8,15 +8,15 @@ on:
       - 'ia4birds-all/ai4birds-ingest-service/**'
 
 jobs:
-  CheckOut:
+  check-out:
     name: Check out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - uses: actions/checkout@v1
 
-  DockerClean:
-    name: Docker clean
-    needs: CheckOut
+  docker-clean:
+    name: docker clean
+    needs: check-out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Stop ai4birds-ingest Container
@@ -29,9 +29,9 @@ jobs:
         run: sudo docker rmi ia4birds-all-ia4birds-ingest-service
         continue-on-error: true
 
-  DockerCompose:
-    name: Docker compose
-    needs: DockerClean
+  docker-compose:
+    name: docker compose
+    needs: docker-clean
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Build Custom Kong Image
