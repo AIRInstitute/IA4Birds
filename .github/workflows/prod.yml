@@ -3,12 +3,12 @@ name: Build all
 on:
   push:
     branches:
-      - 'main'
+      - 'prod'
 
 jobs:
   check_out:
     name: check out
-    runs-on: [self-hosted, linux, x64]  
+    runs-on: [self-hosted, linux, x64, prod]  
     steps:
      - uses: actions/checkout@v1
      - name: stop old container
@@ -26,7 +26,7 @@ jobs:
   docker_compose:
     name: docker compose
     needs: check_out
-    runs-on: [self-hosted, linux, x64]
+    runs-on: [self-hosted, linux, x64, prod]
     steps:
     - name: Build Custom Kong Image
       run: sudo docker build -t my-custom-kong:latest .

@@ -2,20 +2,22 @@ name: Build Coordinate Service
 
 on:
   push:
+    branches:
+      - 'pre'
     paths:
       - 'ia4birds-all/ai4birds-coordinate-service/**'
 
 jobs:
   CheckOut:
     name: Check out
-    runs-on: [self-hosted, linux, x64]
+    runs-on: [self-hosted, linux, x64, pre]
     steps:
       - uses: actions/checkout@v1
 
   DockerClean:
     name: Docker clean
     needs: CheckOut
-    runs-on: [self-hosted, linux, x64]
+    runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Stop ai4birds-coordinate Container
         run: sudo docker stop ai4birds-coordinate
@@ -30,7 +32,7 @@ jobs:
   DockerCompose:
     name: Docker compose
     needs: DockerClean
-    runs-on: [self-hosted, linux, x64]
+    runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Build the docker-compose
         run: sudo docker compose -f "docker-compose.yml" up -d --build ai4birds-coordinate-service
