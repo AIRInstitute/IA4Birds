@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* html, body, #root {
+    height: 100%; 
+  }
+  
+  .app {
+    height: 100%; 
+  }
+  
+  .full-height-div {
+    height: 100%; 
+  } */
+
