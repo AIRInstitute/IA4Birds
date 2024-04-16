@@ -3,8 +3,9 @@ import {Divider,Link, Card, CardBody, CardHeader, CardFooter, Chip} from "@nextu
 import { RxCross1 } from "react-icons/rx";
 
 const SidebarEolic = ({ isOpen, onCancel,eolicdata}) => {
-    const [selected, setSelected] = React.useState("login");
 
+    console.log('Estoy dentro de SidebarEolic');
+    console.log('EolicData dentro del SideBarEolic: ', eolicdata);
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>

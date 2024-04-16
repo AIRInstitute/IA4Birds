@@ -93,9 +93,9 @@ const HeaderComponent = () => {
           </Link>
         </NavbarItem>
         <Divider orientation="vertical" className='h-30'/>
-        <NavbarItem isActive={location.pathname == "/graphs-component"}>
-          <Link to="/graphs-component" color={location.pathname == "/graphs-component" ? '#55436F': 'foreground'} 
-          style={location.pathname == "/graphs-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
+        <NavbarItem isActive={location.pathname == "/blog-component"}>
+          <Link to="/blog-component" color={location.pathname == "/blog-component" ? '#55436F': 'foreground'} 
+          style={location.pathname == "/blog-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
             Blog
           </Link>
         </NavbarItem>
@@ -121,14 +121,19 @@ const HeaderComponent = () => {
         >
         </Switch>
         </NavbarItem>
-        <NavbarItem>
+        {/* <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="flat">
             Iniciar sesión
           </Button>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
     </Navbar>
-    
+    <footer className="fixed bottom-0 w-full bg-background/80 py-4" style={{zIndex: '100'}}>
+      <div className="container mx-auto flex justify-center items-center">
+      <img src="https://ia4birds.air-institute.com/sites/default/files/footer-logos/IA4birds-footer.png" alt="" style={{width: '400px', height: 'auto'}} />
+        {/* <p className="text-gray-600">© 2022 Your Company. All rights reserved.</p> */}
+      </div>
+    </footer>
     </>
   );
 };

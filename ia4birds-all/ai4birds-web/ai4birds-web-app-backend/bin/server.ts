@@ -5,7 +5,7 @@ import debug from "debug";
 import config from "../config/global.config";
 import fs from "fs";
 
-const port = normalizePort(config.port || "3000");
+const port = normalizePort(config.port || "3030");
 app.set("port", port);
 
 function normalizePort(val: string) {
@@ -71,6 +71,6 @@ function onError(error: { syscall: string; code: any }) {
 
 function onListening() {
 	const addr = server.address();
-	const bind = typeof addr === "string" ? "pipe " + addr : "port " + 3000;
+	const bind = typeof addr === "string" ? "pipe " + addr : "port " + 3030;
 	debug("Listening on " + bind);
 }

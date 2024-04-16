@@ -6,17 +6,17 @@ import globalConfig from '../config/global.config';
 const getWindMapData = async (req, res) => {
     try {
         // Obtener los parámetros de entrada desde la solicitud
-        const { wind_profile, daily_wind_temp, weibull_distribution, wind_rose } = req.body;
+        const { lat, lon, z } = req.body;
+        console.log(req.body)
 
         // Hacer la solicitud al mapa eólico ibérico
-        const response = await axios.get(`${globalConfig.pythonURL}/winddata`, {
-            params: {
-                wind_profile,
-                daily_wind_temp,
-                weibull_distribution,
-                wind_rose
+        const response = await axios.post(`${globalConfig.pythonURL}/windmap`, 
+            {
+                lat:lat,
+                lon:lon,
+                z:z
             }
-        });
+        );
 
         // Verificar si la solicitud fue exitosa
         if (response.status !== 200) {
@@ -29,7 +29,7 @@ const getWindMapData = async (req, res) => {
         // Enviar los datos al frontend
         return res.status(200).json(windMapData);
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         return res.status(500).send({
             message: globalMessages[500].INTERNAL_SERVER_ERROR,
         });

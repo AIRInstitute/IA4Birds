@@ -1,20 +1,23 @@
 import React from 'react';
-import {Tabs, Tab, Input, Link, Button, Card, CardBody, CardHeader, Progress,Textarea,User} from "@nextui-org/react";
+import {Tabs, Tab, Card, CardBody, Progress} from "@nextui-org/react";
 import { RxCross1 } from "react-icons/rx";
 
 const Sidebar = ({ isOpen, onCancel, birdData }) => {
     const [selected, setSelected] = React.useState("login");
 
+    console.log('Estoy dentro de Sidebar y este es el birdData: ', birdData);
+
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="content">
       <div className="header">
-            <h2>Latitudd</h2>
-            <button onClick={onCancel}><RxCross1 style={{ height: '30px', width: '30px'}} /></button>
+        <h2 className='mb-5'> Datos de la especie </h2>
+        <button onClick={onCancel}><RxCross1 style={{ height: '30px', width: '30px'}} /></button>
         </div>
-        <p className='py-4'>Longitud</p>
+        <p>Nombre común: {birdData.comName}</p>
+        <p className='py-2'>Nombre científico: {birdData.sciName}</p>
         <div className="flex flex-col w-full">
-      <Card className="max-w-full w-[340px] h-[400px]">
+      <Card className="max-w-full w-[340px] h-[400px] mt-2">
         <CardBody className="overflow-hidden">
           <Tabs
             fullWidth
@@ -24,44 +27,34 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
             onSelectionChange={setSelected}
           >
             <Tab key="birds" title="Aves">
-                {birdData.map ((bird) => (
-                <React.Fragment key={bird.id}>
+              <p className='py-2'>Latitud: {birdData.observations[0].lat}</p>
+              <p className='py-2'>Longitud: {birdData.observations[0].lng}</p>
+              <p className='py-2'>Localización: {birdData.observations[0].locationName}</p>
+              <p className='py-2'>Fecha de observación: {birdData.observations[0].obsDt}</p>
+              <Progress className="py-2" 
+                        color="primary"  
+                        label="Número de aves" 
+                        maxValue={100} 
+                        aria-label="Loading..." 
+                        showValueLabel={true} 
+                        formatOptions={{style: "decimal"}}
+                        value={birdData.observations[0].numObservation}/>
+              
+                {/* <React.Fragment key={birdData.observations[0].lat}>
                 <div>
                 <User
                 className='py-3'   
-                name={bird.name}
-                description={bird.description}
-                avatarProps={{
-                    src: bird.url
-                }}
+                name={birdData.observations[0].lat}
+                description={birdData.observations[0]}
+                // avatarProps={{
+                //     src: bird.url
+                // }}
                 />
                 </div>
-                <Progress color="primary" aria-label="Loading..." value={bird.num}/>
-                    </React.Fragment>
-                ))}
+                <Progress color="primary" aria-label="Loading..." value={9}/>
+                </React.Fragment> */}
             </Tab>
             <Tab key="eolicSensibility" title="Sensibilidad eólica">
-              {/* <form className="flex flex-col gap-4 h-[300px]">
-                <Input isRequired label="Name" placeholder="Enter your name" type="password" />
-                <Input isRequired label="Email" placeholder="Enter your email" type="email" />
-                <Input
-                  isRequired
-                  label="Password"
-                  placeholder="Enter your password"
-                  type="password"
-                />
-                <p className="text-center text-small">
-                  Already have an account?{" "}
-                  <Link size="sm" onPress={() => setSelected("login")}>
-                    Login
-                  </Link>
-                </p>
-                <div className="flex gap-2 justify-end">
-                  <Button fullWidth color="primary">
-                    Sign up
-                  </Button>
-                </div>
-              </form> */}
               <p>Datos de la sensibilidad eólica</p>
             </Tab>
           </Tabs>

@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction, Express, Router } from 'express'
 import * as multerMiddleware from "../../middleware/multer.middleware";
-import * as uploadController from '../../controllers/upload.controller'
 import * as dataCyLController from '../../controllers/dataCyL.controller'
 import * as mapController from '../../controllers/map.controller'
 
@@ -16,16 +15,20 @@ export default () => {
         dataCyLController.getEBirdData
     )
     dataRouter.get(
-        "/databird",
+        "/dataBird",
         dataCyLController.getDataBird
     )
-    dataRouter.get(
-        "/winddata",
+    dataRouter.post(
+        "/windmap",
         mapController.getWindMapData
     )
     dataRouter.get(
         "/exclusionmap",
         mapController.getExclusionMapData
+    )
+    dataRouter.get(
+        "/sensitivity",
+        dataCyLController.getSensitivityData
     )
     return dataRouter;
 };

@@ -19,7 +19,7 @@ function App() {
         </Route>
         <Route path="/map-component" element={<MapComponent/>}>
         </Route>
-        <Route path="/graphs-component" element={<GraphsComponent/>}>
+        <Route path="/blog-component" element={<GraphsComponent/>}>
         </Route>
       </Routes>
     </Router>
