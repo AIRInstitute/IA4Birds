@@ -3,7 +3,7 @@ WORKDIR /home/node/app
 
 #Build backend
 COPY . .
-WORKDIR /home/node/app/node-backend
+WORKDIR /home/node/app/ai4birds-web-app-backend
 RUN npm install
 RUN npm run build
 

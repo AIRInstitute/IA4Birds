@@ -1,5 +1,13 @@
 import pandas as pd
 import json
+import tempfile
+import zipfile
+import os
+import re
+import math
+from shapely import wkt
+from time import sleep
+import gzip
 
 class DataConverter:
     @staticmethod
@@ -12,59 +20,200 @@ class DataConverter:
         return data_frame
 
     @staticmethod
-    def sort_and_deduplicate_coordinates(coordinates):
-        # Asumiendo que 'coordinates' es ahora una lista de tuplas de coordenadas para un 'identific' específico
-        if len(coordinates) > 1:
-            # Ordenar por latitud (norte a sur) y luego por longitud (oeste a este) y deduplicar
-            sorted_coords = sorted(set(coordinates), key=lambda x: (-x[0], x[1]))
-            return sorted_coords
-        else:
+    def extract_coordinates_from_wkt(wkt):
+        try:
+            # Encuentra todas las cadenas de texto que parezcan coordenadas dentro de los paréntesis triples
+            #match = re.findall(r'\(\(\(([^)]+)\)\)\)', wkt)
+            match = re.findall(r'\(\(\((.*?)\)\)\)', wkt, re.DOTALL)
+            if not match:
+                print(f"NOT MATCH: {len(wkt)}")
+                print("Preview of WKT:", wkt[:100])
+
+                sleep(10)  # Esto detendrá la ejecución durante 10 segundos
+                return []
+            # El primer match contiene las coordenadas que necesitamos
+            coordinates_str = match[0]
+            # Elimina espacios adicionales y divide el string por comas para separar cada par de coordenadas
+            coordinates_pairs = coordinates_str.split(',')
+            # Elimina espacios en blanco al inicio y al final de cada par
+            coordinates_pairs = [pair.strip() for pair in coordinates_pairs]
+            # Convierte cada par de coordenadas a tuplas de float, asegurándose de eliminar cualquier paréntesis residual
+            coordinates = []
+            for pair in coordinates_pairs:
+                # Elimina los paréntesis residuales y divide por el espacio
+                clean_pair = re.sub(r'[()]', '', pair).split()
+                # Asegura que hay dos elementos antes de convertir a float
+                if len(clean_pair) == 2:
+                    lat, lon = map(float, clean_pair)
+                    coordinates.append((lat, lon))
+            
             return coordinates
+        except Exception as e:
+            print(f"Error extract coordinate from wtk: {e}")
+            return {'error': str(e)}
 
     @staticmethod
-    def deduplicate_coordinates(coordinates):
-        # Utiliza un set para eliminar duplicados, ya que los sets no permiten duplicados
-        unique_coords_set = {tuple(coord) for coord in coordinates}
-        # Convierte de nuevo a lista para mantener el formato original
-        return list(unique_coords_set)
+    def _paginate_data(data_list, page_size=10, page_number=1):
+        """ Paginate data
 
+        :param data_list: list of data entries
+        :type data_list: list
+        :param page_size: page size, defaults to 10
+        :type page_size: int, optional
+        :param page_number: page number, defaults to 1
+        :type page_number: int, optional
+        :return: pagination info and paginated data list
+        :rtype: dict
+        """        
+        # Asegurar que los parámetros de paginación son enteros válidos
+        page_size = int(page_size)
+        page_number = int(page_number)
+
+        total_data = len(data_list)
+        #total_pages = math.ceil(total_data / page_size) if page_size else 1
+        total_pages = max(1, (total_data + page_size - 1) // page_size)
+        current_page = max(1, min(page_number, total_pages))
+        # Asegurar que el número de página está dentro del rango válido
+        if page_number < 1 or page_number > total_pages:
+            return {"error": "Número de página fuera de rango."}
+        
+        start_index = (current_page - 1) * page_size
+        end_index = start_index + page_size
+        print(f"Start index {start_index} and End Index {end_index}")
+        paginated_list = data_list[start_index:end_index]
+        print(f"El tamaño de la lista paginada es: {len(paginated_list)}")
+
+        pagination_info = {
+            'current_page': current_page,
+            'total_data': total_data,
+            'total_pages': total_pages,
+            'page_size': page_size
+        }
+
+        return {
+            'pagination_info': pagination_info,
+            'data': paginated_list
+        }
 
     @staticmethod
-    def csv_to_json(filepath):
+    def csv_to_json(filepath, page=1, page_size=10):
         try:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
             clean_data = DataConverter.clean_invalid_characters(data)
             
             clean_data['identific'] = clean_data['identific'].str.replace('"', '')
-            # Crea un DataFrame con una columna para 'identific' y otra para las coordenadas
-            clean_data['coordenadas'] = list(zip(clean_data['Latitud'], clean_data['Longitud']))
+            
+            # Extrae y procesa las coordenadas de la columna 'WKT'
+            clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
+            
 
-            # Agrupa por 'identific' y aplica la función para ordenar y deduplicar coordenadas
-            def aggregate_and_sort_rows(group):
-                # Extracción de todas las coordenadas para el grupo actual
-                all_coords = group['coordenadas'].tolist()
-                sorted_and_deduped_coords = DataConverter.sort_and_deduplicate_coordinates(all_coords)
+            # Crear una lista de diccionarios, cada uno representando una fila
+            data_list = []
+            #for index, row in paginated_data.iterrows():
+            for index, row in clean_data.iterrows():
+                
+                row_dict = {
+                    'fid': row['fid'],
+                    'criterio': row['criterio'],
+                    't_instalac': row['t_instalac'],
+                    'ambito': row['ambito'],
+                    'area_excl': row['area_excl'],
+                    'espacio': row['espacio'],
+                    'identific': row['identific'],
+                    'coordenadas': row['coordenadas']  
+                }
+                data_list.append(row_dict)
+                
+            # Antes de devolver, usa _paginate_data para paginar data_list
+            pagination_result = DataConverter._paginate_data(data_list, page_size, page)
 
-                # Asumiendo que todos los otros campos son iguales para el mismo 'identific',
-                # toma el primer valor para cada uno de ellos
-                return pd.Series({
-                    'fid': group['fid'].iloc[0],
-                    'criterio': group['criterio'].iloc[0],
-                    't_instalac': group['t_instalac'].iloc[0],
-                    'ambito': group['ambito'].iloc[0],
-                    'area_excl': group['area_excl'].iloc[0],
-                    'espacio': group['espacio'].iloc[0],
-                    'coordenadas': sorted_and_deduped_coords  # Esta es la lista de coordenadas ordenadas y deduplicadas
-                })
-
-            # Aplica la función de agregación a cada grupo y resetea el índice para volver a un DataFrame
-            grouped_data = clean_data.groupby('identific').apply(aggregate_and_sort_rows).reset_index()
-            print(f"Grouped data: {grouped_data}")
-
-            # Convierte el DataFrame agrupado a JSON
-            json_result = json.loads(grouped_data.to_json(orient='records', force_ascii=False))
-
-            return json_result
+            return {
+                'data': pagination_result['data'],
+                'metadata': pagination_result['pagination_info']
+            }
+            
+            
         except Exception as e:
             print(f"Error converting CSV to JSON: {e}")
+            return {'error': str(e)}
+
+    @staticmethod
+    def csv_to_json_full(filepath):
+        """Convierte un CSV completo a JSON y lo guarda en un archivo ZIP."""
+        try:
+            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
+            clean_data = DataConverter.clean_invalid_characters(data)
+            
+            # Procesar datos adicionales si es necesario
+            clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+            clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
+            
+            # Excluir las columnas 'WKT', 'gml_id', y 'geometry'
+            if 'WKT' in clean_data.columns:
+                clean_data.drop('WKT', axis=1, inplace=True)
+            if 'gml_id' in clean_data.columns:
+                clean_data.drop('gml_id', axis=1, inplace=True)
+            if 'geometry' in clean_data.columns:
+                clean_data.drop('geometry', axis=1, inplace=True)
+
+            # Convertir DataFrame a una lista de diccionarios para JSON
+            data_list = clean_data.to_dict(orient='records')
+            
+            # Convertir a string JSON
+            json_str = json.dumps({'data': data_list}, ensure_ascii=False, indent=4)
+            
+            # Crear un archivo temporal para el JSON
+            fd_json, path_json = tempfile.mkstemp(suffix='.json')
+            with os.fdopen(fd_json, 'w', encoding="utf-8") as tmp_json:
+                tmp_json.write(json_str)
+            
+            # Crear otro archivo temporal para el ZIP
+            fd_zip, path_zip = tempfile.mkstemp(suffix='.zip')
+            with zipfile.ZipFile(path_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                zipf.write(path_json, arcname='data.json')
+            
+            # Limpiar el archivo temporal JSON
+            os.remove(path_json)
+            
+            # Retornar la ruta del archivo ZIP
+            return path_zip
+        except Exception as e:
+            print(f"Error al convertir CSV a JSON y comprimir: {e}")
+            return None
+        
+    @staticmethod
+    def csv_to_json_gzip(filepath, page=1, page_size=10):
+        """Lee un archivo CSV comprimido, limpia los datos y devuelve JSON paginado."""
+        try:
+            with gzip.open(filepath, 'rt', encoding='utf-8') as file:
+                data = pd.read_csv(file, sep=';', on_bad_lines='skip')
+                clean_data = DataConverter.clean_invalid_characters(data)
+                
+                clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+                clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
+
+                # Convertir a lista de diccionarios y paginar
+                data_list = []
+                for index, row in clean_data.iterrows():
+                    row_dict = {
+                        'fid': row['fid'],
+                        'criterio': row['criterio'],
+                        't_instalac': row['t_instalac'],
+                        'ambito': row['ambito'],
+                        'area_excl': row['area_excl'],
+                        'espacio': row['espacio'],
+                        'identific': row['identific'],
+                        'coordenadas': row['coordenadas']
+                    }
+                    data_list.append(row_dict)
+                
+                # Paginación
+                pagination_result = DataConverter._paginate_data(data_list, page_size, page)
+
+                return {
+                    'data': pagination_result['data'],
+                    'metadata': pagination_result['pagination_info']
+                }
+        except Exception as e:
+            print(f"Error converting compressed CSV to JSON: {e}")
             return {'error': str(e)}

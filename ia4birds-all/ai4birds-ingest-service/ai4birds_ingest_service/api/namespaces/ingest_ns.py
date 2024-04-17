@@ -5,14 +5,16 @@ import json
 import os
 from os import path
 from flask import jsonify, send_from_directory
+from flask import send_file
+import tempfile
 from flask_restx import Resource
 from ai4birds_ingest_service import config
 from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
 from ai4birds_ingest_service.core import cache, limiter
-from ai4birds_ingest_service.api.models.ingest_models import windmap_model
-from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser
+from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model  
+from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser, exclusionmap_parser
 from ai4birds_ingest_service.model.ebird_extractor import EBird_Extractor
 from ai4birds_ingest_service.model.xenocanto_extractor import XenoCanto_Extractor
 from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
@@ -27,7 +29,7 @@ ns_windmap = api.namespace('windmap', description='Iberian wind map requests')
 ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')
 ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')
 ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
-ns_spec = api.namespace('api spec', description='Api doc')
+
 
 @ns_dataBird.route('/')
 class DataBird(Resource):
@@ -109,25 +111,72 @@ class WindMap(Resource):
 
 @ns_exclusionmap.route('/')
 class ExclusionMap(Resource):
-    """
-    Saves a file *.shp for the eolic exclusion map.
 
-    Returns:
-        :return: Message indicating the completion of the download.
-        :rtype: str
-    """
-    def get(self):
+    @api.expect(exclusionmap_model)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @limiter.limit('1000000/hour') 
+    @cache.cached(timeout=1, query_string=True)
+    def post(self):
+        
+        """
+        Obtain exclusion map data with coordinates divided into pages.
+
+        Returns:
+            :return: Result of the exlusion map extraction.
+            :rtype: dict
+        """
+        # retrieve arguments
         try:
-            
+            obj = flask.request.get_json()
+        except:
+            return handle400error(ns_exclusionmap, 'Unable to retrieve arguments from request. Please, check the swagger documentation at /v1')
+
+        # check parameters
+        try:
+            params = exclusionmap_parser.parse_args()
+        except:
+            return handle400error(ns_exclusionmap, 'Malformed request. Please, check the request at /v1')
+        
+        
+        try:
+            page = params['page']
+            page_size = params['page_size']
             csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH
             if csv_file_path is None:
                 logger.error("La ruta del archivo CSV no está definida en las variables de entorno.")
-                raise
-            else:            
-                json_data = DataConverter.csv_to_json(csv_file_path)
-                return jsonify({'data': json_data})
-        except:
+                raise Exception("CSV file path not defined.")
+            else:
+                json_data = DataConverter.csv_to_json(csv_file_path,page=page,page_size=page_size)
+                return jsonify(json_data)  # Usar jsonify para asegurar la serialización correcta
+                
+                # # Decidir qué método usar basado en una configuración o un parámetro
+                # if csv_file_path.endswith('.gz'):
+                #     result = DataConverter.csv_to_json_gzip(csv_file_path, page, page_size)
+                # else:
+                #     result = DataConverter.csv_to_json(csv_file_path, page, page_size)
+                # return jsonify(result)
+        except Exception as e:
+            logger.error(f"Error: {e}")  # Asegúrate de loguear el error
             return handle500error(ns_exclusionmap)
+        
+@ns_exclusionmap.route('/zip')
+class ExclusionMapZip(Resource):
+    def get(self):
+        try:
+            csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH 
+            # Obtener el path del archivo ZIP
+            zip_path = DataConverter.csv_to_json_full(csv_file_path)
+            
+            if zip_path:
+                # Enviar el archivo ZIP como respuesta
+                return send_file(zip_path, as_attachment=True, attachment_filename='data.zip', mimetype='application/zip')
+            else:
+                return {"message": "No se pudo procesar el archivo."}, 500
+        except Exception as e:
+            # Asegúrate de manejar los errores adecuadamente...
+            api.abort(500, f"Error interno: {e}")
         
 @ns_sensitivity.route('/')
 class Sensitivity(Resource):
@@ -150,36 +199,5 @@ class Sensitivity(Resource):
                 json_data = DataConverter.csv_to_json(csv_file_path)
                 return jsonify({'data': json_data})
         except:
-            return handle500error(ns_exclusionmap)
+            return handle500error(ns_sensitivity)
 
-@ns_spec.route('/specz')
-class ApiSpec(Resource):
-    def get(self):
-        # try:
-        #     api_spec_path = config.API_SPEC_PATH
-        #     return send_from_directory(directory=api_spec_path, filename='api-spec.yaml')
-        # except:
-        #     return handle500error(ns_spec)
-        try:
-           # Extrae la ruta del directorio y el nombre del archivo de la ruta completa
-            api_spec_directory = os.path.dirname(config.API_SPEC_PATH)
-            api_spec_filename = os.path.basename(config.API_SPEC_PATH)
-            
-            # Imprime las rutas para depuración
-            logger.info(f"Directorio de trabajo actual: {os.getcwd()}")
-            logger.info(f'Directory: {api_spec_directory}')
-            logger.info(f'Filename: {api_spec_filename}')
-
-            # Asegúrate de que el directorio y el archivo existen
-            if not os.path.exists(api_spec_directory):
-                raise FileNotFoundError(f'Directory not found: {api_spec_directory}')
-            if not os.path.exists(os.path.join(api_spec_directory, api_spec_filename)):
-                raise FileNotFoundError(f'File not found: {api_spec_filename} in directory: {api_spec_directory}')
-            
-            # Llama a send_from_directory sin nombrar los parámetros
-            return send_from_directory(api_spec_directory, api_spec_filename)
-
-        except Exception as e:
-            # Es una buena práctica registrar la excepción para saber qué salió mal
-            logger.error(f'Error al enviar el archivo de especificación de la API: {e}')
-            return handle500error(ns_spec)

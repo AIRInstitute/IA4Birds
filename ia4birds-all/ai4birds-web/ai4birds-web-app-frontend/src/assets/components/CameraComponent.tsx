@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {Spacer} from "@nextui-org/react";
-import {CustomCard} from "./card/cameraCard";
+import {CustomCard} from "./card/CameraCard";
 import XenocantoDataService from './services/XenocantoDataService';
 
 const CameraComponent = () => {
