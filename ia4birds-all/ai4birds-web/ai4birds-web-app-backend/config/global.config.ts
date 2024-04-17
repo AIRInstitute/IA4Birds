@@ -10,7 +10,7 @@ const globalConfig = {
 	expiration: Number(process.env.EXPIRATION_TIME) || 180,
 	frontendURL: process.env.FRONTEND_URL || "http://localhost:5173",
 	backendURL: process.env.BACKEND_URL || "http://localhost:3030",
-	pythonURL: process.env.PYTHON_URL || "http://212.128.156.191:5002/ai4birds-ingest-service/v1",
+	pythonURL: process.env.PYTHON_URL || "http://212.128.141.41:5002/ai4birds-ingest-service/v1",
 	smtp: {
 		//host: process.env.SMTP_HOST || "smtp.gmail.com",
 		host: process.env.SMTP_HOST || "gmail",
