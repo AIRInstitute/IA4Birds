@@ -5,7 +5,6 @@ import json
 import os
 from os import path
 from flask import jsonify, send_from_directory
-from flask import send_file
 import tempfile
 from flask_restx import Resource
 from ai4birds_ingest_service import config
@@ -171,7 +170,9 @@ class ExclusionMapZip(Resource):
             
             if zip_path:
                 # Enviar el archivo ZIP como respuesta
-                return send_file(zip_path, as_attachment=True, attachment_filename='data.zip', mimetype='application/zip')
+                #return send_file(zip_path, as_attachment=True, attachment_filename='data.zip', mimetype='application/zip')
+                return send_file(zip_path, as_attachment=True, download_name='data.zip', mimetype='application/zip')
+
             else:
                 return {"message": "No se pudo procesar el archivo."}, 500
         except Exception as e:
