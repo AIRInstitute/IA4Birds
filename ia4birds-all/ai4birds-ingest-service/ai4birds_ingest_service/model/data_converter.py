@@ -217,3 +217,14 @@ class DataConverter:
         except Exception as e:
             print(f"Error converting compressed CSV to JSON: {e}")
             return {'error': str(e)}
+        
+    @staticmethod
+    def csv_to_json_sensitivity(filepath):
+        try:
+
+            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
+            clean_data = DataConverter.clean_invalid_characters(data)  # Llama al método estático correctamente
+            json_result = clean_data.to_dict(orient='records')
+            return json_result
+        except Exception as e:
+            return {'error': str(e)}

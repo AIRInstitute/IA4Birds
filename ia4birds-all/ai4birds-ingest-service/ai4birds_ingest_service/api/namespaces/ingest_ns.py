@@ -197,7 +197,7 @@ class Sensitivity(Resource):
                 logger.error("La ruta del archivo CSV no está definida en las variables de entorno.")
                 raise
             else:
-                json_data = DataConverter.csv_to_json(csv_file_path)
+                json_data = DataConverter.csv_to_json_sensitivity(csv_file_path)
                 return jsonify({'data': json_data})
         except:
             return handle500error(ns_sensitivity)
