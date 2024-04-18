@@ -40,8 +40,15 @@ class DataBird(Resource):
             :return: Combined data from XenoCanto and eBird API.
             :rtype: dict
         """
-        ebird_data = EBird_Extractor.ebird_query()
-        xenocanto_data = XenoCanto_Extractor().xenocanto_query()
+        # Crear instancias de los extractores
+        ebird_extractor = EBird_Extractor()
+        xenocanto_extractor = XenoCanto_Extractor()
+
+        # Llamar a los métodos de instancia
+        ebird_data = ebird_extractor.ebird_query()
+        xenocanto_data = xenocanto_extractor.xenocanto_query()
+
+        # Combinar los datos recibidos
         results = combine_data(data_ebird=ebird_data, data_xenocanto=xenocanto_data)
         return results
     
@@ -55,7 +62,8 @@ class XenoCanto(Resource):
             :return: Data from XenoCanto API.
             :rtype: dict
         """
-        results = XenoCanto_Extractor().xenocanto_query()
+        xenocanto_extractor = XenoCanto_Extractor()
+        results = xenocanto_extractor.xenocanto_query()
         return results
 
 @ns_ebird.route('/')
@@ -68,8 +76,11 @@ class EBird(Resource):
             :return: Data from eBird API.
             :rtype: dict
         """
-        results = EBird_Extractor().ebird_query()
-        return results
+        ebird_extractor = EBird_Extractor()
+
+        # Llamar a los métodos de instancia
+        ebird_data = ebird_extractor.ebird_query()
+        return ebird_data
     
 @ns_windmap.route('/')
 class WindMap(Resource):
@@ -148,6 +159,9 @@ class ExclusionMap(Resource):
                 raise Exception("CSV file path not defined.")
             else:
                 json_data = DataConverter.csv_to_json(csv_file_path,page=page,page_size=page_size)
+                if not json_data:  # Verificar si los datos JSON están vacíos (página fuera de rango)
+                    return {"message": "Data not found for the specified page parameters"}, 404
+
                 return jsonify(json_data)  # Usar jsonify para asegurar la serialización correcta
                 
                 # # Decidir qué método usar basado en una configuración o un parámetro

@@ -9,7 +9,6 @@ from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service import config
 
 class EBird_Extractor:
-    @staticmethod
     def ebird_query(self, max_retries=3, backoff_factor=1):
         """
         Queries the eBird API for recent observations of birds 

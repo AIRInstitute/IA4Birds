@@ -7,7 +7,6 @@ import requests
 from ai4birds_ingest_service.log import logger
 
 class XenoCanto_Extractor():
-    @staticmethod
     def xenocanto_query(self, max_retries=3, backoff_factor=1):
         """
         Query the Xeno-Canto API to obtain recordings of birds specific to Spain,
