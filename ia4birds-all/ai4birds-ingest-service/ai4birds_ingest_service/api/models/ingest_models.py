@@ -10,5 +10,5 @@ windmap_model = api.model('WindMapModel', {
 
 exclusionmap_model = api.model('ExclusionMapModel',{
    'page': fields.Integer(description= 'Number of page', required= True, example=1),
-   'page_size': fields.Integer(description='Size of page', required=True, example=20                           
+   'page_size': fields.Integer(description='Size of page', required=True, example=20)                          
 },description='Model for exclusion map ')
