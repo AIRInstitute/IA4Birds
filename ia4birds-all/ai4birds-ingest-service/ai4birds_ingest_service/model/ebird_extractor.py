@@ -5,10 +5,12 @@
 
 import requests, json
 import time
+from functools import lru_cache
 from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service import config
 
 class EBird_Extractor:
+    @lru_cache(maxsize=100)
     def ebird_query(self, max_retries=3, backoff_factor=1):
         """
         Queries the eBird API for recent observations of birds 
@@ -33,8 +35,11 @@ class EBird_Extractor:
         url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
         for attempt in range(max_retries):
             try:
+                #logger.error(f'Request ebird')
                 response = requests.get(url, headers=headers)
+                #logger.error(f'Despues response')
                 response.raise_for_status()
+                #logger.error(f'Despues raise')
                 return self._format_results(json.loads(response.text))
             except requests.exceptions.RequestException as e:
                 logger.error(f'Error get query: {e}')
@@ -43,6 +48,7 @@ class EBird_Extractor:
 
     def _format_results(self, data):
         formatted_results = []
+        #ogger.error(f'Format_RESULTS')
         for observation in data:
             formatted_results.append({
                 "speciesSciName": observation['sciName'],
@@ -58,4 +64,5 @@ class EBird_Extractor:
                     "numObservation": observation.get('howMany', None)
                 }]
             })
+        #logger.error(f'antes return')
         return formatted_results 

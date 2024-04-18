@@ -32,6 +32,7 @@ ns_dataBird = api.namespace('dataBird', description='Returns observations and re
 
 @ns_dataBird.route('/')
 class DataBird(Resource):
+    
     def get(self):
         """
         Gets data from XencoCanto and eBird API in Castilla y León.
@@ -44,16 +45,20 @@ class DataBird(Resource):
         ebird_extractor = EBird_Extractor()
         xenocanto_extractor = XenoCanto_Extractor()
 
+        max_retries = 3
+        backoff_factor = 1
         # Llamar a los métodos de instancia
-        ebird_data = ebird_extractor.ebird_query()
-        xenocanto_data = xenocanto_extractor.xenocanto_query()
-
+        ebird_data = ebird_extractor.ebird_query(max_retries=max_retries,backoff_factor=backoff_factor)
+        xenocanto_data = xenocanto_extractor.xenocanto_query(max_retries=max_retries,backoff_factor=backoff_factor)
+        print(xenocanto_extractor.xenocanto_query.cache_info())
         # Combinar los datos recibidos
         results = combine_data(data_ebird=ebird_data, data_xenocanto=xenocanto_data)
         return results
+
     
 @ns_xenocanto.route('/')
 class XenoCanto(Resource):
+    
     def get(self):
         """
         Gets data from XencoCanto API in Castilla y León.
@@ -63,11 +68,15 @@ class XenoCanto(Resource):
             :rtype: dict
         """
         xenocanto_extractor = XenoCanto_Extractor()
-        results = xenocanto_extractor.xenocanto_query()
+        max_retries = 3
+        backoff_factor = 1
+        results = xenocanto_extractor.xenocanto_query(max_retries=max_retries,backoff_factor=backoff_factor)
+        print(xenocanto_extractor.xenocanto_query.cache_info())
         return results
 
 @ns_ebird.route('/')
 class EBird(Resource):
+    
     def get(self):
         """
         Gets data from the last 30 days in Castilla y León using eBird API.
@@ -78,8 +87,13 @@ class EBird(Resource):
         """
         ebird_extractor = EBird_Extractor()
 
+        max_retries = 3
+        backoff_factor = 1
         # Llamar a los métodos de instancia
-        ebird_data = ebird_extractor.ebird_query()
+        ebird_data = ebird_extractor.ebird_query(max_retries=max_retries,backoff_factor=backoff_factor)
+        # Después de algunas operaciones
+        print(ebird_extractor.ebird_query.cache_info())
+
         return ebird_data
     
 @ns_windmap.route('/')
@@ -91,7 +105,7 @@ class WindMap(Resource):
     @api.response(400, 'Invalid parameters')
     #@api.marshal_with(post_windmap_output_model, code=200, description='OK', as_list=False)
     @limiter.limit('1000000/hour') 
-    @cache.cached(timeout=1, query_string=True)
+    #@cache.cached(timeout=180, query_string=True)
     def post(self):
         """
         Obtain wind map data with coordinates.
@@ -127,7 +141,7 @@ class ExclusionMap(Resource):
     @api.response(500, 'Unhandled errors')
     @api.response(400, 'Invalid parameters')
     @limiter.limit('1000000/hour') 
-    @cache.cached(timeout=1, query_string=True)
+    #@cache.cached(timeout=180, query_string=True)
     def post(self):
         
         """
@@ -176,6 +190,7 @@ class ExclusionMap(Resource):
         
 @ns_exclusionmap.route('/zip')
 class ExclusionMapZip(Resource):
+    
     def get(self):
         try:
             csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH 
@@ -202,6 +217,7 @@ class Sensitivity(Resource):
         :return: Message indicating the completion of the download.
         :rtype: str
     """
+    
     def get(self):
         try:
             
