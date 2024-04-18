@@ -12,7 +12,7 @@ from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
 from ai4birds_ingest_service.core import cache, limiter
-from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model
+from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model, exclusionmap_response_model
 from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser, exclusionmap_parser
 from ai4birds_ingest_service.model.ebird_extractor import EBird_Extractor
 from ai4birds_ingest_service.model.xenocanto_extractor import XenoCanto_Extractor
@@ -140,6 +140,7 @@ class ExclusionMap(Resource):
     @api.response(404, 'Data not found')
     @api.response(500, 'Unhandled errors')
     @api.response(400, 'Invalid parameters')
+    @api.response(200, 'Successful', model=exclusionmap_response_model)
     @limiter.limit('1000000/hour') 
     #@cache.cached(timeout=180, query_string=True)
     def post(self):
