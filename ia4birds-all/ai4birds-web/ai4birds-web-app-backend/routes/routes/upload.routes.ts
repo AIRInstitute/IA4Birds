@@ -22,7 +22,7 @@ export default () => {
         "/windmap",
         mapController.getWindMapData
     )
-    dataRouter.get(
+    dataRouter.post(
         "/exclusionmap",
         mapController.getExclusionMapData
     )

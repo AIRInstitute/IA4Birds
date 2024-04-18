@@ -37,7 +37,7 @@ class ExclusionEolicService {
     // }
 
     async getExclusionMap() {
-         const response = await api.get("/data/exclusionmap", {
+         const response = await api.post("/data/exclusionmap", {
             headers: {
         //         "x-access-token": getToken(),
               },
