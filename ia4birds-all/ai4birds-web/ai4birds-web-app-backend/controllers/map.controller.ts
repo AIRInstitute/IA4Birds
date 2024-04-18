@@ -38,9 +38,14 @@ const getWindMapData = async (req, res) => {
 
 
 const getExclusionMapData = async (req, res) => {
+    const params = {
+        page: 1,
+        page_size: 20
+      };
+
     try {
         // Hacer la solicitud al servicio WFS del idecyl
-        const response = await axios.post(globalConfig.pythonURL + '/exclusionmap');
+        const response = await axios.post(globalConfig.pythonURL + '/exclusionmap', params);
 
         // Verificar si la solicitud fue exitosa
         if (response.status !== 200) {
