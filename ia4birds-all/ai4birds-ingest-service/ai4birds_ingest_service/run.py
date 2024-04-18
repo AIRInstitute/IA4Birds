@@ -8,24 +8,18 @@
 
 from flask_cors import CORS
 from flask import Flask, Blueprint, redirect, request
-try:
-    from flask_caching import Cache
-    print("Flask-Caching is installed successfully!")
-except ImportError:
-    print("Flask-Caching is not installed.")
-
+# from flask_caching import Cache
 from ai4birds_ingest_service import config
 from ai4birds_ingest_service import events
 from ai4birds_ingest_service.api.v1 import api
 from ai4birds_ingest_service.api import namespaces
-from ai4birds_ingest_service.core import limiter
+from ai4birds_ingest_service.core import cache, limiter
 
 from . import socketio
 
 app = Flask(__name__)
 
 
-cache = Cache()  # Inicializa Cache aquí con la aplicación ya configurada  # Inicializa el objeto Cache con la configuración de la app
 # socketio = SocketIO(app)
 
 VERSION = (1, 0)
@@ -71,10 +65,8 @@ def initialize_app(flask_app):
     api.init_app(v1)
 
     limiter.exempt(v1)
-    app.config['CACHE_TYPE'] = 'simple'
-    app.config['CACHE_DEFAULT_TIMEOUT'] = 300
 
-    cache.init_app(flask_app)  # Inicializa Cache con la aplicación
+    cache.init_app(flask_app) 
     #cache.init_app(flask_app)
 
     for ns in namespaces:
@@ -89,8 +81,6 @@ def main():
     separator_str = ''.join(map(str, ["=" for i in range(175)]))
     print(separator_str)
     print(f'Debug mode: {config.DEBUG_MODE}')
-    print("Cache Type:", app.config['CACHE_TYPE'])
-    print("Cache Timeout:", app.config['CACHE_DEFAULT_TIMEOUT'])
     print(f'Authors: {get_authors()}')
     print(f'Version: {get_version()}')
     print(f'Base URL: http://localhost:{config.PORT}{config.URL_PREFIX}')

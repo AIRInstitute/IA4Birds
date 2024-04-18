@@ -39,7 +39,7 @@ class XenoCanto_Extractor():
                 data = response.json()
                 all_results.extend(bird for bird in data['recordings'] if 'Castilla y León' in bird.get('loc'))
                 
-                logger.error(f"page: {page} and numpages {data['numPages']}")
+                #logger.error(f"page: {page} and numpages {data['numPages']}")
 
                 if page >= data['numPages']:
                     break

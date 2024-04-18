@@ -12,7 +12,7 @@ from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
 from ai4birds_ingest_service.core import cache, limiter
-from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model  
+from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model
 from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser, exclusionmap_parser
 from ai4birds_ingest_service.model.ebird_extractor import EBird_Extractor
 from ai4birds_ingest_service.model.xenocanto_extractor import XenoCanto_Extractor
@@ -29,6 +29,9 @@ ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map
 ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')
 ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
 
+# Crear instancias de los extractores
+xenocanto_extractor = XenoCanto_Extractor()
+ebird_extractor = EBird_Extractor()
 
 @ns_dataBird.route('/')
 class DataBird(Resource):
@@ -41,10 +44,7 @@ class DataBird(Resource):
             :return: Combined data from XenoCanto and eBird API.
             :rtype: dict
         """
-        # Crear instancias de los extractores
-        ebird_extractor = EBird_Extractor()
-        xenocanto_extractor = XenoCanto_Extractor()
-
+        
         max_retries = 3
         backoff_factor = 1
         # Llamar a los métodos de instancia
@@ -58,7 +58,7 @@ class DataBird(Resource):
     
 @ns_xenocanto.route('/')
 class XenoCanto(Resource):
-    
+
     def get(self):
         """
         Gets data from XencoCanto API in Castilla y León.
@@ -67,7 +67,7 @@ class XenoCanto(Resource):
             :return: Data from XenoCanto API.
             :rtype: dict
         """
-        xenocanto_extractor = XenoCanto_Extractor()
+       
         max_retries = 3
         backoff_factor = 1
         results = xenocanto_extractor.xenocanto_query(max_retries=max_retries,backoff_factor=backoff_factor)
@@ -85,8 +85,7 @@ class EBird(Resource):
             :return: Data from eBird API.
             :rtype: dict
         """
-        ebird_extractor = EBird_Extractor()
-
+        
         max_retries = 3
         backoff_factor = 1
         # Llamar a los métodos de instancia
@@ -106,6 +105,7 @@ class WindMap(Resource):
     #@api.marshal_with(post_windmap_output_model, code=200, description='OK', as_list=False)
     @limiter.limit('1000000/hour') 
     #@cache.cached(timeout=180, query_string=True)
+    @cache.cached(timeout=180, query_string=True)
     def post(self):
         """
         Obtain wind map data with coordinates.

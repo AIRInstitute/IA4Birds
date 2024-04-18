@@ -17,6 +17,6 @@ limiter = Limiter(
 cache = Cache(
 	config={
 		'CACHE_TYPE': 'simple',
-		'CACHE_DEFAULT_TIMEOUT': 1
+		'CACHE_DEFAULT_TIMEOUT': 300
 	}
 )
