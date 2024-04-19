@@ -158,13 +158,10 @@ const getWindMapData = async (req:any, res:any) => {
 };
 
 
-const getExclusionMapData = async (req: Request, res: Response) => {
+const getExclusionMapData = async (req, res) => {
     try {
-        const response = await axios({
-            method: 'get',
-            url: `${globalConfig.pythonURL}/exclusionmap/zip`,
-            responseType: 'arraybuffer'  // Important to handle binary data correctly
-        });
+        // Hacer la solicitud al servicio WFS del idecyl
+        const response = await axios.post(globalConfig.pythonURL + '/exclusionmap');
 
         if (response.status !== 200) {
             throw new Error('No se pudieron obtener los datos del mapa de exclusión eólica.');
