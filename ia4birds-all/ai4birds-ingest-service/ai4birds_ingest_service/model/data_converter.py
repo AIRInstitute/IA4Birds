@@ -155,10 +155,9 @@ class DataConverter:
         try:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
             clean_data = DataConverter.clean_invalid_characters(data)
-            
+            print(f"Invalid Character OK")
             # Procesar datos adicionales si es necesario
-            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
-
+            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')            
             clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
             
             # Excluir las columnas 'WKT', 'gml_id', y 'geometry'
@@ -171,23 +170,23 @@ class DataConverter:
 
             # Convertir DataFrame a una lista de diccionarios para JSON
             data_list = clean_data.to_dict(orient='records')
-            
+            print(f"Data List OK")
             # Convertir a string JSON
             json_str = json.dumps({'data': data_list}, ensure_ascii=False, indent=4)
-            
+            print(f"Convert a STRING OK")
             # Crear un archivo temporal para el JSON
             fd_json, path_json = tempfile.mkstemp(suffix='.json')
             with os.fdopen(fd_json, 'w', encoding="utf-8") as tmp_json:
                 tmp_json.write(json_str)
-            
+            print(f"PATH JSON {path_json}")
             # Crear otro archivo temporal para el ZIP
             fd_zip, path_zip = tempfile.mkstemp(suffix='.zip')
             with zipfile.ZipFile(path_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 zipf.write(path_json, arcname='data.json')
-            
+            print(f"PATH ZIP {path_zip}")
             # Limpiar el archivo temporal JSON
             os.remove(path_json)
-            
+            print(f"CLEAND TEMP FILE OK")
             # Retornar la ruta del archivo ZIP
             return path_zip
         except Exception as e:
