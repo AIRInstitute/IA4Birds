@@ -76,7 +76,15 @@ class DataConverter:
         current_page = max(1, min(page_number, total_pages))
         # Asegurar que el número de página está dentro del rango válido
         if page_number < 1 or page_number > total_pages:
-            return {"error": "Número de página fuera de rango."}
+            return {
+                "pagination_info": {
+                    'current_page': page_number,
+                    'total_data': total_data,
+                    'total_pages': total_pages,
+                    'page_size': page_size
+                },
+                "data": []
+            }
         
         start_index = (current_page - 1) * page_size
         end_index = start_index + page_size
@@ -103,7 +111,7 @@ class DataConverter:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
             clean_data = DataConverter.clean_invalid_characters(data)
             
-            clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
             
             # Extrae y procesa las coordenadas de la columna 'WKT'
             clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
@@ -129,6 +137,7 @@ class DataConverter:
             # Antes de devolver, usa _paginate_data para paginar data_list
             pagination_result = DataConverter._paginate_data(data_list, page_size, page)
 
+            print("Tamaño de los datos paginados:", len(pagination_result['data']))  # Muestra el tamaño del array de datos
             return {
                 'data': pagination_result['data'],
                 'metadata': pagination_result['pagination_info']
@@ -148,7 +157,8 @@ class DataConverter:
             clean_data = DataConverter.clean_invalid_characters(data)
             
             # Procesar datos adicionales si es necesario
-            clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
+
             clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
             
             # Excluir las columnas 'WKT', 'gml_id', y 'geometry'
@@ -193,7 +203,7 @@ class DataConverter:
                 data = pd.read_csv(file, sep=';', on_bad_lines='skip')
                 clean_data = DataConverter.clean_invalid_characters(data)
                 
-                clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+                clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
                 clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
 
                 # Convertir a lista de diccionarios y paginar

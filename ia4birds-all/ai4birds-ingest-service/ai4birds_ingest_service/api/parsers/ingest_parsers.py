@@ -13,3 +13,7 @@ exclusionmap_parser = reqparse.RequestParser()
 # Add arguments to the location parser for latitude, longitude, and altitude
 exclusionmap_parser.add_argument('page', location='json', type=int, required=True, help='page is required')
 exclusionmap_parser.add_argument('page_size', location='json', type=int, required=True, help='page_size is required')
+
+exclusionmap_parser_get = reqparse.RequestParser()
+exclusionmap_parser_get.add_argument('page', type=int, required=True, help='Page is required', location='args')
+exclusionmap_parser_get.add_argument('page_size', type=int, required=True, help='Page size is required', location='args')
