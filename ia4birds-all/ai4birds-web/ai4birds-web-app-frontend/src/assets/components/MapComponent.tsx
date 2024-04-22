@@ -89,10 +89,10 @@ const Mapa = () => {
 
       ExclusionEolicService.getExclusionMap().then((response) => {
         if (response.status === 200) {
-          console.log('ExclusionEolicService.getExclusionMap() response ', response.data.data);
-          setEolicMarkers(response.data.data);
+          console.log('ExclusionEolicService.getExclusionMap() response ', response.data);
+          setEolicMarkers(response.data[0]);
           console.log('EolicMarkers están en proceso de cargarse: ', eolicMarkers);
-          setMarkersLoaded(true);
+          //setMarkersLoaded(true);
         }
         else {
           setMarkersLoaded(true);
@@ -114,13 +114,19 @@ const Mapa = () => {
     console.log('Los marcadores eólicos se han cargado:', markersLoaded);
   }, [markersLoaded]);
 
+  useEffect(() => {
+    // Esta función se ejecutará cada vez que setEolicMarkers cambie
+    console.log('Los marcadores eólicos han cambiado', eolicMarkers);
+    setMarkersLoaded(true);
+  }, [eolicMarkers]);
+
   //====================================================================
   //FILL BIRD MARKERS
   //====================================================================
   const fillBirdData = () => {
     BirdDataService.getDataBird().then((response) => {
       if (response.status === 200) {
-        console.log("bird Response", response.data)
+        //console.log("bird Response", response.data)
         setMarkersLoaded(true);
         return setBirdsMarkers(response.data);
       }
@@ -291,16 +297,29 @@ const Mapa = () => {
                 </MarkerClusterGroup> */}
                 <MarkerClusterGroup
                   maxClusterRadius={80}>
-                  {eolicMarkers.length > 0 && eolicMarkers.map((coordenadasValores, coordenadas) => (
-                    <>
-                      <React.Fragment key={coordenadas}>
-                        <Polygon
-                          positions={coordenadasValores.coordenadas}
-                          pathOptions={{ fillColor: 'red', color: 'red' }}
-                        />
-                      </React.Fragment>
-                    </>
-                  ))}
+                  {eolicMarkers.length > 0 && eolicMarkers.map((coordinatesValues, coordinates) => {
+                    console.log('Coordenadas de los marcadores eólicos: ', coordinatesValues);
+                    console.log('COORDENADAS.LENGTH: ', coordinatesValues.coordenadas.length);
+                    for (let i = 0; i < coordinatesValues.coordenadas.length; i++) {
+                      const eolicPoint = coordinatesValues.coordenadas[i];
+                      console.log('eolicPoint', eolicPoint);
+                      return (
+                        <>
+                           <Circle
+                              key={coordinates}
+                              center={eolicPoint} 
+                              pathOptions={{ fillColor: 'blue', color: 'blue' }} 
+                              radius={100}
+                              eventHandlers={{
+                                  click: () => {
+                                      handleButtonClickEolic(coordinates)
+                                  },
+                                }}
+                          />
+                        </>
+                      );
+                    }
+                  })}
                 </MarkerClusterGroup>
               </>
             }
