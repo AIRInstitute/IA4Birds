@@ -22,13 +22,13 @@ export default () => {
         "/windmap",
         mapController.getWindMapData
     )
-    dataRouter.post(
-        "/exclusionmap",
-        mapController.getExclusionMapData
-    )
     dataRouter.get(
         "/sensitivity",
         dataCyLController.getSensitivityData
+    )
+    dataRouter.get(
+        "/exclusionmap/zip",
+        mapController.getExclusionMapData
     )
     return dataRouter;
 };
