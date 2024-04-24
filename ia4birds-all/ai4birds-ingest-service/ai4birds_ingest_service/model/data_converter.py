@@ -45,7 +45,7 @@ class DataConverter:
                 clean_pair = re.sub(r'[()]', '', pair).split()
                 # Asegura que hay dos elementos antes de convertir a float
                 if len(clean_pair) == 2:
-                    lat, lon = map(float, clean_pair)
+                    lon, lat = map(float, clean_pair)
                     coordinates.append((lat, lon))
             
             return coordinates
