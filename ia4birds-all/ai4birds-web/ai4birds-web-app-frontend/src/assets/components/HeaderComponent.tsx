@@ -105,7 +105,7 @@ const HeaderComponent = () => {
           <Link to="#">Login</Link>
         </NavbarItem>
         <NavbarItem>
-        <Switch
+        {/* <Switch
         defaultSelected
         size="lg"
         color="secondary"
@@ -119,7 +119,7 @@ const HeaderComponent = () => {
             )
         }
         >
-        </Switch>
+        </Switch> */}
         </NavbarItem>
         {/* <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="flat">
