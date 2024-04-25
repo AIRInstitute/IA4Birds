@@ -8,8 +8,8 @@ const globalConfig = {
 	sessionSecret: process.env.SECRET_SESSION || "secretSession",
 	saltRounds: Number(process.env.SALT_ROUNDS) || 10,
 	expiration: Number(process.env.EXPIRATION_TIME) || 180,
-	frontendURL: process.env.FRONTEND_URL || "http:///212.128.141.41:5173",
-	backendURL: process.env.BACKEND_URL || "http:///212.128.141.41:3030",
+	frontendURL: process.env.FRONTEND_URL || "http://212.128.141.41:5173",
+	backendURL: process.env.BACKEND_URL || "http://212.128.141.41:3030",
 	pythonURL: process.env.PYTHON_URL || "http://212.128.141.41:5002/ai4birds-ingest-service/v1",
 	smtp: {
 		//host: process.env.SMTP_HOST || "smtp.gmail.com",
