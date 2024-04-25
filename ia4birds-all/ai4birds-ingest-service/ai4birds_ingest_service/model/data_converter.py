@@ -105,7 +105,7 @@ class DataConverter:
         }
 
     @staticmethod
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=128)
     def csv_to_json(filepath, page=1, page_size=10):
         try:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
@@ -149,7 +149,7 @@ class DataConverter:
             return {'error': str(e)}
 
     @staticmethod
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=128)
     def csv_to_json_full(filepath):
         """Convierte un CSV completo a JSON y lo guarda en un archivo ZIP."""
         try:
@@ -194,7 +194,7 @@ class DataConverter:
             return None
         
     @staticmethod
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=128)
     def csv_to_json_gzip(filepath, page=1, page_size=10):
         """Lee un archivo CSV comprimido, limpia los datos y devuelve JSON paginado."""
         try:
@@ -232,7 +232,7 @@ class DataConverter:
             return {'error': str(e)}
         
     @staticmethod
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=128)
     def csv_to_json_sensitivity(filepath):
         try:
 

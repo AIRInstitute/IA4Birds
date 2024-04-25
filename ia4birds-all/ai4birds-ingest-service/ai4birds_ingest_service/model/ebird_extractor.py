@@ -10,7 +10,7 @@ from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service import config
 
 class EBird_Extractor:
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=128)
     def ebird_query(self, max_retries=3, backoff_factor=1):
         """
         Queries the eBird API for recent observations of birds 
