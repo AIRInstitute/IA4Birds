@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import globalMessages from '../utils/messages/global.messages';
 import globalConfig from '../config/global.config';
 import AdmZip from 'adm-zip';
-import { createReadStream } from 'fs';
+import { createReadStream , existsSync} from 'fs';
 import { pipeline } from 'stream/promises';
 import JSONStream from 'JSONStream';
 import { Transform } from 'stream';
@@ -24,19 +24,25 @@ async function processZip(response: any): Promise<any[]> {
     const tempFilePath = path.join(tempDir, 'data.json');
     zip.extractEntryTo(jsonDataEntry, tempDir, true, true);
 
+    // Comprobar que el archivo existe después de la extracción
+    if (!existsSync(tempFilePath)) {
+        throw new Error(`El archivo ${tempFilePath} no se encuentra o no se extrajo correctamente.`);
+    }
     const objects: any[] = [];
     const jsonStream = createReadStream(tempFilePath);
     const parser = JSONStream.parse('*');
     const errorHandler = (err: Error) => {
         console.error('Stream error:', err);
-        jsonStream.destroy();
-        parser.destroy();
+        if (!jsonStream.destroyed) jsonStream.destroy(err);
+        if (!parser.destroyed) parser.destroy(err);
     };
 
+    jsonStream.on('error', errorHandler);
+    parser.on('error', errorHandler);
     try {
         await pipeline(
-            jsonStream.on('error', errorHandler),
-            parser.on('error', errorHandler),
+            jsonStream,
+            parser,
             new Transform({
                 objectMode: true,
                 transform(data, enc, cb) {
