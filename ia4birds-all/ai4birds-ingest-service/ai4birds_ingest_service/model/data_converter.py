@@ -47,6 +47,8 @@ class DataConverter:
                 if len(clean_pair) == 2:
                     lon, lat = map(float, clean_pair)
                     coordinates.append((lat, lon))
+                    break  # Sale del bucle después de añadir el primer par de coordenadas
+
             
             return coordinates
         except Exception as e:
