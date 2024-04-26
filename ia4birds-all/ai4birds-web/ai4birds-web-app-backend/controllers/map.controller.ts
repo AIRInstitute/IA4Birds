@@ -37,28 +37,44 @@ async function processZip(response: any): Promise<any[]> {
         if (!parser.destroyed) parser.destroy(err);
     };
 
-    jsonStream.on('error', errorHandler);
-    parser.on('error', errorHandler);
+    jsonStream.on('error', (err) => {
+        console.error('Error in jsonStream:', err);
+        // Asegúrate de limpiar adecuadamente
+        jsonStream.destroy(err);
+    });
+    
+    parser.on('error', (err) => {
+        console.error('Error in parser:', err);
+        // Asegúrate de limpiar adecuadamente
+        parser.destroy(err);
+    });
+
+    const transformStream = new Transform({
+        objectMode: true,
+        transform(data, enc, cb) {
+            console.log(data);  // Muestra el objeto actual procesado.
+            objects.push(data);  // Añade el objeto al array.
+            console.log(`Número actual de objetos procesados: ${objects.length}`);  // Muestra cuántos objetos se han procesado.
+            cb();  // Continúa con el próximo objeto.
+        },
+        final(cb) {
+            console.log('Transformación completada');
+            console.log(`Total de objetos procesados: ${objects.length}`);  // Muestra el total de objetos procesados al final.
+            cb();
+        }
+    });
+
     try {
         await pipeline(
             jsonStream,
             parser,
-            new Transform({
-                objectMode: true,
-                transform(data, enc, cb) {
-                    console.log(data); 
-                    objects.push(data);
-                    cb();
-                },
-                final(cb) {
-                    console.log('Transformación completada');
-                    cb();
-                }
-            })
+            transformStream
         );
+        console.log('Todos los datos han sido procesados exitosamente.');
     } catch (error) {
         console.error('Pipeline failed:', error);
-        throw error; // O manejarlo de otra manera dependiendo de la lógica de tu aplicación
+        console.error(`Se procesaron un total de ${objects.length} objetos antes de fallar.`);  // Muestra cuántos objetos se procesaron antes del error.
+        throw error;  // Opcional: Puedes manejar el error de manera diferente si no deseas que se lance hacia arriba.
     }
 
     return objects;
@@ -120,5 +136,6 @@ const getExclusionMapData = async (req: Request, res: Response) => {
         });
     }
 };
+
 
 export { getWindMapData, getExclusionMapData };
