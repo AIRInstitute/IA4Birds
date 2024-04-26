@@ -29,7 +29,7 @@ async function processZip(response: any): Promise<any[]> {
     }
 
     const objects = [];
-    const jsonStream = fs.createReadStream(tempFilePath);
+    const jsonStream = createReadStream(tempFilePath);
     const parser = JSONStream.parse('data.*');
     const transformStream = new Transform({
         objectMode: true,
