@@ -40,6 +40,7 @@ class DataConverter:
             coordinates_pairs = [pair.strip() for pair in coordinates_pairs]
             # Convierte cada par de coordenadas a tuplas de float, asegurándose de eliminar cualquier paréntesis residual
             coordinates = []
+            count = 0
             for pair in coordinates_pairs:
                 # Elimina los paréntesis residuales y divide por el espacio
                 clean_pair = re.sub(r'[()]', '', pair).split()
@@ -47,7 +48,9 @@ class DataConverter:
                 if len(clean_pair) == 2:
                     lon, lat = map(float, clean_pair)
                     coordinates.append((lat, lon))
-                    #break  # Sale del bucle después de añadir el primer par de coordenadas
+                    count += 1
+                    if count == 3:
+                        break  # Sale del bucle después de añadir el primer par de coordenadas
 
             
             return coordinates
