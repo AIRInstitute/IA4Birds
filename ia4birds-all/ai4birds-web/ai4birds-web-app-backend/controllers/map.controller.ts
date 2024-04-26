@@ -110,7 +110,10 @@ const getExclusionMapData = async (req: Request, res: Response) => {
 
         const exclusionMapData = await processZip(response);
 
-        return res.status(200).json(exclusionMapData);
+        // Envolver los datos en un objeto con la clave "data"
+        const responseData = { data: exclusionMapData };
+
+        return res.status(200).json(responseData);
     } catch (err) {
         console.error(err);
         return res.status(500).send({
