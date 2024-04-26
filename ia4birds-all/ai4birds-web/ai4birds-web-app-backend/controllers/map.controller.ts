@@ -27,17 +27,32 @@ async function processZip(response: any): Promise<any[]> {
     const objects: any[] = [];
     const jsonStream = createReadStream(tempFilePath);
     const parser = JSONStream.parse('*');
-    await pipeline(
-        jsonStream,
-        parser,
-        new Transform({
-            objectMode: true,
-            transform(data, enc, cb) {
-                objects.push(data);
-                cb();
-            }
-        })
-    );
+    const errorHandler = (err: Error) => {
+        console.error('Stream error:', err);
+        jsonStream.destroy();
+        parser.destroy();
+    };
+
+    try {
+        await pipeline(
+            jsonStream.on('error', errorHandler),
+            parser.on('error', errorHandler),
+            new Transform({
+                objectMode: true,
+                transform(data, enc, cb) {
+                    objects.push(data);
+                    cb();
+                },
+                final(cb) {
+                    console.log('Transformación completada');
+                    cb();
+                }
+            })
+        );
+    } catch (error) {
+        console.error('Pipeline failed:', error);
+        throw error; // O manejarlo de otra manera dependiendo de la lógica de tu aplicación
+    }
 
     return objects;
 }
