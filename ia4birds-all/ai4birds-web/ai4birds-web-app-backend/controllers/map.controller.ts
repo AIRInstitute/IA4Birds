@@ -30,7 +30,7 @@ async function processZip(response: any): Promise<any[]> {
     }
     const objects: any[] = [];
     const jsonStream = createReadStream(tempFilePath);
-    const parser = JSONStream.parse('*');
+    const parser = JSONStream.parse('data.*');
     const errorHandler = (err: Error) => {
         console.error('Stream error:', err);
         if (!jsonStream.destroyed) jsonStream.destroy(err);
@@ -46,6 +46,7 @@ async function processZip(response: any): Promise<any[]> {
             new Transform({
                 objectMode: true,
                 transform(data, enc, cb) {
+                    console.log(data); 
                     objects.push(data);
                     cb();
                 },
