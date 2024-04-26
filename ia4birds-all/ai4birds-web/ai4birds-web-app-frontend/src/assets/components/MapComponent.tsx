@@ -90,7 +90,7 @@ const Mapa = () => {
       ExclusionEolicService.getExclusionMap().then((response) => {
         if (response.status === 200) {
           console.log('ExclusionEolicService.getExclusionMap() response ', response.data);
-          setEolicMarkers(response.data.data[0]);
+          setEolicMarkers(response.data[0]);
           console.log('EolicMarkers están en proceso de cargarse: ', eolicMarkers);
           //setMarkersLoaded(true);
         }
