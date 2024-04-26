@@ -29,28 +29,37 @@ async function processZip(response: any): Promise<any[]> {
     }
 
     const objects = [];
-    const jsonStream = createReadStream(tempFilePath);
+    const jsonStream = fs.createReadStream(tempFilePath);
     const parser = JSONStream.parse('data.*');
+    const transformStream = new Transform({
+        objectMode: true,
+        transform(data, enc, cb) {
+            console.log(data);
+            objects.push(data);
+            console.log(`Número actual de objetos procesados: ${objects.length}`);
+            cb();
+        }
+    });
 
     jsonStream.on('error', error => console.error('Error in jsonStream:', error));
     parser.on('error', error => console.error('Error in parser:', error));
+    transformStream.on('error', error => console.error('Error in transformStream:', error));
 
-    try {
-        await pipeline(jsonStream, parser, async function* (source) {
-            for await (const data of source) {
-                console.log(data);
-                objects.push(data);
-                console.log(`Número actual de objetos procesados: ${objects.length}`);
-            }
-        });
-        console.log('Transformación completada. Total de objetos procesados:', objects.length);
-    } catch (error) {
-        console.error('Pipeline failed:', error);
-        throw error;
-    }
-
-    return objects;
-};
+    // Usando pipe() en lugar de pipeline()
+    return new Promise((resolve, reject) => {
+        jsonStream.pipe(parser).pipe(transformStream)
+            .on('finish', () => {
+                console.log('Todos los datos han sido procesados exitosamente.');
+                console.log(`Total de objetos procesados: ${objects.length}`);
+                resolve(objects);
+            })
+            .on('error', (error) => {
+                console.error('Pipeline failed:', error);
+                console.error(`Se procesaron un total de ${objects.length} objetos antes de fallar.`);
+                reject(error);
+            });
+    });
+}
 
 // Utilidad para descargar y procesar el archivo ZIP
 // async function processZip(response: any): Promise<any[]> {
