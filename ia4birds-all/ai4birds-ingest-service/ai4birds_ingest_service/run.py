@@ -92,7 +92,7 @@ def main():
     
     # Ejecutar la aplicación con SocketIO
     socketio.run(app, host=config.HOST, port=config.PORT, debug=config.DEBUG_MODE, allow_unsafe_werkzeug=True)
-
+    print(f'Ejecutado socket')
 
 if __name__ == '__main__':
     main()

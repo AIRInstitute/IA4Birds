@@ -20,9 +20,9 @@ from ai4birds_ingest_service.model.extractor.windmap_extractor import WindMap_Ex
 from ai4birds_ingest_service.model.extractor.exclusionmap_extractor import ExclusionMap_extractor
 from ai4birds_ingest_service.model.combination_data import combine_data
 from ai4birds_ingest_service.model.data_converter import DataConverter
-from ai4birds_ingest_service.model.data_combination.data_combination_model import DataCombinationModel
-from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel, EBirdData
-from ai4birds_ingest_service.model.xenocanto.xenocanto_model import XenoCantoModel, XenoCantoData
+# from ai4birds_ingest_service.model.data_combination.data_combination_model import DataCombinationModel
+# from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel, EBirdData
+# from ai4birds_ingest_service.model.xenocanto.xenocanto_model import XenoCantoModel, XenoCantoData
 
 
 # Endpoints
