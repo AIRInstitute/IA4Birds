@@ -1,4 +1,4 @@
-from ai4birds_ingest_service.model.db import db
+from ai4birds_ingest_service.model.db import PostgresSingleton
 
 
 class DataCombinationModel:
@@ -7,7 +7,7 @@ class DataCombinationModel:
         query = ""
 
         values = ()
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
         try:
             database.execute(query,values)
@@ -23,7 +23,7 @@ class DataCombinationModel:
     def fetch_content(self, id: int) -> object:
         query = """SELECT * FROM species WHERE id = ?"""
         values = (id,)
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
 
         try:

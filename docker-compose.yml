@@ -130,7 +130,7 @@ services:
     container_name: postgres-analysis
     volumes:
       - /etc/ai4birds-analysis-db/data:/var/lib/postgresql/data
-      - ./data/postgresAnalysisDB/init.sql:/docker-entrypoint-initdb.d/init.sql
+      #- ./data/postgresAnalysisDB/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 1339:5432
     environment:

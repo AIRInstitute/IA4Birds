@@ -1,10 +1,10 @@
 # ebird_model.py
-from ai4birds_ingest_service.model.db import db
-from ebird_data import EBirdData
+from ai4birds_ingest_service.model.db import PostgresSingleton
+from ai4birds_ingest_service.model.ebird.ebird_data import EBirdData
 
 class EBirdModel:
     def add(self, ebird_data: EBirdData) -> bool:
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
         try:
             # Insertar especie
@@ -32,7 +32,7 @@ class EBirdModel:
             database.close()
 
     def add_batch(self, ebird_data_list):
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
         cursor = database.cur
         try:
@@ -73,7 +73,7 @@ class EBirdModel:
             database.close()
 
     def fetch_content(self, species_id: int) -> EBirdData:
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
         try:
             query = "SELECT * FROM species WHERE id = %s;"

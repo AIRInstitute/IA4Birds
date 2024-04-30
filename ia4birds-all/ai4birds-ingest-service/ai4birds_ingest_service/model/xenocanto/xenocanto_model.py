@@ -1,10 +1,10 @@
 # xenocanto_model.py
-from ai4birds_ingest_service.model.db import db
-from xenocanto_data import XenoCantoData
+from ai4birds_ingest_service.model.db import PostgresSingleton
+from ai4birds_ingest_service.model.xenocanto.xenocanto_data import XenoCantoData
 
 class XenoCantoModel:
     def add(self, xenocanto_data: XenoCantoData) -> bool:
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
         try:
             # Suponiendo que ya tienes el ID de la observación, modificar según necesidad
@@ -25,7 +25,7 @@ class XenoCantoModel:
             database.close()
 
     def add_batch(self, xenocanto_data_list):
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
         try:
             # Iniciar la transacción
@@ -59,7 +59,7 @@ class XenoCantoModel:
             database.close()
 
     def fetch_content(self, recording_id: str) -> XenoCantoData:
-        database = db.PostgresSingleton.getInstance()
+        database = PostgresSingleton.getInstance()
         database.connect()
         try:
             query = "SELECT * FROM recording WHERE recordingId = %s;"
