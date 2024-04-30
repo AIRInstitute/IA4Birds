@@ -14,12 +14,16 @@ from ai4birds_ingest_service.utils import handle400error, handle404error, handle
 from ai4birds_ingest_service.core import cache, limiter
 from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model, exclusionmap_response_model
 from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser, exclusionmap_parser, exclusionmap_parser_get
-from ai4birds_ingest_service.model.ebird_extractor import EBird_Extractor
-from ai4birds_ingest_service.model.xenocanto_extractor import XenoCanto_Extractor
-from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
-from ai4birds_ingest_service.model.exclusionmap_extractor import ExclusionMap_extractor
+from ai4birds_ingest_service.model.extractor.ebird_extractor import EBird_Extractor
+from ai4birds_ingest_service.model.extractor.xenocanto_extractor import XenoCanto_Extractor
+from ai4birds_ingest_service.model.extractor.windmap_extractor import WindMap_Extractor
+from ai4birds_ingest_service.model.extractor.exclusionmap_extractor import ExclusionMap_extractor
 from ai4birds_ingest_service.model.combination_data import combine_data
 from ai4birds_ingest_service.model.data_converter import DataConverter
+from ai4birds_ingest_service.model.data_combination.data_combination_model import DataCombinationModel
+from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel, EBirdData
+from ai4birds_ingest_service.model.xenocanto.xenocanto_model import XenoCantoModel, XenoCantoData
+
 
 # Endpoints
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
@@ -33,12 +37,13 @@ ns_dataBird = api.namespace('dataBird', description='Returns observations and re
 xenocanto_extractor = XenoCanto_Extractor()
 ebird_extractor = EBird_Extractor()
 
+
 @ns_dataBird.route('/')
 class DataBird(Resource):
     
     def get(self):
         """
-        Gets data from XencoCanto and eBird API in Castilla y León.
+        Gets data from XenoCanto and eBird API in Castilla y León.
 
         Returns:
             :return: Combined data from XenoCanto and eBird API.
@@ -47,12 +52,26 @@ class DataBird(Resource):
         
         max_retries = 3
         backoff_factor = 1
-        # Llamar a los métodos de instancia
-        ebird_data = ebird_extractor.ebird_query(max_retries=max_retries,backoff_factor=backoff_factor)
-        xenocanto_data = xenocanto_extractor.xenocanto_query(max_retries=max_retries,backoff_factor=backoff_factor)
+        ebird_data_raw = ebird_extractor.ebird_query(max_retries=max_retries, backoff_factor=backoff_factor)
+        xenocanto_data = xenocanto_extractor.xenocanto_query(max_retries=max_retries, backoff_factor=backoff_factor)
+        
+        ebird_data_objects = [EBirdData.from_dict(item) for item in ebird_data_raw] if ebird_data_raw else []
+        xenocanto_data_objects = [XenoCantoData.from_dict(item) for item in xenocanto_data] if xenocanto_data else []
+
+        ebird_model = EBirdModel()
+        xeno_model = XenoCantoModel()
+
+        if ebird_data_objects:
+            if not ebird_model.add_batch(ebird_data_objects):
+                return {"error": "Failed to insert eBird data into the database"}, 500
+
+        if xenocanto_data_objects:
+            if not xeno_model.add_batch(xenocanto_data_objects):
+                return {"error": "Failed to insert XenoCanto data into the database"}, 500
+
         print(xenocanto_extractor.xenocanto_query.cache_info())
-        # Combinar los datos recibidos
-        results = combine_data(data_ebird=ebird_data, data_xenocanto=xenocanto_data)
+        
+        results = combine_data(data_ebird=ebird_data_raw, data_xenocanto=xenocanto_data) if ebird_data_raw and xenocanto_data else {"error": "Failed to retrieve data from one or both sources."}
         return results
 
     
@@ -61,18 +80,30 @@ class XenoCanto(Resource):
 
     def get(self):
         """
-        Gets data from XencoCanto API in Castilla y León.
+        Gets data from XenoCanto API in Castilla y León.
 
         Returns:
             :return: Data from XenoCanto API.
             :rtype: dict
         """
-       
         max_retries = 3
         backoff_factor = 1
-        results = xenocanto_extractor.xenocanto_query(max_retries=max_retries,backoff_factor=backoff_factor)
+        xenocanto_data_raw = xenocanto_extractor.xenocanto_query(max_retries=max_retries, backoff_factor=backoff_factor)
+
+        if xenocanto_data_raw:
+            # Crear instancias de XenoCantoData desde los datos brutos obtenidos
+            xenocanto_data_objects = [XenoCantoData.from_dict(item) for item in xenocanto_data_raw]
+            
+            # Crear una instancia del modelo XenoCantoModel y utilizar add_batch
+            xeno_model = XenoCantoModel()
+            if not xeno_model.add_batch(xenocanto_data_objects):
+                print("Error al insertar datos de XenoCanto en la base de datos")
+                return {"error": "Failed to insert XenoCanto data into the database"}, 500
+
         print(xenocanto_extractor.xenocanto_query.cache_info())
-        return results
+
+        # Retornar los datos recuperados
+        return xenocanto_data_raw
 
 @ns_ebird.route('/')
 class EBird(Resource):
@@ -89,11 +120,25 @@ class EBird(Resource):
         max_retries = 3
         backoff_factor = 1
         # Llamar a los métodos de instancia
-        ebird_data = ebird_extractor.ebird_query(max_retries=max_retries,backoff_factor=backoff_factor)
-        # Después de algunas operaciones
+        ebird_data_raw = ebird_extractor.ebird_query(max_retries=max_retries, backoff_factor=backoff_factor)
+        
+        # Crear instancias de EBirdData desde los datos brutos obtenidos
+        if ebird_data_raw is not None:
+            ebird_data_objects = [EBirdData.from_dict(item) for item in ebird_data_raw]
+
+            # Crear una instancia del modelo EBirdModel y utilizar add_batch
+            ebird_model = EBirdModel()
+            if not ebird_model.add_batch(ebird_data_objects):
+                print("Error al insertar datos de eBird en la base de datos")
+                return {"error": "Failed to insert eBird data into the database"}, 500
+        else:
+            return {"error": "No data retrieved from eBird API"}, 404
+        
         print(ebird_extractor.ebird_query.cache_info())
 
-        return ebird_data
+        # Retornar datos recuperados 
+        return ebird_data_raw
+
     
 @ns_windmap.route('/')
 class WindMap(Resource):
