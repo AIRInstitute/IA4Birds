@@ -9,7 +9,7 @@ import os
 
 # api config
 # PORT = 5001
-PORT = 5002
+PORT = 5000
 HOST = '0.0.0.0'
 URL_PREFIX = '/ai4birds-ingest-service/v1'
 DEBUG_MODE = True
@@ -29,9 +29,8 @@ EBIRD_PASSWORD = 'v1kfvin2apud'
 # Files paths
 CORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'
 #EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica.csv.gz'
-EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica (5).csv'
-API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
+# EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica (5).csv'
+# API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
 
-# Cache config
-# CACHE_TYPE = 'simple'  # Para empezar con una caché en memoria
-# CACHE_DEFAULT_TIMEOUT = 300  # Tiempo por defecto en segundos para la caché
+EXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'
+API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
