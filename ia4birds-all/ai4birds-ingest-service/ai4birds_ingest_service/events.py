@@ -6,7 +6,7 @@
 from . import socketio
 
 from ai4birds_ingest_service import logger
-from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
+from ai4birds_ingest_service.model.extractor.windmap_extractor import WindMap_Extractor
 
 """
 Events from socket
