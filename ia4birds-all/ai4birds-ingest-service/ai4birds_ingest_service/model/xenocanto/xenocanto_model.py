@@ -1,6 +1,7 @@
 # xenocanto_model.py
 from ai4birds_ingest_service.model.db import PostgresSingleton
 from ai4birds_ingest_service.model.xenocanto.xenocanto_data import XenoCantoData
+from ai4birds_ingest_service import logger
 
 class XenoCantoModel:
     def add(self, xenocanto_data: XenoCantoData) -> bool:

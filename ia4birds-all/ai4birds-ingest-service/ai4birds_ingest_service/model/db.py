@@ -25,7 +25,7 @@ class PostgresSingleton:
         try:
             self.conn = psycopg2.connect(host=self.host, port=self.port, user=self.user, password=self.password, database=self.database)
             self.cur = self.conn.cursor()
-            logger.error(f'Connected to PostgreSQL database...')
+            logger.info(f'Connected to PostgreSQL database...')
             #print('Connected to PostgreSQL database...')
         except Exception as e:
             print(e)
