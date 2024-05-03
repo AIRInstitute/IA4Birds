@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS species (
     id SERIAL PRIMARY KEY,
     comName VARCHAR(255),
     sciName VARCHAR(255)
-
 );
 
 CREATE TABLE IF NOT EXISTS observation (
@@ -13,17 +12,16 @@ CREATE TABLE IF NOT EXISTS observation (
     lng DECIMAL(9,6),
     date TIMESTAMP,  -- Usa TIMESTAMP para almacenar tanto fecha como hora
     numObservation INT,
-    speciesId INT,
+    speciesId INT NULL,  -- Hacer opcional el speciesId
     CONSTRAINT fk_species
         FOREIGN KEY (speciesId) 
         REFERENCES species(id)
         ON DELETE SET NULL  
 );
 
-
 CREATE TABLE IF NOT EXISTS recording (
     id SERIAL PRIMARY KEY,
-    recordingId VARCHAR(255),
+    recordingId VARCHAR(255) UNIQUE,  -- Asegurarse de que recordingId sea único si se usa en lógicas de inserción condicionales
     location VARCHAR(255),
     quality VARCHAR(255),
     lat DECIMAL(9,6),
@@ -33,7 +31,7 @@ CREATE TABLE IF NOT EXISTS recording (
     fileName VARCHAR(255),
     time VARCHAR(255),  -- Si es un timestamp, considerar cambiar el tipo a TIME o TIMESTAMP
     date TIMESTAMP,
-    observationId INT,
+    observationId INT NULL,  -- Hacer opcional el observationId
     CONSTRAINT fk_observation
         FOREIGN KEY (observationId)
         REFERENCES observation(id)

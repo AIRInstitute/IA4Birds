@@ -44,7 +44,7 @@ class XenoCantoModel:
                             rec['fileName'], rec['time'], rec['date'], rec.get('observationId', None)
                         ))
             except Exception as e:
-                print(f"Error For XenoCanto: {e}")
+                logger.info(f"Error For XenoCanto: {e}")
                 database.conn.rollback()
                 return False
             logger.info(f"ANTES QUERY")
