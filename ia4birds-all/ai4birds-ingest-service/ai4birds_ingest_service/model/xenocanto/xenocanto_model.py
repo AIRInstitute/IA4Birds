@@ -29,43 +29,39 @@ class XenoCantoModel:
         database = PostgresSingleton.getInstance()
         database.connect()
         try:
-            # Iniciar la transacción
-            logger.info(f"ADD BATCH XENOCANTO")
-            # database.conn.begin()
-            logger.info(f"DESPUES BEGIN")
-            # Preparar los valores para las inserciones de grabaciones
             recording_values = []
-            logger.info(f"DATA LISTA {xenocanto_data_list}")
-            try:
-                for xenocanto_data in xenocanto_data_list:
-                    logger.info(f"DATA LISTA {xenocanto_data.recordings}")
-                    for rec in xenocanto_data.recordings:
-                        try:
-                            recording_values.append((
-                                rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], 
-                                rec['fileName'], rec['time'], rec['date'], rec.get('observationId', None)
-                            ))
-                        except KeyError as e:
-                            logger.error(f"Key error {e} in data: {rec}")
-                            continue  # Continúa con el siguiente registro
-            except Exception as e:
-                logger.error(f"General error processing XenoCanto data: {e}")
-                database.conn.rollback()
-                return False
-            logger.info(f"ANTES QUERY")
+            for xenocanto_data in xenocanto_data_list:
+                for rec in xenocanto_data.recordings:
+                    try:
+                        # Corregir el nombre de clave y realizar conversiones
+                        file_name = rec.get('fileName', rec.get('file-name', 'defaultFileName'))  # Soporte para ambos nombres de clave
+                        lat = float(rec['lat']) if rec['lat'] else 0.0
+                        lng = float(rec['lng']) if rec['lng'] else 0.0
+                        alt = int(rec['alt']) if rec['alt'] else 0
+
+                        # Añadir a la lista de valores
+                        recording_values.append((
+                            rec['recordingId'], rec['location'], rec['quality'], lat, lng, alt, rec['file'], 
+                            file_name, rec['time'], rec['date'], rec.get('observationId')
+                        ))
+                    except KeyError as e:
+                        logger.error(f"Key error {e} in data: {rec}")
+                        continue  # Continúa con el siguiente registro
+                    except ValueError as e:
+                        logger.error(f"Value error {e} in data: {rec}")
+                        continue  # Continúa si hay un error en la conversión de tipos
+
             # Consulta SQL para inserción en lote con manejo de conflictos
             recording_query = """
             INSERT INTO recording (recordingId, location, quality, lat, lng, alt, file, fileName, time, date, observationId)
             VALUES %s ON CONFLICT (recordingId) DO NOTHING;
             """
             # Utilizar execute_values del Singleton para realizar las inserciones
-            database.execute_values(recording_query, recording_values, page_size=100)
-            logger.info(f"DESPUES EXECUTE_VALUES")
-            # Confirmar la transacción
-            # database.conn.commit()
+            if recording_values:  # Verificar si hay algo que insertar
+                database.execute_values(recording_query, recording_values, page_size=100)
             return True
         except Exception as e:
-            print(f"Error adding XenoCanto batch data to DB: {e}")
+            logger.error(f"Error adding XenoCanto batch data to DB: {e}")
             database.conn.rollback()
             return False
         finally:
