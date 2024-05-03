@@ -35,12 +35,18 @@ class XenoCantoModel:
             logger.info(f"DESPUES BEGIN")
             # Preparar los valores para las inserciones de grabaciones
             recording_values = []
-            for xenocanto_data in xenocanto_data_list:
-                for rec in xenocanto_data.recordings:
-                    recording_values.append((
-                        rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], 
-                        rec['fileName'], rec['time'], rec['date'], rec.get('observationId', None)
-                    ))
+            logger.info(f"DATA LISTA {xenocanto_data_list}")
+            try:
+                for xenocanto_data in xenocanto_data_list:
+                    for rec in xenocanto_data.recordings:
+                        recording_values.append((
+                            rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], 
+                            rec['fileName'], rec['time'], rec['date'], rec.get('observationId', None)
+                        ))
+            except Exception as e:
+                print(f"Error For XenoCanto: {e}")
+                database.conn.rollback()
+                return False
             logger.info(f"ANTES QUERY")
             # Consulta SQL para inserción en lote con manejo de conflictos
             recording_query = """
