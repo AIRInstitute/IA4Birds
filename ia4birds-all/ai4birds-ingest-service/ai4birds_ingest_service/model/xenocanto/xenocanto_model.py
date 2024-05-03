@@ -38,13 +38,18 @@ class XenoCantoModel:
             logger.info(f"DATA LISTA {xenocanto_data_list}")
             try:
                 for xenocanto_data in xenocanto_data_list:
+                    logger.info(f"DATA LISTA {xenocanto_data.recordings}")
                     for rec in xenocanto_data.recordings:
-                        recording_values.append((
-                            rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], 
-                            rec['fileName'], rec['time'], rec['date'], rec.get('observationId', None)
-                        ))
+                        try:
+                            recording_values.append((
+                                rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], 
+                                rec['fileName'], rec['time'], rec['date'], rec.get('observationId', None)
+                            ))
+                        except KeyError as e:
+                            logger.error(f"Key error {e} in data: {rec}")
+                            continue  # Continúa con el siguiente registro
             except Exception as e:
-                logger.info(f"Error For XenoCanto: {e}")
+                logger.error(f"General error processing XenoCanto data: {e}")
                 database.conn.rollback()
                 return False
             logger.info(f"ANTES QUERY")
