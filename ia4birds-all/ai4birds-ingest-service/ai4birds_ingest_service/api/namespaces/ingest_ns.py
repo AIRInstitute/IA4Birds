@@ -90,15 +90,15 @@ class XenoCanto(Resource):
         backoff_factor = 1
         xenocanto_data_raw = xenocanto_extractor.xenocanto_query(max_retries=max_retries, backoff_factor=backoff_factor)
 
-        # if xenocanto_data_raw:
-        #     # Crear instancias de XenoCantoData desde los datos brutos obtenidos
-        #     xenocanto_data_objects = [XenoCantoData.from_dict(item) for item in xenocanto_data_raw]
+        if xenocanto_data_raw:
+            # Crear instancias de XenoCantoData desde los datos brutos obtenidos
+            xenocanto_data_objects = [XenoCantoData.from_dict(item) for item in xenocanto_data_raw]
             
-        #     # Crear una instancia del modelo XenoCantoModel y utilizar add_batch
-        #     xeno_model = XenoCantoModel()
-        #     if not xeno_model.add_batch(xenocanto_data_objects):
-        #         print("Error al insertar datos de XenoCanto en la base de datos")
-        #         return {"error": "Failed to insert XenoCanto data into the database"}, 500
+            # Crear una instancia del modelo XenoCantoModel y utilizar add_batch
+            xeno_model = XenoCantoModel()
+            if not xeno_model.add_batch(xenocanto_data_objects):
+                print("Error al insertar datos de XenoCanto en la base de datos")
+                return {"error": "Failed to insert XenoCanto data into the database"}, 500
 
         print(xenocanto_extractor.xenocanto_query.cache_info())
 
@@ -122,17 +122,17 @@ class EBird(Resource):
         # Llamar a los métodos de instancia
         ebird_data_raw = ebird_extractor.ebird_query(max_retries=max_retries, backoff_factor=backoff_factor)
         
-        # Crear instancias de EBirdData desde los datos brutos obtenidos
-        # if ebird_data_raw is not None:
-        #     ebird_data_objects = [EBirdData.from_dict(item) for item in ebird_data_raw]
+        #Crear instancias de EBirdData desde los datos brutos obtenidos
+        if ebird_data_raw is not None:
+            ebird_data_objects = [EBirdData.from_dict(item) for item in ebird_data_raw]
 
-        #     # Crear una instancia del modelo EBirdModel y utilizar add_batch
-        #     ebird_model = EBirdModel()
-        #     if not ebird_model.add_batch(ebird_data_objects):
-        #         print("Error al insertar datos de eBird en la base de datos")
-        #         return {"error": "Failed to insert eBird data into the database"}, 500
-        # else:
-        #     return {"error": "No data retrieved from eBird API"}, 404
+            # Crear una instancia del modelo EBirdModel y utilizar add_batch
+            ebird_model = EBirdModel()
+            if not ebird_model.add_batch(ebird_data_objects):
+                print("Error al insertar datos de eBird en la base de datos")
+                return {"error": "Failed to insert eBird data into the database"}, 500
+        else:
+            return {"error": "No data retrieved from eBird API"}, 404
         
         print(ebird_extractor.ebird_query.cache_info())
 

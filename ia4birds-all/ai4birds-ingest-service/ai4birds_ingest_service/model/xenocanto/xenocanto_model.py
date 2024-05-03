@@ -31,7 +31,7 @@ class XenoCantoModel:
         try:
             # Iniciar la transacción
             database.conn.begin()
-
+            logger.info(f"DESPUES BEGIN")
             # Preparar los valores para las inserciones de grabaciones
             recording_values = []
             for xenocanto_data in xenocanto_data_list:
@@ -40,7 +40,7 @@ class XenoCantoModel:
                         rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], 
                         rec['fileName'], rec['time'], rec['date'], rec.get('observationId', None)
                     ))
-            
+            logger.info(f"ANTES QUERY")
             # Consulta SQL para inserción en lote con manejo de conflictos
             recording_query = """
             INSERT INTO recording (recordingId, location, quality, lat, lng, alt, file, fileName, time, date, observationId)
@@ -48,7 +48,7 @@ class XenoCantoModel:
             """
             # Utilizar execute_values del Singleton para realizar las inserciones
             database.execute_values(recording_query, recording_values, page_size=100)
-            
+            logger.info(f"DESPUES EXECUTE_VALUES")
             # Confirmar la transacción
             database.conn.commit()
             return True
