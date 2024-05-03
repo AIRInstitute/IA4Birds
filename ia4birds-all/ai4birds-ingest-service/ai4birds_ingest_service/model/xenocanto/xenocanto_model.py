@@ -30,7 +30,8 @@ class XenoCantoModel:
         database.connect()
         try:
             # Iniciar la transacción
-            database.conn.begin()
+            logger.info(f"ADD BATCH XENOCANTO")
+            # database.conn.begin()
             logger.info(f"DESPUES BEGIN")
             # Preparar los valores para las inserciones de grabaciones
             recording_values = []
@@ -50,7 +51,7 @@ class XenoCantoModel:
             database.execute_values(recording_query, recording_values, page_size=100)
             logger.info(f"DESPUES EXECUTE_VALUES")
             # Confirmar la transacción
-            database.conn.commit()
+            # database.conn.commit()
             return True
         except Exception as e:
             print(f"Error adding XenoCanto batch data to DB: {e}")
