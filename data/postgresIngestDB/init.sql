@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS species (
     id SERIAL PRIMARY KEY,
-    comName VARCHAR(255),
-    sciName VARCHAR(255)
+    comName VARCHAR(255) UNIQUE,
+    sciName VARCHAR(255) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS observation (

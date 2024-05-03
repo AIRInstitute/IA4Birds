@@ -37,21 +37,21 @@ class EBirdModel:
         database.connect()
 
         try:
-            logger.info("ANTES BEGIN EBIRD")
+            
             # Preparar los valores para la inserción de especies
             species_values = [(data.com_name, data.sci_name) for data in ebird_data_list]
-            logger.info("ANTES QUERY EBIRD")
+           
             species_query = """
             INSERT INTO species (comName, sciName) VALUES %s ON CONFLICT (comName, sciName) DO NOTHING RETURNING id, comName, sciName;
             """
             database.execute_values(species_query, species_values, page_size=100)
-            logger.info("DESPUES EXECUTE EBIRD")
+            
             species_ids = database.fetchall()
 
             # Crear un mapa de ID de especies basado en comName y sciName
             species_id_map = {name: id for id, name, _ in species_ids}
 
-            logger.info("ANTES OBSERVATION VALUES EBIRD")
+            
             # Preparar datos de observaciones para inserción en lotes
             observation_values = []
             for data in ebird_data_list:
@@ -61,12 +61,12 @@ class EBirdModel:
                         (obs['locationId'], obs['locationName'], obs['lat'], obs['lng'], obs['date'], obs['numObservation'], specie_id))
 
             # Insertar observaciones en lotes
-            logger.info("ANTES QUERY OBSERVATION VALUES EBIRD")
+            
             observation_query = """
             INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId) VALUES %s;
             """
             database.execute_values(observation_query, observation_values, page_size=100)
-            logger.info("DESPUES EXECUTE OBSERVATION VALUES EBIRD")
+            
             return True
         except Exception as e:
             print(f"Error in add_batch: {e}")
