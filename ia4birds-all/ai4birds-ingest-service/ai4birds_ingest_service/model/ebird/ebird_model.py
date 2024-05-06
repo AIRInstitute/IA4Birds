@@ -48,10 +48,11 @@ class EBirdModel:
             
             species_ids = database.fetchall()
 
+            logger.info(f"Size of species_ids RETURN: {len(species_ids)}")
             # Crear un mapa de ID de especies basado en comName y sciName
             species_id_map = {name: id for id, name, _ in species_ids}
 
-            
+            logger.info(f"Size of species_id_map: {len(species_id_map)}")
             # Preparar datos de observaciones para inserción en lotes
             observation_values = []
             for data in ebird_data_list:
