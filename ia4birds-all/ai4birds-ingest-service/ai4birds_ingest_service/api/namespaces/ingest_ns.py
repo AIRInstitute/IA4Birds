@@ -55,19 +55,19 @@ class DataBird(Resource):
         ebird_data_raw = ebird_extractor.ebird_query(max_retries=max_retries, backoff_factor=backoff_factor)
         xenocanto_data = xenocanto_extractor.xenocanto_query(max_retries=max_retries, backoff_factor=backoff_factor)
         
-        # ebird_data_objects = [EBirdData.from_dict(item) for item in ebird_data_raw] if ebird_data_raw else []
-        # xenocanto_data_objects = [XenoCantoData.from_dict(item) for item in xenocanto_data] if xenocanto_data else []
+        ebird_data_objects = [EBirdData.from_dict(item) for item in ebird_data_raw] if ebird_data_raw else []
+        xenocanto_data_objects = [XenoCantoData.from_dict(item) for item in xenocanto_data] if xenocanto_data else []
 
-        # ebird_model = EBirdModel()
-        # xeno_model = XenoCantoModel()
+        ebird_model = EBirdModel()
+        xeno_model = XenoCantoModel()
 
-        # if ebird_data_objects:
-        #     if not ebird_model.add_batch(ebird_data_objects):
-        #         return {"error": "Failed to insert eBird data into the database"}, 500
+        if ebird_data_objects:
+            if not ebird_model.add_batch(ebird_data_objects):
+                return {"error": "Failed to insert eBird data into the database"}, 500
 
-        # if xenocanto_data_objects:
-        #     if not xeno_model.add_batch(xenocanto_data_objects):
-        #         return {"error": "Failed to insert XenoCanto data into the database"}, 500
+        if xenocanto_data_objects:
+            if not xeno_model.add_batch(xenocanto_data_objects):
+                return {"error": "Failed to insert XenoCanto data into the database"}, 500
 
         print(xenocanto_extractor.xenocanto_query.cache_info())
         
