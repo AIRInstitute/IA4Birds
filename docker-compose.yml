@@ -154,7 +154,7 @@ services:
     build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
     container_name: backend
     ports:
-      - 3030:3030
+      - 5030:3030
     networks:
       - bird-net
 
