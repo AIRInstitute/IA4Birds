@@ -23,6 +23,27 @@ DB_CONFIG={
     'database' : "ingestDB"
 }
 
+SPECIES_LIST = {
+    "Quebrantahuesos": "Gypaetus barbatus",
+    "Buitre negro": "Aegypius monachus",
+    "Buitre leonado": "Gyps fulvus",
+    "Alimoche común": "Neophron percnopterus",
+    "Águila perdicera": "Aquila fasciata",
+    "Águila imperial ibérica": "Aquila adalberti",
+    "Águila real": "Aquila chrysaetos",
+    "Águila pescadora": "Pandion haliaetus",
+    "Milano real": "Milvus milvus",
+    "Aguilucho pálido": "Circus cyaneus",
+    "Aguilucho cenizo": "Circus pygargus",
+    "Cernícalo primilla": "Falco naumanni",
+    "Halcón tagarote": "Falco pelegrinoides",
+    "Cigüeña negra": "Ciconia nigra",
+    "Cigüeña común": "Ciconia ciconia",
+    "Grulla común": "Grus grus",
+    "Urogallo": "Tetrao urogallus",
+    "Alondra ricotí": "Chersophilus duponti"
+}
+
 # EBird password
 EBIRD_PASSWORD = 'v1kfvin2apud'
 

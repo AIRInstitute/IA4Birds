@@ -47,22 +47,38 @@ class EBird_Extractor:
         return None
 
     def _format_results(self, data):
+        species_list = config.SPECIES_LIST.values()
         formatted_results = []
         #ogger.error(f'Format_RESULTS')
         for observation in data:
-            formatted_results.append({
-                "speciesSciName": observation['sciName'],
-                "speciesCode": observation['speciesCode'],
-                "comName": observation['comName'],
-                "observations": [{
-                    "obsDt": observation['obsDt'],
-                    "locationId": observation['locId'],
-                    "locationName": observation['locName'],
-                    "lat": observation['lat'],
-                    "lng": observation['lng'],
-                    "date": observation['obsDt'],
-                    "numObservation": observation.get('howMany', None)
-                }]
-            })
+            if observation['sciName'] in species_list:
+                formatted_results.append({
+                    "speciesSciName": observation['sciName'],
+                    "speciesCode": observation['speciesCode'],
+                    "comName": observation['comName'],
+                    "observations": [{
+                        "obsDt": observation['obsDt'],
+                        "locationId": observation['locId'],
+                        "locationName": observation['locName'],
+                        "lat": observation['lat'],
+                        "lng": observation['lng'],
+                        "date": observation['obsDt'],
+                        "numObservation": observation.get('howMany', None)
+                    }]
+                })
+            # formatted_results.append({
+            #     "speciesSciName": observation['sciName'],
+            #     "speciesCode": observation['speciesCode'],
+            #     "comName": observation['comName'],
+            #     "observations": [{
+            #         "obsDt": observation['obsDt'],
+            #         "locationId": observation['locId'],
+            #         "locationName": observation['locName'],
+            #         "lat": observation['lat'],
+            #         "lng": observation['lng'],
+            #         "date": observation['obsDt'],
+            #         "numObservation": observation.get('howMany', None)
+            #     }]
+            # })
         #logger.error(f'antes return')
         return formatted_results 

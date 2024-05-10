@@ -5,6 +5,7 @@ import json
 import os
 from os import path
 from flask import jsonify, send_from_directory
+from flask import Response 
 import tempfile
 from flask_restx import Resource
 from ai4birds_ingest_service import config
@@ -23,6 +24,7 @@ from ai4birds_ingest_service.model.data_converter import DataConverter
 from ai4birds_ingest_service.model.data_combination.data_combination_model import DataCombinationModel
 from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel, EBirdData
 from ai4birds_ingest_service.model.xenocanto.xenocanto_model import XenoCantoModel, XenoCantoData
+
 
 
 # Endpoints
@@ -290,7 +292,15 @@ class ExclusionMapZip(Resource):
         except Exception as e:
             # Asegúrate de manejar los errores adecuadamente...
             api.abort(500, f"Error interno: {e}")
-        
+
+@ns_exclusionmap.route('/stream-exclusion-data')
+class StreamExclusionData(Resource):
+    def get(self):
+        def generate():
+            for data_batch in DataConverter.stream_csv_data(config.EXCLUSION_EOLICA_CSV_PATH, page_size=50):
+                yield f"data: {json.dumps(data_batch)}\n\n"
+        return Response(generate(), mimetype='text/event-stream')
+
 @ns_sensitivity.route('/')
 class Sensitivity(Resource):
     """

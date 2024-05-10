@@ -6,6 +6,7 @@ import time
 import requests
 from functools import lru_cache
 from ai4birds_ingest_service.log import logger
+from ai4birds_ingest_service import config
 
 class XenoCanto_Extractor():
     @lru_cache(maxsize=128)
@@ -58,21 +59,39 @@ class XenoCanto_Extractor():
         return self._format_results(all_results)
     
     def _format_results(self, data):
+        species_list = config.SPECIES_LIST.values()
         formatted_results = []
         for bird in data:
-            formatted_results.append({
-                "speciesSciName": f"{bird['gen']} {bird['sp']}",
-                "recordings": [{
-                    "recordingId": bird['id'],
-                    "location": bird['loc'],
-                    "quality": bird['q'],
-                    "lat": bird['lat'],
-                    "lng": bird['lng'],
-                    "alt": bird['alt'],
-                    "file": bird['file'],
-                    "file-name": bird['file-name'],
-                    "time": bird['time'],
-                    "date": bird['date']
-                }]
-            })
+            full_species_name = f"{bird['gen']} {bird['sp']}"
+            if full_species_name in species_list:  # Filtra por especie
+                formatted_results.append({
+                    "speciesSciName": full_species_name,
+                    "recordings": [{
+                        "recordingId": bird['id'],
+                        "location": bird['loc'],
+                        "quality": bird['q'],
+                        "lat": bird['lat'],
+                        "lng": bird['lng'],
+                        "alt": bird['alt'],
+                        "file": bird['file'],
+                        "file-name": bird['file-name'],
+                        "time": bird['time'],
+                        "date": bird['date']
+                    }]
+                })
+            # formatted_results.append({
+            #     "speciesSciName": f"{bird['gen']} {bird['sp']}",
+            #     "recordings": [{
+            #         "recordingId": bird['id'],
+            #         "location": bird['loc'],
+            #         "quality": bird['q'],
+            #         "lat": bird['lat'],
+            #         "lng": bird['lng'],
+            #         "alt": bird['alt'],
+            #         "file": bird['file'],
+            #         "file-name": bird['file-name'],
+            #         "time": bird['time'],
+            #         "date": bird['date']
+            #     }]
+            # })
         return formatted_results
