@@ -18,7 +18,7 @@
     "Node",
     "JavaScript"
   ],
-  "author": "JuanjoLopez19",
+  "author": "Marcos",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sergiosg1504/plantilla-VueNode/issues"
@@ -55,6 +55,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.5",
     "pg": "^8.11.3",
+    "redis": "^4.6.13",
     "sequelize": "^6.33.0",
     "swagger-ui-express": "^5.0.0"
   }
