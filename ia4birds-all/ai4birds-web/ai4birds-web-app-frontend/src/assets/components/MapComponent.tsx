@@ -19,21 +19,6 @@ const Mapa = () => {
 
   const [eolicMarkers, setEolicMarkers] = useState([]);
   const [birdMarkers, setBirdsMarkers] = useState([]);
-  // useEffect(() => {
-  //   console.log('Coordenadass Castilla y león: --->',castillaYLeonBorders); // Check if your GeoJSON data is correctly loaded
-  // }, []);
-
-  //   const coordenadas = [
-  //     [
-  //         40.98,
-  //         -5.66
-  //     ],
-  //     [
-  //         40.94,
-  //         -4.11
-  //     ]
-  // ];
-
 
   const birdData = [
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
