@@ -249,7 +249,7 @@ class DataConverter:
             return {'error': str(e)}
         
     @staticmethod
-    @lru_cache(maxsize=128)
+    # @lru_cache(maxsize=128)
     def stream_csv_data(filepath, page_size=50):
         try:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
