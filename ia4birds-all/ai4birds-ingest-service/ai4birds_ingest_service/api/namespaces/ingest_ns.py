@@ -236,42 +236,6 @@ class ExclusionMap(Resource):
             logger.error(f"Error: {e}")  # Asegúrate de loguear el error
             return jsonify({'error': str(e)}), 500  # Devolver como JSON
         
-    
-    # @api.expect(exclusionmap_parser_get)
-    # @api.response(404, 'Data not found')
-    # @api.response(500, 'Unhandled errors')
-    # @api.response(400, 'Invalid parameters')
-    # @api.response(200, 'Successful', model=exclusionmap_response_model)
-    # @limiter.limit('1000000/hour') 
-    # def get(self):
-    #     """
-    #     Obtain exclusion map data with coordinates divided into pages.
-    #     """
-    #     # Validar y obtener argumentos de la URL
-    #     try:
-    #         args = exclusionmap_parser_get.parse_args()
-    #     except Exception as e:
-    #         return handle400error(ns_exclusionmap, 'Malformed request. Please, check the request at /v1')
-
-    #     page = args['page']
-    #     page_size = args['page_size']
-
-    #     # Continuar con la lógica para obtener los datos como antes
-    #     try:
-    #         csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH
-    #         if csv_file_path is None:
-    #             logger.error("La ruta del archivo CSV no está definida en las variables de entorno.")
-    #             raise Exception("CSV file path not defined.")
-
-    #         json_data = DataConverter.csv_to_json(csv_file_path, page=page, page_size=page_size)
-    #         if not json_data:
-    #             return jsonify({"message": "Data not found for the specified page parameters"}), 404
-
-    #         return jsonify(json_data)
-    #     except Exception as e:
-    #         logger.error(f"Error: {e}")
-    #         return jsonify({'error': str(e)}), 500
-        
 
 @ns_exclusionmap.route('/zip')
 class ExclusionMapZip(Resource):
@@ -295,11 +259,34 @@ class ExclusionMapZip(Resource):
 
 @ns_exclusionmap.route('/stream-exclusion-data')
 class StreamExclusionData(Resource):
-    def get(self):
-        def generate():
-            for data_batch in DataConverter.stream_csv_data(config.EXCLUSION_EOLICA_CSV_PATH, page_size=50):
-                yield f"data: {json.dumps(data_batch)}\n\n"
-        return Response(generate(), mimetype='text/event-stream')
+    
+    # @api.expect(stream_exclusionmap_model)
+    @api.response(200, 'Successful')
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @limiter.limit('1000000/hour')
+    def post(self):
+        """
+        Stream CSV data as server-sent events based on posted configuration.
+
+        Returns:
+            :return: A stream of server-sent events with CSV data batched.
+            :rtype: Response
+        """
+        try:
+            # params = stream_exclusionmap_parser.parse_args()
+            csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH
+
+            def generate():
+                for data_batch in DataConverter.stream_csv_data(csv_file_path, page_size=50):
+                    yield f"data: {json.dumps(data_batch)}\n\n"
+
+            return Response(generate(), mimetype='text/event-stream')
+
+        except Exception as e:
+            logger.error(f"Error during data streaming: {e}")
+            return jsonify({'error': str(e)}), 500
 
 @ns_sensitivity.route('/')
 class Sensitivity(Resource):
