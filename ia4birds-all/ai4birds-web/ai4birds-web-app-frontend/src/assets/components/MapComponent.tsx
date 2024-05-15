@@ -52,6 +52,14 @@ const Mapa = () => {
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false);
 
+  //SSE ServerSent Events
+  const [facts, setFacts] = useState([]);
+  const [listening, setListening] = useState(false);
+
+  useEffect(() => {
+   console.log('facts', facts)
+  }, [facts]);
+
   useEffect(() => {
     // Esta función se ejecutará una vez cuando el componente se monte en el DOM
     console.log('La página se ha cargado MapComponent');
@@ -94,6 +102,22 @@ const Mapa = () => {
       setShowMarkersEolic(showMarkersEolic => !showMarkersEolic);
     }
   };
+
+  const addEolicMarkersStreamExclusion = () => {
+
+    if (!listening) {
+      //get a Node
+      const events = new EventSource('http://localhost:5030/api/data/exclusionmap/stream-exclusion-data');
+
+      events.onmessage = (event) => {
+        const parsedData = JSON.parse(event.data);
+
+        setFacts((facts) => facts.concat(parsedData));
+      };
+
+      setListening(true);
+    }
+  }
 
   useEffect(() => {
     // Esta función se ejecutará cada vez que setEolicMarkers cambie
@@ -166,6 +190,9 @@ const Mapa = () => {
                 {showMarkersEolic && (
                   <FaCheck />
                 )}
+                <Tooltip placement="right" content="Prueba">
+                  <Button className='camera' color={!showMarkersEolic ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersStreamExclusion}><FaFan /></Button>
+                </Tooltip>
               </div>
             </CardBody>
           </Card>

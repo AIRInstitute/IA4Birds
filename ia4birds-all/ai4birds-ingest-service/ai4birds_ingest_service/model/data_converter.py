@@ -278,5 +278,6 @@ class DataConverter:
                 yield data_list
 
         except Exception as e:
-            print(f"Error streaming CSV data: {e}")
+            print(e)
+            print(f"Error streaming CSV data: {e.__str__()}")
             yield {'error': str(e)}

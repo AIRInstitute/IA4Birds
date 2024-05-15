@@ -30,6 +30,14 @@ export default () => {
         "/exclusionmap/zip",
         mapController.getExclusionMapData
     )
+    dataRouter.get(
+        "/exclusionmap/stream-exclusion-data",
+         mapController.getExclusionMapDataStreaming 
+    )
+    dataRouter.post(
+        "/exclusionmap/stream-exclusion-data", 
+        mapController.addFact 
+    )
     return dataRouter;
 };
 

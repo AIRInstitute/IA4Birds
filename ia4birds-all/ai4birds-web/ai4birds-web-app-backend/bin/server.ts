@@ -43,68 +43,9 @@ if (fs.existsSync(config.ssl.key) && fs.existsSync(config.ssl.cert)) {
 	server = http.createServer(app);
 }
 
-// SSE endpoint que devuelve un objeto JSON con el número de clientes conectados
-app.get('/status', (req, res) => res.json({clients: clients.length}));
-
-let clients = [];
-let facts = [];
-
-//Inicializa el servidor
 app.listen(port, () => {
 	console.log(`Server listening at http://localhost:${port}`)
 })
-
-app.get(`/exclusionmap`, (req, res, next) => {
-    
-	const headers = {
-		'Content-Type': 'text/event-stream',
-		'Connection': 'keep-alive',
-		'Cache-Control': 'no-cache'
-	  };
-	  res.writeHead(200, headers);
-	
-	  const data = `data: ${JSON.stringify(facts)}\n\n`;
-	
-	  res.write(data);
-	
-	  const clientId = Date.now();
-	
-	  const newClient = {
-		id: clientId,
-		res
-	  };
-
-	  console.log(`${clientId} Connection opened`);
-	
-	  clients.push(newClient);
-	
-	  req.on('close', () => {
-		console.log(`${clientId} Connection closed`);
-		clients = clients.filter(client => client.id !== clientId);
-	  });
-	
-});
-  //Envía eventos a toos los clientes conectados
-  function sendEventsToAll(newFact) {
-	console.log(`New fact to${JSON.stringify(newFact)} clients`);
-	clients.forEach(client => client.res.write(`data: ${JSON.stringify(newFact)}\n\n`))
-  }
-  
-  async function addFact(req, res, next) {
-	const newFact = req.body;
-	facts.push(newFact);
-	res.json(newFact)
-	console.log(`New fact: ${newFact}`);
-	return sendEventsToAll(newFact);
-  }
-  
-  app.post('/exclusionmap/stream-exclusion-data', addFact);
-
-/* server.listen(port, () => {
-	console.log(`Server running on port ${port}`);
-});
-server.on("error", onError);
-server.on("listening", onListening); */
 
 function onError(error: { syscall: string; code: any }) {
 	if (error.syscall !== "listen") {
