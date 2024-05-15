@@ -5,7 +5,7 @@ import json
 import os
 from os import path
 from flask import jsonify, send_from_directory
-from flask import Response 
+from flask import Response, request as flask_request
 import tempfile
 from flask_restx import Resource
 from ai4birds_ingest_service import config
@@ -277,12 +277,21 @@ class StreamExclusionData(Resource):
         try:
             # params = stream_exclusionmap_parser.parse_args()
             csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH
-
+            client_id = flask_request.args.get('id', None)
             def generate():
                 for data_batch in DataConverter.stream_csv_data(csv_file_path, page_size=50):
-                    yield f"data: {json.dumps(data_batch)}\n\n"
+                    # yield f"data: {json.dumps(data_batch)}\n\n"
+                    # # print(f"Data batch sent: {data_batch}")
+                    response = requests.post(f'http://127.0.0.1:5030/api/data/exclusionmap/stream-exclusion-data?client_id={client_id}', json={"data": "{}\n\n".format(json.dumps(data_batch, ensure_ascii=False))})
+                    if response.status_code == 200:
+                        print(f"Successfully sent")
+                    else:
+                        print(f"Failed to send")
 
-            return Response(generate(), mimetype='text/event-stream')
+                    time.sleep(1)
+            generate()
+            return jsonify({"message": "Data streaming completed."})
+            # return Response(generate(), mimetype='text/event-stream')
 
         except Exception as e:
             logger.error(f"Error during data streaming: {e}")
