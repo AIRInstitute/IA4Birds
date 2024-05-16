@@ -58,6 +58,7 @@ const Mapa = () => {
 
   useEffect(() => {
    console.log('facts', facts)
+   setEolicMarkers(facts);
   }, [facts]);
 
   useEffect(() => {
@@ -104,7 +105,7 @@ const Mapa = () => {
   };
 
   const addEolicMarkersStreamExclusion = () => {
-
+    setBirdsMarkers([]);
     if (!listening) {
       //get a Node
       const events = new EventSource('http://localhost:5030/api/data/exclusionmap/stream-exclusion-data');
@@ -113,6 +114,12 @@ const Mapa = () => {
         const parsedData = JSON.parse(event.data);
 
         setFacts((facts) => facts.concat(parsedData));
+        console.log('parsedData', parsedData);
+
+        
+
+        setShowMarkersEolic(true);
+
       };
 
       setListening(true);
@@ -184,15 +191,18 @@ const Mapa = () => {
                 <Button className='camera'  isIconOnly color="primary" size='lg' onClick={addMarkersCameras}><FaCrow/></Button>
               </Tooltip>  */}
               <div className="flex items-center gap-4">
-                <Tooltip placement="right" content="Capa eólica">
+                {/* <Tooltip placement="right" content="Capa eólica">
                   <Button className='camera' color={!showMarkersEolic ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkers}><FaFan /></Button>
                 </Tooltip>
                 {showMarkersEolic && (
                   <FaCheck />
-                )}
-                <Tooltip placement="right" content="Prueba">
+                )} */}
+                <Tooltip placement="right" content="Capa eólica">
                   <Button className='camera' color={!showMarkersEolic ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersStreamExclusion}><FaFan /></Button>
                 </Tooltip>
+                {showMarkersEolic && (
+                  <FaCheck />
+                )}
               </div>
             </CardBody>
           </Card>
