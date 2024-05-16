@@ -282,7 +282,7 @@ class StreamExclusionData(Resource):
                 for data_batch in DataConverter.stream_csv_data(csv_file_path, page_size=50):
                     # yield f"data: {json.dumps(data_batch)}\n\n"
                     # # print(f"Data batch sent: {data_batch}")
-                    response = requests.post(f'http://212.128.141.36:5030/api/data/exclusionmap/stream-exclusion-data?client_id={client_id}', json={"data": "{}\n\n".format(json.dumps(data_batch, ensure_ascii=False))})
+                    response = requests.post(f'http://212.128.141.36:5030/api/data/exclusionmap/stream-exclusion-data?client_id={client_id}', json=data_batch)
                     if response.status_code == 200:
                         print(f"Successfully sent")
                     else:
