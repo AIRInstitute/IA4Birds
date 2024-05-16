@@ -56,6 +56,7 @@ const getExclusionMapDataStreaming =  async (req: Request, res: Response) => {
                 throw new Error('No se pudieron obtener los datos del mapa de exclusión eólica en Stream.');
             }
             else{
+                notifyNoMoreData(newClient.id)
                 console.log(response.data)
                 // addFact(response.data)
             }
@@ -77,16 +78,37 @@ const getExclusionMapDataStreaming =  async (req: Request, res: Response) => {
 	// clients.forEach(client => client.res.write(`data: ${JSON.stringify(newFact)}\n\n`))
   }
   
-  async function addFact(req: Request, res:Response ) {
-    const {client_id} = req.query
+//   async function addFact(req: Request, res:Response ) {
+//     const {client_id} = req.query
+//     console.log(`New fact: ${req.body}`);
+// 	const newFact = req.body;
+// 	facts.push(newFact);
+// 	res.json(newFact)
+// 	return sendEventToClient(newFact, client_id);
+//     // return res.status(200).json(newFact);
+//   }
+
+
+async function addFact(req: Request, res: Response) {
+    const { client_id } = req.query;
     console.log(`New fact: ${req.body}`);
-	const newFact = req.body;
-	facts.push(newFact);
-	res.json(newFact)
-	return sendEventToClient(newFact, client_id);
-    // return res.status(200).json(newFact);
+    const newFact = req.body;
+    
+    facts.push(newFact);
+    res.json(newFact);
+  
+    sendEventToClient(newFact, client_id);
+  
   }
   
+  function notifyNoMoreData(clientId) {
+    const client = clients.find(client => client.id === clientId);
+    if (client) {
+      client.res.write(`data: {"message": "Data streaming completed."}\n\n`);
+    } else {
+      console.log(`Cliente con ID ${clientId} no encontrado`);
+    }
+  }
 
 
 // Utilidad para descargar y procesar el archivo ZIP
