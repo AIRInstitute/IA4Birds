@@ -114,14 +114,11 @@ const Mapa = () => {
 
       events.onmessage = (event) => {
         const parsedData = JSON.parse(event.data);
-        if(parsedData.message === 'Data streaming completed') {
+        if(parsedData.message === 'Data streaming completed.') {
           setstreamingEolicData(false);
         }else{
           setFacts((facts) => facts.concat(parsedData));
-          console.log('parsedData', parsedData);
         }
-
-        
 
         setShowMarkersEolic(true);
 
