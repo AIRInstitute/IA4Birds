@@ -74,8 +74,17 @@ const getExclusionMapDataStreaming =  async (req: Request, res: Response) => {
     console.log(clientId)
     const client = clients.filter(client => client.id == clientId).pop();
     console.log(client)
-    client.res.write(`data: ${JSON.stringify(newFact)}\n\n`);
-	// clients.forEach(client => client.res.write(`data: ${JSON.stringify(newFact)}\n\n`))
+    //client.res.write(`data: ${JSON.stringify(newFact)}\n\n`);
+	if (client && client.res) {
+        try {
+            client.res.write(`data: ${JSON.stringify(newFact)}\n\n`);
+        } catch (error) {
+            console.error('Error writing to client stream:', error);
+        }
+    } else {
+        console.error(`Client with ID ${clientId} not found or client.res is undefined`);
+    }
+    // clients.forEach(client => client.res.write(`data: ${JSON.stringify(newFact)}\n\n`))
   }
   
 //   async function addFact(req: Request, res:Response ) {
