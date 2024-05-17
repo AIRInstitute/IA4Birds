@@ -16,6 +16,7 @@ import MarkerClusterGroup from 'react-leaflet-cluster'
 const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [markerBird, setMarkerBird] = useState(false);
+  const [streamingEolicData, setstreamingEolicData] = useState(false);
 
   const [eolicMarkers, setEolicMarkers] = useState([]);
   const [birdMarkers, setBirdsMarkers] = useState([]);
@@ -108,13 +109,17 @@ const Mapa = () => {
     setBirdsMarkers([]);
     if (!listening) {
       //get a Node
+      //const events = new EventSource('http://localhost:5030/api/data/exclusionmap/stream-exclusion-data');
       const events = new EventSource('http://212.128.141.36:5030/api/data/exclusionmap/stream-exclusion-data');
 
       events.onmessage = (event) => {
         const parsedData = JSON.parse(event.data);
-
-        setFacts((facts) => facts.concat(parsedData));
-        console.log('parsedData', parsedData);
+        if(parsedData.message === 'Data streaming completed') {
+          setstreamingEolicData(false);
+        }else{
+          setFacts((facts) => facts.concat(parsedData));
+          console.log('parsedData', parsedData);
+        }
 
         
 
