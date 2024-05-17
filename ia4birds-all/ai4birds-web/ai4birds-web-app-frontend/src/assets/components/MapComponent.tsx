@@ -108,7 +108,7 @@ const Mapa = () => {
     setBirdsMarkers([]);
     if (!listening) {
       //get a Node
-      const events = new EventSource('http://localhost:5030/api/data/exclusionmap/stream-exclusion-data');
+      const events = new EventSource('http://212.128.141.36:5030/api/data/exclusionmap/stream-exclusion-data');
 
       events.onmessage = (event) => {
         const parsedData = JSON.parse(event.data);
