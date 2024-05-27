@@ -8,15 +8,15 @@ on:
       - 'ia4birds-all/ai4birds-ai-service/**'
 
 jobs:
-  CheckOut:
-    name: Check out
+  check_out:
+    name: check out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - uses: actions/checkout@v1
 
-  DockerClean:
-    name: Docker clean
-    needs: CheckOut
+  docker_clean:
+    name: docker clean
+    needs: check_out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Stop ai4birds-ai Container
@@ -29,9 +29,17 @@ jobs:
         run: sudo docker rmi ia4birds-all-ia4birds-ai-service
         continue-on-error: true
 
-  DockerCompose:
+  copy_file:
+    name: copy file
+    needs: docker_clean
+    runs-on: [self-hosted, linux, x64, prod]
+    steps:
+      - name: copy file
+        run: cp /etc/envs/.env .
+
+  docker_compose:
     name: Docker compose
-    needs: DockerClean
+    needs: copy_file
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Build the docker-compose
