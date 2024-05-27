@@ -63,13 +63,13 @@ class DataBird(Resource):
         ebird_model = EBirdModel()
         xeno_model = XenoCantoModel()
 
-        if ebird_data_objects:
-            if not ebird_model.add_batch(ebird_data_objects):
-                return {"error": "Failed to insert eBird data into the database"}, 500
+        # if ebird_data_objects:
+        #     if not ebird_model.add_batch(ebird_data_objects):
+        #         return {"error": "Failed to insert eBird data into the database"}, 500
 
-        if xenocanto_data_objects:
-            if not xeno_model.add_batch(xenocanto_data_objects):
-                return {"error": "Failed to insert XenoCanto data into the database"}, 500
+        # if xenocanto_data_objects:
+        #     if not xeno_model.add_batch(xenocanto_data_objects):
+        #         return {"error": "Failed to insert XenoCanto data into the database"}, 500
 
         print(xenocanto_extractor.xenocanto_query.cache_info())
         
