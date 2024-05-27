@@ -224,4 +224,6 @@ services:
 networks:
   bird-net:
     driver: bridge
+  redis-net:
+    driver: bridge
 
