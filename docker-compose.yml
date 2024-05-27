@@ -227,3 +227,7 @@ networks:
   redis-net:
     driver: bridge
 
+volumes:
+  cache:
+    driver: local
+
