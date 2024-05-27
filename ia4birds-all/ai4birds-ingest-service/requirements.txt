@@ -40,3 +40,4 @@ lru_cache
 # truststore==0.8.0
 # urllib3_secure_extra==0.1.0
 # zstandard==0.22.0
+python-dotenv

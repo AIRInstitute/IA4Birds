@@ -99,14 +99,13 @@ services:
     image: "postgres:14-alpine"
     container_name: postgres
     volumes:
+      - /etc/envs/.env:/etc/envs/.env
       - /etc/ai4birds-data-db/data:/var/lib/postgresql/data
       - ./data/postgresDB/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - 1337:5432
     environment:
-      - POSTGRES_USER=ai4birds_user
-      - POSTGRES_DB=dataDB
-      - POSTGRES_PASSWORD=ai4birds_2024?!
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - bird-net
 
@@ -114,14 +113,13 @@ services:
     image: "postgres:14-alpine"
     container_name: postgres-ingest
     volumes:
+      - /etc/envs/.env:/etc/envs/.env
       - /etc/ai4birds-ingest-db/data:/var/lib/postgresql/data
       - ./data/postgresIngestDB/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - 1338:5432
     environment:
-      - POSTGRES_USER=ai4birds_user
-      - POSTGRES_DB=ingestDB
-      - POSTGRES_PASSWORD=ai4birds_2024?!
+      - POSTGRES_USER=${POSTGRES_INGEST_USER}
+      - POSTGRES_DB=${POSTGRES_INGEST_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_INGEST_PASSWORD}
     networks:
       - bird-net
 
@@ -129,14 +127,13 @@ services:
     image: "postgres:14-alpine"
     container_name: postgres-analysis
     volumes:
+      - /etc/envs/.env:/etc/envs/.env
       - /etc/ai4birds-analysis-db/data:/var/lib/postgresql/data
       #- ./data/postgresAnalysisDB/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - 1339:5432
     environment:
-      - POSTGRES_USER=ai4birds_user
-      - POSTGRES_DB=analysisDB
-      - POSTGRES_PASSWORD=ai4birds_2024?!
+      - POSTGRES_USER=${POSTGRES_ANALYSIS_USER}
+      - POSTGRES_DB=${POSTGRES_ANALYSIS_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_ANALYSIS_PASSWORD}
     networks:
       - bird-net
 
@@ -187,6 +184,42 @@ services:
         - .env
       networks:
         - bird-net 
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    env_file:
+      - /etc/envs/.env
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes: 
+      - cache:/data
+      - /etc/envs/.env:/etc/envs/.env
+    networks:
+      - bird-net
+      - redis-net
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    env_file:
+      - /etc/envs/.env
+    environment:
+      REDIS_HOSTS: redis
+      REDIS_HOST: redis
+      REDIS_PORT: redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      HTTP_USER: ${REDIS_COMMANDER_USER}
+      HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD}
+    ports:
+      - 8081:8081
+    volumes:
+      - /etc/envs/.env:/etc/envs/.env
+    depends_on:
+      - redis
+    networks:
+      - redis-net
 
 networks:
   bird-net:

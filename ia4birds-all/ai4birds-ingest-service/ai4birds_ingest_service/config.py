@@ -3,9 +3,12 @@
 # See LICENSE for details.
 # Author: AIRInstitute (@AIRInstitute on GitHub)
 
-
+from dotenv import load_dotenv
 import os
 
+dotenv_path = '/etc/envs/.env'
+
+load_dotenv(dotenv_path)
 
 # api config
 # PORT = 5001
@@ -16,11 +19,11 @@ DEBUG_MODE = True
 
 #DB config
 DB_CONFIG={
-    'host' : "212.128.141.36",
-    'port' : 1338,
-    'user' : "ai4birds_user",
-    'password' : "ai4birds_2024?!",
-    'database' : "ingestDB"
+    'host' : os.getenv('POSTGRES_INGEST_HOST'),
+    'port' : os.getenv('POSTGRES_INGEST_PORT'),
+    'user' : os.getenv('POSTGRES_INGEST_USER'),
+    'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),
+    'database' : os.getenv('POSTGRES_INGEST_DB')
 }
 
 SPECIES_LIST = {
