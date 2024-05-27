@@ -32,8 +32,8 @@ jobs:
         run: cp /etc/envs/.env .
 
   docker_compose:
-    name: copy_file
-    needs: check_out
+    name: docker compose
+    needs: copy_file
     runs-on: [self-hosted, linux, x64, prod]
     steps:
     - name: Build Custom Kong Image
