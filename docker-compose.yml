@@ -83,17 +83,17 @@ services:
   #   networks:
   #     - bird-net
       
-  app:
-    build: ./ia4birds-all/ai4birds-web
-    container_name: app
-    ports:
-      - 8080:8080
-      - 80:80
-      - 5173:5173
-      - 443:443
-      - 3000:3030
-    networks:
-      - bird-net
+  # app:
+  #   build: ./ia4birds-all/ai4birds-web
+  #   container_name: app
+  #   ports:
+  #     - 8080:8080
+  #     - 80:80
+  #     - 5173:5173
+  #     - 443:443
+  #     - 3000:3030
+  #   networks:
+  #     - bird-net
 
   postgresql:
     image: "postgres:14-alpine"
@@ -137,24 +137,23 @@ services:
     networks:
       - bird-net
 
-  # frontend:
-  #   build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-frontend
-  #   container_name: frontend
-  #   ports:
-  #     - 80:5173
-  #     - 8080:8080
-  #     - 443:443
-  #   networks:
-  #     - bird-net
+  frontend:
+    build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-frontend
+    container_name: frontend
+    ports:
+      - 80:5173
+      - 8080:8080
+      - 443:443
+    networks:
+      - bird-net
 
-  # backend:
-  #   build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
-  #   container_name: backend
-  #   ports:
-  #     - 5030:3030
-  #   networks:
-  #     - bird-net
-
+  backend:
+    build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
+    container_name: backend
+    ports:
+      - 5030:3030
+    networks:
+      - bird-net
 
   ai4birds-ai-service:
       build: ./ia4birds-all/ai4birds-ai-service
