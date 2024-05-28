@@ -1,5 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
+import './bin/server';
 
 import routes from "./routes";
 

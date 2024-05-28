@@ -6,6 +6,7 @@ import config from "../config/global.config";
 import fs from "fs";
 const bodyParser = require('body-parser');
 import globalConfig from "../config/global.config";
+import '../config/cron.config';
 
 const port = normalizePort(config.port || "5030");
 app.set("port", port);
