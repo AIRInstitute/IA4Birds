@@ -10,7 +10,7 @@ interface DataBird {
 }
 
 // Programar tarea para ejecutarse una vez al mes
-cron.schedule('0 0 1 * *', async () => {
+cron.schedule('0 0 30 * *', async () => {
   try {
     const response = await axios.get<DataBird>(`${globalConfig.pythonURL}/dataBird`);
     const dataBirdData = response.data;
