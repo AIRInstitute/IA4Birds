@@ -1,11 +1,10 @@
 import cron from 'node-cron';
 import axios from 'axios';
 import redis from './redis.config';
-import globalConfig from './global.config'; // Asumiendo que esta es la configuración global donde tienes la URL
+import globalConfig from './global.config'; 
 
+// Definición de la interfaz de los datos de DataBird
 interface DataBird {
-  // Define the shape of the data you expect to receive from the Python service
-  // Por ejemplo:
   recordings: any[];
 }
 
@@ -20,7 +19,7 @@ function isLastDayOfMonth(): boolean {
 
 
 
-// Programar tarea para ejecutarse una vez al mes
+// Programar tarea para ejecutarse una vez al mes cuando sea el último día del mes, ya sea 28, 29, 30 o 31
 cron.schedule('0 0 * * *', async () => {
     if (isLastDayOfMonth()) {
         try {
