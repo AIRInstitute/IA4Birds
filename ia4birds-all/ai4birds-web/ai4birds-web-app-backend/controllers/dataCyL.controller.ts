@@ -73,26 +73,6 @@ const getDataBird = async (req, res) => {
           message: globalMessages[500].INTERNAL_SERVER_ERROR,
         });
       }
-    // try {
-    //     // Hacer la solicitud a Xenocanto para obtener las grabaciones
-    //     const dataBirdResponse = await axios.get(`${globalConfig.pythonURL}/dataBird`);
-
-    //     // Verificar si las solicitudes fueron exitosas
-    //     if (dataBirdResponse.status !== 200) {
-    //         throw new Error('No se pudieron obtener los datos necesarios.');
-    //     }
-
-    //     // Extraer los datos de las grabaciones de Xenocanto
-    //     const dataBirdData = dataBirdResponse.data;
-
-    //     // Enviar la información combinada al frontend
-    //     return res.status(200).json(dataBirdData);
-    // } catch (err) {
-    //     console.error(err);
-    //     return res.status(500).send({
-    //         message: globalMessages[500].INTERNAL_SERVER_ERROR,
-    //     });
-    // }
 };
 
 const getSensitivityData = async (req, res) => {
