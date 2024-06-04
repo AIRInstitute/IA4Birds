@@ -10,6 +10,7 @@ import { tmpdir } from 'os';
 import app from "../app";
 const bodyParser = require('body-parser');
 import express, { Request, Response, NextFunction, response } from 'express';
+import redis from '../config/redis.config';
 
 //SSE
 
@@ -173,7 +174,14 @@ async function processZip(response: any): Promise<any[]> {
 
 
 const getWindMapData = async (req:any, res:any) => {
+    
     try {
+        // Compruebo si ya estaban guardados los datos
+        const cachedWindMapData = await redis.get('windMapDataKey');
+        if (cachedWindMapData) {
+            return res.status(200).json(JSON.parse(cachedWindMapData));
+        }
+
         // Obtener los parámetros de entrada desde la solicitud
         const { lat, lon, z } = req.body;
         console.log(req.body)
@@ -194,6 +202,9 @@ const getWindMapData = async (req:any, res:any) => {
 
         // Extraer los datos del mapa eólico ibérico
         const windMapData = response.data;
+
+        // Guardo los datos en la caché de Redis (llegar aquí significa que no estaban)
+        await redis.set('windMapDataKey', JSON.stringify(windMapData));
 
         // Enviar los datos al frontend
         return res.status(200).json(windMapData);

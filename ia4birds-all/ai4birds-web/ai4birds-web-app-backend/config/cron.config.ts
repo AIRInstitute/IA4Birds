@@ -7,6 +7,10 @@ import globalConfig from './global.config';
 interface DataBird {
   recordings: any[];
 }
+// Definición de la interfaz de los datos de WindMap
+interface WindMap {
+  recordings: any[];
+}
 
 
 // Función para determinar si hoy es el último día del mes
@@ -17,9 +21,7 @@ function isLastDayOfMonth(): boolean {
     return tomorrow.getDate() === 1;
 }
 
-
-
-// Programar tarea para ejecutarse una vez al mes cuando sea el último día del mes, ya sea 28, 29, 30 o 31
+// Programar dataBird para ejecutarse una vez al mes cuando sea el último día del mes, ya sea 28, 29, 30 o 31
 cron.schedule('0 0 * * *', async () => {
     if (isLastDayOfMonth()) {
         try {
@@ -30,6 +32,21 @@ cron.schedule('0 0 * * *', async () => {
         console.log('Datos de dataBird actualizados en Redis');
         } catch (error) {
             console.error('Error actualizando datos de dataBird desde el servicio Python', error);
+        }
+    }
+});
+
+// Programar windMapData para ejecutarse una vez al mes cuando sea el último día del mes, ya sea 28, 29, 30 o 31
+cron.schedule('0 0 * * *', async () => {
+    if (isLastDayOfMonth()) {
+        try {
+        const response = await axios.post<WindMap>(`${globalConfig.pythonURL}/windmap`);
+        const windMapData = response.data;
+
+        await redis.set('windMapDataKey', JSON.stringify(windMapData));
+        console.log('Datos de windmap actualizados en Redis');
+        } catch (error) {
+            console.error('Error actualizando datos de windmap desde el servicio Python', error);
         }
     }
 });
