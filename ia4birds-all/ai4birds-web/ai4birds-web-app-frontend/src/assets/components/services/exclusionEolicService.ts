@@ -43,7 +43,18 @@ class ExclusionEolicService {
               },
         })
         return response;
-    }   
+    }  
+    
+    async getExclusionResourcesMap(body) {
+         const response = await api.post("/data/windmap", body
+         //{
+    //        headers: {
+    //    //         "x-access-token": getToken(),
+    //          },
+       //}
+       )
+       return response;
+   } 
 
 }
 

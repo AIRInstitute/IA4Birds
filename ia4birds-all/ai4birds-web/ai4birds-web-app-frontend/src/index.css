@@ -55,13 +55,38 @@ h2{
 .sidebar.open {
   width: 603px;
 }
-
 .sidebar .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .sidebar .content {
+  padding: 16px;
+  margin-top: 40px;
+  color: hsl(var(--nextui-primary));
+}
+
+.sidebarExclusionResources {
+  width: 0;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: hsl(var(--nextui-background));
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidebarExclusionResources.open {
+  width: 755px;
+}
+.sidebarExclusionResources .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sidebarExclusionResources .content {
   padding: 16px;
   margin-top: 40px;
   color: hsl(var(--nextui-primary));

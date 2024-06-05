@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {Spacer} from "@nextui-org/react";
 import {CustomCard} from "./card/CameraCard";
 import XenocantoDataService from './services/XenocantoDataService';
+import {FrequencyWindSpeed} from './Charts/FrequencyWindSpeed';
 
 const CameraComponent = () => {
     const camerasData = [
@@ -32,6 +33,7 @@ const CameraComponent = () => {
   return (
     <>
     <div className="camera-component">
+    <FrequencyWindSpeed/>
       <Spacer y={5} />
       <div className="flex flex-wrap justify-center gap-6">
         {camerasData.map ((camera) => (
