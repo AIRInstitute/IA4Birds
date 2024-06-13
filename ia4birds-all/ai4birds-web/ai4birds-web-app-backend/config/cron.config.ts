@@ -25,11 +25,11 @@ function isLastDayOfMonth(): boolean {
 cron.schedule('0 0 * * *', async () => {
     if (isLastDayOfMonth()) {
         try {
-        const response = await axios.get<DataBird>(`${globalConfig.pythonURL}/dataBird`);
-        const dataBirdData = response.data;
+            const response = await axios.get<DataBird>(`${globalConfig.pythonURL}/dataBird`);
+            const dataBirdData = response.data;
 
-        await redis.set('dataBirdKey', JSON.stringify(dataBirdData));
-        console.log('Datos de dataBird actualizados en Redis');
+            await redis.set('dataBirdKey', JSON.stringify(dataBirdData));
+            console.log('Datos de dataBird actualizados en Redis');
         } catch (error) {
             console.error('Error actualizando datos de dataBird desde el servicio Python', error);
         }
@@ -40,11 +40,11 @@ cron.schedule('0 0 * * *', async () => {
 cron.schedule('0 0 * * *', async () => {
     if (isLastDayOfMonth()) {
         try {
-        const response = await axios.post<WindMap>(`${globalConfig.pythonURL}/windmap`);
-        const windMapData = response.data;
+            const response = await axios.post<WindMap>(`${globalConfig.pythonURL}/windmap`);
+            const windMapData = response.data;
 
-        await redis.set('windMapDataKey', JSON.stringify(windMapData));
-        console.log('Datos de windmap actualizados en Redis');
+            await redis.set('windMapDataKey', JSON.stringify(windMapData));
+            console.log('Datos de windmap actualizados en Redis');
         } catch (error) {
             console.error('Error actualizando datos de windmap desde el servicio Python', error);
         }
