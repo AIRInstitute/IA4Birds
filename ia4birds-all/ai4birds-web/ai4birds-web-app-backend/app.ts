@@ -13,9 +13,7 @@ import swaggerdocs from "./documentation/docs.json";
 import path from "path";
 import config from "./config/global.config";
 
-import authRoutes from "./routes/routes/auth.routes";
-import userRoutes from "./routes/routes/user.routes";
-import productRoutes from "./routes/routes/product.routes";
+
 
 import uploadRoutes from "./routes/routes/upload.routes";
 import morgan from 'morgan';
