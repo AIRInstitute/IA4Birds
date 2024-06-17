@@ -149,10 +149,7 @@ class WindMap(Resource):
     @api.response(404, 'Data not found')
     @api.response(500, 'Unhandled errors')
     @api.response(400, 'Invalid parameters')
-    #@api.marshal_with(post_windmap_output_model, code=200, description='OK', as_list=False)
     @limiter.limit('1000000/hour') 
-    #@cache.cached(timeout=180, query_string=True)
-    @cache.cached(timeout=180, query_string=True)
     def post(self):
         """
         Obtain wind map data with coordinates.
