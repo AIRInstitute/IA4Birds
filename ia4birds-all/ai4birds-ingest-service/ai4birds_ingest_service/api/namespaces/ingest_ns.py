@@ -159,20 +159,25 @@ class WindMap(Resource):
             :rtype: dict
         """
         # retrieve arguments
-        try:
-            obj = flask.request.get_json()
-        except:
-            return handle400error(ns_windmap, 'Unable to retrieve arguments from request. Please, check the swagger documentation at /v1')
+        # try:
+        #     obj = flask.request.get_json()
+        # except:
+        #     return handle400error(ns_windmap, 'Unable to retrieve arguments from request. Please, check the swagger documentation at /v1')
 
         # check parameters
-        try:
-            params = location_parser.parse_args()
-        except:
-            return handle400error(ns_windmap, 'Malformed request. Please, check the request at /v1')
+        # try:
+        #     params = location_parser.parse_args()
+        # except:
+        #     return handle400error(ns_windmap, 'Malformed request. Please, check the request at /v1')
         
+        # retrieve arguments directly from JSON body
+        data = flask.request.get_json(force=True)  # 'force=True' to ensure JSON format is parsed even if the content-type header is not set correctly
+        if not data or 'lat' not in data or 'lon' not in data or 'z' not in data:
+            return {"message": "Missing 'lat', 'lon', or 'z' in request body"}, 400
+
         try:
             extractor = WindMap_Extractor()
-            result= extractor.windmap_ingest(lat = params['lat'], lon = params['lon'], z = params['z'])
+            result= extractor.windmap_ingest(lat = data['lat'], lon = data['lon'], z = data['z'])
         except:
             return handle500error(ns_windmap)
         return result
