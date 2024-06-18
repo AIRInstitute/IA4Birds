@@ -2,7 +2,7 @@ import axios from 'axios';
 import globalMessages from '../utils/messages/global.messages';
 import globalConfig from '../config/global.config';
 import AdmZip from 'adm-zip';
-import { createReadStream , existsSync} from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import JSONStream from 'JSONStream';
 import { Transform } from 'stream';
 import path from 'path';
@@ -17,32 +17,32 @@ import redis from '../config/redis.config';
 let clients = [];
 let facts = [];
 
-const getExclusionMapDataStreaming =  async (req: Request, res: Response) => {
-	console.log(`New client: ${req.body}`);
-    
-	const headers = {
-		'Content-Type': 'text/event-stream',
-		'Connection': 'keep-alive',
-		'Cache-Control': 'no-cache'
-	  };
-	  res.writeHead(200, headers);
-	
-	  const clientId = Date.now();
-	
-	  const newClient = {
-		id: clientId,
-		res
-	  };
+const getExclusionMapDataStreaming = async (req: Request, res: Response) => {
+    console.log(`New client: ${req.body}`);
 
-	  console.log(`${clientId} Connection opened`);
-	
-	  clients.push(newClient);
-	
-	  req.on('close', () => {
-		console.log(`${clientId} Connection closed`);
-		clients = clients.filter(client => client.id !== clientId);
-	  });
-    
+    const headers = {
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'no-cache'
+    };
+    res.writeHead(200, headers);
+
+    const clientId = Date.now();
+
+    const newClient = {
+        id: clientId,
+        res
+    };
+
+    console.log(`${clientId} Connection opened`);
+
+    clients.push(newClient);
+
+    req.on('close', () => {
+        console.log(`${clientId} Connection closed`);
+        clients = clients.filter(client => client.id !== clientId);
+    });
+
     //Forma de hacerlo con async y await
     //   const response = await axios.post(`${globalConfig.pythonURL}/exclusionmap/stream-exclusion-data`);
     //   if(response.status !== 200){
@@ -53,30 +53,31 @@ const getExclusionMapDataStreaming =  async (req: Request, res: Response) => {
     //   }
 
     axios.post(`${globalConfig.pythonURL}/exclusionmap/stream-exclusion-data?id=${newClient.id}`).then((response) => {
-        if(response.status !== 200){
-                throw new Error('No se pudieron obtener los datos del mapa de exclusión eólica en Stream.');
-            }
-            else{
-                notifyNoMoreData(newClient.id)
-                console.log(response.data)
-                // addFact(response.data)
-            }
+        if (response.status !== 200) {
+            throw new Error('No se pudieron obtener los datos del mapa de exclusión eólica en Stream.');
+        }
+        else {
+            notifyNoMoreData(newClient.id)
+            console.log(response.data)
+            // addFact(response.data)
+        }
     }).catch((error) => {
         console.error(error);
         return res.status(500).send({
             message: globalMessages[500].INTERNAL_SERVER_ERROR,
-        });})
-    }
+        });
+    })
+}
 
-  //Envía eventos a todos los clientes conectados
-  function sendEventToClient(newFact, clientId) {
-	//console.log(`New fact to${JSON.stringify(newFact)} clients`)
+//Envía eventos a todos los clientes conectados
+function sendEventToClient(newFact, clientId) {
+    //console.log(`New fact to${JSON.stringify(newFact)} clients`)
     console.log(clients)
     console.log(clientId)
     const client = clients.filter(client => client.id == clientId).pop();
     console.log(client)
     //client.res.write(`data: ${JSON.stringify(newFact)}\n\n`);
-	if (client && client.res) {
+    if (client && client.res) {
         try {
             client.res.write(`data: ${JSON.stringify(newFact)}\n\n`);
         } catch (error) {
@@ -86,8 +87,8 @@ const getExclusionMapDataStreaming =  async (req: Request, res: Response) => {
         console.error(`Client with ID ${clientId} not found or client.res is undefined`);
     }
     // clients.forEach(client => client.res.write(`data: ${JSON.stringify(newFact)}\n\n`))
-  }
-  
+}
+
 //   async function addFact(req: Request, res:Response ) {
 //     const {client_id} = req.query
 //     console.log(`New fact: ${req.body}`);
@@ -103,22 +104,22 @@ async function addFact(req: Request, res: Response) {
     const { client_id } = req.query;
     console.log(`New fact: ${req.body}`);
     const newFact = req.body;
-    
+
     facts.push(newFact);
     res.json(newFact);
-  
+
     sendEventToClient(newFact, client_id);
-  
-  }
-  
-  function notifyNoMoreData(clientId) {
+
+}
+
+function notifyNoMoreData(clientId) {
     const client = clients.find(client => client.id === clientId);
     if (client) {
-      client.res.write(`data: {"message": "Data streaming completed."}\n\n`);
+        client.res.write(`data: {"message": "Data streaming completed."}\n\n`);
     } else {
-      console.log(`Cliente con ID ${clientId} no encontrado`);
+        console.log(`Cliente con ID ${clientId} no encontrado`);
     }
-  }
+}
 
 
 // Utilidad para descargar y procesar el archivo ZIP
@@ -180,7 +181,7 @@ const getWindMapData = async (req, res) => {
         console.log(req.body);
 
         // Hacer la solicitud al mapa eólico ibérico
-        const response = await axios.post(`${globalConfig.pythonURL}/windmap`, 
+        const response = await axios.post(`${globalConfig.pythonURL}/windmap`,
             {
                 lat: lat,
                 lon: lng,
@@ -233,4 +234,4 @@ const getExclusionMapData = async (req: Request, res: Response) => {
 
 
 // };
-export { getWindMapData, getExclusionMapData, getExclusionMapDataStreaming, addFact};
+export { getWindMapData, getExclusionMapData, getExclusionMapDataStreaming, addFact };

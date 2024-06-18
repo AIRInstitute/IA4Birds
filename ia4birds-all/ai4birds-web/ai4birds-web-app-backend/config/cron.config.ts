@@ -1,11 +1,11 @@
 import cron from 'node-cron';
 import axios from 'axios';
 import redis from './redis.config';
-import globalConfig from './global.config'; 
+import globalConfig from './global.config';
 
 // Definición de la interfaz de los datos de DataBird
 interface DataBird {
-  recordings: any[];
+    recordings: any[];
 }
 
 // Función para determinar si hoy es el último día del mes

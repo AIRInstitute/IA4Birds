@@ -32,11 +32,11 @@ export default () => {
     )
     dataRouter.get(
         "/exclusionmap/stream-exclusion-data",
-         mapController.getExclusionMapDataStreaming 
+        mapController.getExclusionMapDataStreaming
     )
     dataRouter.post(
-        "/exclusionmap/stream-exclusion-data", 
-        mapController.addFact 
+        "/exclusionmap/stream-exclusion-data",
+        mapController.addFact
     )
     return dataRouter;
 };
