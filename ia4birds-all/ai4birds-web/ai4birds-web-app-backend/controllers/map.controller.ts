@@ -176,20 +176,15 @@ async function processZip(response: any): Promise<any[]> {
 const getWindMapData = async (req:any, res:any) => {
     
     try {
-        
-
-        // Obtener los parámetros de entrada desde la solicitud
-        const { lat, lon, z } = req.body;
-        
-        // Crear una clave única para el caché basada en los parámetros de entrada
-        const cacheKey = `windMapData_${lat}_${lon}_${z}`;
-        console.log(req.body);
-
         // Compruebo si ya estaban guardados los datos
-        const cachedWindMapData = await redis.get(cacheKey);
+        const cachedWindMapData = await redis.get('windMapDataKey');
         if (cachedWindMapData) {
             return res.status(200).json(JSON.parse(cachedWindMapData));
         }
+
+        // Obtener los parámetros de entrada desde la solicitud
+        const { lat, lon, z } = req.body;
+        console.log(req.body)
 
         // Hacer la solicitud al mapa eólico ibérico
         const response = await axios.post(`${globalConfig.pythonURL}/windmap`, 
@@ -209,7 +204,7 @@ const getWindMapData = async (req:any, res:any) => {
         const windMapData = response.data;
 
         // Guardo los datos en la caché de Redis (llegar aquí significa que no estaban)
-        await redis.set(cacheKey, JSON.stringify(windMapData));
+        await redis.set('windMapDataKey', JSON.stringify(windMapData));
 
         // Enviar los datos al frontend
         return res.status(200).json(windMapData);
