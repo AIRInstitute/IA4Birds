@@ -176,14 +176,14 @@ async function processZip(response: any): Promise<any[]> {
 const getWindMapData = async (req, res) => {
     try {
         // Obtener los parámetros de entrada desde la solicitud
-        const { lat, lng, z } = req.body;
+        const { lat, lon, z } = req.body;
         console.log(req.body);
 
         // Hacer la solicitud al mapa eólico ibérico
         const response = await axios.post(`${globalConfig.pythonURL}/windmap`, 
             {
                 lat: lat,
-                lng: lng,
+                lon: lon,
                 z: z
             }
         );
