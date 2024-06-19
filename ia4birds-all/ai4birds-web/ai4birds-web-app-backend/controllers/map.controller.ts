@@ -71,12 +71,10 @@ const getExclusionMapDataStreaming = async (req: Request, res: Response) => {
 
 //Envía eventos a todos los clientes conectados
 function sendEventToClient(newFact, clientId) {
-    //console.log(`New fact to${JSON.stringify(newFact)} clients`)
     console.log(clients)
     console.log(clientId)
     const client = clients.filter(client => client.id == clientId).pop();
     console.log(client)
-    //client.res.write(`data: ${JSON.stringify(newFact)}\n\n`);
     if (client && client.res) {
         try {
             client.res.write(`data: ${JSON.stringify(newFact)}\n\n`);
@@ -86,18 +84,7 @@ function sendEventToClient(newFact, clientId) {
     } else {
         console.error(`Client with ID ${clientId} not found or client.res is undefined`);
     }
-    // clients.forEach(client => client.res.write(`data: ${JSON.stringify(newFact)}\n\n`))
 }
-
-//   async function addFact(req: Request, res:Response ) {
-//     const {client_id} = req.query
-//     console.log(`New fact: ${req.body}`);
-// 	const newFact = req.body;
-// 	facts.push(newFact);
-// 	res.json(newFact)
-// 	return sendEventToClient(newFact, client_id);
-//     // return res.status(200).json(newFact);
-//   }
 
 
 async function addFact(req: Request, res: Response) {
