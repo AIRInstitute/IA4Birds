@@ -33,7 +33,6 @@ const CameraComponent = () => {
   return (
     <>
     <div className="camera-component">
-    <FrequencyWindSpeed/>
       <Spacer y={5} />
       <div className="flex flex-wrap justify-center gap-6">
         {camerasData.map ((camera) => (
