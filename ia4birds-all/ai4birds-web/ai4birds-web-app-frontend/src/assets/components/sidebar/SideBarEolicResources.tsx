@@ -9,20 +9,34 @@ import { Weibull } from '../Charts/Weibull';
 import { VerticalWindSpeed } from '../Charts/VerticalWindSpeed';
 import ExclusionEolicService from '../services/ExclusionEolicService';
 
-const SidebarEolicResources = ({ isOpen, onCancel,eolicResourcesdata}) => {
+const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
 
     const [eolicWindMapData, setEolicWindMapData] = useState([]);
 
-    console.log('Estoy dentro de SidebarEolicResources');
-    console.log('EolicData dentro del SideBarEolicResources: ', eolicResourcesdata);
+    const getEolicResources = () => { 
+      const body = {
+          "lat": eolicResourcesdata.lat,
+          "lng": eolicResourcesdata.lng,
+          "z": 50
+      };
+      ExclusionEolicService.getExclusionResourcesMap(body).then((response) => {
+          if (response.status === 200) {
+          setEolicWindMapData(response.data);
+          }
+          else {
+          throw new Error(response.data);
+          }
+      });
+  }
 
     useEffect(() => {
-        // Esta función se ejecutará una vez cuando el componente se monte en el DOM
-        console.log('La página se ha cargado MapComponent');
-        
-        // Llama a tu función aquí
-        getEolicResources();
-      }, []);
+        // Esta función se ejecutará cada vez que eolicResourcesdata cambie
+        if (eolicResourcesdata && eolicResourcesdata.lat && eolicResourcesdata.lng) {
+          getEolicResources();
+      } else {
+          console.log('eolicResourcesdata no está definido o no tiene lat/lng');
+      }
+      }, [eolicResourcesdata]);
 
     //FUNCIÓN QUE PONE ESTILOS AL 
     const renderIndicator = (onClickHandler, isSelected) => {
@@ -41,22 +55,6 @@ const SidebarEolicResources = ({ isOpen, onCancel,eolicResourcesdata}) => {
         );
       };
 
-      const getEolicResources = () => { 
-        const body = {
-            "lat": eolicResourcesdata.lat,
-            "lng": eolicResourcesdata.lng,
-            "z": 50
-        };
-        ExclusionEolicService.getExclusionResourcesMap(body).then((response) => {
-            if (response.status === 200) {
-            console.log('ExclusionEolicService.getExclusionResourcessssss() response ', response.data);
-            setEolicWindMapData(response.data);
-            }
-            else {
-            throw new Error(response.data);
-            }
-        });
-    }
 
   return (
     <div className={`sidebarExclusionResources ${isOpen ? 'open' : ''}`}>
@@ -77,9 +75,9 @@ const SidebarEolicResources = ({ isOpen, onCancel,eolicResourcesdata}) => {
         </CardHeader>
         <CardBody>
         <div className="min-h-460 sm:h-64 xl:h-80 2xl:h-96">
-        <Carousel 
+        <Carousel
                 showArrows={true} 
-                autoPlay={true} 
+                autoPlay={false} 
                 infiniteLoop={true} 
                 showThumbs={false}
                 showStatus={false}
@@ -92,15 +90,15 @@ const SidebarEolicResources = ({ isOpen, onCancel,eolicResourcesdata}) => {
                     {/* <p className="legend">Perfil medio diario de la velocidad del viento</p> */}
                 </div>
                 <div>
-                    <WindRose/>
+                    <WindRose eolicWindMapData={eolicWindMapData.wind_rose}/ >
                     {/* <p className="legend">Slide 2</p> */}
                 </div>
                 <div>
-                    <Weibull/>
+                    <Weibull eolicWindMapData={eolicWindMapData.weibull_distribution}/>
                     {/* <p className="legend">Slide 3</p> */}
                 </div>
                 <div>
-                    <VerticalWindSpeed/>
+                    <VerticalWindSpeed eolicWindMapData={eolicWindMapData.wind_profile}/>
                     {/* <p className="legend">Slide 4</p> */}
                 </div>
             </Carousel>

@@ -214,9 +214,6 @@ const Mapa = () => {
 
     setSelectedButton(button);
     setSidebarEolicOpen(true);
-    console.log('sideBar tiene que estar a true', sidebarEolicOpen);
-    console.log('selectedButton', selectedButton)
-    console.log("Si estas variables tienen datos debería de funcionar: ", selectedButton + " y ", eolicMarkers[selectedButton])
   };
 
   const handleCancelClickEolic = () => {
@@ -225,17 +222,11 @@ const Mapa = () => {
 
   const handleButtonClickEolicResources = (button) => {
 
-    console.log('He tocado el Button número', button);
+    console.log('coordenadas del punto', button);
     setSelectedButtonEolicResources(button);
     setSidebarEolicResourcesOpen(true);
-    console.log('sideBar tiene que estar a true', sidebarEolicResourcesOpen);
-    console.log('selectedButton', selectedButtonEolicResources)
-    console.log("Si estas variables tienen datos debería de funcionar: ", selectedButtonEolicResources + " y ", coordinatesCameras[selectedButtonEolicResources])
   };
 
-  const handleCancelClickEolicResources = () => {
-    setSidebarEolicResourcesOpen(false);
-  };
 
   return (
     <>
@@ -459,8 +450,9 @@ const Mapa = () => {
 
         {selectedButtonEolicResources && (
           <SideBarEolicResources
+            key={selectedButtonEolicResources.lat + '-' + selectedButtonEolicResources.lng} // Clave única
             isOpen={sidebarEolicResourcesOpen}
-            onCancel={handleCancelClickEolicResources}
+            onCancel={()=>setSidebarEolicResourcesOpen(false)}
             eolicResourcesdata={selectedButtonEolicResources}
           />
         )}
@@ -469,7 +461,6 @@ const Mapa = () => {
     </>
   );
 };
-
 
 export default Mapa;
 

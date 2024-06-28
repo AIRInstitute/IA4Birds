@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
+import {Spinner} from "@nextui-org/react";
 
 interface EolicWindMapData {
   data: {
@@ -63,7 +64,7 @@ export const FrequencyWindSpeed: React.FC<FrequencyWindSpeedProps> = ({ eolicWin
           return val.toFixed(1) + " m/s"; // Formateo a 1 decimal
         }
       }
-    }
+    } 
   });
 
   useEffect(() => {
@@ -77,16 +78,16 @@ export const FrequencyWindSpeed: React.FC<FrequencyWindSpeedProps> = ({ eolicWin
     }
   }, [eolicWindMapData]);
 
-  console.log('FrequencySpeed: ', eolicWindMapData);
-  console.log('Series: ', series);
-
   return (
     <div>
       <div id="chart">
         {eolicWindMapData ? (
           <ReactApexChart options={options} series={series} type="bar" height={350} />
         ) : (
-          <div>Loading...</div>
+          <>
+            <div className='mb-2' >Loading...</div>
+            <Spinner />
+          </>
         )}
       </div>
       <div id="html-dist"></div>

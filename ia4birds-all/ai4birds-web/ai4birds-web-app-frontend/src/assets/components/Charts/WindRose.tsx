@@ -3,7 +3,16 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import ReactApexChart from 'react-apexcharts';
 
-export const WindRose = () => {
+interface EolicWindMapData {
+  data: {
+    y: number[];
+  };
+}
+interface WindRoseProps {
+  eolicWindMapData?: EolicWindMapData;
+}
+
+export const WindRose : React.FC<WindRoseProps> = ({ eolicWindMapData }) => {
     const [state] = useState( {
         series: [14, 23, 21, 17, 15, 10, 12],
         options: {
