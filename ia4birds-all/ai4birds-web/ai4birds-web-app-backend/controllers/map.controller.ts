@@ -168,13 +168,11 @@ const getWindMapData = async (req, res) => {
         console.log(req.body);
 
         // Hacer la solicitud al mapa eólico ibérico
-        const response = await axios.post(`${globalConfig.pythonURL}/windmap`,
-            {
-                lat: lat,
-                lon: lng,
-                z: z
-            }
-        );
+        const response = await axios.post(`${globalConfig.pythonURL}/windmap`, {
+            lat: lat,
+            lon: lng,
+            z: z
+        });
 
         // Verificar si la solicitud fue exitosa
         if (response.status !== 200) {
@@ -184,15 +182,50 @@ const getWindMapData = async (req, res) => {
         // Extraer los datos del mapa eólico ibérico
         const windMapData = response.data;
 
+        // Direcciones del viento
+        const windDirections = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+        // Alturas del viento
+        const windHeights = ['0-3', '3-6', '6-9', '9-12', '12-15', '15-18', '> 18'];
+
+        // Crear un nuevo array con los datos formateados
+        const updatedWindRose = windDirections.map((direction, dirIndex) => {
+            const directionData = { angle: direction };
+            let total = 0;
+
+            windHeights.forEach((height, heightIndex) => {
+                const value = windMapData.wind_rose.data.yhist2[heightIndex][dirIndex];
+                directionData[height] = value;
+                total += value;
+            });
+
+            directionData.total = total;
+            return directionData;
+        });
+
+        // Actualizar el objeto windMapData
+        const windMapDataUpdated = {
+            ...windMapData,
+            wind_rose: {
+                ...windMapData.wind_rose,
+                data: {
+                    ...windMapData.wind_rose.data,
+                    updatedWindRose: updatedWindRose
+                }
+            }
+        };
+
+        console.log(windMapDataUpdated);
+
         // Enviar los datos al frontend
-        return res.status(200).json(windMapData);
+        return res.status(200).json(windMapDataUpdated);
     } catch (err) {
-        // console.error(err);
+        console.error(err);
         return res.status(500).send({
             message: globalMessages[500].INTERNAL_SERVER_ERROR,
         });
     }
 };
+
 
 
 const getExclusionMapData = async (req: Request, res: Response) => {
