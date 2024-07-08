@@ -188,17 +188,15 @@ const getWindMapData = async (req, res) => {
         const windHeights = ['0-3', '3-6', '6-9', '9-12', '12-15', '15-18', '> 18'];
 
         // Crear un nuevo array con los datos formateados
-        const updatedWindRose = windDirections.map((direction, dirIndex) => {
-            const directionData = { angle: direction };
-            let total = 0;
-
+        const chartData: { angle: string; total: number }[] = windDirections.map((direction, dirIndex) => {
+            const directionData = { angle: direction, total: 0 };
+        
             windHeights.forEach((height, heightIndex) => {
-                const value = windMapData.wind_rose.data.yhist2[heightIndex][dirIndex];
+                const value = parseFloat(windMapData.wind_rose.data.yhist2[heightIndex][dirIndex]) || 0;
                 directionData[height] = value;
-                total += value;
+                directionData.total += value;
             });
-
-            directionData.total = total;
+        
             return directionData;
         });
 
@@ -209,7 +207,7 @@ const getWindMapData = async (req, res) => {
                 ...windMapData.wind_rose,
                 data: {
                     ...windMapData.wind_rose.data,
-                    updatedWindRose: updatedWindRose
+                    chartData: chartData
                 }
             }
         };
