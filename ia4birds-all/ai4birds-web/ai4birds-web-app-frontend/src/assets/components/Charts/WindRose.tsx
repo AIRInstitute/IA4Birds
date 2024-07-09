@@ -40,7 +40,7 @@ export const WindRose = ({eolicWindMapData}) => {
         />
         ) : (
           <>
-            <div className='mb-2' >Loading...</div>
+            <div className='mb-2' >Cargando... el proceso puede tardar unos segundos...</div>
             <Spinner />
           </>
         )}
