@@ -84,10 +84,10 @@ export const FrequencyWindSpeed: React.FC<FrequencyWindSpeedProps> = ({ eolicWin
         {eolicWindMapData ? (
           <ReactApexChart options={options} series={series} type="bar" height={350} />
         ) : (
-          <>
+          <div className='mb-2' style={{ minHeight: '440px' }}>
             <div className='mb-2' >Loading...</div>
             <Spinner />
-          </>
+          </div>
         )}
       </div>
       <div id="html-dist"></div>

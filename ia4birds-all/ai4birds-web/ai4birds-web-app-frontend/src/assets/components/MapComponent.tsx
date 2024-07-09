@@ -4,7 +4,7 @@ import SidebarEolic from './sidebar/SideBarEolic';
 import SideBarEolicResources from './sidebar/SideBarEolicResources';
 import ExclusionEolicService from './services/ExclusionEolicService';
 import BirdDataService from './services/BirdDataService';
-import { MapContainer, TileLayer, Circle, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Circle, Marker, Popup, useMapEvents} from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { Button, Tooltip, Card, CardBody } from "@nextui-org/react";
@@ -13,28 +13,23 @@ import { TbCarFan } from "react-icons/tb";
 import { FaCheck } from "react-icons/fa6";
 import { TbCarFan1 } from "react-icons/tb";
 import { TbCarFan2 } from "react-icons/tb";
+import L from 'leaflet';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [showMarkersEolicResources, setShowMarkersEolicResources] = useState(false);
   const [streamingEolicData, setstreamingEolicData] = useState(false);
-
   const [eolicMarkers, setEolicMarkers] = useState([]);
   const [birdMarkers, setBirdsMarkers] = useState([]);
   const [eolicResourcesMarkers, setEolicResourcesMarkers] = useState([]);
+  const [clickedLatLng, setClickedLatLng] = useState(null);
 
   const birdData = [
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
     { id: 2, name: 'Ave 2', description: 'Descripción Ave 2', url: 'https://okdiario.com/img/2018/06/21/reproduccion-de-las-aves.jpg', num: '4' },
     { id: 3, name: 'Ave 3', description: 'Descripción Ave 3', url: 'https://www.nationalgeographic.com.es/medio/2022/12/13/muchuelo-alpino_8598e7e9_221213120701_1280x853.jpg', num: '40' },
   ];
-  // const coordinatesBirds = [
-  //   { latitude: 40.9429, longitude: -4.1088 },
-  //   { latitude: 40.9647, longitude: -5.6631 },
-  //   { latitude: 40.6566, longitude: -4.7006 },
-  //   { latitude: 41.652, longitude: -4.7286 },
-  //   { latitude: 42.599, longitude: -5.5713 }
-  // ];
 
   const coordinatesCameras = 
     [{"lat": 40.48648648648644, "lng": -3.860493503041469}, 
@@ -70,32 +65,26 @@ const Mapa = () => {
   const [selectedButtonEolicResources, setSelectedButtonEolicResources] = useState('');
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false); // Para poner el pájaro de carga
+  
 
   //SSE ServerSent Events
   const [facts, setFacts] = useState([]);
   const [listening, setListening] = useState(false);
 
+  const notify = () => toast('Toca cualquier parte del mapa para ver los datos de la mesoescala');
+
   useEffect(() => {
    console.log('facts', facts)
    setEolicMarkers(facts);
+   setMarkersLoaded(true);
   }, [facts]);
 
   useEffect(() => {
-    // Esta función se ejecutará una vez cuando el componente se monte en el DOM
-    console.log('La página se ha cargado MapComponent');
-
-    // Llama a tu función aquí
     fillBirdData();
   }, []);
 
   useEffect(() => {
     // Esta función se ejecutará cada vez que setEolicMarkers cambie
-    console.log('Los marcadores eólicos se han cargado:', markersLoaded);
-  }, [markersLoaded]);
-
-  useEffect(() => {
-    // Esta función se ejecutará cada vez que setEolicMarkers cambie
-    console.log('Los marcadores eólicos han cambiado', eolicMarkers);
     setMarkersLoaded(true);
   }, [eolicMarkers]);
 
@@ -103,6 +92,8 @@ const Mapa = () => {
   //EOLIC MARKERS
   //Si activo la exclusión eólica llamo al endpoint si no vacío el array y pongo valor al array de aves
   //====================================================================
+
+
   const addEolicMarkers = () => {
     setMarkersLoaded(false);
 
@@ -135,6 +126,7 @@ const Mapa = () => {
   };
 
   const addEolicMarkersStreamExclusion = () => {
+    setMarkersLoaded(false);
     setstreamingEolicData(true);
     setBirdsMarkers([]);
     if(!showMarkersEolic){
@@ -171,16 +163,20 @@ const Mapa = () => {
   //FILL EOLIC RESOURCES
   //====================================================================
   const addEolicMarkersResources = () => {
-
+    
     if(!showMarkersEolicResources){
+      notify();
       setBirdsMarkers([]);
-      setEolicResourcesMarkers(coordinatesCameras);
+      //setEolicResourcesMarkers(coordinatesCameras);
       setShowMarkersEolicResources(true);
 
     } else{
       setSidebarEolicResourcesOpen(false);
       setEolicResourcesMarkers([]);
       setShowMarkersEolicResources(false);
+      if(!showMarkersEolic && showMarkersEolicResources){
+        fillBirdData();
+      }
     }
   }
 
@@ -226,10 +222,50 @@ const Mapa = () => {
     setSelectedButtonEolicResources(button);
     setSidebarEolicResourcesOpen(true);
   };
+  function LocationMarker() {
 
+    if(showMarkersEolicResources){
+    useMapEvents({
+      click(e) {
+        setClickedLatLng(e.latlng);
+        console.log('Latitud y longitud', e.latlng);
+        handleButtonClickEolicResources(e.latlng);
+      }
+    });
+  }
 
+  const defaultIcon = new L.Icon({
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    shadowSize: [41, 41]
+  });
+  
+  return clickedLatLng === null ? null : (
+    // <Marker position={clickedLatLng} icon={defaultIcon}>
+    //   <Popup position={clickedLatLng} openOnClick={true}>
+    //     Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
+    //   </Popup>
+    // </Marker>
+    showMarkersEolicResources && (
+      <Marker position={clickedLatLng} icon={defaultIcon}>
+       <Popup position={clickedLatLng} openOnClick={true}>
+         Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
+       </Popup>
+     </Marker>
+    )
+  );
+}
   return (
     <>
+    <Toaster containerStyle={{top: 150,
+    left: 20,
+    bottom: 40,
+    right: 20,
+  }} 
+    position="top-center" />
       <div className='map-component'>
         <div className='map-button' >
           <Card className='buttons' >
@@ -258,7 +294,10 @@ const Mapa = () => {
                   </Button>
                 </Tooltip>
                 {showMarkersEolicResources && (
+                  <div className="d-flex align-items-center gap-2">
                   <FaCheck />
+                  
+                </div>
                 )}
               </div>
             </CardBody>
@@ -276,6 +315,7 @@ const Mapa = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {/* <GeoJSON data={castillaYLeonBorders} style={{ color: 'gray', weight: 0.5 }} /> */}
+            
             {!markersLoaded ?
               <>
                 <div className='blurredLayer'>
@@ -401,6 +441,7 @@ const Mapa = () => {
                     }
                   })}
                 </MarkerClusterGroup>
+                <LocationMarker />
 
                 {eolicResourcesMarkers.length > 0 && eolicResourcesMarkers.map((coordinatesValues, coordinates) => {
                       return (
