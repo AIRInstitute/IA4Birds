@@ -15,6 +15,7 @@ RUN pip install pip --upgrade
 
 RUN python -m pip install -r requirements.txt
 
+RUN pip install python-dotenv
 # Install package
 
 RUN python -m pip install . --upgrade
