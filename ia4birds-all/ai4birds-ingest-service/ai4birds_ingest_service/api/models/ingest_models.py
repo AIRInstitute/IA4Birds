@@ -48,9 +48,9 @@ exclusionmap_response_model = api.model('ExclusionMapResponse', {
 
 # Modelo para device status
 device_status_model = api.model('DeviceStatus', {
-    'gps_latitude': fields.Float(required=True, description='Latitude of the device GPS'),
-    'gps_longitude': fields.Float(required=True, description='Longitude of the device GPS'),
-    'status': fields.String(required=True, description='Current status of the device'),
-    'storage_status': fields.Float(required=True, description='Available storage in GB'),
-    'last_update': fields.String(required=True, description='Last update timestamp')
+    'gps_latitude': fields.Float(required=True, description='Latitude of the device GPS', example=40.416775),
+    'gps_longitude': fields.Float(required=True, description='Longitude of the device GPS', example=-3.703790),
+    'status': fields.String(required=True, description='Current status of the device', example='active'),
+    'storage_status': fields.Float(required=True, description='Available storage in GB', example=15.5),
+    'last_update': fields.String(required=True, description='Last update timestamp',example='2024-10-28 15:59:00')
 })
