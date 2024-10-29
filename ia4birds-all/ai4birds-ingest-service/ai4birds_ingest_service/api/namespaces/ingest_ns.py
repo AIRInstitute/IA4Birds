@@ -13,8 +13,8 @@ from ai4birds_ingest_service.log import logger
 from ai4birds_ingest_service.api.v1 import api 
 from ai4birds_ingest_service.utils import handle400error, handle404error, handle500error
 from ai4birds_ingest_service.core import cache, limiter
-from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model, exclusionmap_response_model
-from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser, exclusionmap_parser, exclusionmap_parser_get
+from ai4birds_ingest_service.api.models.ingest_models import windmap_model, exclusionmap_model, exclusionmap_response_model, device_status_model
+from ai4birds_ingest_service.api.parsers.ingest_parsers import location_parser, exclusionmap_parser, exclusionmap_parser_get, device_status_parser
 from ai4birds_ingest_service.model.extractor.ebird_extractor import EBird_Extractor
 from ai4birds_ingest_service.model.extractor.xenocanto_extractor import XenoCanto_Extractor
 from ai4birds_ingest_service.model.extractor.windmap_extractor import WindMap_Extractor
@@ -24,6 +24,7 @@ from ai4birds_ingest_service.model.data_converter import DataConverter
 from ai4birds_ingest_service.model.data_combination.data_combination_model import DataCombinationModel
 from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel, EBirdData
 from ai4birds_ingest_service.model.xenocanto.xenocanto_model import XenoCantoModel, XenoCantoData
+from ai4birds_ingest_service.model.device_status.device_model import DeviceModel, DeviceData
 
 
 
@@ -34,6 +35,8 @@ ns_windmap = api.namespace('windmap', description='Iberian wind map requests')
 ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')
 ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')
 ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
+ns_device_status = api.namespace('device-status', description='Device status operations')
+
 
 # Crear instancias de los extractores
 xenocanto_extractor = XenoCanto_Extractor()
@@ -323,3 +326,88 @@ class Sensitivity(Resource):
         except:
             return handle500error(ns_sensitivity)
 
+@ns_device_status.route('/')
+class DeviceStatus(Resource):
+
+    @api.expect(device_status_model)  
+    @api.response(200, 'Device status added successfully')
+    @api.response(400, 'Invalid input')
+    @api.response(500, 'Internal server error')
+    def post(self):
+        """
+        Adds a new device status to the database.
+
+        Returns:
+            :return: Message indicating successful addition.
+            :rtype: str
+        """
+        # Recuperar argumentos
+        try:
+            data = flask.request.get_json(force=True)
+        except Exception as e:
+            return handle400error(ns_device_status, 'Unable to retrieve arguments from request. Please, check the documentation.')
+
+        # Verificar parámetros
+        try:
+            params = device_status_parser.parse_args()  
+        except Exception as e:
+            return handle400error(ns_device_status, 'Malformed request. Please, check the request parameters.')
+
+        # Crear el objeto de datos del dispositivo
+        device_data = DeviceData(
+            gps_latitude=params['gps_latitude'],
+            gps_longitude=params['gps_longitude'],
+            status=params['status'],
+            storage_status=params['storage_status'],
+            last_update=params['last_update']
+        )
+
+        device_model = DeviceModel()
+        if device_model.add(device_data):
+            return {"message": "Device status added successfully"}, 200
+        else:
+            return {"error": "Failed to add device status"}, 500
+
+
+
+@ns_device_status.route('/latest')
+class LatestDeviceStatus(Resource):
+
+    @api.response(200, 'Successful', model=device_status_model)  
+    @api.response(404, 'No data found')
+    @api.response(500, 'Internal server error')
+    def get(self):
+        """
+        Gets the latest device status.
+
+        Returns:
+            :return: Latest device status.
+            :rtype: DeviceData
+        """
+
+        device_model = DeviceModel()
+        latest_status = device_model.fetch_latest_status()
+
+        if latest_status:
+            return latest_status, 200
+        else:
+            return {"error": "No data found"}, 404
+
+
+@ns_device_status.route('/health')
+class DeviceHealth(Resource):
+
+    @api.response(200, 'Device health checked')
+    @api.response(404, 'No data found')
+    @api.response(500, 'Internal server error')
+    def get(self):
+        """
+        Checks the health status of the device.
+
+        Returns:
+            :return: Health status of the device.
+            :rtype: str
+        """
+        device_model = DeviceModel()
+        health_status = device_model.check_health()
+        return {"health_status": health_status}, 200

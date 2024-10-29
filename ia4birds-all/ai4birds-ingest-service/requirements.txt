@@ -35,3 +35,4 @@ shapely
 pandas
 lru_cache
 python-dotenv
+flask-socketio

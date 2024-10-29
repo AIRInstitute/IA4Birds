@@ -17,3 +17,11 @@ exclusionmap_parser.add_argument('page_size', location='json', type=int, require
 exclusionmap_parser_get = reqparse.RequestParser()
 exclusionmap_parser_get.add_argument('page', type=int, required=True, help='Page is required', location='args')
 exclusionmap_parser_get.add_argument('page_size', type=int, required=True, help='Page size is required', location='args')
+
+# Add arguments to the device status parser
+device_status_parser = reqparse.RequestParser()
+device_status_parser.add_argument('gps_latitude', type=float, required=True, help='Latitude of the device GPS')
+device_status_parser.add_argument('gps_longitude', type=float, required=True, help='Longitude of the device GPS')
+device_status_parser.add_argument('status', type=str, required=True, help='Current status of the device')
+device_status_parser.add_argument('storage_status', type=float, required=True, help='Available storage in GB')
+device_status_parser.add_argument('last_update', type=str, required=True, help='Last update timestamp')

@@ -37,3 +37,22 @@ CREATE TABLE IF NOT EXISTS recording (
         REFERENCES observation(id)
         ON DELETE SET NULL  
 );
+
+CREATE TABLE IF NOT EXISTS user (
+    id SERIAL PRIMARY KEY,                        
+    name VARCHAR(255) NOT NULL,                     
+    email VARCHAR(255) UNIQUE NOT NULL,             
+    password VARCHAR(255) NOT NULL,                  
+    organization VARCHAR(255),                      
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+    active BOOLEAN DEFAULT TRUE                      
+);
+
+CREATE TABLE IF NOT EXISTS device_status (
+    id SERIAL PRIMARY KEY,
+    gps_latitude DECIMAL(9,6) NOT NULL,
+    gps_longitude DECIMAL(9,6) NOT NULL,
+    status VARCHAR(255) NOT NULL,  -- Estado del dispositivo
+    storage_status DECIMAL(5,2) NOT NULL,  -- Almacenamiento libre en GB, con dos decimales
+    last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Última vez que se recibió la actualización
+);

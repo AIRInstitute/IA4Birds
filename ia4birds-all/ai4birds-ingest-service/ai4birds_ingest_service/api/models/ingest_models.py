@@ -45,3 +45,12 @@ exclusionmap_response_model = api.model('ExclusionMapResponse', {
     'data': fields.List(fields.Nested(data_item_model), required=True, description='Lista de datos de áreas protegidas'),
     'metadata': fields.Nested(metadata_model, required=True, description='Metadatos sobre la paginación de la respuesta')
 })
+
+# Modelo para device status
+device_status_model = api.model('DeviceStatus', {
+    'gps_latitude': fields.Float(required=True, description='Latitude of the device GPS'),
+    'gps_longitude': fields.Float(required=True, description='Longitude of the device GPS'),
+    'status': fields.String(required=True, description='Current status of the device'),
+    'storage_status': fields.Float(required=True, description='Available storage in GB'),
+    'last_update': fields.String(required=True, description='Last update timestamp')
+})
