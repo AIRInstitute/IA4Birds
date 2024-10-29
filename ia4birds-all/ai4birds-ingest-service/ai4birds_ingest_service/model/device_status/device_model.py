@@ -1,5 +1,5 @@
 from ai4birds_ingest_service.model.db import PostgresSingleton
-from ai4birds_ingest_service.model.device.device_data import DeviceData
+from ai4birds_ingest_service.model.device_status.device_data import DeviceData
 from ai4birds_ingest_service import logger
 from datetime import datetime
 
