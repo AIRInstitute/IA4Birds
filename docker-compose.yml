@@ -114,7 +114,7 @@ services:
     container_name: postgres-ingest
     volumes:
       - /etc/envs/.env:/etc/envs/.env
-      #- /etc/ai4birds-ingest-db/data:/var/lib/postgresql/data
+      - /etc/ai4birds-ingest-db/data:/var/lib/postgresql/data
       - ./data/postgresIngestDB/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=${POSTGRES_INGEST_USER}
