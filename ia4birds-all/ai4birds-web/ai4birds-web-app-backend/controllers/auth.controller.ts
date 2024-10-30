@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 
 import globalConfig from "../config/global.config";
@@ -19,9 +20,18 @@ const signup = async (req: Request, res: Response) => {
     if (!utils.keysChecker(body, ["name", "email", "password", "organization"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
-    const existingUser = User.findOne({ where: { email: body.email } });
-    if (existingUser != null) {
-        return res.status(409).send(responseMessages[409].EMAIL_IN_USE);
+    try {
+        const existingUser = await User.findOne({
+            where: { email: body.email },
+        });
+        if (existingUser != null) {
+            return res.status(409).send(responseMessages[409].EMAIL_IN_USE);
+        }
+    } catch (err: any) {
+        console.error(err);
+        return res
+            .status(500)
+            .send(responseMessages[500].INTERNAL_SERVER_ERROR);
     }
 
     let salt: string;
@@ -85,7 +95,52 @@ const signup = async (req: Request, res: Response) => {
     }
 };
 
-const signin = (req: Request, res: Response) => {};
+const signin = async (req: Request, res: Response) => {
+    const body = req.body;
+
+    if (!body || Object.keys(body).length === 0)
+        return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
+    if (!utils.keysChecker(body, ["email", "password"]))
+        return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
+
+    try {
+        const user = await User.findOne({ where: { email: body.email } });
+        if (user == null) {
+            return res.status(404).send(responseMessages[404].NOT_FOUND);
+        }
+
+        // Check password
+        const result = await bcrypt.compare(body.password, user.password);
+        if (!result) {
+            return res.status(401).send(responseMessages[401].INVALID_PWD);
+        }
+
+        // Check if user is active
+        if (!user.active) {
+            return res
+                .status(401)
+                .send(responseMessages[500].USER_NOT_ACTIVATED);
+        }
+
+        // Set token expiration time
+        const token = jwt.sign({ id: user.id }, globalConfig.secretKey, {
+            expiresIn: globalConfig.expiration,
+        });
+
+        // Send token to user
+        return res.status(200).send({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            accessToken: token,
+        });
+    } catch (err: any) {
+        console.error(err);
+        return res
+            .status(500)
+            .send(responseMessages[500].INTERNAL_SERVER_ERROR);
+    }
+};
 
 const guardFunction = (req: Request, res: Response) => {};
 
