@@ -19,6 +19,11 @@ const signup = async (req: Request, res: Response) => {
     if (!utils.keysChecker(body, ["name", "email", "password", "organization"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
+    const existingUser = User.findOne({ where: { email: body.email } });
+    if (existingUser != null) {
+        return res.status(409).send(responseMessages[409].EMAIL_IN_USE);
+    }
+
     let salt: string;
     try {
         salt = await bcrypt.genSalt(SALT_ROUNDS);
