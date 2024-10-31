@@ -142,6 +142,19 @@ const signin = async (req: Request, res: Response) => {
     }
 };
 
-const guardFunction = (req: Request, res: Response) => {};
+const guardFunction = (req: Request, res: Response) => {
+    const token = req.headers["x-access-token"] as string;
+
+    if (!token) {
+        return res.status(200).send({
+            auth: false,
+        });
+    }
+
+    jwt.verify(token, globalConfig.secretKey, (error, decoded) => {
+        if (error) return res.status(200).send({ auth: false });
+        return res.status(200).send({ auth: true });
+    });
+};
 
 export default { signup, signin, guardFunction };
