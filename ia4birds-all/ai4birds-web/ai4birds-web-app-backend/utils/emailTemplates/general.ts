@@ -1,10 +1,47 @@
-const emailTemplate = (
+const activateAccountTemplate = (
     url: string,
     username: string,
     organization: string,
     email: string,
-    projectName: string,
+    projectName: string
 ) => {
+    baseEmailTemplate(
+        `Activate ${username}'s Account`,
+        [
+            "Hello",
+            `You are receiving this because ${username} from organization ${organization} has signed up with the email ${email} in the ${projectName} platform.`,
+            "To activate the account, please click on the link below: ",
+        ],
+        url,
+        "Activate account"
+    );
+};
+
+const resetPasswordTemplate = (url: string, projectName: string) => {
+    return baseEmailTemplate(
+        `Reset your Password`,
+        [
+            "Hello",
+            `You are receiving this because you (or someone else) is trying to reset your password in ${projectName} platform.`,
+            "To reset the password, please click on the link below: ",
+        ],
+        url,
+        "Reset password"
+    );
+};
+
+const baseEmailTemplate = (
+    title: string,
+    body: string[],
+    url: string,
+    buttonText: string
+) => {
+    let bodyString = body
+        .map(
+            (b) =>
+                `<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">${b}</span></p>`
+        )
+        .join(`<p style="font-size: 14px; line-height: 140%;"></p>`);
     return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -194,7 +231,7 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
       <td style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 30px;font-family:'Lato',sans-serif;" align="left">
 
   <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 28px; line-height: 39.2px; color: #ffffff; font-family: Lato, sans-serif;">Activate ${username}'s Account</span></p>
+    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 28px; line-height: 39.2px; color: #ffffff; font-family: Lato, sans-serif;">${title}</span></p>
   </div>
 
       </td>
@@ -229,13 +266,8 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
       <td style="overflow-wrap:break-word;word-break:break-word;padding:40px 40px 30px;font-family:'Lato',sans-serif;" align="left">
 
   <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Hello,</span></p>
-<p style="font-size: 14px; line-height: 140%;"></p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">You are receiving this because ${username} from organization ${organization} has signed up with the email ${email} in the ${projectName} platform.</span></p>
-<p style="font-size: 14px; line-height: 140%;"></p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">To activate the account, please click on the link below: </span></p>
+    ${bodyString}
   </div>
-
       </td>
     </tr>
   </tbody>
@@ -251,7 +283,7 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
   <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:52px; v-text-anchor:middle; width:213px;" arcsize="2%"  stroke="f" fillcolor="#18163a"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Lato',sans-serif;"><![endif]-->
     <form action="${url}" method="POST" enctype="text/plain">
     <button type="submit" class="v-button" style="box-sizing: border-box;display: inline-block;font-family:'Lato',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #18163a; border-radius: 1px;-webkit-border-radius: 1px; -moz-border-radius: 1px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
-      <span style="display:block;padding:15px 40px;line-height:120%;"><span style="font-size: 18px; line-height: 21.6px;">Activate account</span></span>
+      <span style="display:block;padding:15px 40px;line-height:120%;"><span style="font-size: 18px; line-height: 21.6px;">${buttonText}</span></span>
     </button>
     </form>
   <!--[if mso]></center></v:roundrect><![endif]-->
@@ -369,4 +401,4 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
 </html>`;
 };
 
-export default emailTemplate;
+export { activateAccountTemplate, resetPasswordTemplate };

@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import globalConfig from "../config/global.config";
 import responseMessages from "../utils/messages/global.messages";
 import smtp from "../utils/smtp/smtp";
-import activateAccountTemplate from "../utils/emailTemplates/activateAccount";
+import { activateAccountTemplate } from "../utils/emailTemplates/general";
 import utils from "../utils/utils";
 import { User } from "../models/connection";
 
