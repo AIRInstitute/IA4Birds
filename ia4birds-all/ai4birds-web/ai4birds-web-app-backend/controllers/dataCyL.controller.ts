@@ -2,6 +2,7 @@ import axios from 'axios';
 import express from 'express';
 import globalMessages from '../utils/messages/global.messages';
 import globalConfig from '../config/global.config';
+import redis from '../config/redis.config';
 
 const getXenoCantoRecordings = async (req, res) => {
     try {
@@ -51,19 +52,21 @@ const getEBirdData = async (req, res) => {
 
 const getDataBird = async (req, res) => {
     try {
-        // Hacer la solicitud a Xenocanto para obtener las grabaciones
-        const dataBirdResponse = await axios.get(`${globalConfig.pythonURL}/dataBird`);
+        const cachedData = await redis.get('dataBirdKey');
+        if (cachedData) {
+            return res.status(200).json(JSON.parse(cachedData));
+        } else {
+            const dataBirdResponse = await axios.get(`${globalConfig.pythonURL}/dataBird`);
 
-        // Verificar si las solicitudes fueron exitosas
-        if (dataBirdResponse.status !== 200) {
-            throw new Error('No se pudieron obtener los datos necesarios.');
+            if (dataBirdResponse.status !== 200) {
+                throw new Error('No se pudieron obtener los datos necesarios.');
+            }
+
+            const dataBirdData = dataBirdResponse.data;
+            await redis.set('dataBirdKey', JSON.stringify(dataBirdData));
+
+            return res.status(200).json(dataBirdData);
         }
-
-        // Extraer los datos de las grabaciones de Xenocanto
-        const dataBirdData = dataBirdResponse.data;
-
-        // Enviar la información combinada al frontend
-        return res.status(200).json(dataBirdData);
     } catch (err) {
         console.error(err);
         return res.status(500).send({

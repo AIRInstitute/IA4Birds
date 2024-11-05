@@ -6,7 +6,7 @@
 from . import socketio
 
 from ai4birds_ingest_service import logger
-from ai4birds_ingest_service.model.windmap_extractor import WindMap_Extractor
+from ai4birds_ingest_service.model.extractor.windmap_extractor import WindMap_Extractor
 
 """
 Events from socket
@@ -28,7 +28,7 @@ def handle_windmap(data):
     print('Received windmap event')  # Add this message
     
     # Crear una instancia de WindMap_Extractor
-    #extractor = WindMap_Extractor()
+    extractor = WindMap_Extractor()
    
     # Obtener los parámetros latitud, longitud y altitud del mensaje enviado por el cliente
     lat = data.get('lat')
@@ -39,7 +39,7 @@ def handle_windmap(data):
         # Verify that the required data is present
         if lat is not None and lon is not None and z is not None:
             # Call the windmap_ingest method and capture the response
-            result = WindMap_Extractor.windmap_ingest(lat, lon, z)
+            result = extractor.windmap_ingest(lat, lon, z)
 
             # Send the response to the client
             socketio.emit('windmap_response', result)

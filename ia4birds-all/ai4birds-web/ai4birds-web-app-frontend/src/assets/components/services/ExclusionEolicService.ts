@@ -37,13 +37,24 @@ class ExclusionEolicService {
     // }
 
     async getExclusionMap() {
-         const response = await api.get("/data/exclusionmap", {
+         const response = await api.get("/data/exclusionmap/zip", {
             headers: {
         //         "x-access-token": getToken(),
               },
         })
         return response;
-    }
+    }  
+    
+    async getExclusionResourcesMap(body) {
+         const response = await api.post("/data/windmap", body
+         //{
+    //        headers: {
+    //    //         "x-access-token": getToken(),
+    //          },
+       //}
+       )
+       return response;
+   } 
 
 }
 

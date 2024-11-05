@@ -8,7 +8,7 @@
 
 from flask_cors import CORS
 from flask import Flask, Blueprint, redirect, request
-
+# from flask_caching import Cache
 from ai4birds_ingest_service import config
 from ai4birds_ingest_service import events
 from ai4birds_ingest_service.api.v1 import api
@@ -18,6 +18,8 @@ from ai4birds_ingest_service.core import cache, limiter
 from . import socketio
 
 app = Flask(__name__)
+
+
 # socketio = SocketIO(app)
 
 VERSION = (1, 0)
@@ -63,7 +65,9 @@ def initialize_app(flask_app):
     api.init_app(v1)
 
     limiter.exempt(v1)
-    cache.init_app(flask_app)
+
+    cache.init_app(flask_app) 
+    #cache.init_app(flask_app)
 
     for ns in namespaces:
         api.add_namespace(ns)
@@ -88,7 +92,7 @@ def main():
     
     # Ejecutar la aplicación con SocketIO
     socketio.run(app, host=config.HOST, port=config.PORT, debug=config.DEBUG_MODE, allow_unsafe_werkzeug=True)
-
+    print(f'Ejecutado socket')
 
 if __name__ == '__main__':
     main()

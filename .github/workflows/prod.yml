@@ -23,9 +23,17 @@ jobs:
      - name: clear all docker
        run: sudo docker system prune --all -f
 
+  copy_file:
+    name: copy file
+    needs: check_out
+    runs-on: [self-hosted, linux, x64, prod]
+    steps:
+      - name: copy file
+        run: cp /etc/envs/.env .
+
   docker_compose:
     name: docker compose
-    needs: check_out
+    needs: copy_file
     runs-on: [self-hosted, linux, x64, prod]
     steps:
     - name: Build Custom Kong Image

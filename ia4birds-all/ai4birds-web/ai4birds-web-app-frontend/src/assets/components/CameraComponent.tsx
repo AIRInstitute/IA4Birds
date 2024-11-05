@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {Spacer} from "@nextui-org/react";
 import {CustomCard} from "./card/CameraCard";
 import XenocantoDataService from './services/XenocantoDataService';
+import {FrequencyWindSpeed} from './Charts/FrequencyWindSpeed';
 
 const CameraComponent = () => {
     const camerasData = [

@@ -5,6 +5,7 @@ import zipfile
 import os
 import re
 import math
+from functools import lru_cache
 from shapely import wkt
 from time import sleep
 import gzip
@@ -39,13 +40,18 @@ class DataConverter:
             coordinates_pairs = [pair.strip() for pair in coordinates_pairs]
             # Convierte cada par de coordenadas a tuplas de float, asegurándose de eliminar cualquier paréntesis residual
             coordinates = []
+            count = 0
             for pair in coordinates_pairs:
                 # Elimina los paréntesis residuales y divide por el espacio
                 clean_pair = re.sub(r'[()]', '', pair).split()
                 # Asegura que hay dos elementos antes de convertir a float
                 if len(clean_pair) == 2:
-                    lat, lon = map(float, clean_pair)
+                    lon, lat = map(float, clean_pair)
                     coordinates.append((lat, lon))
+                    count += 1
+                    if count == 3:
+                        break  # Sale del bucle después de añadir el primer par de coordenadas
+
             
             return coordinates
         except Exception as e:
@@ -75,7 +81,15 @@ class DataConverter:
         current_page = max(1, min(page_number, total_pages))
         # Asegurar que el número de página está dentro del rango válido
         if page_number < 1 or page_number > total_pages:
-            return {"error": "Número de página fuera de rango."}
+            return {
+                "pagination_info": {
+                    'current_page': page_number,
+                    'total_data': total_data,
+                    'total_pages': total_pages,
+                    'page_size': page_size
+                },
+                "data": []
+            }
         
         start_index = (current_page - 1) * page_size
         end_index = start_index + page_size
@@ -96,12 +110,13 @@ class DataConverter:
         }
 
     @staticmethod
+    @lru_cache(maxsize=128)
     def csv_to_json(filepath, page=1, page_size=10):
         try:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
             clean_data = DataConverter.clean_invalid_characters(data)
             
-            clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
             
             # Extrae y procesa las coordenadas de la columna 'WKT'
             clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
@@ -127,6 +142,7 @@ class DataConverter:
             # Antes de devolver, usa _paginate_data para paginar data_list
             pagination_result = DataConverter._paginate_data(data_list, page_size, page)
 
+            print("Tamaño de los datos paginados:", len(pagination_result['data']))  # Muestra el tamaño del array de datos
             return {
                 'data': pagination_result['data'],
                 'metadata': pagination_result['pagination_info']
@@ -138,14 +154,15 @@ class DataConverter:
             return {'error': str(e)}
 
     @staticmethod
+    @lru_cache(maxsize=128)
     def csv_to_json_full(filepath):
         """Convierte un CSV completo a JSON y lo guarda en un archivo ZIP."""
         try:
             data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
             clean_data = DataConverter.clean_invalid_characters(data)
-            
+            print(f"Invalid Character OK")
             # Procesar datos adicionales si es necesario
-            clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')            
             clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
             
             # Excluir las columnas 'WKT', 'gml_id', y 'geometry'
@@ -158,23 +175,23 @@ class DataConverter:
 
             # Convertir DataFrame a una lista de diccionarios para JSON
             data_list = clean_data.to_dict(orient='records')
-            
+            print(f"Data List OK")
             # Convertir a string JSON
             json_str = json.dumps({'data': data_list}, ensure_ascii=False, indent=4)
-            
+            print(f"Convert a STRING OK")
             # Crear un archivo temporal para el JSON
             fd_json, path_json = tempfile.mkstemp(suffix='.json')
             with os.fdopen(fd_json, 'w', encoding="utf-8") as tmp_json:
                 tmp_json.write(json_str)
-            
+            print(f"PATH JSON {path_json}")
             # Crear otro archivo temporal para el ZIP
             fd_zip, path_zip = tempfile.mkstemp(suffix='.zip')
             with zipfile.ZipFile(path_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 zipf.write(path_json, arcname='data.json')
-            
+            print(f"PATH ZIP {path_zip}")
             # Limpiar el archivo temporal JSON
             os.remove(path_json)
-            
+            print(f"CLEAND TEMP FILE OK")
             # Retornar la ruta del archivo ZIP
             return path_zip
         except Exception as e:
@@ -182,6 +199,7 @@ class DataConverter:
             return None
         
     @staticmethod
+    @lru_cache(maxsize=128)
     def csv_to_json_gzip(filepath, page=1, page_size=10):
         """Lee un archivo CSV comprimido, limpia los datos y devuelve JSON paginado."""
         try:
@@ -189,7 +207,7 @@ class DataConverter:
                 data = pd.read_csv(file, sep=';', on_bad_lines='skip')
                 clean_data = DataConverter.clean_invalid_characters(data)
                 
-                clean_data['identific'] = clean_data['identific'].str.replace('"', '')
+                clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
                 clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
 
                 # Convertir a lista de diccionarios y paginar
@@ -217,3 +235,49 @@ class DataConverter:
         except Exception as e:
             print(f"Error converting compressed CSV to JSON: {e}")
             return {'error': str(e)}
+        
+    @staticmethod
+    @lru_cache(maxsize=128)
+    def csv_to_json_sensitivity(filepath):
+        try:
+
+            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
+            clean_data = DataConverter.clean_invalid_characters(data)  # Llama al método estático correctamente
+            json_result = clean_data.to_dict(orient='records')
+            return json_result
+        except Exception as e:
+            return {'error': str(e)}
+        
+    @staticmethod
+    # @lru_cache(maxsize=128)
+    def stream_csv_data(filepath, page_size=50):
+        try:
+            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
+            clean_data = DataConverter.clean_invalid_characters(data)
+
+            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
+            clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
+
+            for start in range(0, len(clean_data), page_size):
+                end = start + page_size
+                batch = clean_data.iloc[start:end]
+
+                data_list = [
+                    {
+                        'fid': row['fid'],
+                        'criterio': row['criterio'],
+                        't_instalac': row['t_instalac'],
+                        'ambito': row['ambito'],
+                        'area_excl': row['area_excl'],
+                        'espacio': row['espacio'],
+                        'identific': row['identific'],
+                        'coordenadas': row['coordenadas']  
+                    }
+                    for _, row in batch.iterrows()
+                ]
+                yield data_list
+
+        except Exception as e:
+            print(e)
+            print(f"Error streaming CSV data: {e.__str__()}")
+            yield {'error': str(e)}

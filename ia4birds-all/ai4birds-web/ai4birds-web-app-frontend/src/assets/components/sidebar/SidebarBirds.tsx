@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
             selectedKey={selected}
             onSelectionChange={setSelected}
           >
-            <Tab key="birds" title="Aves">
+            <Tab title="Aves">
               <p className='py-2'>Latitud: {birdData.observations[0].lat}</p>
               <p className='py-2'>Longitud: {birdData.observations[0].lng}</p>
               <p className='py-2'>Localización: {birdData.observations[0].locationName}</p>
@@ -54,7 +54,7 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
                 <Progress color="primary" aria-label="Loading..." value={9}/>
                 </React.Fragment> */}
             </Tab>
-            <Tab key="eolicSensibility" title="Sensibilidad eólica">
+            <Tab  title="Sensibilidad eólica">
               <p>Datos de la sensibilidad eólica</p>
             </Tab>
           </Tabs>
