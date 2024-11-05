@@ -5,6 +5,7 @@ import HeaderComponent from './assets/components/HeaderComponent';
 import CameraComponent from './assets/components/CameraComponent';
 import MapComponent from './assets/components/MapComponent';
 import GraphsComponent from './assets/components/GraphsComponent';
+import RequestAdminComponent from './assets/components/RequestAdminComponent';
 
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
         <Route path="/map-component" element={<MapComponent/>}>
         </Route>
         <Route path="/blog-component" element={<GraphsComponent/>}>
+        </Route>
+        <Route path="/request-admin-component" element={<RequestAdminComponent/>}>
         </Route>
       </Routes>
     </Router>
