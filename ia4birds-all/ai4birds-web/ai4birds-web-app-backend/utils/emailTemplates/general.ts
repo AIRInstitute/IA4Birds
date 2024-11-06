@@ -5,7 +5,7 @@ const activateAccountTemplate = (
     email: string,
     projectName: string
 ) => {
-    baseEmailTemplate(
+    return baseEmailTemplate(
         `Activate ${username}'s Account`,
         [
             "Hello",

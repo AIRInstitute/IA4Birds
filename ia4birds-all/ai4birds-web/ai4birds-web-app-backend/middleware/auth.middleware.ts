@@ -3,6 +3,7 @@ import { Request, Response, NextFunction, response } from "express";
 
 import responseMessages from "../utils/messages/global.messages";
 import { User } from "../models/connection";
+import globalConfig from "../config/global.config";
 
 type RequestWithSession = Request & {
     session: {
@@ -21,7 +22,7 @@ const verifyToken = (
     if (Array.isArray(token))
         return res.status(403).send(responseMessages[401].INVALID_TOKEN);
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, globalConfig.secretKey, (err, decoded) => {
         if (err || typeof decoded === "string")
             return res.status(401).send(responseMessages[401].UNAUTHORIZED);
 

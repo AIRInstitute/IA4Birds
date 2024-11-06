@@ -5,6 +5,14 @@ import authMiddleware from "../../middleware/auth.middleware";
 export default () => {
     const userRouter: Router = Router();
 
+    userRouter.get(
+        "/activateAccount",
+        [authMiddleware.verifyToken],
+        userController.activateAccount
+    );
+    userRouter.get("/forgotPassword", userController.forgotPassword);
+    userRouter.post("/resetPassword", userController.resetPassword);
+
     userRouter.get("/", [authMiddleware.verifyToken], userController.findAll);
     userRouter.get(
         "/:id",
@@ -21,14 +29,6 @@ export default () => {
         [authMiddleware.verifyToken],
         userController.deleteUser
     );
-
-    userRouter.post(
-        "/activateAccount",
-        [authMiddleware.verifyToken],
-        userController.activateAccount
-    );
-    userRouter.post("/forgotPassword", userController.forgotPassword);
-    userRouter.post("/resetPassword", userController.resetPassword);
 
     return userRouter;
 };

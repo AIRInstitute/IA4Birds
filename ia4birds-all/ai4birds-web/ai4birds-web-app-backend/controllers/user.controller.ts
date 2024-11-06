@@ -72,6 +72,7 @@ const activateAccount = async (req: Request, res: Response) => {
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
         await user.update({ active: true });
+        return res.status(200).send(responseMessages[200].USER_ACTIVATED);
     } catch (err: any) {
         console.error(err);
         return res
@@ -84,18 +85,22 @@ const activateAccount = async (req: Request, res: Response) => {
  * Send an email to reset the user's password.
  */
 const forgotPassword = async (req: Request, res: Response) => {
-    const body = req.body;
-
-    if (!body || Object.keys(body).length === 0)
-        return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
-    if (!utils.keysChecker(body, ["email"]))
+    // Check query parameters
+    if (!req.query || Object.keys(req.query).length === 0)
+        return res
+            .status(400)
+            .send(responseMessages[400].QUERY_CANNOT_BE_EMPTY);
+    if (!utils.keysChecker(req.query, ["email"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
+    const email = req.query.email as string;
     try {
-        const user = await User.findOne({ where: { email: body.email } });
+        const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
-        const url = `${globalConfig.backendURL}/api/users/resetPassword?email=${body.email}`;
+        // NOTE: Using the email as the token, but it should probably be a random
+        // token.
+        const url = `${globalConfig.backendURL}/api/users/resetPassword?email=${email}`;
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: globalConfig.smtp.email,
@@ -120,14 +125,22 @@ const forgotPassword = async (req: Request, res: Response) => {
  * Reset the user's password.
  */
 const resetPassword = async (req: Request, res: Response) => {
+    if (!req.query || Object.keys(req.query).length === 0)
+        return res
+            .status(400)
+            .send(responseMessages[400].QUERY_CANNOT_BE_EMPTY);
+    if (!utils.keysChecker(req.query, ["email"]))
+        return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
+
     if (!req.body || Object.keys(req.body).length === 0)
         return res
             .status(400)
             .send(responseMessages[400].QUERY_CANNOT_BE_EMPTY);
-    if (!utils.keysChecker(req.body, ["email", "password"]))
+    if (!utils.keysChecker(req.body, ["password"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
-    const { email, password } = req.body as { email: string; password: string };
+    const email = req.query.email as string;
+    const password = req.body.password as string;
 
     try {
         const user = await User.findOne({ where: { email } });
@@ -179,14 +192,14 @@ const updateUser = async (req: Request, res: Response) => {
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
 
     try {
-        const user = await User.findByPk(req.body.id);
+        const user = await User.findByPk(id);
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
-        // We don't want to update the id (it might be wrong!), or the password (the password is hashed just
-        // underneath).
+        // We don't want to update the id (we are using the params' id), or the password
+        // (we need to hash it first), we also ignore the fields active, createdAt.
         let updateData = {};
         for (const key in req.body) {
-            if (key !== "id" && key !== "password") {
+            if (!["id", "password", "active", "createdAt"].includes(key)) {
                 updateData[key] = req.body[key];
             }
         }
