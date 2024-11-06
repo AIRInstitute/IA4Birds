@@ -39,8 +39,6 @@ function App() {
         </Route>
         <Route path="/blog-component" element={<GraphsComponent/>}>
         </Route>
-        <Route path="/request-admin-component" element={<RequestAdminComponent/>}>
-        </Route>
       </Routes>
     </Router>
     </>
