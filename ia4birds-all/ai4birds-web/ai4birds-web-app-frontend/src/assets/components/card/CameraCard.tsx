@@ -1,5 +1,6 @@
-import React from "react";
-import {Card,CardHeader, CardBody, Image} from "@nextui-org/react";
+import { Card,CardHeader, CardBody } from "@nextui-org/card";
+import { Image } from "@nextui-org/image";
+
 export const CustomCard = ({ cameraData }) => (
     <>
   <Card className="my-3 py-4">

@@ -1,6 +1,9 @@
-import React from 'react';
-import {Divider,Link, Card, CardBody, CardHeader, CardFooter, Chip} from "@nextui-org/react";
+import {Card, CardBody, CardHeader, CardFooter } from "@nextui-org/card";
 import { RxCross1 } from "react-icons/rx";
+import { Divider } from "@nextui-org/divider";
+import { Link } from "@nextui-org/link";
+import { Image } from "@nextui-org/image";
+import { Chip } from "@nextui-org/chip";
 
 const SidebarEolic = ({ isOpen, onCancel,eolicdata}) => {
 

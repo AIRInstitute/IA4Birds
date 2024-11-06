@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Switch, Divider} from "@nextui-org/react";
+import { useState, useEffect } from 'react';
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/navbar";
+import { Button } from "@nextui-org/button";
+import { Divider } from "@nextui-org/divider";
+import { Switch } from "@nextui-org/switch";
 import imagen from '../images/IA4birds-1500px.png';
-import { Link, } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { set } from 'ol/transform';
 const MoonIcon = (props) => (
@@ -101,8 +104,10 @@ const HeaderComponent = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link to="#">Login</Link>
+        <NavbarItem className="lg:flex">
+          {location.pathname !== '/login-component' && (
+            <Button><Link to="/login-component">Login</Link></Button>
+          )}
         </NavbarItem>
         <NavbarItem>
         {/* <Switch
