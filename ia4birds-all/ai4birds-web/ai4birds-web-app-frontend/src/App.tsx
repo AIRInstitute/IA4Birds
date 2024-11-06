@@ -1,11 +1,14 @@
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import HeaderComponent from './assets/components/HeaderComponent';
 import CameraComponent from './assets/components/CameraComponent';
 import MapComponent from './assets/components/MapComponent';
 import GraphsComponent from './assets/components/GraphsComponent';
+import LoginComponent from './assets/components/LoginComponent';
+import Login from './assets/components/LoginComponent';
 import RequestAdminComponent from './assets/components/RequestAdminComponent';
+
 
 
 function App() {
@@ -38,6 +41,8 @@ function App() {
         <Route path="/map-component" element={<MapComponent/>}>
         </Route>
         <Route path="/blog-component" element={<GraphsComponent/>}>
+        </Route>
+        <Route path="/login-component" element={<LoginComponent/>}>
         </Route>
       </Routes>
     </Router>

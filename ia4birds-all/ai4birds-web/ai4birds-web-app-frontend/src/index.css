@@ -116,6 +116,28 @@ h2{
   z-index: 999;
 } 
 
+/* Login */
+.login-container{
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0 auto;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+ /* input{
+  border: none;
+  outline: none;
+}
+input:focus{
+  outline: none;
+} */
+
 /* Loader */
 
 body {
