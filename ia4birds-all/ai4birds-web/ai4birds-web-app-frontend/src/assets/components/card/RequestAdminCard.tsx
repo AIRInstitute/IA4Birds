@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Input } from "@nextui-org/input";
+import { Input, Textarea } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Button } from "@nextui-org/react";
 
@@ -38,8 +38,8 @@ export const CustomCard = () => {
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-                        <Input type="email" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                        <Input className="description-input h-full"  type="text" label="Description" value={description} onChange={(e) => setDescription(e.target.value)}/>
+                        <Input type="email" isRequired label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <Textarea className="max-w-xm" type="text" label="Description" value={description} onChange={(e) => setDescription(e.target.value)}/>
                     </div>
                 </div>
                 {error && <p className="error">{error}</p>}
