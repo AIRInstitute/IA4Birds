@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import {Spacer} from "@nextui-org/react";
+import {Spacer} from "@nextui-org/spacer";
 import {CustomCard} from "./card/CameraCard";
 import XenocantoDataService from './services/XenocantoDataService';
 import {FrequencyWindSpeed} from './Charts/FrequencyWindSpeed';
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 
 const CameraComponent = () => {
     const camerasData = [
@@ -17,7 +18,7 @@ const CameraComponent = () => {
         
         // Llama a tu función aquí
         getXenocantoData();
-      }, []);
+      }, []); // es un array vacío porque se ejecuta según se forma el componente, si pones el nombre de la variable se ejecuta cada vez que cambia esa variable
 
       const getXenocantoData = () => {
         XenocantoDataService.getXenocanto().then((response) => {
@@ -43,7 +44,6 @@ const CameraComponent = () => {
         ))}
       </div>
     </div>
-
     </>
   );
 }
