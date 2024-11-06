@@ -142,11 +142,6 @@ h2{
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.description-input {
-  min-height: 120px !important;
-  max-height: 200px ;
-  
-}
  /* input{
   border: none;
   outline: none;
