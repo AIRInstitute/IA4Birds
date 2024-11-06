@@ -7,6 +7,8 @@ import MapComponent from './assets/components/MapComponent';
 import GraphsComponent from './assets/components/GraphsComponent';
 import LoginComponent from './assets/components/LoginComponent';
 import Login from './assets/components/LoginComponent';
+import RequestAdminComponent from './assets/components/RequestAdminComponent';
+
 
 
 function App() {
