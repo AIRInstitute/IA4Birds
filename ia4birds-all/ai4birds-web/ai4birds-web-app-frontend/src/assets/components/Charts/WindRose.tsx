@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import { Chart } from "react-windrose-chart";
-import {Spinner} from "@nextui-org/react";
+import {Spinner} from "@nextui-org/spinner";
 
 
 export const WindRose = ({eolicWindMapData}) => {

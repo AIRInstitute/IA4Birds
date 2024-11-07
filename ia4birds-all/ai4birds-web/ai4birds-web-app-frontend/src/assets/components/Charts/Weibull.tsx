@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import {Spinner} from "@nextui-org/react";
+import {Spinner} from "@nextui-org/spinner";
 
 interface EolicWindMapData {
+  data: {
     densityData: number[];
     frequencyData: number[];
+    y: number[];
+  }
 }
 
 interface FrequencyWindSpeedProps {
@@ -19,12 +21,12 @@ export const Weibull: React.FC<FrequencyWindSpeedProps> = ({ eolicWindMapData })
     {
       name: 'Densidad',
       type: 'line',
-      data: [] // Datos de densidad serán dinámicos
+      data: [] as number [] // Datos de densidad serán dinámicos
     }, 
     {
       name: 'Frecuencia',
       type: 'column',
-      data:  [] // Datos de frecuencia serán dinámicos
+      data:  [] as number [] // Datos de frecuencia serán dinámicos
     }
   ]);
   const [options, setOptions] = useState<any>({
