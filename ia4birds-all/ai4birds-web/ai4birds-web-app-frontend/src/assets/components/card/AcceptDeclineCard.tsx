@@ -41,73 +41,41 @@ export const CustomCard = () => {
         <>
         <Card>
             <CardHeader>
-                <h2>Solicitar rol admin</h2>
+                <h2>Datos de la solicitud de admin</h2>
             </CardHeader>
             <CardBody>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
                     <Input  
-                            type="email" 
-                            isRequired 
-                            isClearable 
-                            onClear={() => {
-                                setEmail('');
-                                console.log("Input email cleared")
-                            }} 
-                            placeholder="ejemplo@ejemplo.com" 
+                            isReadOnly
+                            type="email"  
                             label="Email" 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
                             />
-                        <Textarea 
+                        <Textarea
+                            isReadOnly
                             className="max-w-xm" 
                             type="text" 
-                            description="Por favor, introduce una razón válida" 
                             label="Description" 
                             value={description} 
                             onChange={(e) => setDescription(e.target.value)}
                             />
                     </div>
                 </div>
-                {error && <p className="error">{error}</p>}
-                <div className="flex justify-end mt-4">
-                    <Button color="primary" type="submit">
-                        Enviar solicitud
+                {/* {error && <p className="error">{error}</p>} */}
+                <div className="flex justify-between mt-4">
+                    <Button style={{ backgroundColor: "#ac1919", color: 'white' }} type="submit">
+                        Rechazar
+                    </Button>
+                    <Button style={{ backgroundColor: "#1b9316", color: 'white' }} type="submit">
+                        Aceptar
                     </Button>
                 </div>
             </form>
             </CardBody>
         </Card>
-        <Modal 
-        backdrop={"blur"} 
-        isOpen={isOpen} 
-        onOpenChange={onOpenChange}
-        className="fixed top-0"
-        classNames={{
-          body: "py-6",
-          backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-          closeButton: "hover:bg-white/5 active:bg-primary/10",
-        }}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Aviso</ModalHeader>
-              <ModalBody>
-                <p> 
-                  Ya se ha enviado la solicitud de rol de administrador. 
-                  En un plazo determinado, en caso de que su solicitud sea aceptada, recibirá un correo electrónico de confirmación.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20" onPress={onClose}>
-                  Close
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
         </>
     );
     

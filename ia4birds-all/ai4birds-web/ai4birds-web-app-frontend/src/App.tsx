@@ -7,6 +7,7 @@ import GraphsComponent from './assets/components/GraphsComponent';
 import LoginComponent from './assets/components/LoginComponent';
 import RequestAdminComponent from './assets/components/RequestAdminComponent';
 import RegisterFormComponent from './assets/components/RegisterFormComponent';
+import AcceptDeclineComponent from './assets/components/AcceptDeclineComponent';
 
 
 
@@ -46,6 +47,8 @@ function App() {
         <Route path="/request-admin-component" element={<RequestAdminComponent/>}>
         </Route>
         <Route path="/register-form-component" element={<RegisterFormComponent/>}>
+        </Route>
+        <Route path="/accept-decline-component" element={<AcceptDeclineComponent/>}>
         </Route>
       </Routes>
     </Router>

@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import * as React from "react";
+import { useEffect } from "react";
 import { Input } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
