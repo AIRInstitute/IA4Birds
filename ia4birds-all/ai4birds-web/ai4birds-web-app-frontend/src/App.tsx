@@ -6,6 +6,7 @@ import MapComponent from './assets/components/MapComponent';
 import GraphsComponent from './assets/components/GraphsComponent';
 import LoginComponent from './assets/components/LoginComponent';
 import RequestAdminComponent from './assets/components/RequestAdminComponent';
+import RegisterFormComponent from './assets/components/RegisterFormComponent';
 
 
 
@@ -43,6 +44,8 @@ function App() {
         <Route path="/login-component" element={<LoginComponent/>}>
         </Route>
         <Route path="/request-admin-component" element={<RequestAdminComponent/>}>
+        </Route>
+        <Route path="/register-form-component" element={<RegisterFormComponent/>}>
         </Route>
       </Routes>
     </Router>

@@ -130,6 +130,7 @@ h2{
   transform: translate(-50%, -50%);
 }
 
+/* Request admin view */
 .request-admin-container{
   max-width: 400px;
   margin: auto;
@@ -142,6 +143,25 @@ h2{
   left: 50%;
   transform: translate(-50%, -50%);
 }
+/* Register form view */
+.register-form-container{
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0 auto;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.error {
+  color: red;
+  font-size: 0.875rem; /* Ajusta el tamaño según tus necesidades */
+  margin-top: 0.5rem;
+}
+
  /* input{
   border: none;
   outline: none;
