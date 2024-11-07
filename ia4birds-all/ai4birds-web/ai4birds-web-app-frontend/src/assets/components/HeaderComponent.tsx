@@ -109,7 +109,11 @@ const HeaderComponent = () => {
             <Button><Link to="/login-component">Login</Link></Button>
           )}
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem className="lg:flex">
+          {location.pathname !== '/request-admin-component' && (
+            <Button><Link to="/request-admin-component">Solicitud Admin</Link></Button>
+          )}
+
         {/* <Switch
         defaultSelected
         size="lg"

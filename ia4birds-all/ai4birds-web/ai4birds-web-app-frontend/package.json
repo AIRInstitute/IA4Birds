@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
+    "@mui/icons-material": "^6.1.6",
+    "@mui/material": "^6.1.6",
     "@nextui-org/link": "^2.0.35",
     "@nextui-org/react": "^2.2.9",
     "@nextui-org/use-disclosure": "^2.0.10",
