@@ -1,11 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import {Spinner} from "@nextui-org/react";
+import {Spinner} from "@nextui-org/spinner";
 interface EolicWindMapData {
   data: {
-    y: number[];
+    subplot: {
+      y: number[];
+    };
   };
 }
 

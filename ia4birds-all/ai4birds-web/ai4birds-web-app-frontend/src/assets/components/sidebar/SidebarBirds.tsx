@@ -1,5 +1,7 @@
-import React from 'react';
-import {Tabs, Tab, Card, CardBody, Progress} from "@nextui-org/react";
+import * as React from 'react';
+import {Tabs, Tab } from "@nextui-org/tabs";
+import { Card, CardBody } from "@nextui-org/card";
+import { Progress } from "@nextui-org/progress";
 import { RxCross1 } from "react-icons/rx";
 
 const Sidebar = ({ isOpen, onCancel, birdData }) => {
@@ -24,7 +26,7 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
             size="md"
             aria-label="Tabs form"
             selectedKey={selected}
-            onSelectionChange={setSelected}
+            onSelectionChange={(key) => setSelected(key.toString())}
           >
             <Tab title="Aves">
               <p className='py-2'>Latitud: {birdData.observations[0].lat}</p>
