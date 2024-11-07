@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Input, Textarea } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/modal";
 import { Button } from "@nextui-org/react";
 
 export const CustomCard = () => {
@@ -8,16 +9,23 @@ export const CustomCard = () => {
     const [description, setDescription] = React.useState('');
     const [error, setError] = React.useState('');
 
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("ENTRO EN EL SUBMIT");
-        console.log("e: ", e);
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !description) {
             setError('Please fill in all fields');
             return;
         }
+
+        if (!emailRegex.test(email)) {
+            setError('*Please enter a valid email');
+            return;
+        }
         setError('');
+        onOpen();
         console.log("Submitted with:", { email, description });
 
     };
@@ -38,8 +46,27 @@ export const CustomCard = () => {
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-                        <Input type="email" isRequired label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                        <Textarea className="max-w-xm" type="text" label="Description" value={description} onChange={(e) => setDescription(e.target.value)}/>
+                    <Input  
+                            type="email" 
+                            isRequired 
+                            isClearable 
+                            onClear={() => {
+                                setEmail('');
+                                console.log("Input email cleared")
+                            }} 
+                            placeholder="ejemplo@ejemplo.com" 
+                            label="Email" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                            />
+                        <Textarea 
+                            className="max-w-xm" 
+                            type="text" 
+                            description="Por favor, introduce una razón válida" 
+                            label="Description" 
+                            value={description} 
+                            onChange={(e) => setDescription(e.target.value)}
+                            />
                     </div>
                 </div>
                 {error && <p className="error">{error}</p>}
@@ -51,7 +78,35 @@ export const CustomCard = () => {
             </form>
             </CardBody>
         </Card>
-        
+        <Modal 
+        backdrop={"blur"} 
+        isOpen={isOpen} 
+        onOpenChange={onOpenChange}
+        className="fixed top-0"
+        classNames={{
+          body: "py-6",
+          backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+          closeButton: "hover:bg-white/5 active:bg-primary/10",
+        }}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Aviso</ModalHeader>
+              <ModalBody>
+                <p> 
+                  Ya se ha enviado la solicitud de rol de administrador. 
+                  En un plazo determinado, en caso de que su solicitud sea aceptada, recibirá un correo electrónico de confirmación.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
         </>
     );
     
