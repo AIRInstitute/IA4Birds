@@ -69,7 +69,10 @@ type JWTIntent = "access" | "activation" | "reset";
  */
 function generateJWTToken(id: number, intent: JWTIntent) {
     return jwt.sign({ id, intent }, globalConfig.secretKey, {
-        expiresIn: globalConfig.expiration,
+        expiresIn:
+            intent === "access"
+                ? globalConfig.access_expiration
+                : globalConfig.other_expiration,
     });
 }
 
