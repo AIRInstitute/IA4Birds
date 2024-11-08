@@ -67,7 +67,8 @@ const signup = async (req: Request, res: Response) => {
             .send(responseMessages[500].INTERNAL_SERVER_ERROR);
     }
 
-    const url = `${globalConfig.backendURL}/api/users/activateAccount?email=${body.email}`;
+    const activateAccountToken = utils.generateJWTToken(user.id, "activation");
+    const url = `${globalConfig.backendURL}/api/users/activateAccount?token=${activateAccountToken}`;
     const mailOptions = {
         from: globalConfig.smtp.email,
         to: globalConfig.smtp.email,
@@ -122,10 +123,7 @@ const signin = async (req: Request, res: Response) => {
                 .send(responseMessages[500].USER_NOT_ACTIVATED);
         }
 
-        // Set token expiration time
-        const token = jwt.sign({ id: user.id }, globalConfig.secretKey, {
-            expiresIn: globalConfig.expiration,
-        });
+        const token = utils.generateJWTToken(user.id, "access");
 
         // Send token to user
         return res.status(200).send({
@@ -152,7 +150,10 @@ const guardFunction = (req: Request, res: Response) => {
     }
 
     jwt.verify(token, globalConfig.secretKey, (error, decoded) => {
-        if (error) return res.status(200).send({ auth: false });
+        if (error || typeof decoded === "string")
+            return res.status(200).send({ auth: false });
+        if (!decoded.intent || decoded.intent != "access")
+            return res.status(200).send({ auth: false });
         return res.status(200).send({ auth: true });
     });
 };

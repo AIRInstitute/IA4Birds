@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import globalConfig from "../config/global.config";
 import responseMessages from "./messages/global.messages";
 
@@ -62,4 +63,44 @@ async function bcryptPassword(password: string): Promise<string> {
     return hash;
 }
 
-export default { generateToken, bytesToSize, keysChecker, bcryptPassword };
+type JWTIntent = "access" | "activation" | "reset";
+/**
+ *  Generate a JWT Token for a user ID with an intent
+ */
+function generateJWTToken(id: number, intent: JWTIntent) {
+    return jwt.sign({ id, intent }, globalConfig.secretKey, {
+        expiresIn: globalConfig.expiration,
+    });
+}
+
+export type DecodedToken = { id: number; intent: JWTIntent };
+function verifyJWTToken(
+    token: string,
+    intent?: JWTIntent
+): Promise<DecodedToken> {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, globalConfig.secretKey, (err, decoded) => {
+            // The token is invalid
+            if (err || typeof decoded === "string") return reject();
+
+            if (intent != undefined)
+                if (!decoded.intent || decoded.intent != intent)
+                    // The token doesn't have the correct intent.
+                    return reject();
+
+            // The token doesn't have a user id.
+            if (!decoded.id) return reject();
+
+            return resolve(decoded as DecodedToken);
+        });
+    });
+}
+
+export default {
+    generateToken,
+    bytesToSize,
+    keysChecker,
+    bcryptPassword,
+    generateJWTToken,
+    verifyJWTToken,
+};

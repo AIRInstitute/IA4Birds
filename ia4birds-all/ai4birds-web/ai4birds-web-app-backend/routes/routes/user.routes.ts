@@ -5,11 +5,7 @@ import authMiddleware from "../../middleware/auth.middleware";
 export default () => {
     const userRouter: Router = Router();
 
-    userRouter.get(
-        "/activateAccount",
-        [authMiddleware.verifyToken],
-        userController.activateAccount
-    );
+    userRouter.get("/activateAccount", userController.activateAccount);
     userRouter.get("/forgotPassword", userController.forgotPassword);
     userRouter.post("/resetPassword", userController.resetPassword);
 

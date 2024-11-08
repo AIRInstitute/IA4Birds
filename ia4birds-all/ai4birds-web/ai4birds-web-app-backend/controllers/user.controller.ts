@@ -5,7 +5,7 @@ import globalConfig from "../config/global.config";
 import responseMessages from "../utils/messages/global.messages";
 import smtp from "../utils/smtp/smtp";
 import { resetPasswordTemplate } from "../utils/emailTemplates/general";
-import utils from "../utils/utils";
+import utils, { DecodedToken } from "../utils/utils";
 import { User } from "../models/connection";
 
 const SALT_ROUNDS = globalConfig.saltRounds;
@@ -62,13 +62,22 @@ const activateAccount = async (req: Request, res: Response) => {
         return res
             .status(400)
             .send(responseMessages[400].QUERY_CANNOT_BE_EMPTY);
-    if (!utils.keysChecker(req.query, ["email"]))
+    if (!utils.keysChecker(req.query, ["token"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
-    const email = req.query.email as string;
+    const token = req.query.token as string;
+
+    let decoded_token: DecodedToken;
+    try {
+        decoded_token = await utils.verifyJWTToken(token, "activation");
+    } catch (err: any) {
+        return res.status(401).send(responseMessages[401].INVALID_TOKEN);
+    }
 
     try {
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({
+            where: { id: decoded_token.id },
+        });
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
         await user.update({ active: true });
@@ -94,13 +103,15 @@ const forgotPassword = async (req: Request, res: Response) => {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
     const email = req.query.email as string;
+
     try {
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
         // NOTE: Using the email as the token, but it should probably be a random
         // token.
-        const url = `${globalConfig.backendURL}/api/users/resetPassword?email=${email}`;
+        const resetPasswordToken = utils.generateJWTToken(user.id, "reset");
+        const url = `${globalConfig.backendURL}/api/users/resetPassword?token=${resetPasswordToken}`;
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: globalConfig.smtp.email,
@@ -129,7 +140,7 @@ const resetPassword = async (req: Request, res: Response) => {
         return res
             .status(400)
             .send(responseMessages[400].QUERY_CANNOT_BE_EMPTY);
-    if (!utils.keysChecker(req.query, ["email"]))
+    if (!utils.keysChecker(req.query, ["token"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
     if (!req.body || Object.keys(req.body).length === 0)
@@ -139,11 +150,18 @@ const resetPassword = async (req: Request, res: Response) => {
     if (!utils.keysChecker(req.body, ["password"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
-    const email = req.query.email as string;
+    const token = req.query.token as string;
     const password = req.body.password as string;
 
+    let decoded_token: DecodedToken;
     try {
-        const user = await User.findOne({ where: { email } });
+        decoded_token = await utils.verifyJWTToken(token, "reset");
+    } catch (err: any) {
+        return res.status(401).send(responseMessages[401].INVALID_TOKEN);
+    }
+
+    try {
+        const user = await User.findOne({ where: { id: decoded_token.id } });
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
         let salt: string;
