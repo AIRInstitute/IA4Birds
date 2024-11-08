@@ -9,13 +9,15 @@ import utils, { DecodedToken } from "../utils/utils";
 import { User } from "../models/connection";
 
 const SALT_ROUNDS = globalConfig.saltRounds;
-
+const PRIVATE_USER_FIELDS = ["password"];
 /**
  * Find all users
  */
 const findAll = async (req: Request, res: Response) => {
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({
+            attributes: { exclude: PRIVATE_USER_FIELDS },
+        });
         if (users.length > 0) return res.status(200).send(users);
         else return res.status(204).send(responseMessages[204].NO_CONTENT);
     } catch (err: any) {
@@ -41,7 +43,7 @@ const findOne = async (req: Request, res: Response) => {
 
     try {
         const user = await User.findByPk(req.params.id, {
-            attributes: { exclude: ["password", "active"] },
+            attributes: { exclude: PRIVATE_USER_FIELDS },
         });
         if (user) return res.status(200).send(user);
         else return res.status(404).send(responseMessages[404].NOT_FOUND);
