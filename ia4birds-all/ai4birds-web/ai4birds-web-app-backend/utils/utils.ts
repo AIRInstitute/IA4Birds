@@ -14,7 +14,7 @@ const generateToken = (length: number) => {
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
         result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
+            Math.floor(Math.random() * charactersLength),
         );
     }
     return result;
@@ -45,6 +45,7 @@ const keysChecker = (obj: object, keys: string[]) => {
 /**
  * Encrypts password and returns hash. If error, returns the correct message to show the user.
  * @param  {string} password   password in plain text
+ * @returns {string} hash
  */
 async function bcryptPassword(password: string): Promise<string> {
     let hash, salt;
@@ -65,7 +66,10 @@ async function bcryptPassword(password: string): Promise<string> {
 
 type JWTIntent = "access" | "activation" | "reset";
 /**
- *  Generate a JWT Token for a user ID with an intent
+ * Generate a JWT Token for a user ID with an intent
+ * @param {number} id The user ID
+ * @param {JWTIntent} intent The intent of the token
+ * @returns {string} The JWT Token
  */
 function generateJWTToken(id: number, intent: JWTIntent) {
     return jwt.sign({ id, intent }, globalConfig.secretKey, {
@@ -77,9 +81,16 @@ function generateJWTToken(id: number, intent: JWTIntent) {
 }
 
 export type DecodedToken = { id: number; intent: JWTIntent };
+/**
+ * Verify a JWT Token
+ * @param token The token to verify
+ * @param intent The intent we are looking for
+ * @returns The decoded token (if valid)
+ * @throws If the token is invalid, malformed, or doesn't have the correct intent.
+ */
 function verifyJWTToken(
     token: string,
-    intent?: JWTIntent
+    intent?: JWTIntent,
 ): Promise<DecodedToken> {
     return new Promise((resolve, reject) => {
         jwt.verify(token, globalConfig.secretKey, (err, decoded) => {
@@ -87,7 +98,7 @@ function verifyJWTToken(
             if (err || typeof decoded === "string") return reject();
 
             if (intent != undefined)
-                if (!decoded.intent || decoded.intent != intent)
+                if (!decoded.intent || decoded.intent !== intent)
                     // The token doesn't have the correct intent.
                     return reject();
 

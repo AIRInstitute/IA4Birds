@@ -13,7 +13,8 @@ const globalConfig = {
     secretKey: process.env.SECRET_KEY || "secretKey",
     sessionSecret: process.env.SECRET_SESSION || "secretSession",
     saltRounds: Number(process.env.SALT_ROUNDS) || 10,
-    expiration: process.env.EXPIRATION_TIME || "180",
+    access_expiration: process.env.ACCESS_EXPIRATION_TIME || "1h",
+    other_expiration: process.env.OTHER_EXPIRATION_TIME || "15m",
     frontendURL: process.env.FRONTEND_URL || "http://212.128.141.36:5173",
     backendURL: process.env.BACKEND_URL || "http://212.128.141.36:5030",
     pythonURL:

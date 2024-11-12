@@ -9,8 +9,14 @@ import { activateAccountTemplate } from "../utils/emailTemplates/general";
 import utils from "../utils/utils";
 import { User } from "../models/connection";
 
-const SALT_ROUNDS = globalConfig.saltRounds;
-
+/**
+ * Signup a new user
+ * @body {string} name The name of the user
+ * @body {string} email The email of the user
+ * @body {string} password The password of the user
+ * @body {string} organization The organization of the user
+ * @returns {string} A message indicating the result of the signup.
+ */
 const signup = async (req: Request, res: Response) => {
     const body = req.body;
     if (!body || Object.keys(body).length === 0) {
@@ -34,20 +40,11 @@ const signup = async (req: Request, res: Response) => {
             .send(responseMessages[500].INTERNAL_SERVER_ERROR);
     }
 
-    let salt: string;
-    try {
-        salt = await bcrypt.genSalt(SALT_ROUNDS);
-    } catch (err: any) {
-        console.error(err);
-        return res.status(500).send(responseMessages[500].BYCRYPT_SALT_ERROR);
-    }
-
     let hash: string;
     try {
-        hash = await bcrypt.hash(body.password, salt);
+        hash = await utils.bcryptPassword(body.password);
     } catch (err: any) {
-        console.error(err);
-        return res.status(500).send(responseMessages[500].BYCRYPT_HASH_ERROR);
+        return res.status(500).send(err.message);
     }
 
     // Save user to database
@@ -71,21 +68,20 @@ const signup = async (req: Request, res: Response) => {
     const url = `${globalConfig.backendURL}/api/users/activateAccount?token=${activateAccountToken}`;
     const mailOptions = {
         from: globalConfig.smtp.email,
-        to: globalConfig.smtp.email,
+        to: globalConfig.smtp.email, // send email to the ai4birds admin email
         subject: `${globalConfig.projectName} - Activate account`,
         html: activateAccountTemplate(
             url,
             body.name,
             body.organization,
             body.email,
-            globalConfig.projectName
+            globalConfig.projectName,
         ),
     };
     try {
         const mailResponse = await smtp.sendMail(mailOptions);
-        console.log("Mail response", mailResponse);
         if (mailResponse.status === 200) {
-            return res.status(200).send(user);
+            return res.status(200).send(responseMessages[200].SMTP_EMAIL_SENT);
         } else {
             console.error(mailResponse);
             return res.status(500).send(responseMessages[500].SMTP_SEND_ERROR);
@@ -96,6 +92,15 @@ const signup = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * Log into a user account
+ * @body {string} email The email of the user
+ * @body {string} password The password of the user
+ * @returns {number} id The id of the user
+ * @returns {string} name The name of the user
+ * @returns {string} email The email of the user
+ * @returns {string} accessToken The JWT token for the user
+ */
 const signin = async (req: Request, res: Response) => {
     const body = req.body;
 
@@ -140,6 +145,11 @@ const signin = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * Guard function to check if the user is authenticated
+ * @header {string} x-access-token The JWT token
+ * @returns {object} {auth: boolean} where auth is true if the user is authenticated
+ */
 const guardFunction = (req: Request, res: Response) => {
     const token = req.headers["x-access-token"] as string;
 
@@ -152,7 +162,7 @@ const guardFunction = (req: Request, res: Response) => {
     jwt.verify(token, globalConfig.secretKey, (error, decoded) => {
         if (error || typeof decoded === "string")
             return res.status(200).send({ auth: false });
-        if (!decoded.intent || decoded.intent != "access")
+        if (!decoded.intent || decoded.intent !== "access")
             return res.status(200).send({ auth: false });
         return res.status(200).send({ auth: true });
     });

@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
 
 import globalConfig from "../config/global.config";
 import responseMessages from "../utils/messages/global.messages";
@@ -8,10 +7,13 @@ import { resetPasswordTemplate } from "../utils/emailTemplates/general";
 import utils, { DecodedToken } from "../utils/utils";
 import { User } from "../models/connection";
 
-const SALT_ROUNDS = globalConfig.saltRounds;
+// User fields that won't be returned in the response when using findAll and
+// findOne methods.
 const PRIVATE_USER_FIELDS = ["password"];
+
 /**
  * Find all users
+ * @returns {User[]} An array of all users (without the private fields)
  */
 const findAll = async (req: Request, res: Response) => {
     try {
@@ -30,6 +32,8 @@ const findAll = async (req: Request, res: Response) => {
 
 /**
  * Find a single user by id
+ * @param {number} id The id of the user to find
+ * @returns {User} The user object (without the private fields)
  */
 const findOne = async (req: Request, res: Response) => {
     // Check parameters
@@ -56,7 +60,9 @@ const findOne = async (req: Request, res: Response) => {
 };
 
 /**
- * Activate a user account, by email.
+ * Activate a user account.
+ * @query {string} token The activation token sent to the ai4birds email.
+ * @returns {string} A message indicating the result of the activation.
  */
 const activateAccount = async (req: Request, res: Response) => {
     // Check query parameters
@@ -94,6 +100,8 @@ const activateAccount = async (req: Request, res: Response) => {
 
 /**
  * Send an email to reset the user's password.
+ * @query {string} email The email of the user to reset the password.
+ * @returns {string} A message indicating the result of the email sending.
  */
 const forgotPassword = async (req: Request, res: Response) => {
     // Check query parameters
@@ -110,8 +118,6 @@ const forgotPassword = async (req: Request, res: Response) => {
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
-        // NOTE: Using the email as the token, but it should probably be a random
-        // token.
         const resetPasswordToken = utils.generateJWTToken(user.id, "reset");
         const url = `${globalConfig.backendURL}/api/users/resetPassword?token=${resetPasswordToken}`;
         const mailOptions = {
@@ -136,6 +142,9 @@ const forgotPassword = async (req: Request, res: Response) => {
 
 /**
  * Reset the user's password.
+ * @query {string} token The token sent to the user's email to reset the password.
+ * @body {string} password The new password for the user.
+ * @returns {string} A message indicating the result of the password reset.
  */
 const resetPassword = async (req: Request, res: Response) => {
     if (!req.query || Object.keys(req.query).length === 0)
@@ -166,23 +175,11 @@ const resetPassword = async (req: Request, res: Response) => {
         const user = await User.findOne({ where: { id: decoded_token.id } });
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
-        let salt: string;
-        try {
-            salt = await bcrypt.genSalt(SALT_ROUNDS);
-        } catch (err: any) {
-            console.error(err);
-            return res
-                .status(500)
-                .send(responseMessages[500].BYCRYPT_SALT_ERROR);
-        }
         let hash: string;
         try {
-            hash = await bcrypt.hash(password, salt);
+            hash = await utils.bcryptPassword(password);
         } catch (err: any) {
-            console.error(err);
-            return res
-                .status(500)
-                .send(responseMessages[500].BYCRYPT_HASH_ERROR);
+            return res.status(500).send(err.message);
         }
 
         user.update({ password: hash });
@@ -198,6 +195,13 @@ const resetPassword = async (req: Request, res: Response) => {
 
 /**
  * Update a user's data by id. The body of the request is the user object.
+ * @param {string} id The id of the user to update.
+ * @body {string?} id The id of the user. (this must be the same as the id in the params, if present)
+ * @body {string?} name The new name of the user
+ * @body {string?} email The new email of the user
+ * @body {string?} password The new password of the user
+ * @body {string?} organization The new organization of the user
+ * @returns {string} A message indicating the result of the update.
  */
 const updateUser = async (req: Request, res: Response) => {
     if (!req.params || Object.keys(req.params).length === 0)
@@ -215,22 +219,52 @@ const updateUser = async (req: Request, res: Response) => {
         const user = await User.findByPk(id);
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
-        // We don't want to update the id (we are using the params' id), or the password
-        // (we need to hash it first), we also ignore the fields active, createdAt.
-        let updateData = {};
+        // We don't want to update the id (we are using the params' id), or the
+        // password (we need to hash it first), or the email (we are checking
+        // for duplicates).  We also ignore the fields active, createdAt.
+        const updateData: { [key: string]: any } = {};
         for (const key in req.body) {
-            if (!["id", "password", "active", "createdAt"].includes(key)) {
+            if (["name", "organization"].includes(key)) {
                 updateData[key] = req.body[key];
             }
         }
+
         // Update password if it is in the request
         if (req.body.password) {
             try {
-                updateData["password"] = await utils.bcryptPassword(
-                    req.body.password
+                updateData.password = await utils.bcryptPassword(
+                    req.body.password,
                 );
             } catch (err: any) {
                 return res.status(500).send(err.message);
+            }
+        }
+        // Check if the id in the body is the same as the id in the params.
+        if (req.body.id && req.body.id !== id) {
+            // TODO: Find a better error message.
+            return res
+                .status(400)
+                .send(responseMessages[400].MISSING_PARAMETERS);
+        }
+        // Check if the email is already in use.
+        if (req.body.email) {
+            try {
+                // Ignore the current user, otherwise setting an email to the
+                // already existing email would fail because of a duplicate.
+                const emailDupliacte = await User.findOne({
+                    where: { email: req.body.email, id: { $ne: id } },
+                });
+                if (emailDupliacte)
+                    return res
+                        .status(409)
+                        .send(responseMessages[409].EMAIL_IN_USE);
+
+                updateData.email = req.body.email;
+            } catch (err: any) {
+                console.error(err);
+                return res
+                    .status(500)
+                    .send(responseMessages[500].INTERNAL_SERVER_ERROR);
             }
         }
 
@@ -246,7 +280,9 @@ const updateUser = async (req: Request, res: Response) => {
 };
 
 /**
- * Delete a user by id
+ * Delete a user by id.
+ * @param {string} id The id of the user to delete.
+ * @returns {string} A message indicating the result of the deletion.
  */
 const deleteUser = async (req: Request, res: Response) => {
     if (!req.params || Object.keys(req.params).length === 0)
