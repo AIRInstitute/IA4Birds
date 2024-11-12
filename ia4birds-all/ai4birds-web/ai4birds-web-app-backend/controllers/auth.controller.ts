@@ -65,7 +65,7 @@ const signup = async (req: Request, res: Response) => {
     }
 
     const activateAccountToken = utils.generateJWTToken(user.id, "activation");
-    const url = `${globalConfig.backendURL}/api/users/activateAccount?token=${activateAccountToken}`;
+    const url = `${globalConfig.backendURL}/api/user/activateAccount?token=${activateAccountToken}`;
     const mailOptions = {
         from: globalConfig.smtp.email,
         to: globalConfig.smtp.email, // send email to the ai4birds admin email

@@ -119,7 +119,8 @@ const forgotPassword = async (req: Request, res: Response) => {
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
         const resetPasswordToken = utils.generateJWTToken(user.id, "reset");
-        const url = `${globalConfig.backendURL}/api/users/resetPassword?token=${resetPasswordToken}`;
+        // TODO: Change the URL to the correct frontend path.
+        const url = `${globalConfig.frontendURL}/resetPassword?token=${resetPasswordToken}`;
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: globalConfig.smtp.email,

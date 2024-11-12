@@ -13,17 +13,17 @@ export default () => {
     userRouter.get(
         "/:id",
         [authMiddleware.verifyToken],
-        userController.findOne
+        userController.findOne,
     );
     userRouter.put(
         "/:id",
         [authMiddleware.verifyToken],
-        userController.updateUser
+        userController.updateUser,
     );
     userRouter.delete(
         "/:id",
         [authMiddleware.verifyToken],
-        userController.deleteUser
+        userController.deleteUser,
     );
 
     return userRouter;

@@ -17,11 +17,6 @@ import uploadRoutes from "./routes/routes/upload.routes";
 import morgan from "morgan";
 import chalk from "chalk";
 
-// import { testConnection } from "./utils/smtp/smtp";
-// testConnection();
-import { testConnection } from "./models/connection";
-testConnection();
-
 const app: Express = express();
 
 /**
@@ -31,7 +26,7 @@ app.use(
     cors({
         origin: "*",
         credentials: false,
-    })
+    }),
 );
 
 const morganMiddleware = morgan(function (tokens, req, res) {
@@ -72,7 +67,7 @@ app.use(function (
     err: { message: any; status: any },
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
 ) {
     // set locals, only providing error in development
     console.log(err);
