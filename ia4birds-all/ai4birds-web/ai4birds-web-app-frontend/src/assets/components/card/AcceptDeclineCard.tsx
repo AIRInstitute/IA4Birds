@@ -46,7 +46,7 @@ export const CustomCard = () => {
             <CardBody>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                    <div className="flex w-full flex-wrap gap-4">
                     <Input  
                             isReadOnly
                             type="email"  

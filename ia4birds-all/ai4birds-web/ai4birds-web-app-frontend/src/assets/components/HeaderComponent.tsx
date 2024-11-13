@@ -41,10 +41,9 @@ const MoonIcon = (props) => (
     </svg>
   );
   
-
 const HeaderComponent = () => {
     const location = useLocation();
-    
+    // const isAdmin = user.role === 'admin';
     //DARK MODE
     const storedMode = localStorage.getItem('isLightModeLocal');
     const defaultMode = true;
@@ -102,16 +101,25 @@ const HeaderComponent = () => {
             Blog
           </Link>
         </NavbarItem>
+        {/* {isAdmin && ( */}
+        <Divider orientation="vertical" className='h-30'/>
+        <NavbarItem isActive={location.pathname == "/admin-panel-component"}>
+          <Link to="/admin-panel-component" color={location.pathname == "/admin-panel-component" ? '#55436F': 'foreground'} 
+          style={location.pathname == "/admin-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
+            Panel de Admin
+          </Link>
+        </NavbarItem>
+        {/* )} */}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="lg:flex">
           {location.pathname !== '/login-component' && (
-            <Button><Link to="/login-component">Login</Link></Button>
+            <Link to="/login-component"><Button>Login</Button></Link>
           )}
         </NavbarItem>
         <NavbarItem className="lg:flex">
           {location.pathname !== '/request-admin-component' && (
-            <Button><Link to="/request-admin-component">Solicitud Admin</Link></Button>
+            <Link to="/request-admin-component"><Button>Solicitud Admin</Button></Link>
           )}
 
         {/* <Switch

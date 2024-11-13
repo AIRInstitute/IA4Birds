@@ -8,6 +8,9 @@ import LoginComponent from './assets/components/LoginComponent';
 import RequestAdminComponent from './assets/components/RequestAdminComponent';
 import RegisterFormComponent from './assets/components/RegisterFormComponent';
 import AcceptDeclineComponent from './assets/components/AcceptDeclineComponent';
+import AdminPanelComponent from './assets/components/AdminPanelComponent';
+import CameraPanelComponent from './assets/components/CameraPanelComponent';
+import DataPanelComponent from './assets/components/DataPanelComponent';
 
 
 
@@ -49,6 +52,12 @@ function App() {
         <Route path="/register-form-component" element={<RegisterFormComponent/>}>
         </Route>
         <Route path="/accept-decline-component" element={<AcceptDeclineComponent/>}>
+        </Route>
+        <Route path="/admin-panel-component" element={<AdminPanelComponent/>}>
+        </Route>
+        <Route path="/camera-panel-component" element={<CameraPanelComponent/>}>
+        </Route>
+        <Route path="/data-panel-component" element={<DataPanelComponent/>}>
         </Route>
       </Routes>
     </Router>

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
+import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
@@ -11,6 +12,8 @@ export const CustomCard = () => {
     const [password, setPassword] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const [error, setError] = React.useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -56,7 +59,7 @@ export const CustomCard = () => {
             <CardBody>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                    <div className="flex w-full flex-wrap gap-4">
                         <Input 
                             type="email" 
                             isRequired 
@@ -86,22 +89,31 @@ export const CustomCard = () => {
                             value={surnames} 
                             onChange={(e) => setSurnames(e.target.value)} 
                             />
-                        <Input 
-                            type="text" 
-                            isRequired 
-                            placeholder="Contraseña" 
-                            label="Contraseña" 
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
-                            />
-                        <Input 
-                            type="text" 
-                            isRequired 
-                            placeholder="Repite contraseña" 
-                            label="Confirmación contraseña" 
-                            value={passwordConfirmation} 
-                            onChange={(e) => setPasswordConfirmation(e.target.value)} 
-                            />
+                        <div className="relative w-full">
+                            <Input type={showPassword ? "text" : "password"} isRequired label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
+                                <Button 
+                                isIconOnly
+                                onClick={() => setShowPassword(!showPassword)}
+                                variant='light'
+                                className=""
+                            >
+                                {showPassword ? <RxEyeOpen/> : <RxEyeClosed/>}
+                            </Button>
+                            }/>
+
+                        </div>
+                        <div className="relative w-full">
+                            <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repeat Password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
+                                    <Button 
+                                    isIconOnly
+                                    onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
+                                    variant='light'
+                                    className=""
+                                >
+                                    {showPassword ? <RxEyeOpen/> : <RxEyeClosed/>}
+                                </Button>
+                            }/>
+                        </div>
                     </div>
                 </div>
                 {error && <p className="error">{error}</p>}
