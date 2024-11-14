@@ -35,7 +35,7 @@ export const CustomCard = ()=> {
     <CardBody>
         <form onSubmit={handleSubmit}>
             <div className="form-group">
-                <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                <div className="flex w-full flex-wrap gap-4">
                     <Input type="email" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <div className="relative w-full">
                         <Input type={showPassword ? "text" : "password"} label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
