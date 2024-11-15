@@ -121,7 +121,7 @@ const HeaderComponent = () => {
           {location.pathname !== '/request-admin-component' && (
             <Link to="/request-admin-component"><Button>Solicitud Admin</Button></Link>
           )}
-
+        </NavbarItem>
         {/* <Switch
         defaultSelected
         size="lg"
@@ -137,7 +137,7 @@ const HeaderComponent = () => {
         }
         >
         </Switch> */}
-        </NavbarItem>
+        
         {/* <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="flat">
             Iniciar sesión
