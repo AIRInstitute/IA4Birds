@@ -14,45 +14,65 @@ export const CustomCardData = ({ panelAdminData }) => {
 
   return (
     <Card className="py-4 h-[83vh] overflow-hidden">
-      <CardHeader className="pb-0 pt-2 px-4">
-        <h1 className="font-bold text-xl">Panel de Datos</h1>
-      </CardHeader>
-      <CardBody className="overflow-visible py-2">
-          <Card className="w-full py-4 my-4">
-            <h2 className="p-1 text-center">Datos Xenocanto</h2>
-            <CardBody>
-                <div>
-                    <CopyBlock
-                      language="go"
-                      text={panelAdminData[0].data}
-                      codeBlock
-                      showLineNumbers={false}
-                    />
-                </div>
-                <Link href="/data-panel-component" 
-                      style={location.pathname== "/data-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
-                        Ver más...
-                </Link>
-            </CardBody>
-          </Card>
-          <Card className="w-full py-4">
-            <h2 className="p-1 text-center">Datos eBird</h2>
-            <CardBody>
-                <div>
-                    <CopyBlock
-                      language="go"
-                      text={panelAdminData[1].data}
-                      codeBlock
-                      showLineNumbers={false}
-                    />
-                </div>
-                <Link href="/data-panel-component" 
-                      style={location.pathname== "/data-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
-                        Ver más...
-                </Link>
-            </CardBody>
-          </Card>
-      </CardBody>
-    </Card>
+  <CardHeader className="pb-0 pt-2 px-4">
+    <h1 className="font-bold text-xl">Panel de Datos</h1>
+  </CardHeader>
+  <CardBody className="overflow-auto py-2">
+    <div className="flex gap-4 h-full">
+      <Card className="flex-1 h-full overflow-hidden">
+        <h2 className="p-1 text-center">Datos Xenocanto</h2>
+        <CardBody className="h-full overflow-auto">
+          <div className="max-w-full overflow-x-auto">
+            <CopyBlock
+              language="go"
+              text={JSON.stringify(panelAdminData[0].data, null, 2)}
+              codeBlock
+              showLineNumbers={false}
+            />
+          </div>
+          <div className="w-full flex justify-end mt-4">
+            <Link 
+              href="/data-panel-component"
+              style={
+                location.pathname === "/data-panel-component" 
+                  ? { textDecoration: 'underline', color: '#55436F' } 
+                  : { textDecoration: 'none' }
+              }
+              className="place-content-end cursor-pointer"
+            >
+              Ver más...
+            </Link>
+          </div>
+        </CardBody>
+      </Card>
+      <Card className="flex-1 h-full overflow-hidden">
+        <h2 className="p-1 text-center">Datos eBird</h2>
+        <CardBody className="h-full overflow-auto">
+          <div className="max-w-full overflow-x-auto">
+            <CopyBlock
+              language="go"
+              text={JSON.stringify(panelAdminData[1].data, null, 2)}
+              codeBlock
+              showLineNumbers={false}
+            />
+          </div>
+          <div className="w-full flex justify-end mt-4">
+            <Link 
+              href="/data-panel-component"
+              style={
+                location.pathname === "/data-panel-component" 
+                  ? { textDecoration: 'underline', color: '#55436F' } 
+                  : { textDecoration: 'none' }
+              }
+              className="place-content-end cursor-pointer"
+            >
+              Ver más...
+            </Link>
+          </div>
+        </CardBody>
+      </Card>
+    </div>
+  </CardBody>
+</Card>
   );
 };

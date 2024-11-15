@@ -4,17 +4,68 @@ import { CustomCardCamera } from './card/AdminPanelCameraCard';
 import { CustomCardData } from './card/AdminPanelDataCard';
 
 const AdminPanelComponent = () => {
-  // Sample data for each card
-  // const cameraAdminData = {
-  //   Name: "Camera 1",
-  //   Location: "Avenida Madrigal",
-  //   Views: "23 views",
-  //   Status: "Online"
-  // };
 
   const panelAdminData = [
-    { id: 1, name: 'Xenocanto', data: 'Aquí van los datos de Xenocanto'},
-    { id: 2, name: 'eBird', data: 'Aquí van los datos de eBird'},
+    { 
+      id: 1, 
+      name: 'Xenocanto', 
+      data:  {
+        description: 'A platform for sharing bird sounds.',
+        recordings: 15230,
+        regionsCovered: ['Americas', 'Europe', 'Asia', 'Africa'],
+        website: 'https://xenocanto.org',
+        a: 'A global birdwatching database.',
+        b: 950000,
+        c: 52000,
+        d: 'https://ebird.org',
+        e: 'A global birdwatching database.',
+        f: 950000,
+        g: 52000,
+        h: 'https://ebird.org',
+        i: 'A global birdwatching database.',
+        k: 950000,
+        j: 52000,
+        l: 'https://ebird.org',
+        m: 'A global birdwatching database.',
+        n: 950000,
+        o: 52000,
+        p: 'https://ebird.org',
+        q: 'A global birdwatching database.',
+        r: 950000,
+        s: 52000,
+        t: 'https://ebird.org',
+      }
+    },
+    {
+      id: 2,
+      name: 'eBird',
+      data: {
+        description: 'A global birdwatching database.',
+        sightingsLogged: 950000,
+        contributors: 52000,
+        website: 'https://ebird.org',
+        a: 'A global birdwatching database.',
+        b: 950000,
+        c: 52000,
+        d: 'https://ebird.org',
+        e: 'A global birdwatching database.',
+        f: 950000,
+        g: 52000,
+        h: 'https://ebird.org',
+        i: 'A global birdwatching database.',
+        k: 950000,
+        j: 52000,
+        l: 'https://ebird.org',
+        m: 'A global birdwatching database.',
+        n: 950000,
+        o: 52000,
+        p: 'https://ebird.org',
+        q: 'A global birdwatching database.',
+        r: 950000,
+        s: 52000,
+        t: 'https://ebird.org',
+      }
+    },
   ];
   const cameraAdminData = [
     { id: 1, name: 'Camera 1', location: '', views: '23 views', url: '/public/Buitre negro.jpg'},

@@ -31,10 +31,12 @@ export const CustomCardCamera = ({ cameraAdminData }) => {
                 <p>Datos estado cam</p>
                 <p>Datos almacenamiento</p>
               </div>
-              <Link href="/camera-panel-component" 
-                style={location.pathname== "/camera-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
-                  Ver más...
-              </Link>
+              <div className="w-full flex justify-end">
+                <Link href="/camera-panel-component" 
+                  style={location.pathname== "/camera-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
+                    Ver más...
+                </Link>
+              </div>
             </CardBody>
           </Card>
           <Card className="w-full py-3">
@@ -52,10 +54,12 @@ export const CustomCardCamera = ({ cameraAdminData }) => {
                 <p>Datos estado cam</p>
                 <p>Datos almacenamiento</p>
               </div>
-              <Link href="/camera-panel-component" 
-                style={location.pathname== "/camera-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
-                  Ver más...
-              </Link>
+              <div className="w-full flex justify-end">
+                <Link href="/camera-panel-component" 
+                  style={location.pathname== "/camera-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
+                    Ver más...
+                </Link>
+              </div>
             </CardBody>
           </Card>
         </div>
@@ -75,10 +79,12 @@ export const CustomCardCamera = ({ cameraAdminData }) => {
                 <p>Datos estado cam</p>
                 <p>Datos almacenamiento</p>
               </div>
-              <Link href="/camera-panel-component" 
-                style={location.pathname== "/camera-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
-                  Ver más...
-              </Link>
+              <div className="w-full flex justify-end">
+                <Link href="/camera-panel-component" 
+                  style={location.pathname== "/camera-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} } className="place-content-end cursor-pointer" >
+                    Ver más...
+                </Link>
+              </div>
             </CardBody>
           </Card>
         </div>
