@@ -71,6 +71,7 @@ const AdminPanelComponent = () => {
     { id: 1, name: 'Camera 1', location: '', views: '23 views', url: '/public/Buitre negro.jpg'},
     { id: 2, name: 'Camera 2', location: '', views: '100 views', url: '/public/Buitre negro.jpg'},
     { id: 3, name: 'Camera 3', location: '', views: '50 views', url: '/public/Buitre negro.jpg'},
+    { id: 4, name: 'Camera 4', location: '', views: '500 views', url: '/public/Buitre negro.jpg'},
     
   ];
 
