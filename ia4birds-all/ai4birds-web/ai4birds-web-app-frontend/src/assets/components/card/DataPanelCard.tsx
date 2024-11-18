@@ -1,5 +1,6 @@
 import { Card,CardHeader, CardBody } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
+import { CopyBlock } from "react-code-blocks";
 
 export const CustomCard = ({ dataPanelData }) => (
     <>
@@ -9,12 +10,12 @@ export const CustomCard = ({ dataPanelData }) => (
                 <small className="text-default-500">{dataPanelData.views}</small>
                 <h4 className="font-bold text-large">{dataPanelData.name}</h4>
             </CardHeader>
-            <CardBody className="overflow-visible py-2">
-                <Image
-                alt="Card background"
-                className="object-cover rounded-xl"
-                src={dataPanelData.url}
-                width={270}
+            <CardBody className="overflow-x py-2 h-[73vh]">
+                <CopyBlock
+                language="go"
+                text={JSON.stringify(dataPanelData, null, 2)}
+                codeBlock
+                showLineNumbers={false}
                 />
             </CardBody>
         </Card>
