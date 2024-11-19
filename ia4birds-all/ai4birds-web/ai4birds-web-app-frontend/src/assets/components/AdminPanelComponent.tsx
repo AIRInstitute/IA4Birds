@@ -78,13 +78,13 @@ const AdminPanelComponent = () => {
   return (
     <div className="admin-panel">
       <Spacer y={5} />
-      <div className="flex justify-between gap-2 w-full px-6 ">
+      <div className="flex justify-between gap-2 w-full px-6 lg:flex-row flex-col">
         
-        <div className="card-container flex-grow w-1/2">
+        <div className="card-container flex-grow lg:w-1/2 w-full">
           <CustomCardCamera cameraAdminData={cameraAdminData} />
         </div>
 
-        <div className="card-container flex-grow w-1/2">
+        <div className="card-container flex-grow lg:w-1/2 w-full">
           <CustomCardData panelAdminData={panelAdminData} />
         </div>
       </div>
