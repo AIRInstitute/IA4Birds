@@ -4,7 +4,7 @@ import { Image } from "@nextui-org/image";
 import { Textarea } from "@nextui-org/input";
 import { Snippet } from "@nextui-org/snippet";
 import { CopyBlock } from "react-code-blocks";
-import { Link } from "@nextui-org/link";
+import { Link } from "react-router-dom";
 // import { Text } from "@nextui-org/react";
 
 export const CustomCardData = ({ panelAdminData }) => {
@@ -19,58 +19,29 @@ export const CustomCardData = ({ panelAdminData }) => {
   </CardHeader>
   <CardBody className="overflow-auto py-2">
     <div className="flex gap-4 h-full">
-      <Card className="flex-1 h-full overflow-hidden">
-        <h2 className="p-1 text-center">Datos Xenocanto</h2>
-        <CardBody className="h-full overflow-auto">
-          <div className="max-w-full overflow-x-auto">
-            <CopyBlock
-              language="go"
-              text={JSON.stringify(panelAdminData[0].data, null, 2)}
-              codeBlock
-              showLineNumbers={false}
-            />
-          </div>
-          <div className="w-full flex justify-end mt-4">
-            <Link 
-              href="/data-panel-component"
-              style={
-                location.pathname === "/data-panel-component" 
-                  ? { textDecoration: 'underline', color: '#55436F' } 
-                  : { textDecoration: 'none' }
-              }
-              className="place-content-end cursor-pointer"
-            >
-              Ver más...
-            </Link>
-          </div>
-        </CardBody>
-      </Card>
-      <Card className="flex-1 h-full overflow-hidden">
-        <h2 className="p-1 text-center">Datos eBird</h2>
-        <CardBody className="h-full overflow-auto">
-          <div className="max-w-full overflow-x-auto">
-            <CopyBlock
-              language="go"
-              text={JSON.stringify(panelAdminData[1].data, null, 2)}
-              codeBlock
-              showLineNumbers={false}
-            />
-          </div>
-          <div className="w-full flex justify-end mt-4">
-            <Link 
-              href="/data-panel-component"
-              style={
-                location.pathname === "/data-panel-component" 
-                  ? { textDecoration: 'underline', color: '#55436F' } 
-                  : { textDecoration: 'none' }
-              }
-              className="place-content-end cursor-pointer"
-            >
-              Ver más...
-            </Link>
-          </div>
-        </CardBody>
-      </Card>
+    {panelAdminData.map(data => (
+            <Card key={data.id} className="w-full py-3">
+              <h2 className="p-1 text-center">{data.name}</h2>
+              <CardBody>
+                <div className="max-w-full overflow-x-auto">
+                  <CopyBlock
+                    language="go"
+                    text={JSON.stringify(panelAdminData[0].data, null, 2)}
+                    codeBlock
+                    showLineNumbers={false}
+                  />
+                </div>
+                <div className="w-full flex justify-end">
+                  <Link
+                    to={`/data-panel-component?data=${data.id}`}
+                    className="place-content-end cursor-pointer"
+                  >
+                    Ver más...
+                  </Link>
+                </div>
+              </CardBody>
+            </Card>
+          ))}
     </div>
   </CardBody>
 </Card>
