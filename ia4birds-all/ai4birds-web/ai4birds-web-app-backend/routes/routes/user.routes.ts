@@ -1,48 +1,30 @@
-import { Request, Response, NextFunction, Express } from "express";
-
-/*********** EXPORTS **************/
+import { Router } from "express";
+import userController from "../../controllers/user.controller";
 import authMiddleware from "../../middleware/auth.middleware";
-import authController from "../../controllers/user.controllers";
 
-export default function (app: Express) {
-	app.use(function (req: Request, res: Response, next: NextFunction) {
-		res.header(
-			"Access-Control-Allow-Headers",
-			"x-access-token, Origin, Content-Type, Accept"
-		);
-		next();
-	});
+export default () => {
+    const userRouter: Router = Router();
 
-	app.get(
-		"/api/users/:id",
-		[authMiddleware.verifyToken],
-		authController.findOne
-	);
+    userRouter.get("/activateAccount", userController.activateAccount);
+    userRouter.get("/forgotPassword", userController.forgotPassword);
+    userRouter.post("/resetPassword", userController.resetPassword);
 
-	app.post("/api/users/activateAccount", authController.activateAccount);
+    userRouter.get("/", [authMiddleware.verifyToken], userController.findAll);
+    userRouter.get(
+        "/:id",
+        [authMiddleware.verifyToken],
+        userController.findOne,
+    );
+    userRouter.put(
+        "/:id",
+        [authMiddleware.verifyToken],
+        userController.updateUser,
+    );
+    userRouter.delete(
+        "/:id",
+        [authMiddleware.verifyToken],
+        userController.deleteUser,
+    );
 
-	app.put(
-		"/api/users/:id/update",
-		[authMiddleware.verifyToken],
-		authController.updateUser
-	);
-
-	app.post("/api/users/forgotPassword", authController.forgotPassword);
-
-	app.post(
-		"/api/users/recoverPassword",
-		authController.recoverPassword
-	);
-
-	app.get(
-		"/api/users/",
-		[authMiddleware.verifyToken, authMiddleware.isAdmin],
-		authController.findAll
-	);
-
-	app.delete(
-		"/api/users/:id/delete",
-		[authMiddleware.verifyToken, authMiddleware.isAdmin],
-		authController.deleteUser
-	);
-}
+    return userRouter;
+};

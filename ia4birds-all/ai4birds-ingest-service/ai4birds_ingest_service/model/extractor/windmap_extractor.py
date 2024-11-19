@@ -5,11 +5,12 @@
 
 import requests
 import typing
+from functools import lru_cache
 from typing import Dict
 from ai4birds_ingest_service.log import logger
 
 class WindMap_Extractor():
-    
+    @lru_cache(maxsize=128)
     def windmap_ingest(self, lat: float, lon: float, z: int) -> Dict:
         """
         Processes latitude and longitude data for the extraction of wind maps.

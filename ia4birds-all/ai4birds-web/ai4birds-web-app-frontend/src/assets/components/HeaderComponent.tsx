@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Switch, Divider} from "@nextui-org/react";
+import { useState, useEffect } from 'react';
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/navbar";
+import { Button } from "@nextui-org/button";
+import { Divider } from "@nextui-org/divider";
+import { Switch } from "@nextui-org/switch";
 import imagen from '../images/IA4birds-1500px.png';
-import { Link, } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { set } from 'ol/transform';
 const MoonIcon = (props) => (
@@ -38,10 +41,9 @@ const MoonIcon = (props) => (
     </svg>
   );
   
-
 const HeaderComponent = () => {
     const location = useLocation();
-    
+    // const isAdmin = user.role === 'admin';
     //DARK MODE
     const storedMode = localStorage.getItem('isLightModeLocal');
     const defaultMode = true;
@@ -93,19 +95,34 @@ const HeaderComponent = () => {
           </Link>
         </NavbarItem>
         <Divider orientation="vertical" className='h-30'/>
-        <NavbarItem isActive={location.pathname == "/graphs-component"}>
-          <Link to="/graphs-component" color={location.pathname == "/graphs-component" ? '#55436F': 'foreground'} 
-          style={location.pathname == "/graphs-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
+        <NavbarItem isActive={location.pathname == "/blog-component"}>
+          <Link to="/blog-component" color={location.pathname == "/blog-component" ? '#55436F': 'foreground'} 
+          style={location.pathname == "/blog-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
             Blog
           </Link>
         </NavbarItem>
+        {/* {isAdmin && ( */}
+        <Divider orientation="vertical" className='h-30'/>
+        <NavbarItem isActive={location.pathname == "/admin-panel-component"}>
+          <Link to="/admin-panel-component" color={location.pathname == "/admin-panel-component" ? '#55436F': 'foreground'} 
+          style={location.pathname == "/admin-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
+            Panel de Admin
+          </Link>
+        </NavbarItem>
+        {/* )} */}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link to="#">Login</Link>
+        <NavbarItem className="lg:flex">
+          {location.pathname !== '/login-component' && (
+            <Link to="/login-component"><Button>Login</Button></Link>
+          )}
         </NavbarItem>
-        <NavbarItem>
-        <Switch
+        <NavbarItem className="lg:flex">
+          {location.pathname !== '/request-admin-component' && (
+            <Link to="/request-admin-component"><Button>Solicitud Admin</Button></Link>
+          )}
+        </NavbarItem>
+        {/* <Switch
         defaultSelected
         size="lg"
         color="secondary"
@@ -119,16 +136,21 @@ const HeaderComponent = () => {
             )
         }
         >
-        </Switch>
-        </NavbarItem>
-        <NavbarItem>
+        </Switch> */}
+        
+        {/* <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="flat">
             Iniciar sesión
           </Button>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
     </Navbar>
-    
+    <footer className="fixed bottom-0 w-full bg-background/80 py-4" style={{zIndex: '100'}}>
+      <div className="container mx-auto flex justify-center items-center">
+      <img src="https://ia4birds.air-institute.com/sites/default/files/footer-logos/IA4birds-footer.png" alt="" style={{width: '400px', height: 'auto'}} />
+        {/* <p className="text-gray-600">© 2022 Your Company. All rights reserved.</p> */}
+      </div>
+    </footer>
     </>
   );
 };

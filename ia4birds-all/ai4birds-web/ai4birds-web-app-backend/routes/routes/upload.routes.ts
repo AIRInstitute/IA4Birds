@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction, Express, Router } from 'express'
 import * as multerMiddleware from "../../middleware/multer.middleware";
-import * as uploadController from '../../controllers/upload.controller'
 import * as dataCyLController from '../../controllers/dataCyL.controller'
 import * as mapController from '../../controllers/map.controller'
 
@@ -16,55 +15,28 @@ export default () => {
         dataCyLController.getEBirdData
     )
     dataRouter.get(
-        "/databird",
+        "/dataBird",
         dataCyLController.getDataBird
     )
-    dataRouter.get(
-        "/winddata",
+    dataRouter.post(
+        "/windmap",
         mapController.getWindMapData
     )
     dataRouter.get(
-        "/exclusionmap",
+        "/sensitivity",
+        dataCyLController.getSensitivityData
+    )
+    dataRouter.get(
+        "/exclusionmap/zip",
         mapController.getExclusionMapData
+    )
+    dataRouter.get(
+        "/exclusionmap/stream-exclusion-data",
+        mapController.getExclusionMapDataStreaming
+    )
+    dataRouter.post(
+        "/exclusionmap/stream-exclusion-data",
+        mapController.addFact
     )
     return dataRouter;
 };
-
-// export default function (app: Express) {
-//     app.use((req: Request, res: Response, next: NextFunction) => {
-//       res.header(
-//         'Access-Control-Allow-Headers',
-//         'x-access-token, Origin, Content-Type, Accept'
-//       )
-//       next()
-//     })
-
-//     app.get(
-//         "/cvs",
-//         // multerMiddleware.uploadCV.single("file"),
-//         uploadController.uploadCV
-//     )
-
-    // app.get(
-    //     "/xenocanto",
-    //     dataCyLController.getXenoCantoRecordings
-    // )
-    // app.get(
-    //     "/ebird",
-    //     dataCyLController.getEBirdData
-    // )
-    // app.get(
-    //     "/databird",
-    //     dataCyLController.getDataBird
-    // )
-    // app.get(
-    //     "/winddata",
-    //     mapController.getWindMapData
-    // )
-    // app.get(
-    //     "/exclusionmap",
-    //     mapController.getExclusionMapData
-    // )
-//   }
-  
-

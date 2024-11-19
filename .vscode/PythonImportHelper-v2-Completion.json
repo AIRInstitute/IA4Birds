@@ -72,35 +72,19 @@
         "documentation": {}
     },
     {
-        "label": "fields",
-        "importPath": "flask_restx",
-        "description": "flask_restx",
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
         "isExtraImport": true,
-        "detail": "flask_restx",
+        "detail": "dotenv",
         "documentation": {}
     },
     {
-        "label": "Resource",
-        "importPath": "flask_restx",
-        "description": "flask_restx",
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
         "isExtraImport": true,
-        "detail": "flask_restx",
-        "documentation": {}
-    },
-    {
-        "label": "reqparse",
-        "importPath": "flask_restx",
-        "description": "flask_restx",
-        "isExtraImport": true,
-        "detail": "flask_restx",
-        "documentation": {}
-    },
-    {
-        "label": "Api",
-        "importPath": "flask_restx",
-        "description": "flask_restx",
-        "isExtraImport": true,
-        "detail": "flask_restx",
+        "detail": "dotenv",
         "documentation": {}
     },
     {
@@ -169,14 +153,6 @@
         "documentation": {}
     },
     {
-        "label": "Cache",
-        "importPath": "flask_caching",
-        "description": "flask_caching",
-        "isExtraImport": true,
-        "detail": "flask_caching",
-        "documentation": {}
-    },
-    {
         "label": "Limiter",
         "importPath": "flask_limiter",
         "description": "flask_limiter",
@@ -198,22 +174,6 @@
         "description": "flask_limiter",
         "isExtraImport": true,
         "detail": "flask_limiter",
-        "documentation": {}
-    },
-    {
-        "label": "Limiter",
-        "importPath": "flask_limiter",
-        "description": "flask_limiter",
-        "isExtraImport": true,
-        "detail": "flask_limiter",
-        "documentation": {}
-    },
-    {
-        "label": "get_remote_address",
-        "importPath": "flask_limiter.util",
-        "description": "flask_limiter.util",
-        "isExtraImport": true,
-        "detail": "flask_limiter.util",
         "documentation": {}
     },
     {
@@ -259,7 +219,40 @@
         "documentation": {}
     },
     {
+        "label": "typing",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "typing",
+        "description": "typing",
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -283,7 +276,23 @@
         "documentation": {}
     },
     {
-        "label": "NamedTuple",
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -307,7 +316,23 @@
         "documentation": {}
     },
     {
-        "label": "NamedTuple",
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -347,11 +372,12 @@
         "documentation": {}
     },
     {
-        "label": "CORS",
-        "importPath": "flask_cors",
-        "description": "flask_cors",
+        "label": "flask",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "flask_cors",
+        "importPath": "flask",
+        "description": "flask",
+        "detail": "flask",
         "documentation": {}
     },
     {
@@ -427,7 +453,7 @@
         "documentation": {}
     },
     {
-        "label": "Flask",
+        "label": "send_file",
         "importPath": "flask",
         "description": "flask",
         "isExtraImport": true,
@@ -435,7 +461,7 @@
         "documentation": {}
     },
     {
-        "label": "Blueprint",
+        "label": "jsonify",
         "importPath": "flask",
         "description": "flask",
         "isExtraImport": true,
@@ -443,7 +469,15 @@
         "documentation": {}
     },
     {
-        "label": "redirect",
+        "label": "send_from_directory",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
         "importPath": "flask",
         "description": "flask",
         "isExtraImport": true,
@@ -452,6 +486,30 @@
     },
     {
         "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "send_file",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "after_this_request",
         "importPath": "flask",
         "description": "flask",
         "isExtraImport": true,
@@ -741,6 +799,22 @@
         "documentation": {}
     },
     {
+        "label": "WindMap",
+        "importPath": "ai4birds_coordinate_service.model.coordinate_model",
+        "description": "ai4birds_coordinate_service.model.coordinate_model",
+        "isExtraImport": true,
+        "detail": "ai4birds_coordinate_service.model.coordinate_model",
+        "documentation": {}
+    },
+    {
+        "label": "ExclusionMap",
+        "importPath": "ai4birds_coordinate_service.model.coordinate_model",
+        "description": "ai4birds_coordinate_service.model.coordinate_model",
+        "isExtraImport": true,
+        "detail": "ai4birds_coordinate_service.model.coordinate_model",
+        "documentation": {}
+    },
+    {
         "label": "json",
         "kind": 6,
         "isExtraImport": true,
@@ -830,27 +904,165 @@
         "documentation": {}
     },
     {
-        "label": "api",
-        "importPath": "ai4birds_ingest_service.api.v1",
-        "description": "ai4birds_ingest_service.api.v1",
+        "label": "json,",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.v1",
+        "importPath": "json.",
+        "description": "json.",
+        "detail": "json.",
         "documentation": {}
     },
     {
-        "label": "api",
-        "importPath": "ai4birds_ingest_service.api.v1",
-        "description": "ai4birds_ingest_service.api.v1",
+        "label": "tempfile",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.v1",
+        "importPath": "tempfile",
+        "description": "tempfile",
+        "detail": "tempfile",
         "documentation": {}
     },
     {
-        "label": "api",
-        "importPath": "ai4birds_ingest_service.api.v1",
-        "description": "ai4birds_ingest_service.api.v1",
+        "label": "config",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.v1",
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "events",
+        "importPath": "ai4birds_ingest_service",
+        "description": "ai4birds_ingest_service",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service.log",
+        "description": "ai4birds_ingest_service.log",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.log",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service.log",
+        "description": "ai4birds_ingest_service.log",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.log",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service.log",
+        "description": "ai4birds_ingest_service.log",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.log",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service.log",
+        "description": "ai4birds_ingest_service.log",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.log",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service.log",
+        "description": "ai4birds_ingest_service.log",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.log",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "ai4birds_ingest_service.log",
+        "description": "ai4birds_ingest_service.log",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.log",
         "documentation": {}
     },
     {
@@ -878,30 +1090,6 @@
         "documentation": {}
     },
     {
-        "label": "handle400error",
-        "importPath": "ai4birds_ingest_service.utils",
-        "description": "ai4birds_ingest_service.utils",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.utils",
-        "documentation": {}
-    },
-    {
-        "label": "handle404error",
-        "importPath": "ai4birds_ingest_service.utils",
-        "description": "ai4birds_ingest_service.utils",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.utils",
-        "documentation": {}
-    },
-    {
-        "label": "handle500error",
-        "importPath": "ai4birds_ingest_service.utils",
-        "description": "ai4birds_ingest_service.utils",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.utils",
-        "documentation": {}
-    },
-    {
         "label": "cache",
         "importPath": "ai4birds_ingest_service.core",
         "description": "ai4birds_ingest_service.core",
@@ -934,39 +1122,7 @@
         "documentation": {}
     },
     {
-        "label": "cache",
-        "importPath": "ai4birds_ingest_service.core",
-        "description": "ai4birds_ingest_service.core",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.core",
-        "documentation": {}
-    },
-    {
-        "label": "limiter",
-        "importPath": "ai4birds_ingest_service.core",
-        "description": "ai4birds_ingest_service.core",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.core",
-        "documentation": {}
-    },
-    {
-        "label": "cache",
-        "importPath": "ai4birds_ingest_service.core",
-        "description": "ai4birds_ingest_service.core",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.core",
-        "documentation": {}
-    },
-    {
-        "label": "limiter",
-        "importPath": "ai4birds_ingest_service.core",
-        "description": "ai4birds_ingest_service.core",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.core",
-        "documentation": {}
-    },
-    {
-        "label": "post_input_model",
+        "label": "windmap_model",
         "importPath": "ai4birds_ingest_service.api.models.ingest_models",
         "description": "ai4birds_ingest_service.api.models.ingest_models",
         "isExtraImport": true,
@@ -974,7 +1130,7 @@
         "documentation": {}
     },
     {
-        "label": "put_input_model",
+        "label": "exclusionmap_model",
         "importPath": "ai4birds_ingest_service.api.models.ingest_models",
         "description": "ai4birds_ingest_service.api.models.ingest_models",
         "isExtraImport": true,
@@ -982,7 +1138,7 @@
         "documentation": {}
     },
     {
-        "label": "output_model",
+        "label": "exclusionmap_response_model",
         "importPath": "ai4birds_ingest_service.api.models.ingest_models",
         "description": "ai4birds_ingest_service.api.models.ingest_models",
         "isExtraImport": true,
@@ -990,7 +1146,7 @@
         "documentation": {}
     },
     {
-        "label": "post_input_model",
+        "label": "device_status_model",
         "importPath": "ai4birds_ingest_service.api.models.ingest_models",
         "description": "ai4birds_ingest_service.api.models.ingest_models",
         "isExtraImport": true,
@@ -998,23 +1154,7 @@
         "documentation": {}
     },
     {
-        "label": "put_input_model",
-        "importPath": "ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ai4birds_ingest_service.api.models.ingest_models",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "output_model",
-        "importPath": "ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ai4birds_ingest_service.api.models.ingest_models",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "post_parser",
+        "label": "location_parser",
         "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "isExtraImport": true,
@@ -1022,7 +1162,7 @@
         "documentation": {}
     },
     {
-        "label": "get_parser",
+        "label": "exclusionmap_parser",
         "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "isExtraImport": true,
@@ -1030,7 +1170,7 @@
         "documentation": {}
     },
     {
-        "label": "put_parser",
+        "label": "exclusionmap_parser_get",
         "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "isExtraImport": true,
@@ -1038,7 +1178,7 @@
         "documentation": {}
     },
     {
-        "label": "delete_parser",
+        "label": "device_status_parser",
         "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
         "isExtraImport": true,
@@ -1046,83 +1186,115 @@
         "documentation": {}
     },
     {
-        "label": "post_parser",
-        "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "label": "EBird_Extractor",
+        "importPath": "ai4birds_ingest_service.model.extractor.ebird_extractor",
+        "description": "ai4birds_ingest_service.model.extractor.ebird_extractor",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "detail": "ai4birds_ingest_service.model.extractor.ebird_extractor",
         "documentation": {}
     },
     {
-        "label": "get_parser",
-        "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "label": "XenoCanto_Extractor",
+        "importPath": "ai4birds_ingest_service.model.extractor.xenocanto_extractor",
+        "description": "ai4birds_ingest_service.model.extractor.xenocanto_extractor",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "detail": "ai4birds_ingest_service.model.extractor.xenocanto_extractor",
         "documentation": {}
     },
     {
-        "label": "put_parser",
-        "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "label": "WindMap_Extractor",
+        "importPath": "ai4birds_ingest_service.model.extractor.windmap_extractor",
+        "description": "ai4birds_ingest_service.model.extractor.windmap_extractor",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "detail": "ai4birds_ingest_service.model.extractor.windmap_extractor",
         "documentation": {}
     },
     {
-        "label": "delete_parser",
-        "importPath": "ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "label": "WindMap_Extractor",
+        "importPath": "ai4birds_ingest_service.model.extractor.windmap_extractor",
+        "description": "ai4birds_ingest_service.model.extractor.windmap_extractor",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "detail": "ai4birds_ingest_service.model.extractor.windmap_extractor",
         "documentation": {}
     },
     {
-        "label": "Model",
-        "importPath": "ai4birds_ingest_service.model.ingest_model",
-        "description": "ai4birds_ingest_service.model.ingest_model",
+        "label": "ExclusionMap_extractor",
+        "importPath": "ai4birds_ingest_service.model.extractor.exclusionmap_extractor",
+        "description": "ai4birds_ingest_service.model.extractor.exclusionmap_extractor",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.model.ingest_model",
+        "detail": "ai4birds_ingest_service.model.extractor.exclusionmap_extractor",
         "documentation": {}
     },
     {
-        "label": "EBird_Model",
-        "importPath": "ai4birds_ingest_service.model.ingest_model",
-        "description": "ai4birds_ingest_service.model.ingest_model",
+        "label": "combine_data",
+        "importPath": "ai4birds_ingest_service.model.combination_data",
+        "description": "ai4birds_ingest_service.model.combination_data",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.model.ingest_model",
+        "detail": "ai4birds_ingest_service.model.combination_data",
         "documentation": {}
     },
     {
-        "label": "XenoCanto_Model",
-        "importPath": "ai4birds_ingest_service.model.ingest_model",
-        "description": "ai4birds_ingest_service.model.ingest_model",
+        "label": "DataConverter",
+        "importPath": "ai4birds_ingest_service.model.data_converter",
+        "description": "ai4birds_ingest_service.model.data_converter",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.model.ingest_model",
+        "detail": "ai4birds_ingest_service.model.data_converter",
         "documentation": {}
     },
     {
-        "label": "Model",
-        "importPath": "ai4birds_ingest_service.model.ingest_model",
-        "description": "ai4birds_ingest_service.model.ingest_model",
+        "label": "DataCombinationModel",
+        "importPath": "ai4birds_ingest_service.model.data_combination.data_combination_model",
+        "description": "ai4birds_ingest_service.model.data_combination.data_combination_model",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.model.ingest_model",
+        "detail": "ai4birds_ingest_service.model.data_combination.data_combination_model",
         "documentation": {}
     },
     {
-        "label": "EBird_Model",
-        "importPath": "ai4birds_ingest_service.model.ingest_model",
-        "description": "ai4birds_ingest_service.model.ingest_model",
+        "label": "EBirdModel",
+        "importPath": "ai4birds_ingest_service.model.ebird.ebird_model",
+        "description": "ai4birds_ingest_service.model.ebird.ebird_model",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.model.ingest_model",
+        "detail": "ai4birds_ingest_service.model.ebird.ebird_model",
         "documentation": {}
     },
     {
-        "label": "XenoCanto_Model",
-        "importPath": "ai4birds_ingest_service.model.ingest_model",
-        "description": "ai4birds_ingest_service.model.ingest_model",
+        "label": "EBirdData",
+        "importPath": "ai4birds_ingest_service.model.ebird.ebird_model",
+        "description": "ai4birds_ingest_service.model.ebird.ebird_model",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.model.ingest_model",
+        "detail": "ai4birds_ingest_service.model.ebird.ebird_model",
+        "documentation": {}
+    },
+    {
+        "label": "XenoCantoModel",
+        "importPath": "ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "description": "ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "documentation": {}
+    },
+    {
+        "label": "XenoCantoData",
+        "importPath": "ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "description": "ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "documentation": {}
+    },
+    {
+        "label": "DeviceModel",
+        "importPath": "ai4birds_ingest_service.model.device_status.device_model",
+        "description": "ai4birds_ingest_service.model.device_status.device_model",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.device_status.device_model",
+        "documentation": {}
+    },
+    {
+        "label": "DeviceData",
+        "importPath": "ai4birds_ingest_service.model.device_status.device_model",
+        "description": "ai4birds_ingest_service.model.device_status.device_model",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.device_status.device_model",
         "documentation": {}
     },
     {
@@ -1135,39 +1307,15 @@
         "documentation": {}
     },
     {
-        "label": "config",
-        "importPath": "ai4birds_ingest_service",
-        "description": "ai4birds_ingest_service",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service",
-        "documentation": {}
-    },
-    {
-        "label": "config",
-        "importPath": "ai4birds_ingest_service",
-        "description": "ai4birds_ingest_service",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service",
-        "documentation": {}
-    },
-    {
-        "label": "config",
-        "importPath": "ai4birds_ingest_service",
-        "description": "ai4birds_ingest_service",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service",
-        "documentation": {}
-    },
-    {
-        "label": "config",
-        "importPath": "ai4birds_ingest_service",
-        "description": "ai4birds_ingest_service",
-        "isExtraImport": true,
-        "detail": "ai4birds_ingest_service",
-        "documentation": {}
-    },
-    {
         "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
         "importPath": "datetime",
         "description": "datetime",
         "isExtraImport": true,
@@ -1180,6 +1328,54 @@
         "description": "datetime",
         "isExtraImport": true,
         "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "PostgresSingleton",
+        "importPath": "ai4birds_ingest_service.model.db",
+        "description": "ai4birds_ingest_service.model.db",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.db",
+        "documentation": {}
+    },
+    {
+        "label": "PostgresSingleton",
+        "importPath": "ai4birds_ingest_service.model.db",
+        "description": "ai4birds_ingest_service.model.db",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.db",
+        "documentation": {}
+    },
+    {
+        "label": "PostgresSingleton",
+        "importPath": "ai4birds_ingest_service.model.db",
+        "description": "ai4birds_ingest_service.model.db",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.db",
+        "documentation": {}
+    },
+    {
+        "label": "PostgresSingleton",
+        "importPath": "ai4birds_ingest_service.model.db",
+        "description": "ai4birds_ingest_service.model.db",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.db",
+        "documentation": {}
+    },
+    {
+        "label": "DeviceData",
+        "importPath": "ai4birds_ingest_service.model.device_status.device_data",
+        "description": "ai4birds_ingest_service.model.device_status.device_data",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.device_status.device_data",
+        "documentation": {}
+    },
+    {
+        "label": "EBirdData",
+        "importPath": "ai4birds_ingest_service.model.ebird.ebird_data",
+        "description": "ai4birds_ingest_service.model.ebird.ebird_data",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.ebird.ebird_data",
         "documentation": {}
     },
     {
@@ -1192,51 +1388,121 @@
         "documentation": {}
     },
     {
-        "label": "PostgresSingleton",
-        "importPath": "ai4birds_ingest_service.database.db",
-        "description": "ai4birds_ingest_service.database.db",
+        "label": "time",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.database.db",
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
         "documentation": {}
     },
     {
-        "label": "PostgresSingleton",
-        "importPath": "ai4birds_ingest_service.database.db",
-        "description": "ai4birds_ingest_service.database.db",
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.database.db",
+        "detail": "time",
         "documentation": {}
     },
     {
-        "label": "logger",
-        "importPath": "ai4birds_ingest_service.log",
-        "description": "ai4birds_ingest_service.log",
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.log",
+        "detail": "functools",
         "documentation": {}
     },
     {
-        "label": "logger",
-        "importPath": "ai4birds_ingest_service.log",
-        "description": "ai4birds_ingest_service.log",
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.log",
+        "detail": "functools",
         "documentation": {}
     },
     {
-        "label": "EBIRD_PASSWORD",
-        "importPath": "ai4birds_ingest_service.config",
-        "description": "ai4birds_ingest_service.config",
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.config",
+        "detail": "functools",
         "documentation": {}
     },
     {
-        "label": "EBIRD_PASSWORD",
-        "importPath": "ai4birds_ingest_service.config",
-        "description": "ai4birds_ingest_service.config",
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.config",
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "zipfile",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "zipfile",
+        "description": "zipfile",
+        "detail": "zipfile",
+        "documentation": {}
+    },
+    {
+        "label": "XenoCantoData",
+        "importPath": "ai4birds_ingest_service.model.xenocanto.xenocanto_data",
+        "description": "ai4birds_ingest_service.model.xenocanto.xenocanto_data",
+        "isExtraImport": true,
+        "detail": "ai4birds_ingest_service.model.xenocanto.xenocanto_data",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "wkt",
+        "importPath": "shapely",
+        "description": "shapely",
+        "isExtraImport": true,
+        "detail": "shapely",
+        "documentation": {}
+    },
+    {
+        "label": "gzip",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "gzip",
+        "description": "gzip",
+        "detail": "gzip",
+        "documentation": {}
+    },
+    {
+        "label": "execute_values",
+        "importPath": "psycopg2.extras",
+        "description": "psycopg2.extras",
+        "isExtraImport": true,
+        "detail": "psycopg2.extras",
         "documentation": {}
     },
     {
@@ -1248,11 +1514,12 @@
         "documentation": {}
     },
     {
-        "label": "namespaces",
-        "importPath": "ai4birds_ingest_service.api",
-        "description": "ai4birds_ingest_service.api",
+        "label": "pytest",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "ai4birds_ingest_service.api",
+        "importPath": "pytest",
+        "description": "pytest",
+        "detail": "pytest",
         "documentation": {}
     },
     {
@@ -1265,11 +1532,20 @@
         "documentation": {}
     },
     {
+        "label": "dotenv_path",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
+        "description": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
+        "peekOfCode": "dotenv_path = '/etc/envs/.env'\nload_dotenv(dotenv_path)\n# api config\nPORT = 5000\nHOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ai-service/v1'\nDEBUG_MODE = True\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_ANALYSIS_HOST'),\n    'port' : os.getenv('POSTGRES_ANALYSIS_PORT'),",
+        "detail": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
+        "documentation": {}
+    },
+    {
         "label": "PORT",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "description": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
-        "peekOfCode": "PORT = 5000\nHOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ai-service/v1'\nDEBUG_MODE = True",
+        "peekOfCode": "PORT = 5000\nHOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ai-service/v1'\nDEBUG_MODE = True\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_ANALYSIS_HOST'),\n    'port' : os.getenv('POSTGRES_ANALYSIS_PORT'),\n    'user' : os.getenv('POSTGRES_ANALYSIS_USER'),\n    'password' : os.getenv('POSTGRES_ANALYSIS_PASSWORD'),\n    'database' : os.getenv('POSTGRES_ANALYSIS_DB')",
         "detail": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "documentation": {}
     },
@@ -1278,7 +1554,7 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "description": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
-        "peekOfCode": "HOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ai-service/v1'\nDEBUG_MODE = True",
+        "peekOfCode": "HOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ai-service/v1'\nDEBUG_MODE = True\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_ANALYSIS_HOST'),\n    'port' : os.getenv('POSTGRES_ANALYSIS_PORT'),\n    'user' : os.getenv('POSTGRES_ANALYSIS_USER'),\n    'password' : os.getenv('POSTGRES_ANALYSIS_PASSWORD'),\n    'database' : os.getenv('POSTGRES_ANALYSIS_DB')\n}",
         "detail": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "documentation": {}
     },
@@ -1287,7 +1563,7 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "description": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
-        "peekOfCode": "URL_PREFIX = '/ai4birds-ai-service/v1'\nDEBUG_MODE = True",
+        "peekOfCode": "URL_PREFIX = '/ai4birds-ai-service/v1'\nDEBUG_MODE = True\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_ANALYSIS_HOST'),\n    'port' : os.getenv('POSTGRES_ANALYSIS_PORT'),\n    'user' : os.getenv('POSTGRES_ANALYSIS_USER'),\n    'password' : os.getenv('POSTGRES_ANALYSIS_PASSWORD'),\n    'database' : os.getenv('POSTGRES_ANALYSIS_DB')\n}",
         "detail": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "documentation": {}
     },
@@ -1296,7 +1572,7 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "description": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
-        "peekOfCode": "DEBUG_MODE = True",
+        "peekOfCode": "DEBUG_MODE = True\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_ANALYSIS_HOST'),\n    'port' : os.getenv('POSTGRES_ANALYSIS_PORT'),\n    'user' : os.getenv('POSTGRES_ANALYSIS_USER'),\n    'password' : os.getenv('POSTGRES_ANALYSIS_PASSWORD'),\n    'database' : os.getenv('POSTGRES_ANALYSIS_DB')\n}",
         "detail": "ia4birds-all.ai4birds-ai-service.ai4birds_ai_service.config",
         "documentation": {}
     },
@@ -1575,7 +1851,7 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
-        "peekOfCode": "class EBirdCoordinate(Resource):\n    def get(self):\n        model = EBird()\n        return model.get()\n@xenocanto_ns.route('/')\nclass XenoCantoCoordinate(Resource):\n    def get(self):\n        model = XenoCanto()\n        return model.get()",
+        "peekOfCode": "class EBirdCoordinate(Resource):\n    \"\"\"\n    Gets data from the last 30 days in Castilla y León using eBird API.\n    Returns:\n        :return: Data from eBird API.\n        :rtype: dict\n    \"\"\"\n    def get(self):\n        return EBird.get()\n@xenocanto_ns.route('/')",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "documentation": {}
     },
@@ -1584,7 +1860,25 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
-        "peekOfCode": "class XenoCantoCoordinate(Resource):\n    def get(self):\n        model = XenoCanto()\n        return model.get()",
+        "peekOfCode": "class XenoCantoCoordinate(Resource):\n    \"\"\"\n    Gets data from XencoCanto API in Castilla y León.\n    Returns:\n        :return: Data from XenoCanto API.\n        :rtype: dict\n    \"\"\"\n    def get(self):\n        return XenoCanto.get()\n@windmap_ns.route('/')",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "documentation": {}
+    },
+    {
+        "label": "WindMapCoordinate",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "peekOfCode": "class WindMapCoordinate(Resource):\n    \"\"\"\n    Obtain wind map data with coordinates.\n    Returns:\n        :return: Result of the wind map extraction.\n        :rtype: dict\n    \"\"\"\n    def get(self, lat: float, lon: float, z: int):\n        return WindMap.get(lat, lon, z)\n@exclusionmap_ns.route('/')",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ExclusionMap",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "peekOfCode": "class ExclusionMap(Resource):\n    \"\"\"\n    Saves a file *.shp for the eolic exclusion map.\n    Returns:\n        :return: Message indicating the completion of the download.\n        :rtype: str\n    \"\"\"\n    def get(self):\n        return ExclusionMap.get()",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "documentation": {}
     },
@@ -1593,7 +1887,7 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
-        "peekOfCode": "ns = api.namespace('IngestApi', description='Coordinate endpoints')\nebird_ns = api.namespace('EBird', description='EBird requests')\nxenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') \n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :\n            args = get_parser.parse_args()\n            id = args['id']",
+        "peekOfCode": "ns = api.namespace('IngestApi', description='Coordinate endpoints')\nebird_ns = api.namespace('EBird', description='EBird requests')\nxenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') \nwindmap_ns = api.namespace('WindMap', description='Windmap requests')\nexclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')\n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "documentation": {}
     },
@@ -1602,7 +1896,7 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
-        "peekOfCode": "ebird_ns = api.namespace('EBird', description='EBird requests')\nxenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') \n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :\n            args = get_parser.parse_args()\n            id = args['id']\n        except Exception as e:",
+        "peekOfCode": "ebird_ns = api.namespace('EBird', description='EBird requests')\nxenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') \nwindmap_ns = api.namespace('WindMap', description='Windmap requests')\nexclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')\n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :\n            args = get_parser.parse_args()",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "documentation": {}
     },
@@ -1611,7 +1905,25 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
-        "peekOfCode": "xenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') \n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :\n            args = get_parser.parse_args()\n            id = args['id']\n        except Exception as e:\n            return handle400error(ns, e)",
+        "peekOfCode": "xenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') \nwindmap_ns = api.namespace('WindMap', description='Windmap requests')\nexclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')\n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :\n            args = get_parser.parse_args()\n            id = args['id']",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "documentation": {}
+    },
+    {
+        "label": "windmap_ns",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "peekOfCode": "windmap_ns = api.namespace('WindMap', description='Windmap requests')\nexclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')\n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :\n            args = get_parser.parse_args()\n            id = args['id']\n        except Exception as e:",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "documentation": {}
+    },
+    {
+        "label": "exclusionmap_ns",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
+        "peekOfCode": "exclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')\n@ns.route('/')\nclass Coordinate(Resource):\n    @ns.expect(get_parser)\n    def get(self):\n        try :\n            args = get_parser.parse_args()\n            id = args['id']\n        except Exception as e:\n            return handle400error(ns, e)",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.api.namespaces.coordinate_ns",
         "documentation": {}
     },
@@ -1665,7 +1977,7 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
-        "peekOfCode": "class CheckModel:\n    def get(self, id: int):\n        url = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'\n        headers = {'Content-Type': 'application/json'}\n        try:\n            response = requests.get(url, headers=headers, params={'id': id})\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response\n            else:",
+        "peekOfCode": "class CheckModel:\n    def get(self, id: int):\n        headers = {'Content-Type': 'application/json'}\n        try:\n            response = requests.get(config.CRUD_URL, headers=headers, params={'id': id})\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response\n            else:\n                return {\"status\": \"Not found\"}, 404",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
         "documentation": {}
     },
@@ -1674,7 +1986,7 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
-        "peekOfCode": "class EBird:\n    def get(self):\n        url = 'http://localhost:5001/ai4birds-ingest-service/v1/ebird/'\n        try:\n            response = requests.get(url)\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response \n            else:\n                return {\"status\": \"Not found\"}, 404",
+        "peekOfCode": "class EBird:\n    @staticmethod\n    def get():\n        try:\n            response = requests.get(config.EBIRD_URL)\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response \n            else:\n                return {\"status\": \"Not found\"}, 404",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
         "documentation": {}
     },
@@ -1683,7 +1995,25 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
-        "peekOfCode": "class XenoCanto:\n    def get(self):\n        url = 'http://localhost:5001/ai4birds-ingest-service/v1/xenocanto/'\n        try:\n            response = requests.get(url)\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response \n            else:\n                return {\"status\": \"Not found\"}, 404",
+        "peekOfCode": "class XenoCanto:\n    @staticmethod\n    def get():\n        try:\n            response = requests.get(config.XENOCANTO_URL)\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response \n            else:\n                return {\"status\": \"Not found\"}, 404",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
+        "documentation": {}
+    },
+    {
+        "label": "WindMap",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
+        "peekOfCode": "class WindMap:\n    @staticmethod\n    def get(lat: float, lon: float, z: int):\n        headers = {'Content-Type': 'application/json'}\n        try:\n            response = requests.get(config.WINDMAP_URL, headers=headers, params={'lat': lat, 'lon': lon, 'z': z})\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response\n            else:",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
+        "documentation": {}
+    },
+    {
+        "label": "ExclusionMap",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
+        "peekOfCode": "class ExclusionMap:\n    @staticmethod\n    def get():\n        try:\n            response = requests.get(config.EXCLUSIONMAP_URL)\n            if response.status_code == 200:\n                response = json.loads(response.content)\n                return response \n            else:\n                return {\"status\": \"Not found\"}, 404",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.model.coordinate_model",
         "documentation": {}
     },
@@ -1719,7 +2049,52 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
         "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
-        "peekOfCode": "DEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"\n}",
+        "peekOfCode": "DEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"\n}\n# URLS",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "EBIRD_URL",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "peekOfCode": "EBIRD_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/ebird/'\nCRUD_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'\nXENOCANTO_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/xenocanto/'\nWINDMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/windmap/'\nEXCLUSIONMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "CRUD_URL",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "peekOfCode": "CRUD_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'\nXENOCANTO_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/xenocanto/'\nWINDMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/windmap/'\nEXCLUSIONMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "XENOCANTO_URL",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "peekOfCode": "XENOCANTO_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/xenocanto/'\nWINDMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/windmap/'\nEXCLUSIONMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "WINDMAP_URL",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "peekOfCode": "WINDMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/windmap/'\nEXCLUSIONMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'",
+        "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "EXCLUSIONMAP_URL",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "description": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
+        "peekOfCode": "EXCLUSIONMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'",
         "detail": "ia4birds-all.ai4birds-coordinate-service.ai4birds_coordinate_service.config",
         "documentation": {}
     },
@@ -1931,65 +2306,74 @@
         "documentation": {}
     },
     {
-        "label": "nested_model",
+        "label": "windmap_model",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "nested_model = api.model('Data', {\n    'key1': fields.String(description='Data body1', required=True, example='pram1'),\n    'key2': fields.String(description='Data body2', required=True, example='param2')\n}, description='data model')\nget_input_model = api.model('Get Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\npost_input_model = api.model('Post Input', {\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})",
+        "peekOfCode": "windmap_model = api.model('WindMapModel', {\n    'lat': fields.Float(description='Latitude', required=True, example=41.85563222906876),\n    'lon': fields.Float(description='Longitude', required=True, example=-5.5495918821608665),\n    'z': fields.Integer(description='Altitude', required=True, example=50)\n}, description='Model for obtaining location data based on latitude and longitude')\nexclusionmap_model = api.model('ExclusionMapModel',{\n   'page': fields.Integer(description= 'Number of page', required= True, example=1),\n   'page_size': fields.Integer(description='Size of page', required=True, example=20)                          \n},description='Model for exclusion map ')\n# Modelo para las coordenadas (array de arrays)",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "documentation": {}
     },
     {
-        "label": "get_input_model",
+        "label": "exclusionmap_model",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "get_input_model = api.model('Get Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\npost_input_model = api.model('Post Input', {\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\nput_input_model = api.model('Put Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})",
+        "peekOfCode": "exclusionmap_model = api.model('ExclusionMapModel',{\n   'page': fields.Integer(description= 'Number of page', required= True, example=1),\n   'page_size': fields.Integer(description='Size of page', required=True, example=20)                          \n},description='Model for exclusion map ')\n# Modelo para las coordenadas (array de arrays)\ncoordenadas_model = api.model('Coordenadas', {\n    'coordenadas': fields.List(fields.List(fields.Float, required=True), required=True,\n                               description='Lista de coordenadas de la ZEPA')\n})\n# Modelo para cada elemento en \"data\"",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "documentation": {}
     },
     {
-        "label": "post_input_model",
+        "label": "coordenadas_model",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "post_input_model = api.model('Post Input', {\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\nput_input_model = api.model('Put Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\ndelete_input_model = api.model('Delete Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})",
+        "peekOfCode": "coordenadas_model = api.model('Coordenadas', {\n    'coordenadas': fields.List(fields.List(fields.Float, required=True), required=True,\n                               description='Lista de coordenadas de la ZEPA')\n})\n# Modelo para cada elemento en \"data\"\ndata_item_model = api.model('DataItem', {\n    'ambito': fields.String(required=True, description='Ámbito de protección', example='RANP - Red Natura 2000'),\n    'area_excl': fields.String(required=True, description='Área de exclusión', example='ZEPA'),\n    'coordenadas': fields.Nested(coordenadas_model, description='Coordenadas de la ZEPA'),\n    'criterio': fields.String(required=True, description='Criterio de protección', example='Red de Áreas Naturales Protegidas'),",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "documentation": {}
     },
     {
-        "label": "put_input_model",
+        "label": "data_item_model",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "put_input_model = api.model('Put Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\ndelete_input_model = api.model('Delete Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\noutput_model = api.model('Output', {\n    'id': fields.Integer(description='Data id', required=True),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False),",
+        "peekOfCode": "data_item_model = api.model('DataItem', {\n    'ambito': fields.String(required=True, description='Ámbito de protección', example='RANP - Red Natura 2000'),\n    'area_excl': fields.String(required=True, description='Área de exclusión', example='ZEPA'),\n    'coordenadas': fields.Nested(coordenadas_model, description='Coordenadas de la ZEPA'),\n    'criterio': fields.String(required=True, description='Criterio de protección', example='Red de Áreas Naturales Protegidas'),\n    'espacio': fields.String(required=True, description='Espacio protegido', example='Sierra de la Cabrera - ZEPA'),\n    'fid': fields.Integer(required=True, description='Identificador FID', example=34745),\n    'identific': fields.String(required=True, description='Identificación del espacio', example='Sierra de la Cabrera - ZEPA'),\n    't_instalac': fields.String(required=True, description='Tipo de instalación', example='Parques eólicos')\n})",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "documentation": {}
     },
     {
-        "label": "delete_input_model",
+        "label": "metadata_model",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "delete_input_model = api.model('Delete Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\noutput_model = api.model('Output', {\n    'id': fields.Integer(description='Data id', required=True),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False),\n    'created_at': fields.DateTime(description='Created data at', required=True)\n})",
+        "peekOfCode": "metadata_model = api.model('Metadata', {\n    'current_page': fields.Integer(required=True, description='Número de página actual', example=1),\n    'page_size': fields.Integer(required=True, description='Cantidad de elementos por página', example=20),\n    'total_data': fields.Integer(required=True, description='Total de elementos', example=10000),\n    'total_pages': fields.Integer(required=True, description='Total de páginas', example=500)\n})\n# Modelo para la respuesta general que incluye \"data\" y \"metadata\"\nexclusionmap_response_model = api.model('ExclusionMapResponse', {\n    'data': fields.List(fields.Nested(data_item_model), required=True, description='Lista de datos de áreas protegidas'),\n    'metadata': fields.Nested(metadata_model, required=True, description='Metadatos sobre la paginación de la respuesta')",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "documentation": {}
     },
     {
-        "label": "output_model",
+        "label": "exclusionmap_response_model",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "output_model = api.model('Output', {\n    'id': fields.Integer(description='Data id', required=True),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False),\n    'created_at': fields.DateTime(description='Created data at', required=True)\n})",
+        "peekOfCode": "exclusionmap_response_model = api.model('ExclusionMapResponse', {\n    'data': fields.List(fields.Nested(data_item_model), required=True, description='Lista de datos de áreas protegidas'),\n    'metadata': fields.Nested(metadata_model, required=True, description='Metadatos sobre la paginación de la respuesta')\n})\n# Modelo para device status\ndevice_status_model = api.model('DeviceStatus', {\n    'gps_latitude': fields.Float(required=True, description='Latitude of the device GPS', example=40.416775),\n    'gps_longitude': fields.Float(required=True, description='Longitude of the device GPS', example=-3.703790),\n    'status': fields.String(required=True, description='Current status of the device', example='active'),\n    'storage_status': fields.Float(required=True, description='Available storage in GB', example=15.5),",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
         "documentation": {}
     },
     {
-        "label": "nsCRUD",
+        "label": "device_status_model",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
+        "peekOfCode": "device_status_model = api.model('DeviceStatus', {\n    'gps_latitude': fields.Float(required=True, description='Latitude of the device GPS', example=40.416775),\n    'gps_longitude': fields.Float(required=True, description='Longitude of the device GPS', example=-3.703790),\n    'status': fields.String(required=True, description='Current status of the device', example='active'),\n    'storage_status': fields.Float(required=True, description='Available storage in GB', example=15.5),\n    'last_update': fields.String(required=True, description='Last update timestamp',example='2024-10-28 15:59:00')\n})",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.models.ingest_models",
+        "documentation": {}
+    },
+    {
+        "label": "DataBird",
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "class nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)\n    @limiter.limit('10000/hour') \n    @cache.cached(timeout=1, query_string=True)\n    def get(self):\n        try:",
+        "peekOfCode": "class DataBird(Resource):\n    def get(self):\n        \"\"\"\n        Gets data from XenoCanto and eBird API in Castilla y León.\n        Returns:\n            :return: Combined data from XenoCanto and eBird API.\n            :rtype: dict\n        \"\"\"\n        max_retries = 3\n        backoff_factor = 1",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "documentation": {}
     },
@@ -1998,7 +2382,7 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "class XenoCanto(Resource):\n    def get(self):\n        model = XenoCanto_Model()\n        results = model.xenocanto_query()\n        return results\n@ns_ebird.route('/')\nclass EBird(Resource):\n    def get(self):\n        # Gets data from the last 30 days in Castilla y León\n        model = EBird_Model()",
+        "peekOfCode": "class XenoCanto(Resource):\n    def get(self):\n        \"\"\"\n        Gets data from XenoCanto API in Castilla y León.\n        Returns:\n            :return: Data from XenoCanto API.\n            :rtype: dict\n        \"\"\"\n        max_retries = 3\n        backoff_factor = 1",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "documentation": {}
     },
@@ -2007,16 +2391,79 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "class EBird(Resource):\n    def get(self):\n        # Gets data from the last 30 days in Castilla y León\n        model = EBird_Model()\n        results = model.ebird_query()\n        return results",
+        "peekOfCode": "class EBird(Resource):\n    def get(self):\n        \"\"\"\n        Gets data from the last 30 days in Castilla y León using eBird API.\n        Returns:\n            :return: Data from eBird API.\n            :rtype: dict\n        \"\"\"\n        max_retries = 3\n        backoff_factor = 1",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "documentation": {}
     },
     {
-        "label": "ns_db",
-        "kind": 5,
+        "label": "WindMap",
+        "kind": 6,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "ns_db = api.namespace('crud', description='Manage CRUD endpoint')\nns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')\nns_ebird = api.namespace('ebird', description='eBird requests')\n@ns_db.route('/')\nclass nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)",
+        "peekOfCode": "class WindMap(Resource):\n    @api.expect(windmap_model)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @limiter.limit('1000000/hour') \n    def post(self):\n        \"\"\"\n        Obtain wind map data with coordinates.\n        Returns:",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ExclusionMap",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "class ExclusionMap(Resource):\n    @api.expect(exclusionmap_model)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.response(200, 'Successful', model=exclusionmap_response_model)\n    @limiter.limit('1000000/hour') \n    #@cache.cached(timeout=180, query_string=True)\n    def post(self):\n        \"\"\"",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ExclusionMapZip",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "class ExclusionMapZip(Resource):\n    def get(self):\n        try:\n            csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH \n            # Obtener el path del archivo ZIP\n            zip_path = DataConverter.csv_to_json_full(csv_file_path)\n            if zip_path:\n                # Enviar el archivo ZIP como respuesta\n                #return send_file(zip_path, as_attachment=True, attachment_filename='data.zip', mimetype='application/zip')\n                return send_file(zip_path, as_attachment=True, download_name='data.zip', mimetype='application/zip')",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "StreamExclusionData",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "class StreamExclusionData(Resource):\n    # @api.expect(stream_exclusionmap_model)\n    @api.response(200, 'Successful')\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @limiter.limit('1000000/hour')\n    def post(self):\n        \"\"\"\n        Stream CSV data as server-sent events based on posted configuration.",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "Sensitivity",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "class Sensitivity(Resource):\n    \"\"\"\n    Saves a file *.shp for the eolic exclusion map.\n    Returns:\n        :return: Message indicating the completion of the download.\n        :rtype: str\n    \"\"\"\n    def get(self):\n        try:\n            csv_file_path = config.CORRDENADAS_CSV_PATH",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "DeviceStatus",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "class DeviceStatus(Resource):\n    @api.expect(device_status_model)  \n    @api.response(200, 'Device status added successfully')\n    @api.response(400, 'Invalid input')\n    @api.response(500, 'Internal server error')\n    def post(self):\n        \"\"\"\n        Adds a new device status to the database.\n        Returns:\n            :return: Message indicating successful addition.",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "LatestDeviceStatus",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "class LatestDeviceStatus(Resource):\n    @api.response(200, 'Successful', model=device_status_model)  \n    @api.response(404, 'No data found')\n    @api.response(500, 'Internal server error')\n    def get(self):\n        \"\"\"\n        Gets the latest device status.\n        Returns:\n            :return: Latest device status.\n            :rtype: DeviceData",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "DeviceHealth",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "class DeviceHealth(Resource):\n    @api.response(200, 'Device health checked')\n    @api.response(404, 'No data found')\n    @api.response(500, 'Internal server error')\n    def get(self):\n        \"\"\"\n        Checks the health status of the device.\n        Returns:\n            :return: Health status of the device.\n            :rtype: str",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "documentation": {}
     },
@@ -2025,7 +2472,7 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')\nns_ebird = api.namespace('ebird', description='eBird requests')\n@ns_db.route('/')\nclass nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)\n    @limiter.limit('10000/hour') ",
+        "peekOfCode": "ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')\nns_ebird = api.namespace('ebird', description='eBird requests')\nns_windmap = api.namespace('windmap', description='Iberian wind map requests')\nns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')\nns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')\nns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')\nns_device_status = api.namespace('device-status', description='Device status operations')\n# Crear instancias de los extractores\nxenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "documentation": {}
     },
@@ -2034,43 +2481,106 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "ns_ebird = api.namespace('ebird', description='eBird requests')\n@ns_db.route('/')\nclass nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)\n    @limiter.limit('10000/hour') \n    @cache.cached(timeout=1, query_string=True)",
+        "peekOfCode": "ns_ebird = api.namespace('ebird', description='eBird requests')\nns_windmap = api.namespace('windmap', description='Iberian wind map requests')\nns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')\nns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')\nns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')\nns_device_status = api.namespace('device-status', description='Device status operations')\n# Crear instancias de los extractores\nxenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
         "documentation": {}
     },
     {
-        "label": "post_parser",
+        "label": "ns_windmap",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "ns_windmap = api.namespace('windmap', description='Iberian wind map requests')\nns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')\nns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')\nns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')\nns_device_status = api.namespace('device-status', description='Device status operations')\n# Crear instancias de los extractores\nxenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')\nclass DataBird(Resource):",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ns_exclusionmap",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map for CyL')\nns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')\nns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')\nns_device_status = api.namespace('device-status', description='Device status operations')\n# Crear instancias de los extractores\nxenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')\nclass DataBird(Resource):\n    def get(self):",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ns_sensitivity",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')\nns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')\nns_device_status = api.namespace('device-status', description='Device status operations')\n# Crear instancias de los extractores\nxenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')\nclass DataBird(Resource):\n    def get(self):\n        \"\"\"",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ns_dataBird",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')\nns_device_status = api.namespace('device-status', description='Device status operations')\n# Crear instancias de los extractores\nxenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')\nclass DataBird(Resource):\n    def get(self):\n        \"\"\"\n        Gets data from XenoCanto and eBird API in Castilla y León.",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ns_device_status",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "ns_device_status = api.namespace('device-status', description='Device status operations')\n# Crear instancias de los extractores\nxenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')\nclass DataBird(Resource):\n    def get(self):\n        \"\"\"\n        Gets data from XenoCanto and eBird API in Castilla y León.\n        Returns:",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "xenocanto_extractor",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "xenocanto_extractor = XenoCanto_Extractor()\nebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')\nclass DataBird(Resource):\n    def get(self):\n        \"\"\"\n        Gets data from XenoCanto and eBird API in Castilla y León.\n        Returns:\n            :return: Combined data from XenoCanto and eBird API.\n            :rtype: dict",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "ebird_extractor",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "peekOfCode": "ebird_extractor = EBird_Extractor()\n@ns_dataBird.route('/')\nclass DataBird(Resource):\n    def get(self):\n        \"\"\"\n        Gets data from XenoCanto and eBird API in Castilla y León.\n        Returns:\n            :return: Combined data from XenoCanto and eBird API.\n            :rtype: dict\n        \"\"\"",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "documentation": {}
+    },
+    {
+        "label": "location_parser",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "post_parser = reqparse.RequestParser()\npost_parser.add_argument('data', location='json', type=dict, required=True, help='missing data')\nput_parser = reqparse.RequestParser()\nput_parser.add_argument('id', type=int, required=True, help='missing id')\nput_parser.add_argument('data', location='json', type=dict, required=True, help='missing data')\nget_parser = reqparse.RequestParser()\nget_parser.add_argument('id', type=int, required=True, help='missing id')\ndelete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
+        "peekOfCode": "location_parser = reqparse.RequestParser()\n# Add arguments to the location parser for latitude, longitude, and altitude\nlocation_parser.add_argument('lat', location='json', type=float, required=True, help='latitude is required')\nlocation_parser.add_argument('lon', location='json', type=float, required=True, help='longitude is required')\nlocation_parser.add_argument('z', location='json', type=int, required=True, help='altitude is required')# Create a parser for location data\nexclusionmap_parser = reqparse.RequestParser()\n# Add arguments to the location parser for latitude, longitude, and altitude\nexclusionmap_parser.add_argument('page', location='json', type=int, required=True, help='page is required')\nexclusionmap_parser.add_argument('page_size', location='json', type=int, required=True, help='page_size is required')\nexclusionmap_parser_get = reqparse.RequestParser()",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "documentation": {}
     },
     {
-        "label": "put_parser",
+        "label": "exclusionmap_parser",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "put_parser = reqparse.RequestParser()\nput_parser.add_argument('id', type=int, required=True, help='missing id')\nput_parser.add_argument('data', location='json', type=dict, required=True, help='missing data')\nget_parser = reqparse.RequestParser()\nget_parser.add_argument('id', type=int, required=True, help='missing id')\ndelete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
+        "peekOfCode": "exclusionmap_parser = reqparse.RequestParser()\n# Add arguments to the location parser for latitude, longitude, and altitude\nexclusionmap_parser.add_argument('page', location='json', type=int, required=True, help='page is required')\nexclusionmap_parser.add_argument('page_size', location='json', type=int, required=True, help='page_size is required')\nexclusionmap_parser_get = reqparse.RequestParser()\nexclusionmap_parser_get.add_argument('page', type=int, required=True, help='Page is required', location='args')\nexclusionmap_parser_get.add_argument('page_size', type=int, required=True, help='Page size is required', location='args')\n# Add arguments to the device status parser\ndevice_status_parser = reqparse.RequestParser()\ndevice_status_parser.add_argument('gps_latitude', type=float, required=True, help='Latitude of the device GPS')",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "documentation": {}
     },
     {
-        "label": "get_parser",
+        "label": "exclusionmap_parser_get",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "get_parser = reqparse.RequestParser()\nget_parser.add_argument('id', type=int, required=True, help='missing id')\ndelete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
+        "peekOfCode": "exclusionmap_parser_get = reqparse.RequestParser()\nexclusionmap_parser_get.add_argument('page', type=int, required=True, help='Page is required', location='args')\nexclusionmap_parser_get.add_argument('page_size', type=int, required=True, help='Page size is required', location='args')\n# Add arguments to the device status parser\ndevice_status_parser = reqparse.RequestParser()\ndevice_status_parser.add_argument('gps_latitude', type=float, required=True, help='Latitude of the device GPS')\ndevice_status_parser.add_argument('gps_longitude', type=float, required=True, help='Longitude of the device GPS')\ndevice_status_parser.add_argument('status', type=str, required=True, help='Current status of the device')\ndevice_status_parser.add_argument('storage_status', type=float, required=True, help='Available storage in GB')\ndevice_status_parser.add_argument('last_update', type=str, required=True, help='Last update timestamp')",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "documentation": {}
     },
     {
-        "label": "delete_parser",
+        "label": "device_status_parser",
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "delete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
+        "peekOfCode": "device_status_parser = reqparse.RequestParser()\ndevice_status_parser.add_argument('gps_latitude', type=float, required=True, help='Latitude of the device GPS')\ndevice_status_parser.add_argument('gps_longitude', type=float, required=True, help='Longitude of the device GPS')\ndevice_status_parser.add_argument('status', type=str, required=True, help='Current status of the device')\ndevice_status_parser.add_argument('storage_status', type=float, required=True, help='Available storage in GB')\ndevice_status_parser.add_argument('last_update', type=str, required=True, help='Last update timestamp')",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.api.parsers.ingest_parsers",
         "documentation": {}
     },
@@ -2088,710 +2598,476 @@
         "kind": 6,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.database.db",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.database.db",
-        "peekOfCode": "class PostgresSingleton:\n    __instance = None\n    def __init__(self):\n        self.host = config.DB_CONFIG['host']\n        self.port = config.DB_CONFIG['port']\n        self.user = config.DB_CONFIG['user']\n        self.password = config.DB_CONFIG['password']\n        self.database = config.DB_CONFIG['database']\n    @staticmethod\n    def getInstance() -> 'PostgresSingleton':",
+        "peekOfCode": "class PostgresSingleton:\n    __instance = None\n    def __init__(self):\n        \"\"\"\n        Initializes the singleton instance with database connection parameters.\n        \"\"\"        \n        self.host = config.DB_CONFIG['host']\n        self.port = config.DB_CONFIG['port']\n        self.user = config.DB_CONFIG['user']\n        self.password = config.DB_CONFIG['password']",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.database.db",
         "documentation": {}
     },
     {
-        "label": "DataModel",
+        "label": "DataCombination",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class DataModel(NamedTuple):\n    key1: str\n    key2: str\nclass Model:\n    def __init__(self, id: int = -1, data: DataModel = None, created_at: datetime = None):\n        self.id: int = id\n        self.data: DataModel = data\n        self.created_at: datetime = created_at\n    def to_json(self):\n        return {",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_combination.data_combination",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_combination.data_combination",
+        "peekOfCode": "class DataCombination:\n    def __init__(self, species_id: int, com_name: str, sci_name: str, observations: List[Dict[str, Any]], recordings: List[Dict[str, Any]]) -> None:\n        self.species_id = species_id\n        self.com_name = com_name\n        self.sci_name = sci_name\n        self.observations = observations\n        self.recordings = recordings\n    def to_dict(self) -> Dict[str, Any]:\n        return {\n            'species_id': self.species_id,",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_combination.data_combination",
         "documentation": {}
     },
     {
-        "label": "Model",
+        "label": "DataCombinationModel",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class Model:\n    def __init__(self, id: int = -1, data: DataModel = None, created_at: datetime = None):\n        self.id: int = id\n        self.data: DataModel = data\n        self.created_at: datetime = created_at\n    def to_json(self):\n        return {\n            'id': self.id,\n            'data': dict(self.data._asdict()),  \n            'created_at': self.created_at",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_combination.data_combination_model",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_combination.data_combination_model",
+        "peekOfCode": "class DataCombinationModel:\n    def add(self, dataCombination) -> bool:\n        query = \"\"\n        values = ()\n        database = PostgresSingleton.getInstance()\n        database.connect()\n        try:\n            database.execute(query,values)\n            result = True\n        except Exception as e:",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_combination.data_combination_model",
         "documentation": {}
     },
     {
-        "label": "EBird_Model",
+        "label": "DeviceData",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class EBird_Model:\n    def ebird_query(self):\n        regionCode = 'ES-CL'\n        headers = {'X-eBirdApiToken': EBIRD_PASSWORD}\n        # Last 30 days \n        url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'\n        try:\n            response = requests.get(url, headers=headers)\n            if response.status_code == 200:\n                return(json.loads(response.text))",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.device_status.device_data",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.device_status.device_data",
+        "peekOfCode": "class DeviceData:\n    def __init__(self, gps_latitude: float, gps_longitude: float, status: str, storage_status: float, last_update: str):\n        self.gps_latitude = gps_latitude\n        self.gps_longitude = gps_longitude\n        self.status = status\n        self.storage_status = storage_status\n        self.last_update = last_update\n    @staticmethod\n    def from_dict(data: Dict[str, Any]) -> 'DeviceData':\n        return DeviceData(",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.device_status.device_data",
         "documentation": {}
     },
     {
-        "label": "XenoCanto_Model",
+        "label": "DeviceModel",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class XenoCanto_Model():\n    def xenocanto_query(self):\n        query = 'cnt:spain'\n        page = 1\n        all_results = []\n        while True:\n            url = f'http://www.xeno-canto.org/api/2/recordings?query={query}&page={page}'\n            try:\n                response = requests.get(url)\n                response.raise_for_status() ",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ingest_model",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.device_status.device_model",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.device_status.device_model",
+        "peekOfCode": "class DeviceModel:\n    def add(self, device_data: DeviceData) -> bool:\n        \"\"\"\n        Inserts the device data into the device_status table in the database.\n        Args:\n            device_data (DeviceData): The data of the device to be added.\n        Returns:\n            bool: True if the data was added successfully, False otherwise.\n        \"\"\"\n        database = PostgresSingleton.getInstance()",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.device_status.device_model",
         "documentation": {}
     },
     {
-        "label": "PORT",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "peekOfCode": "PORT = 5001\nHOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "documentation": {}
-    },
-    {
-        "label": "HOST",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "peekOfCode": "HOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "documentation": {}
-    },
-    {
-        "label": "URL_PREFIX",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "peekOfCode": "URL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"\n}",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "documentation": {}
-    },
-    {
-        "label": "DEBUG_MODE",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "peekOfCode": "DEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"\n}\n# EBird password",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "documentation": {}
-    },
-    {
-        "label": "EBIRD_PASSWORD",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "peekOfCode": "EBIRD_PASSWORD = 'v1kfvin2apud'",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "documentation": {}
-    },
-    {
-        "label": "limiter",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
-        "peekOfCode": "limiter = Limiter(\t\n\tkey_func=get_remote_address,\t\n\tdefault_limits=[\"1000 per hour\"]\n)\ncache = Cache(\n\tconfig={\n\t\t'CACHE_TYPE': 'simple',\n\t\t'CACHE_DEFAULT_TIMEOUT': 1\n\t}\n)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
-        "documentation": {}
-    },
-    {
-        "label": "cache",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
-        "peekOfCode": "cache = Cache(\n\tconfig={\n\t\t'CACHE_TYPE': 'simple',\n\t\t'CACHE_DEFAULT_TIMEOUT': 1\n\t}\n)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
-        "documentation": {}
-    },
-    {
-        "label": "setup_logger",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "peekOfCode": "def setup_logger() -> None:\n    \"\"\"Setups logger for cookiecutter.application_\n    \"\"\"\n    global logger\n    logging.config.dictConfig(LOGGING_CONFIG)\n    logger = logging.getLogger(LOGGER_NAME)\ndef serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.\n    Returns: \n        :obj:`logging.logger` application logger",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "documentation": {}
-    },
-    {
-        "label": "serve_application_logger",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "peekOfCode": "def serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.\n    Returns: \n        :obj:`logging.logger` application logger\n    \"\"\"\n    global has_setup, logger\n    if not has_setup:\n        setup_logger()\n        has_setup = True\n    return logger",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "documentation": {}
-    },
-    {
-        "label": "LOGGER_NAME",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "peekOfCode": "LOGGER_NAME = 'ai4birds_ingest_service'\nLOGGING_CONFIG = {\n    'version': 1,\n    'disable_existing_loggers': True,\n    'loggers': {\n        '': {\n            'level': 'ERROR',\n            'handlers': ['consoleHandler']\n        },\n        LOGGER_NAME: {",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "documentation": {}
-    },
-    {
-        "label": "LOGGING_CONFIG",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "peekOfCode": "LOGGING_CONFIG = {\n    'version': 1,\n    'disable_existing_loggers': True,\n    'loggers': {\n        '': {\n            'level': 'ERROR',\n            'handlers': ['consoleHandler']\n        },\n        LOGGER_NAME: {\n            'level': 'DEBUG',",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "documentation": {}
-    },
-    {
-        "label": "logger",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "peekOfCode": "logger = None\nhas_setup = False\ndef setup_logger() -> None:\n    \"\"\"Setups logger for cookiecutter.application_\n    \"\"\"\n    global logger\n    logging.config.dictConfig(LOGGING_CONFIG)\n    logger = logging.getLogger(LOGGER_NAME)\ndef serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "documentation": {}
-    },
-    {
-        "label": "has_setup",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "peekOfCode": "has_setup = False\ndef setup_logger() -> None:\n    \"\"\"Setups logger for cookiecutter.application_\n    \"\"\"\n    global logger\n    logging.config.dictConfig(LOGGING_CONFIG)\n    logger = logging.getLogger(LOGGER_NAME)\ndef serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.\n    Returns: ",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
-        "documentation": {}
-    },
-    {
-        "label": "get_version",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "def get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"\n    This function returns the API's author name.\n    \"\"\"\n    return str(AUTHOR)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "get_authors",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "def get_authors():\n    \"\"\"\n    This function returns the API's author name.\n    \"\"\"\n    return str(AUTHOR)\n__version__ = get_version()\n__author__ = get_authors()\n@app.route('/')\ndef register_redirection():\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "register_redirection",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "def register_redirection():\n    \"\"\"\n    Redirects to dcoumentation page.\n    \"\"\"\n    return redirect(f'{request.url_root}/{config.URL_PREFIX}', code=302)\ndef initialize_app(flask_app):\n    \"\"\"\n    This function initializes the Flask Application, adds the namespace and registers the blueprint.\n    \"\"\"\n    CORS(flask_app)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "initialize_app",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "def initialize_app(flask_app):\n    \"\"\"\n    This function initializes the Flask Application, adds the namespace and registers the blueprint.\n    \"\"\"\n    CORS(flask_app)\n    v1 = Blueprint('api', __name__, url_prefix=config.URL_PREFIX)\n    api.init_app(v1)\n    limiter.exempt(v1)\n    cache.init_app(flask_app)\n    for ns in namespaces:",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "main",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "def main():\n    initialize_app(app)\n    separator_str = ''.join(map(str, [\"=\" for i in range(175)]))\n    print(separator_str)\n    print(f'Debug mode: {config.DEBUG_MODE}')\n    print(f'Authors: {get_authors()}')\n    print(f'Version: {get_version()}')\n    print(f'Base URL: http://localhost:{config.PORT}{config.URL_PREFIX}')\n    print(separator_str)\n    app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG_MODE)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "app",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "app = Flask(__name__)\nVERSION = (1, 0)\nAUTHOR = 'AIRInstitute'\ndef get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "VERSION",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "VERSION = (1, 0)\nAUTHOR = 'AIRInstitute'\ndef get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"\n    This function returns the API's author name.",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "AUTHOR",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "AUTHOR = 'AIRInstitute'\ndef get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"\n    This function returns the API's author name.\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "__version__",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "__version__ = get_version()\n__author__ = get_authors()\n@app.route('/')\ndef register_redirection():\n    \"\"\"\n    Redirects to dcoumentation page.\n    \"\"\"\n    return redirect(f'{request.url_root}/{config.URL_PREFIX}', code=302)\ndef initialize_app(flask_app):\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "__author__",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "peekOfCode": "__author__ = get_authors()\n@app.route('/')\ndef register_redirection():\n    \"\"\"\n    Redirects to dcoumentation page.\n    \"\"\"\n    return redirect(f'{request.url_root}/{config.URL_PREFIX}', code=302)\ndef initialize_app(flask_app):\n    \"\"\"\n    This function initializes the Flask Application, adds the namespace and registers the blueprint.",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
-        "documentation": {}
-    },
-    {
-        "label": "handle400error",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "peekOfCode": "def handle400error(ns, message):\n    \"\"\"\n    Function to handle a 400 (bad arguments code) error.\n    \"\"\"\n    return ns.abort(400, status=message, statusCode=\"400\")\ndef handle404error(ns, message):\n    \"\"\"\n    Function to handle a 404 (not found) error.\n    \"\"\"\n    return ns.abort(404, status=message, statusCode=\"404\")",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "documentation": {}
-    },
-    {
-        "label": "handle404error",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "peekOfCode": "def handle404error(ns, message):\n    \"\"\"\n    Function to handle a 404 (not found) error.\n    \"\"\"\n    return ns.abort(404, status=message, statusCode=\"404\")\ndef handle500error(ns, message=None):\n    \"\"\"\n    Function to handle a 500 (unknown) error.\n    \"\"\"\n    if message is None:",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "documentation": {}
-    },
-    {
-        "label": "handle500error",
-        "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "peekOfCode": "def handle500error(ns, message=None):\n    \"\"\"\n    Function to handle a 500 (unknown) error.\n    \"\"\"\n    if message is None:\n        message = \"Unknown error, please contact administrator.\"\n    return ns.abort(500, status=message, statusCode=\"500\")",
-        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
-        "documentation": {}
-    },
-    {
-        "label": "nested_model",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "nested_model = api.model('Data', {\n    'key1': fields.String(description='Data body1', required=True, example='pram1'),\n    'key2': fields.String(description='Data body2', required=True, example='param2')\n}, description='data model')\nget_input_model = api.model('Get Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\npost_input_model = api.model('Post Input', {\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "get_input_model",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "get_input_model = api.model('Get Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\npost_input_model = api.model('Post Input', {\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\nput_input_model = api.model('Put Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "post_input_model",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "post_input_model = api.model('Post Input', {\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\nput_input_model = api.model('Put Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\ndelete_input_model = api.model('Delete Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "put_input_model",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "put_input_model = api.model('Put Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False)\n})\ndelete_input_model = api.model('Delete Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\noutput_model = api.model('Output', {\n    'id': fields.Integer(description='Data id', required=True),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False),",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "delete_input_model",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "delete_input_model = api.model('Delete Input', {\n    'id': fields.Integer(description='Data Id', required= True, example=1),\n})\noutput_model = api.model('Output', {\n    'id': fields.Integer(description='Data id', required=True),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False),\n    'created_at': fields.DateTime(description='Created data at', required=True)\n})",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "output_model",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "peekOfCode": "output_model = api.model('Output', {\n    'id': fields.Integer(description='Data id', required=True),\n    'data': fields.Nested(nested_model, description='Data', skip_none=True, allow_null=False),\n    'created_at': fields.DateTime(description='Created data at', required=True)\n})",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.models.ingest_models",
-        "documentation": {}
-    },
-    {
-        "label": "nsCRUD",
+        "label": "EBirdData",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "class nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)\n    @limiter.limit('10000/hour') \n    @cache.cached(timeout=1, query_string=True)\n    def get(self):\n        try:",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ebird.ebird_data",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ebird.ebird_data",
+        "peekOfCode": "class EBirdData:\n    def __init__(self, species_code: str, com_name: str, sci_name: str, observations: List[Dict[str, Any]]):\n        self.species_code = species_code\n        self.com_name = com_name\n        self.sci_name = sci_name\n        self.observations = observations\n    @staticmethod\n    def from_dict(data: Dict[str, Any]) -> 'EBirdData':\n        return EBirdData(\n            species_code=data['speciesCode'],",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ebird.ebird_data",
         "documentation": {}
     },
     {
-        "label": "XenoCanto",
+        "label": "EBirdModel",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "class XenoCanto(Resource):\n    def get(self):\n        model = XenoCanto_Model()\n        results = model.xenocanto_query()\n        return results\n@ns_ebird.route('/')\nclass EBird(Resource):\n    def get(self):\n        # Gets data from the last 30 days in Castilla y León\n        model = EBird_Model()",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ebird.ebird_model",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ebird.ebird_model",
+        "peekOfCode": "class EBirdModel:\n    def add(self, ebird_data: EBirdData) -> bool:\n        database = PostgresSingleton.getInstance()\n        database.connect()\n        try:\n            # Insertar especie\n            species_query = \"\"\"\n            INSERT INTO species (comName, sciName) VALUES (%s, %s) RETURNING id;\n            \"\"\"\n            species_values = (ebird_data.com_name, ebird_data.sci_name)",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.ebird.ebird_model",
         "documentation": {}
     },
     {
-        "label": "EBird",
+        "label": "EBird_Extractor",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "class EBird(Resource):\n    def get(self):\n        # Gets data from the last 30 days in Castilla y León\n        model = EBird_Model()\n        results = model.ebird_query()\n        return results",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.ebird_extractor",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.ebird_extractor",
+        "peekOfCode": "class EBird_Extractor:\n    @lru_cache(maxsize=128)\n    def ebird_query(self, max_retries=3, backoff_factor=1):\n        \"\"\"\n        Queries the eBird API for recent observations of birds \n        in the region of Castilla y León, Spain.\n        The function queries the data for birds observed in the last 30 days. \n        Uses a custom API token for authentication.\n        Args:\n            :param max_retries: maximum number of retries.",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.ebird_extractor",
         "documentation": {}
     },
     {
-        "label": "ns_db",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "ns_db = api.namespace('crud', description='Manage CRUD endpoint')\nns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')\nns_ebird = api.namespace('ebird', description='eBird requests')\n@ns_db.route('/')\nclass nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "label": "ExclusionMap_extractor",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.exclusionmap_extractor",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.exclusionmap_extractor",
+        "peekOfCode": "class ExclusionMap_extractor():\n    @staticmethod\n    def exclusionMap_ingest():\n        \"\"\"\n        Queries the idecyl API to retrieve eolic exclusion map data in SHP format.\n        Args:\n            None\n        Returns:\n            None\n        \"\"\"",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.exclusionmap_extractor",
         "documentation": {}
     },
     {
-        "label": "ns_xenocanto",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')\nns_ebird = api.namespace('ebird', description='eBird requests')\n@ns_db.route('/')\nclass nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)\n    @limiter.limit('10000/hour') ",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "label": "WindMap_Extractor",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.windmap_extractor",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.windmap_extractor",
+        "peekOfCode": "class WindMap_Extractor():\n    @lru_cache(maxsize=128)\n    def windmap_ingest(self, lat: float, lon: float, z: int) -> Dict:\n        \"\"\"\n        Processes latitude and longitude data for the extraction of wind maps.\n        Args:\n            :param lat: latitude of the point of interest.\n            :type lat: float, required\n            :param lon: Longitude of the point of interest.\n            :type lon: float, required",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.windmap_extractor",
         "documentation": {}
     },
     {
-        "label": "ns_ebird",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
-        "peekOfCode": "ns_ebird = api.namespace('ebird', description='eBird requests')\n@ns_db.route('/')\nclass nsCRUD(Resource):\n    @api.expect(get_parser)\n    @api.response(404, 'Data not found')\n    @api.response(500, 'Unhandled errors')\n    @api.response(400, 'Invalid parameters')\n    @api.marshal_with(output_model, code=200, description='OK', as_list=False)\n    @limiter.limit('10000/hour') \n    @cache.cached(timeout=1, query_string=True)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.namespaces.ingest_ns",
+        "label": "XenoCanto_Extractor",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.xenocanto_extractor",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.xenocanto_extractor",
+        "peekOfCode": "class XenoCanto_Extractor():\n    @lru_cache(maxsize=128)\n    def xenocanto_query(self, max_retries=3, backoff_factor=1):\n        \"\"\"\n        Query the Xeno-Canto API to obtain recordings of birds specific to Spain,\n        filtering for those located in Castilla y León.\n        Args:\n            :param max_retries: maximum number of retries.\n            :type max_retries: int\n            :param backoff_factor: backoff factor.",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.extractor.xenocanto_extractor",
         "documentation": {}
     },
     {
-        "label": "post_parser",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "post_parser = reqparse.RequestParser()\npost_parser.add_argument('data', location='json', type=dict, required=True, help='missing data')\nput_parser = reqparse.RequestParser()\nput_parser.add_argument('id', type=int, required=True, help='missing id')\nput_parser.add_argument('data', location='json', type=dict, required=True, help='missing data')\nget_parser = reqparse.RequestParser()\nget_parser.add_argument('id', type=int, required=True, help='missing id')\ndelete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "label": "XenoCantoData",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.xenocanto.xenocanto_data",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.xenocanto.xenocanto_data",
+        "peekOfCode": "class XenoCantoData:\n    def __init__(self, species_sci_name: str, recordings: List[Dict[str, Any]]):\n        self.species_sci_name = species_sci_name\n        self.recordings = recordings\n    @staticmethod\n    def from_dict(data: Dict[str, Any]) -> 'XenoCantoData':\n        return XenoCantoData(\n            species_sci_name=data['speciesSciName'],\n            recordings=data['recordings']\n        )",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.xenocanto.xenocanto_data",
         "documentation": {}
     },
     {
-        "label": "put_parser",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "put_parser = reqparse.RequestParser()\nput_parser.add_argument('id', type=int, required=True, help='missing id')\nput_parser.add_argument('data', location='json', type=dict, required=True, help='missing data')\nget_parser = reqparse.RequestParser()\nget_parser.add_argument('id', type=int, required=True, help='missing id')\ndelete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "label": "XenoCantoModel",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.xenocanto.xenocanto_model",
+        "peekOfCode": "class XenoCantoModel:\n    def add(self, xenocanto_data: XenoCantoData) -> bool:\n        database = PostgresSingleton.getInstance()\n        database.connect()\n        try:\n            # Suponiendo que ya tienes el ID de la observación, modificar según necesidad\n            recording_query = \"\"\"\n            INSERT INTO recording (recordingId, location, quality, lat, lng, alt, file, fileName, time, date, observationId) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);\n            \"\"\"\n            for rec in xenocanto_data.recordings:",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.xenocanto.xenocanto_model",
         "documentation": {}
     },
     {
-        "label": "get_parser",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "get_parser = reqparse.RequestParser()\nget_parser.add_argument('id', type=int, required=True, help='missing id')\ndelete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
+        "label": "combine_data",
+        "kind": 2,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.combination_data",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.combination_data",
+        "peekOfCode": "def combine_data(data_ebird, data_xenocanto) -> list:\n    \"\"\"\n    Combines bird observation data from eBird and recording data from Xeno-Canto.\n    Args:\n        :param data_ebird: List of bird observation data from the eBird API.\n        :type data_ebird: list, required\n        :param data_xenocanto: List of bird recording data from the Xeno-Canto API.\n        :type data_xenocanto: list, required\n    Returns:\n        :return: A list of combined bird data, each entry containing observations and recordings for a particular species.",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.combination_data",
         "documentation": {}
     },
     {
-        "label": "delete_parser",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "peekOfCode": "delete_parser = reqparse.RequestParser()\ndelete_parser.add_argument('id', type=int, required=True, help='missing id')",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.parsers.ingest_parsers",
-        "documentation": {}
-    },
-    {
-        "label": "api",
-        "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.v1",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.v1",
-        "peekOfCode": "api = Api(version='1.0',\n\t\t  title='ai4birds-ingest-service',\n\t\t  description=\"Project description\")",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.api.v1",
+        "label": "DataConverter",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_converter",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_converter",
+        "peekOfCode": "class DataConverter:\n    @staticmethod\n    def clean_invalid_characters(data_frame):\n        for column in data_frame.columns:\n            if data_frame[column].dtype == object:\n                data_frame[column] = data_frame[column].apply(\n                    lambda x: x.encode('utf-8', 'replace').decode('utf-8') if isinstance(x, str) else x\n                )\n        return data_frame\n    @staticmethod",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.data_converter",
         "documentation": {}
     },
     {
         "label": "PostgresSingleton",
         "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.database.db",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.database.db",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.db",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.db",
         "peekOfCode": "class PostgresSingleton:\n    __instance = None\n    def __init__(self):\n        self.host = config.DB_CONFIG['host']\n        self.port = config.DB_CONFIG['port']\n        self.user = config.DB_CONFIG['user']\n        self.password = config.DB_CONFIG['password']\n        self.database = config.DB_CONFIG['database']\n    @staticmethod\n    def getInstance() -> 'PostgresSingleton':",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.database.db",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.model.db",
         "documentation": {}
     },
     {
-        "label": "DataModel",
-        "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class DataModel(NamedTuple):\n    key1: str\n    key2: str\nclass Model:\n    def __init__(self, id: int = -1, data: DataModel = None, created_at: datetime = None):\n        self.id: int = id\n        self.data: DataModel = data\n        self.created_at: datetime = created_at\n    def to_json(self):\n        return {",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "documentation": {}
-    },
-    {
-        "label": "Model",
-        "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class Model:\n    def __init__(self, id: int = -1, data: DataModel = None, created_at: datetime = None):\n        self.id: int = id\n        self.data: DataModel = data\n        self.created_at: datetime = created_at\n    def to_json(self):\n        return {\n            'id': self.id,\n            'data': dict(self.data._asdict()),  \n            'created_at': self.created_at",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "documentation": {}
-    },
-    {
-        "label": "EBird_Model",
-        "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class EBird_Model:\n    def ebird_query(self):\n        regionCode = 'ES-CL'\n        headers = {'X-eBirdApiToken': EBIRD_PASSWORD}\n        # Last 30 days \n        url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'\n        try:\n            response = requests.get(url, headers=headers)\n            if response.status_code == 200:\n                return(json.loads(response.text))",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "documentation": {}
-    },
-    {
-        "label": "XenoCanto_Model",
-        "kind": 6,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
-        "peekOfCode": "class XenoCanto_Model():\n    def xenocanto_query(self):\n        query = 'cnt:spain'\n        page = 1\n        all_results = []\n        while True:\n            url = f'http://www.xeno-canto.org/api/2/recordings?query={query}&page={page}'\n            try:\n                response = requests.get(url)\n                response.raise_for_status() ",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.model.ingest_model",
+        "label": "dotenv_path",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "dotenv_path = '/etc/envs/.env'\nload_dotenv(dotenv_path)\n# api config\n# PORT = 5001\nPORT = 5000\nHOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "documentation": {}
     },
     {
         "label": "PORT",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "peekOfCode": "PORT = 5001\nHOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "PORT = 5000\nHOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_INGEST_HOST'),\n    'port' : os.getenv('POSTGRES_INGEST_PORT'),\n    'user' : os.getenv('POSTGRES_INGEST_USER'),\n    'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "documentation": {}
     },
     {
         "label": "HOST",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "peekOfCode": "HOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "HOST = '0.0.0.0'\nURL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_INGEST_HOST'),\n    'port' : os.getenv('POSTGRES_INGEST_PORT'),\n    'user' : os.getenv('POSTGRES_INGEST_USER'),\n    'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),\n    'database' : os.getenv('POSTGRES_INGEST_DB')",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "documentation": {}
     },
     {
         "label": "URL_PREFIX",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "peekOfCode": "URL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"\n}",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "URL_PREFIX = '/ai4birds-ingest-service/v1'\nDEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_INGEST_HOST'),\n    'port' : os.getenv('POSTGRES_INGEST_PORT'),\n    'user' : os.getenv('POSTGRES_INGEST_USER'),\n    'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),\n    'database' : os.getenv('POSTGRES_INGEST_DB')\n}",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "documentation": {}
     },
     {
         "label": "DEBUG_MODE",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "peekOfCode": "DEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : \"ethicalnews.bisite.usal.es\",\n    'port' : 1338,\n    'user' : \"news_user\",\n    'password' : \"n3ws_2023?!\",\n    'database' : \"ethicalTask\"\n}\n# EBird password",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "DEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_INGEST_HOST'),\n    'port' : os.getenv('POSTGRES_INGEST_PORT'),\n    'user' : os.getenv('POSTGRES_INGEST_USER'),\n    'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),\n    'database' : os.getenv('POSTGRES_INGEST_DB')\n}\nSPECIES_LIST = {",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "SPECIES_LIST",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "SPECIES_LIST = {\n    \"Quebrantahuesos\": \"Gypaetus barbatus\",\n    \"Buitre negro\": \"Aegypius monachus\",\n    \"Buitre leonado\": \"Gyps fulvus\",\n    \"Alimoche común\": \"Neophron percnopterus\",\n    \"Águila perdicera\": \"Aquila fasciata\",\n    \"Águila imperial ibérica\": \"Aquila adalberti\",\n    \"Águila real\": \"Aquila chrysaetos\",\n    \"Águila pescadora\": \"Pandion haliaetus\",\n    \"Milano real\": \"Milvus milvus\",",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "documentation": {}
     },
     {
         "label": "EBIRD_PASSWORD",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
-        "peekOfCode": "EBIRD_PASSWORD = 'v1kfvin2apud'",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.config",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "EBIRD_PASSWORD = 'v1kfvin2apud'\n# Files paths\nCORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'\n#EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica.csv.gz'\n# EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica (5).csv'\n# API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'\nEXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'\nAPI_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "CORRDENADAS_CSV_PATH",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "CORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'\n#EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica.csv.gz'\n# EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica (5).csv'\n# API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'\nEXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'\nAPI_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "#EXCLUSION_EOLICA_CSV_PATH",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "#EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica.csv.gz'\n# EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica (5).csv'\n# API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'\nEXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'\nAPI_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "EXCLUSION_EOLICA_CSV_PATH",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "EXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'\nAPI_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "API_SPEC_PATH",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "documentation": {}
     },
     {
         "label": "limiter",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.core",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.core",
-        "peekOfCode": "limiter = Limiter(\t\n\tkey_func=get_remote_address,\t\n\tdefault_limits=[\"1000 per hour\"]\n)\ncache = Cache(\n\tconfig={\n\t\t'CACHE_TYPE': 'simple',\n\t\t'CACHE_DEFAULT_TIMEOUT': 1\n\t}\n)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.core",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
+        "peekOfCode": "limiter = Limiter(\t\n\tkey_func=get_remote_address,\t\n\tdefault_limits=[\"1000 per hour\"]\n)\ncache = Cache(\n\tconfig={\n\t\t'CACHE_TYPE': 'simple',\n\t\t'CACHE_DEFAULT_TIMEOUT': 300\n\t}\n)",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
         "documentation": {}
     },
     {
         "label": "cache",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.core",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.core",
-        "peekOfCode": "cache = Cache(\n\tconfig={\n\t\t'CACHE_TYPE': 'simple',\n\t\t'CACHE_DEFAULT_TIMEOUT': 1\n\t}\n)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.core",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
+        "peekOfCode": "cache = Cache(\n\tconfig={\n\t\t'CACHE_TYPE': 'simple',\n\t\t'CACHE_DEFAULT_TIMEOUT': 300\n\t}\n)",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.core",
+        "documentation": {}
+    },
+    {
+        "label": "handle_conect",
+        "kind": 2,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "peekOfCode": "def handle_conect():\n    print('User connect to socket')\n@socketio.on('disconnect')\ndef handle_desconect():\n    print('User disconnect from socket')\n@socketio.on('windmap')\ndef handle_windmap(data):\n    print('Received windmap event')  # Add this message\n    # Crear una instancia de WindMap_Extractor\n    extractor = WindMap_Extractor()",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "documentation": {}
+    },
+    {
+        "label": "handle_desconect",
+        "kind": 2,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "peekOfCode": "def handle_desconect():\n    print('User disconnect from socket')\n@socketio.on('windmap')\ndef handle_windmap(data):\n    print('Received windmap event')  # Add this message\n    # Crear una instancia de WindMap_Extractor\n    extractor = WindMap_Extractor()\n    # Obtener los parámetros latitud, longitud y altitud del mensaje enviado por el cliente\n    lat = data.get('lat')\n    lon = data.get('lon')",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "documentation": {}
+    },
+    {
+        "label": "handle_windmap",
+        "kind": 2,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
+        "peekOfCode": "def handle_windmap(data):\n    print('Received windmap event')  # Add this message\n    # Crear una instancia de WindMap_Extractor\n    extractor = WindMap_Extractor()\n    # Obtener los parámetros latitud, longitud y altitud del mensaje enviado por el cliente\n    lat = data.get('lat')\n    lon = data.get('lon')\n    z = data.get('z')\n    try:\n        # Verify that the required data is present",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.events",
         "documentation": {}
     },
     {
         "label": "setup_logger",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "peekOfCode": "def setup_logger() -> None:\n    \"\"\"Setups logger for cookiecutter.application_\n    \"\"\"\n    global logger\n    logging.config.dictConfig(LOGGING_CONFIG)\n    logger = logging.getLogger(LOGGER_NAME)\ndef serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.\n    Returns: \n        :obj:`logging.logger` application logger",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "documentation": {}
     },
     {
         "label": "serve_application_logger",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "peekOfCode": "def serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.\n    Returns: \n        :obj:`logging.logger` application logger\n    \"\"\"\n    global has_setup, logger\n    if not has_setup:\n        setup_logger()\n        has_setup = True\n    return logger",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "documentation": {}
     },
     {
         "label": "LOGGER_NAME",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "peekOfCode": "LOGGER_NAME = 'ai4birds_ingest_service'\nLOGGING_CONFIG = {\n    'version': 1,\n    'disable_existing_loggers': True,\n    'loggers': {\n        '': {\n            'level': 'ERROR',\n            'handlers': ['consoleHandler']\n        },\n        LOGGER_NAME: {",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "documentation": {}
     },
     {
         "label": "LOGGING_CONFIG",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "peekOfCode": "LOGGING_CONFIG = {\n    'version': 1,\n    'disable_existing_loggers': True,\n    'loggers': {\n        '': {\n            'level': 'ERROR',\n            'handlers': ['consoleHandler']\n        },\n        LOGGER_NAME: {\n            'level': 'DEBUG',",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "documentation": {}
     },
     {
         "label": "logger",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "peekOfCode": "logger = None\nhas_setup = False\ndef setup_logger() -> None:\n    \"\"\"Setups logger for cookiecutter.application_\n    \"\"\"\n    global logger\n    logging.config.dictConfig(LOGGING_CONFIG)\n    logger = logging.getLogger(LOGGER_NAME)\ndef serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "documentation": {}
     },
     {
         "label": "has_setup",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "peekOfCode": "has_setup = False\ndef setup_logger() -> None:\n    \"\"\"Setups logger for cookiecutter.application_\n    \"\"\"\n    global logger\n    logging.config.dictConfig(LOGGING_CONFIG)\n    logger = logging.getLogger(LOGGER_NAME)\ndef serve_application_logger() -> Any:\n    \"\"\"Setups logger for application if not initializes, and servers the application logger.\n    Returns: ",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.log",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.log",
         "documentation": {}
     },
     {
         "label": "get_version",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "peekOfCode": "def get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"\n    This function returns the API's author name.\n    \"\"\"\n    return str(AUTHOR)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "get_authors",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "peekOfCode": "def get_authors():\n    \"\"\"\n    This function returns the API's author name.\n    \"\"\"\n    return str(AUTHOR)\n__version__ = get_version()\n__author__ = get_authors()\n@app.route('/')\ndef register_redirection():\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "register_redirection",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "peekOfCode": "def register_redirection():\n    \"\"\"\n    Redirects to dcoumentation page.\n    \"\"\"\n    return redirect(f'{request.url_root}/{config.URL_PREFIX}', code=302)\ndef initialize_app(flask_app):\n    \"\"\"\n    This function initializes the Flask Application, adds the namespace and registers the blueprint.\n    \"\"\"\n    CORS(flask_app)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "initialize_app",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "peekOfCode": "def initialize_app(flask_app):\n    \"\"\"\n    This function initializes the Flask Application, adds the namespace and registers the blueprint.\n    \"\"\"\n    CORS(flask_app)\n    v1 = Blueprint('api', __name__, url_prefix=config.URL_PREFIX)\n    api.init_app(v1)\n    limiter.exempt(v1)\n    cache.init_app(flask_app)\n    for ns in namespaces:",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "peekOfCode": "def initialize_app(flask_app):\n    \"\"\"\n    This function initializes the Flask Application, adds the namespace and registers the blueprint.\n    \"\"\"\n    CORS(flask_app)\n    v1 = Blueprint('api', __name__, url_prefix=config.URL_PREFIX)\n    api.init_app(v1)\n    limiter.exempt(v1)\n    cache.init_app(flask_app) \n    #cache.init_app(flask_app)",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "main",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "peekOfCode": "def main():\n    initialize_app(app)\n    separator_str = ''.join(map(str, [\"=\" for i in range(175)]))\n    print(separator_str)\n    print(f'Debug mode: {config.DEBUG_MODE}')\n    print(f'Authors: {get_authors()}')\n    print(f'Version: {get_version()}')\n    print(f'Base URL: http://localhost:{config.PORT}{config.URL_PREFIX}')\n    print(separator_str)\n    app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG_MODE)",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "peekOfCode": "def main():\n    initialize_app(app)\n    separator_str = ''.join(map(str, [\"=\" for i in range(175)]))\n    print(separator_str)\n    print(f'Debug mode: {config.DEBUG_MODE}')\n    print(f'Authors: {get_authors()}')\n    print(f'Version: {get_version()}')\n    print(f'Base URL: http://localhost:{config.PORT}{config.URL_PREFIX}')\n    print(f'Socket URL: http://localhost:{config.PORT}')\n    print(separator_str)",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "app",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "peekOfCode": "app = Flask(__name__)\nVERSION = (1, 0)\nAUTHOR = 'AIRInstitute'\ndef get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "peekOfCode": "app = Flask(__name__)\n# socketio = SocketIO(app)\nVERSION = (1, 0)\nAUTHOR = 'AIRInstitute'\ndef get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "VERSION",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "peekOfCode": "VERSION = (1, 0)\nAUTHOR = 'AIRInstitute'\ndef get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"\n    This function returns the API's author name.",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "AUTHOR",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "peekOfCode": "AUTHOR = 'AIRInstitute'\ndef get_version():\n    \"\"\"\n    This function returns the API version that is being used.\n    \"\"\"\n    return '.'.join(map(str, VERSION))\ndef get_authors():\n    \"\"\"\n    This function returns the API's author name.\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "__version__",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "peekOfCode": "__version__ = get_version()\n__author__ = get_authors()\n@app.route('/')\ndef register_redirection():\n    \"\"\"\n    Redirects to dcoumentation page.\n    \"\"\"\n    return redirect(f'{request.url_root}/{config.URL_PREFIX}', code=302)\ndef initialize_app(flask_app):\n    \"\"\"",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "documentation": {}
     },
     {
         "label": "__author__",
         "kind": 5,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
         "peekOfCode": "__author__ = get_authors()\n@app.route('/')\ndef register_redirection():\n    \"\"\"\n    Redirects to dcoumentation page.\n    \"\"\"\n    return redirect(f'{request.url_root}/{config.URL_PREFIX}', code=302)\ndef initialize_app(flask_app):\n    \"\"\"\n    This function initializes the Flask Application, adds the namespace and registers the blueprint.",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.run",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.run",
+        "documentation": {}
+    },
+    {
+        "label": "TestApi",
+        "kind": 6,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.test_api",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.test_api",
+        "peekOfCode": "class TestApi:\n    def test_XenoCanto(self):\n        response = requests.get('http://localhost:5000/ai4birds-ingest-service/v1/xenocanto/')\n        assert response.status_code == 200\n    def test_eBird(self):\n        response = requests.get('http://localhost:5000/ai4birds-ingest-service/v1/ebird/')\n        assert response.status_code == 200\n    @pytest.mark.parametrize(\"lat, lon, z\", testdata_windmap)\n    def test_windmap(self, lat:float, lon:float, z:int):\n        url = 'http://localhost:5000/ai4birds-ingest-service/v1/windmap /windMap'",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "testdata_windmap",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.test_api",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.test_api",
+        "peekOfCode": "testdata_windmap = [\n    (41.85563222906876, -5.5495918821608665, 50),\n    # Agrega más conjuntos de datos según sea necesario\n]\nclass TestApi:\n    def test_XenoCanto(self):\n        response = requests.get('http://localhost:5000/ai4birds-ingest-service/v1/xenocanto/')\n        assert response.status_code == 200\n    def test_eBird(self):\n        response = requests.get('http://localhost:5000/ai4birds-ingest-service/v1/ebird/')",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.test_api",
         "documentation": {}
     },
     {
         "label": "handle400error",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
         "peekOfCode": "def handle400error(ns, message):\n    \"\"\"\n    Function to handle a 400 (bad arguments code) error.\n    \"\"\"\n    return ns.abort(400, status=message, statusCode=\"400\")\ndef handle404error(ns, message):\n    \"\"\"\n    Function to handle a 404 (not found) error.\n    \"\"\"\n    return ns.abort(404, status=message, statusCode=\"404\")",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
         "documentation": {}
     },
     {
         "label": "handle404error",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
         "peekOfCode": "def handle404error(ns, message):\n    \"\"\"\n    Function to handle a 404 (not found) error.\n    \"\"\"\n    return ns.abort(404, status=message, statusCode=\"404\")\ndef handle500error(ns, message=None):\n    \"\"\"\n    Function to handle a 500 (unknown) error.\n    \"\"\"\n    if message is None:",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
         "documentation": {}
     },
     {
         "label": "handle500error",
         "kind": 2,
-        "importPath": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
-        "description": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
         "peekOfCode": "def handle500error(ns, message=None):\n    \"\"\"\n    Function to handle a 500 (unknown) error.\n    \"\"\"\n    if message is None:\n        message = \"Unknown error, please contact administrator.\"\n    return ns.abort(500, status=message, statusCode=\"500\")",
-        "detail": "ia4birds-all.ai4birds-ingest-service.build.lib.ai4birds_ingest_service.utils",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.utils",
         "documentation": {}
     },
     {

@@ -4,10 +4,15 @@ import http from "http";
 import debug from "debug";
 import config from "../config/global.config";
 import fs from "fs";
+const bodyParser = require('body-parser');
+import globalConfig from "../config/global.config";
+import '../config/cron.config';
 
-const port = normalizePort(config.port || "3000");
+const port = normalizePort(config.port || "5030");
 app.set("port", port);
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+//Asegura que esté en un formato válido antes de pasarlo a la función de creación del servidor
 function normalizePort(val: string) {
 	var port = parseInt(val, 10);
 
@@ -24,7 +29,9 @@ function normalizePort(val: string) {
 	return false;
 }
 
+//Creación del servidor HTTP o HTTPS
 let server: http.Server | https.Server;
+//Si existen archivos de certificado y clave SSL, se crea un servidor HTTPS
 if (fs.existsSync(config.ssl.key) && fs.existsSync(config.ssl.cert)) {
 	server = https.createServer(
 		{
@@ -37,11 +44,9 @@ if (fs.existsSync(config.ssl.key) && fs.existsSync(config.ssl.cert)) {
 	server = http.createServer(app);
 }
 
-server.listen(port, () => {
-	console.log(`Server running on port ${port}`);
-});
-server.on("error", onError);
-server.on("listening", onListening);
+app.listen(port, () => {
+	console.log(`Server listening at http://localhost:${port}`)
+})
 
 function onError(error: { syscall: string; code: any }) {
 	if (error.syscall !== "listen") {
@@ -71,6 +76,6 @@ function onError(error: { syscall: string; code: any }) {
 
 function onListening() {
 	const addr = server.address();
-	const bind = typeof addr === "string" ? "pipe " + addr : "port " + 3000;
+	const bind = typeof addr === "string" ? "pipe " + addr : "port " + 5030;
 	debug("Listening on " + bind);
 }

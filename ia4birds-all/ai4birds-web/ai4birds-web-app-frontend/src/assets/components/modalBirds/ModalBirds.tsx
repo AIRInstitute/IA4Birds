@@ -1,8 +1,9 @@
-import React from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import * as React from "react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/modal";
+import { Button } from "@nextui-org/button";
 export const CustomCard = ({ valueBackdrop }) => { 
     const {isOpen, onOpen, onClose} = useDisclosure();
-    const [backdrop, setBackdrop] = React.useState('opaque')
+    const [backdrop, setBackdrop] = React.useState<'opaque' | 'transparent' | 'blur'>('opaque')
 
   
     const handleOpen = (backdrop) => {

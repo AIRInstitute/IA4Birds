@@ -1,25 +1,12 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, Express, Router } from "express";
+import authController from "../../controllers/auth.controller";
 
-/*********** EXPORTS **************/
-import authMiddleware from "../../middleware/auth.middleware";
-import authController from "../../controllers/auth.controllers";
+export default () => {
+    const authRouter: Router = Router();
 
-export default function (app: any) {
-	app.use(function (req: Request, res: Response, next: NextFunction) {
-		res.header(
-			"Access-Control-Allow-Headers",
-			"x-access-token, Origin, Content-Type, Accept"
-		);
-		next();
-	});
+    authRouter.post("/signup", authController.signup);
+    authRouter.post("/signin", authController.signin);
+    authRouter.get("/", authController.guardFunction);
 
-	app.post(
-		"/api/auth/signup",
-		[authMiddleware.verifySignUp],
-		authController.signup
-	);
-
-	app.post("/api/auth/signin", authController.signin);
-
-	app.get("/api/auth", authController.guardFunction);
-}
+    return authRouter;
+};

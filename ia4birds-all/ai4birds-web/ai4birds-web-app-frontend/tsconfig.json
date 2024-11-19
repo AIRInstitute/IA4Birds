@@ -16,15 +16,10 @@
 
     /* Linting */
     "strict": true,
-    //"noUnusedLocals": true,
-    //"noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
-    // Comprobaciones que se han cambiado de "true" a "false" para el despliegue, cambiar a "true" en caso de que sea necesario para desarrollo
     "noUnusedLocals": false,
-    "noUnusedParameters": true,
-    "noImplicitAny": true,
-    
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
