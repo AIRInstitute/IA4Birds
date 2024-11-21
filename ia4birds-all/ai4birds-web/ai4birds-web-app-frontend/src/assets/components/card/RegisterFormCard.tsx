@@ -110,7 +110,7 @@ export const CustomCard = () => {
                                     variant='light'
                                     className=""
                                 >
-                                    {showPassword ? <RxEyeOpen/> : <RxEyeClosed/>}
+                                    {showPasswordConfirmation ? <RxEyeOpen/> : <RxEyeClosed/>}
                                 </Button>
                             }/>
                         </div>
