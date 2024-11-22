@@ -81,7 +81,7 @@ const HeaderComponent = () => {
           <Link  
           to="/map-component" 
           color={location.pathname == "/map-component" ? '#55436F': 'foreground'} 
-          style={location.pathname == "/map-component" ? { textDecoration: 'underline',color:'#55436F'} : {textDecoration: 'none'} }
+          style={location.pathname == "/map-component" ? { color:'#55436F'} : {textDecoration: 'none'} }
         // Add more styles as needed
              aria-current="page">
             Mapa
@@ -90,14 +90,14 @@ const HeaderComponent = () => {
         <Divider orientation="vertical" className='h-30' />
         <NavbarItem isActive={location.pathname == "/camera-component"}>
           <Link  to="/camera-component" 
-          style={location.pathname== "/camera-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }  >
+          style={location.pathname== "/camera-component" ? { color:'#55436F'} : {textDecoration: 'none'} }  >
             Cámaras
           </Link>
         </NavbarItem>
         <Divider orientation="vertical" className='h-30'/>
         <NavbarItem isActive={location.pathname == "/blog-component"}>
           <Link to="/blog-component" color={location.pathname == "/blog-component" ? '#55436F': 'foreground'} 
-          style={location.pathname == "/blog-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
+          style={location.pathname == "/blog-component" ? { color:'#55436F'} : {textDecoration: 'none'} }>
             Blog
           </Link>
         </NavbarItem>
@@ -105,20 +105,22 @@ const HeaderComponent = () => {
         <Divider orientation="vertical" className='h-30'/>
         <NavbarItem isActive={location.pathname == "/admin-panel-component"}>
           <Link to="/admin-panel-component" color={location.pathname == "/admin-panel-component" ? '#55436F': 'foreground'} 
-          style={location.pathname == "/admin-panel-component" ? { textDecoration: 'underline', color:'#55436F'} : {textDecoration: 'none'} }>
+          style={location.pathname == "/admin-panel-component" ? { color:'#55436F'} : {textDecoration: 'none'} }>
             Panel de Admin
           </Link>
         </NavbarItem>
         {/* )} */}
       </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="lg:flex">
-          {location.pathname !== '/login-component' && (
+      <NavbarContent justify="end" className="">
+        <NavbarItem>
+          {location.pathname !== '/login-component' && location.pathname !== '/admin-panel-component' && location.pathname !== '/camera-panel-component' && 
+          location.pathname !== '/data-panel-component' && (
             <Link to="/login-component"><Button>Login</Button></Link>
           )}
         </NavbarItem>
-        <NavbarItem className="lg:flex">
-          {location.pathname !== '/request-admin-component' && (
+        <NavbarItem>
+          {location.pathname !== '/request-admin-component' && location.pathname !== '/admin-panel-component' && location.pathname !== '/camera-panel-component' && 
+          location.pathname !== '/data-panel-component' && (
             <Link to="/request-admin-component"><Button>Solicitud Admin</Button></Link>
           )}
         </NavbarItem>

@@ -11,6 +11,8 @@ import AcceptDeclineComponent from './assets/components/AcceptDeclineComponent';
 import AdminPanelComponent from './assets/components/AdminPanelComponent';
 import CameraPanelComponent from './assets/components/CameraPanelComponent';
 import DataPanelComponent from './assets/components/DataPanelComponent';
+import ResetPasswordComponent from './assets/components/ResetPasswordComponent';
+import ForgotPasswordComponent from './assets/components/ForgotPasswordComponent';
 
 
 
@@ -58,6 +60,10 @@ function App() {
         <Route path="/camera-panel-component" element={<CameraPanelComponent/>}>
         </Route>
         <Route path="/data-panel-component" element={<DataPanelComponent/>}>
+        </Route>
+        <Route path="/reset-password-component" element={<ResetPasswordComponent/>}>
+        </Route>
+        <Route path="/forgot-password-component" element={<ForgotPasswordComponent/>}>
         </Route>
       </Routes>
     </Router>
