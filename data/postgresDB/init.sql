@@ -39,3 +39,14 @@ CREATE TABLE IF NOT EXISTS recording (
         REFERENCES observation(id)
         ON DELETE SET NULL  
 );
+
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    organization VARCHAR(255),
+    description VARCHAR(255),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    active BOOLEAN DEFAULT FALSE
+);
