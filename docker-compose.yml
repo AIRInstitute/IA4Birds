@@ -7,7 +7,7 @@ services:
     container_name: postgres
     volumes:
       - /etc/envs/.env:/etc/envs/.env
-      #- /etc/ai4birds-data-db/data:/var/lib/postgresql/data
+      - /etc/ai4birds-data-db/data:/var/lib/postgresql/data
       - ./data/postgresDB/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
