@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Button, ButtonGroup} from "@nextui-org/button";
+import { Button} from "@nextui-org/button";
 import {Input} from "@nextui-org/input";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { Link } from "react-router-dom";
 
+import auth from "../services/ExclusionEolicService";
 
 export const CustomCard = ()=> {
     const [user, setUser] = useState({});
@@ -18,15 +19,43 @@ export const CustomCard = ()=> {
       console.log("ENTRO EN EL SUBMIT");
       console.log("e: ", e);
   
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+
       if (!email || !password) {
         setError('Please fill in all fields');
         return;
       }
-      setError('');
-      console.log("Submitted with:", { email, password });
-      
+      if (!emailRegex.test(email)) {
+        setError('Please enter a valid email');
+        return;
+      }
+
+      if (!passwordRegex.test(password)) {
+        setError('Password must contain at least one number and one uppercase and lowercase letter, and at least 6 characters');
+        return;
+      }
+
+      console.log("email: ", email);
+      console.log("password: ", password);
+
+      auth.login({email: email, password: password})
+        .then((response) => {
+            console.log("RESPONSE: ", response);
+            if (response.data.accessToken) {
+                //Deberia devolver un token y la informacion del usuario
+                localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+                //No se si esto es correcto y ya valdría o deberia crearlo tambien un item en localStorage
+                setUser(response.data.user);
+            } else if (response.data.error) {
+                setError(response.data.error);
+            }
+        })
+        .catch(() => {
+            setError('An error occurred. Please try again.');
+        });
     };
-  
+
    return (
     <>
   <Card>

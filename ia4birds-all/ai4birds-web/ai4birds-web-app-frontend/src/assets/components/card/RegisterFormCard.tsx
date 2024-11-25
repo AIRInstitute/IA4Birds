@@ -4,16 +4,22 @@ import { Input } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
+
+import auth from "../services/ExclusionEolicService";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
     const [name, setName] = React.useState('');
     const [surnames, setSurnames] = React.useState('');
+    const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const [error, setError] = React.useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -39,15 +45,19 @@ export const CustomCard = () => {
             return;
         }
 
-        setError('');
-        console.log("Submitted with:", { email, name, surnames, password, passwordConfirmation });
-
+        auth.register({email: email, name: name, surnames: surnames, username: username, password: password})
+            .then((response) => {
+                if (!response.data.error) {
+                    navigate("/login-component");
+                } else if (response.data.error) {
+                    setError(response.data.error);
+                }
+            })
+            .catch(() => {
+                setError('An error occurred while registering. Please try again.');
+            });
     };
 
-    useEffect(() => {
-        // Esta función se ejecutará una vez cuando el componente se monte en el DOM
-        console.log('La página se ha cargado RegisterFormComponent');
-    }, []);
     
 
     return (
@@ -88,6 +98,14 @@ export const CustomCard = () => {
                             label="Apellidos" 
                             value={surnames} 
                             onChange={(e) => setSurnames(e.target.value)} 
+                            />
+                        <Input 
+                            type="text" 
+                            isRequired 
+                            placeholder="Nombre usuario" 
+                            label="Nombre usuario" 
+                            value={username} 
+                            onChange={(e) => setUsername(e.target.value)} 
                             />
                         <div className="relative w-full">
                             <Input type={showPassword ? "text" : "password"} isRequired label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
