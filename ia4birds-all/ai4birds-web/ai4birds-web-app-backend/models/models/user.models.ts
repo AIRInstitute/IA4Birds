@@ -33,6 +33,7 @@ export default (sequelize: Sequelize) => {
             createdAt: {
                 type: DataTypes.DATE,
                 defaultValue: Sequelize.fn("now"),
+                field: "createdat", // Mapea la columna de la base de datos
             },
             name: DataTypes.STRING,
             email: DataTypes.STRING,
