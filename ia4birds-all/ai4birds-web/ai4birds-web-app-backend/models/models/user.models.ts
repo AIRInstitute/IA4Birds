@@ -41,7 +41,7 @@ export default (sequelize: Sequelize) => {
             description: DataTypes.STRING,
         },
         {
-            tableName: "user",
+            tableName: "users",
             sequelize,
             charset: "utf8",
             collate: "utf8_unicode_ci",
