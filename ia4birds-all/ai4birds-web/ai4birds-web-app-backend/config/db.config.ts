@@ -11,4 +11,6 @@ const dataBaseConfig = {
 	dialect: process.env.DB_DIALECT || "postgres",
 };
 
+console.log(dataBaseConfig);
+
 export default dataBaseConfig;
