@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "/home/node/app/ai4birds-web-app-backend/.env" });
 
 const dataBaseConfig = {
 	devMode: process.env.NODE_ENV || false,
