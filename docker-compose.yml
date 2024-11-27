@@ -59,6 +59,7 @@ services:
     container_name: backend
     volumes:
       - /etc/letsencrypt/archive/ia4birds-platform.air-institute.com:/etc/letsencrypt/archive/ia4birds-platform.air-institute.com
+      - /etc/envs/.env:/home/node/app/ai4birds-web-app-backend/.env
     ports:
       - 5030:3030
     networks:

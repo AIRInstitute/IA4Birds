@@ -16,6 +16,7 @@ const PRIVATE_USER_FIELDS = ["password"];
  * @returns {User[]} An array of all users (without the private fields)
  */
 const findAll = async (req: Request, res: Response) => {
+    console.log("findALL:");
     try {
         const users = await User.findAll({
             attributes: { exclude: PRIVATE_USER_FIELDS },
@@ -37,7 +38,9 @@ const findAll = async (req: Request, res: Response) => {
  */
 const findOne = async (req: Request, res: Response) => {
     // Check parameters
-
+    console.log("findOne:");
+    console.log("ID:", req.params.id);
+    
     if (!req.params || Object.keys(req.params).length === 0)
         return res
             .status(400)

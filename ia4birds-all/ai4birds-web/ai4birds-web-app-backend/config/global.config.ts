@@ -15,8 +15,8 @@ const globalConfig = {
     saltRounds: Number(process.env.SALT_ROUNDS) || 10,
     access_expiration: process.env.ACCESS_EXPIRATION_TIME || "1h",
     other_expiration: process.env.OTHER_EXPIRATION_TIME || "15m",
-    frontendURL: process.env.FRONTEND_URL || "http://212.128.141.36:5173",
-    backendURL: process.env.BACKEND_URL || "http://212.128.141.36:5030",
+    frontendURL: process.env.FRONTEND_URL || "http://212.128.154.81:5173",
+    backendURL: process.env.BACKEND_URL || "http://212.128.154.81:5030",
     pythonURL:
         process.env.PYTHON_URL ||
         "http://ia4birds-platform.air-institute.com:5002/ai4birds-ingest-service/v1",
