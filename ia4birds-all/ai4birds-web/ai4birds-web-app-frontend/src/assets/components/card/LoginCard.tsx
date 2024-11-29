@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button} from "@nextui-org/button";
 import {Input} from "@nextui-org/input";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
-import auth from "../services/ExclusionEolicService";
+import auth from "../services/AuthDataService";
 
 export const CustomCard = ()=> {
     const [user, setUser] = useState({});
@@ -14,6 +16,9 @@ export const CustomCard = ()=> {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
   
+    const notify = () => toast.success('Inicio de sesión correcto');
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
       e.preventDefault();
       console.log("ENTRO EN EL SUBMIT");
@@ -43,10 +48,16 @@ export const CustomCard = ()=> {
         .then((response) => {
             console.log("RESPONSE: ", response);
             if (response.data.accessToken) {
-                //Deberia devolver un token y la informacion del usuario
+                notify();
+                setUser({
+                    id: response.data.id,
+                    name: response.data.name,
+                    email: response.data.email,
+                    token: response.data.accessToken
+                });
                 localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
-                //No se si esto es correcto y ya valdría o deberia crearlo tambien un item en localStorage
-                setUser(response.data.user);
+                localStorage.setItem("user", JSON.stringify(user));
+                navigate("/" + {accessToken: response.data.accessToken});
             } else if (response.data.error) {
                 setError(response.data.error);
             }

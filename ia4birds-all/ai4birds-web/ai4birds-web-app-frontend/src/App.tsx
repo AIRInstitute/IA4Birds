@@ -14,7 +14,7 @@ import DataPanelComponent from './assets/components/DataPanelComponent';
 import ResetPasswordComponent from './assets/components/ResetPasswordComponent';
 import ForgotPasswordComponent from './assets/components/ForgotPasswordComponent';
 
-
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   // const [facts, setFacts] = useState([]);
@@ -36,6 +36,7 @@ function App() {
 
   return (
     <>
+    <Toaster position='top-center'/>
      <Router>
       <HeaderComponent/>
       <Routes>

@@ -1,17 +1,23 @@
 import * as React from "react";
-import  { useEffect } from "react";
 import { Input, Textarea } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
+import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
+
+import auth from "../services/AuthDataService";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [error, setError] = React.useState('');
 
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const {isOpen, onOpenChange} = useDisclosure();
     
+    const notify = () => toast.success('Solicitud enviada correctamente');
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -25,16 +31,22 @@ export const CustomCard = () => {
             setError('*Please enter a valid email');
             return;
         }
-        setError('');
-        onOpen();
-        console.log("Submitted with:", { email, description });
 
+        auth.requestAdmin({email: email, description: description})
+            .then((response) => {
+                if (!response.data.error) {
+                  notify();
+                  navigate("/");
+                } else if (response.data.error) {
+                    setError(response.data.error);
+                }
+            })
+            .catch(() => {
+                setError('An error occurred while registering. Please try again.');
+            });
     };
 
-    useEffect(() => {
-        // Esta función se ejecutará una vez cuando el componente se monte en el DOM
-        console.log('La página se ha cargado RequestAdminComponent');
-    }, []);
+
     
 
     return (
