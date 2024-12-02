@@ -25,7 +25,7 @@ const globalConfig = {
         port: Number(process.env.SMTP_PORT) || 587,
         secure: toBoolean(process.env.SMTP_SECURE) || false,
         email: process.env.SMTP_EMAIL || "ia4birds@air-institute.com",
-        password: process.env.SMTP_PWD || "gyrgij-Fepra0-katwym",
+        password: process.env.SMTP_PWD || "vtxuefosyeqytobm",
         logger: toBoolean(process.env.SMTP_LOGGER) || true,
     },
     cypher: {
