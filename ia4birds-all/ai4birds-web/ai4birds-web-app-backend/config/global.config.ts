@@ -8,14 +8,14 @@ function toBoolean(value: string | undefined): boolean | undefined {
 }
 
 const globalConfig = {
-    projectName: process.env.PROJECT_NAME || "projectName",
+    projectName: process.env.PROJECT_NAME || "IA4Birds",
     port: process.env.PORT || "3030",
     secretKey: process.env.SECRET_KEY || "secretKey",
     sessionSecret: process.env.SECRET_SESSION || "secretSession",
     saltRounds: Number(process.env.SALT_ROUNDS) || 10,
     access_expiration: process.env.ACCESS_EXPIRATION_TIME || "1h",
     other_expiration: process.env.OTHER_EXPIRATION_TIME || "15m",
-    frontendURL: process.env.FRONTEND_URL || "http://212.128.154.81:5173",
+    frontendURL: process.env.FRONTEND_URL || "http://212.128.154.81",
     backendURL: process.env.BACKEND_URL || "http://212.128.154.81:5030",
     pythonURL:
         process.env.PYTHON_URL ||
