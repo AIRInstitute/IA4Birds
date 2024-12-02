@@ -17,7 +17,7 @@ const SidebarEolic = ({ isOpen, onCancel,eolicdata}) => {
             <h2>Datos de la exclusión eólica</h2>
             <button onClick={onCancel}><RxCross1 style={{ height: '30px', width: '30px'}} /></button>
         </div>
-      <Card className="max-w-[400px]">
+      <Card className="w-full h-[30vh]">
       <CardHeader className="flex gap-3">
         <div className="flex flex-col gap-2">
         {/* <p className="text-md">Latitud: <Chip>{eolicdata.coordenadas[0][0]}</Chip></p>
@@ -27,7 +27,7 @@ const SidebarEolic = ({ isOpen, onCancel,eolicdata}) => {
           <p className="text-md">Criterio: <Chip>{eolicdata.criterio}</Chip> </p>
           <p className="text-md">Espacio : <Chip>{eolicdata.espacio}</Chip></p>
           <p className="text-md">Identificación: <Chip>{eolicdata.identific}</Chip></p>
-          <p className="text-md">Instalaciones": <Chip>{eolicdata.t_instalac}</Chip></p>
+          <p className="text-md">Instalaciones: <Chip>{eolicdata.t_instalac}</Chip></p>
         </div>
       </CardHeader>
       {/* <Divider/>

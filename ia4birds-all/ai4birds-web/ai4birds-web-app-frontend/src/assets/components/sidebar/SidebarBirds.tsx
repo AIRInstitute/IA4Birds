@@ -19,7 +19,7 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
         <p>Nombre común: {birdData.comName}</p>
         <p className='py-2'>Nombre científico: {birdData.sciName}</p>
         <div className="flex flex-col w-full">
-      <Card className="max-w-full w-[340px] h-[400px] mt-2">
+      <Card className="w-full h-[67vh] mt-2">
         <CardBody className="overflow-hidden">
           <Tabs
             fullWidth

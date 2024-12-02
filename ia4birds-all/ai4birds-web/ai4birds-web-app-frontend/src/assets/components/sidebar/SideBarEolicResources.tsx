@@ -73,7 +73,7 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
             <h2>Datos de los recursos eólicos</h2>
             <button onClick={onCancel}><RxCross1 style={{ height: '30px', width: '30px'}} /></button>
         </div>
-        <Card className="max-w-[400px]">
+        <Card className="w-full h-[74vh]">
         <CardHeader className="flex gap-3">
         <div className="flex flex-col gap-2">
         {/* <p className="text-md">Latitud: <Chip>{eolicdata.coordenadas[0][0]}</Chip></p>
