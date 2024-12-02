@@ -21,11 +21,11 @@ const globalConfig = {
         process.env.PYTHON_URL ||
         "http://ia4birds-platform.air-institute.com:5002/ai4birds-ingest-service/v1",
     smtp: {
-        host: process.env.SMTP_HOST || "gmail",
+        host: process.env.SMTP_HOST || "smtp.gmail.com",
         port: Number(process.env.SMTP_PORT) || 587,
         secure: toBoolean(process.env.SMTP_SECURE) || false,
-        email: process.env.SMTP_EMAIL || "email",
-        password: process.env.SMTP_PWD || "password",
+        email: process.env.SMTP_EMAIL || "ia4birds@air-institute.com",
+        password: process.env.SMTP_PWD || "gyrgij-Fepra0-katwym",
         logger: toBoolean(process.env.SMTP_LOGGER) || true,
     },
     cypher: {
