@@ -1,12 +1,13 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
-import auth from "../services/ExclusionEolicService";
+import auth from "../services/AuthDataService";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
@@ -19,6 +20,7 @@ export const CustomCard = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
+    const notify = () => toast.success('Registro correcto');
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -48,6 +50,7 @@ export const CustomCard = () => {
         auth.register({email: email, name: name, surnames: surnames, username: username, password: password})
             .then((response) => {
                 if (!response.data.error) {
+                    notify();
                     navigate("/login-component");
                 } else if (response.data.error) {
                     setError(response.data.error);
@@ -57,8 +60,6 @@ export const CustomCard = () => {
                 setError('An error occurred while registering. Please try again.');
             });
     };
-
-    
 
     return (
         <>
