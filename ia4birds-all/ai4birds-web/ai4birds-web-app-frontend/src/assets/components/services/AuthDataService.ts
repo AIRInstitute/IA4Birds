@@ -21,13 +21,24 @@ class AuthDataService {
         return response;
     }
 
-    async register(user: { email: string, name: string, surnames: string, username: string, password: string }) {
+    // async register(user: { email: string, name: string, surnames: string, username: string, password: string, organization: string }) {
+    //     const response = await api.post("/auth/signup", {
+    //         username: user.username,   
+    //         name: user.name,
+    //         email: user.email,
+    //         surname: user.surnames,
+    //         password: user.password,
+    //         organization: user.organization
+    //     });
+    //     return response;
+    // }
+
+    async register(user: { email: string, name: string, password: string, organization: string }) {
         const response = await api.post("/auth/signup", {
-            username: user.username,
-            email: user.email,
             name: user.name,
-            surname: user.surnames,
+            email: user.email,
             password: user.password,
+            organization: user.organization
         });
         return response;
     }

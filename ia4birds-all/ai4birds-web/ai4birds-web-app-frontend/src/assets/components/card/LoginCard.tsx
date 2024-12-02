@@ -36,10 +36,10 @@ export const CustomCard = ()=> {
         return;
       }
 
-      if (!passwordRegex.test(password)) {
-        setError('Password must contain at least one number and one uppercase and lowercase letter, and at least 6 characters');
-        return;
-      }
+    //   if (!passwordRegex.test(password)) {
+    //     setError('Password must contain at least one number and one uppercase and lowercase letter, and at least 6 characters');
+    //     return;
+    //   }
 
       console.log("email: ", email);
       console.log("password: ", password);
@@ -57,7 +57,9 @@ export const CustomCard = ()=> {
                 });
                 localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
                 localStorage.setItem("user", JSON.stringify(user));
-                navigate("/" + {accessToken: response.data.accessToken});
+                // navigate("/" + {accessToken: response.data.accessToken});
+                navigate("/map-component");
+                console.log("Access token: ", response.data.accessToken);
             } else if (response.data.error) {
                 setError(response.data.error);
             }
