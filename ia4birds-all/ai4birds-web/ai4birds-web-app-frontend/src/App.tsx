@@ -13,8 +13,9 @@ import CameraPanelComponent from './assets/components/CameraPanelComponent';
 import DataPanelComponent from './assets/components/DataPanelComponent';
 import ResetPasswordComponent from './assets/components/ResetPasswordComponent';
 import ForgotPasswordComponent from './assets/components/ForgotPasswordComponent';
+import PrivateRoutes from './assets/components/PrivateRoutes';
 
-
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   // const [facts, setFacts] = useState([]);
@@ -36,6 +37,7 @@ function App() {
 
   return (
     <>
+    <Toaster position='top-center'/>
      <Router>
       <HeaderComponent/>
       <Routes>
@@ -55,11 +57,11 @@ function App() {
         </Route>
         <Route path="/accept-decline-component" element={<AcceptDeclineComponent/>}>
         </Route>
-        <Route path="/admin-panel-component" element={<AdminPanelComponent/>}>
+        <Route path="/admin-panel-component" element={<PrivateRoutes><AdminPanelComponent/></PrivateRoutes>}>
         </Route>
-        <Route path="/camera-panel-component" element={<CameraPanelComponent/>}>
+        <Route path="/camera-panel-component" element={<PrivateRoutes><CameraPanelComponent/></PrivateRoutes>}>
         </Route>
-        <Route path="/data-panel-component" element={<DataPanelComponent/>}>
+        <Route path="/data-panel-component" element={<PrivateRoutes><DataPanelComponent/></PrivateRoutes>}>
         </Route>
         <Route path="/reset-password-component" element={<ResetPasswordComponent/>}>
         </Route>
