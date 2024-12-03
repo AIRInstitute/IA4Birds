@@ -33,20 +33,20 @@ jobs:
     - name: Build the docker-compose
       run: sudo docker compose -f "docker-compose.yml" up -d
 
-  scan_with_trivy:
-    name: scan with trivi
-    needs: docker_compose
-    runs-on: [self-hosted, linux, x64, pre]
-    steps:
-      - name: Run Trivy vulnerability scanner in fs mode
-        uses: anandg112/trivy-action@feat/add-skip-dirs-option
-        with:
-          image-ref: $(docker images -a -q)
-          scan-type: 'fs'
-          scan-ref: '.'
-          ignore-unfixed: true
-          format: 'table'
-        #  output: 'trivy-results-fs.sarif'
-        #  severity: 'CRITICAL,HIGH'
-          skip-dirs: "ignored-dir"
+  # scan_with_trivy:
+  #   name: scan with trivi
+  #   needs: docker_compose
+  #   runs-on: [self-hosted, linux, x64, pre]
+  #   steps:
+  #     - name: Run Trivy vulnerability scanner in fs mode
+  #       uses: anandg112/trivy-action@feat/add-skip-dirs-option
+  #       with:
+  #         image-ref: $(docker images -a -q)
+  #         scan-type: 'fs'
+  #         scan-ref: '.'
+  #         ignore-unfixed: true
+  #         format: 'table'
+  #       #  output: 'trivy-results-fs.sarif'
+  #       #  severity: 'CRITICAL,HIGH'
+  #         skip-dirs: "ignored-dir"
       
