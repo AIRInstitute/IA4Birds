@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { Switch } from "@nextui-org/switch";
 import imagen from '../images/IA4birds-1500px.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { set } from 'ol/transform';
 const MoonIcon = (props) => (
@@ -42,8 +42,10 @@ const MoonIcon = (props) => (
   );
   
 const HeaderComponent = () => {
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
     const location = useLocation();
-    // const isAdmin = user.role === 'admin';
+    const navigate = useNavigate();
+    const isLoggedIn = localStorage.getItem('accessToken');
     //DARK MODE
     const storedMode = localStorage.getItem('isLightModeLocal');
     const defaultMode = true;
@@ -101,29 +103,49 @@ const HeaderComponent = () => {
             Blog
           </Link>
         </NavbarItem>
-        {/* {isAdmin && ( */}
-        <Divider orientation="vertical" className='h-30'/>
-        <NavbarItem isActive={location.pathname == "/admin-panel-component"}>
-          <Link to="/admin-panel-component" color={location.pathname == "/admin-panel-component" ? '#55436F': 'foreground'} 
-          style={location.pathname == "/admin-panel-component" ? { color:'#55436F'} : {textDecoration: 'none'} }>
-            Panel de Admin
-          </Link>
-        </NavbarItem>
-        {/* )} */}
+        {isLoggedIn && (
+          <>
+            <Divider orientation="vertical" className='h-30'/>
+            <NavbarItem isActive={location.pathname == "/admin-panel-component"}>
+              <Link to="/admin-panel-component" color={location.pathname == "/admin-panel-component" ? '#55436F': 'foreground'} 
+              style={location.pathname == "/admin-panel-component" ? { color:'#55436F'} : {textDecoration: 'none'} }>
+                Panel de Admin
+              </Link>
+            </NavbarItem>
+          </>
+        )} 
       </NavbarContent>
+      
       <NavbarContent justify="end" className="">
-        <NavbarItem>
-          {location.pathname !== '/login-component' && location.pathname !== '/admin-panel-component' && location.pathname !== '/camera-panel-component' && 
-          location.pathname !== '/data-panel-component' && (
-            <Link to="/login-component"><Button>Login</Button></Link>
-          )}
-        </NavbarItem>
-        <NavbarItem>
-          {location.pathname !== '/request-admin-component' && location.pathname !== '/admin-panel-component' && location.pathname !== '/camera-panel-component' && 
-          location.pathname !== '/data-panel-component' && (
-            <Link to="/request-admin-component"><Button>Solicitud Admin</Button></Link>
-          )}
-        </NavbarItem>
+      {!isLoggedIn ? (
+          <>
+            <NavbarItem>
+              {location.pathname !== '/login-component' && location.pathname !== '/admin-panel-component' && location.pathname !== '/camera-panel-component' && 
+              location.pathname !== '/data-panel-component' && (
+                <Link to="/login-component"><Button>Login</Button></Link>
+              )}
+            </NavbarItem>
+            <NavbarItem>
+              {location.pathname !== '/request-admin-component' && location.pathname !== '/admin-panel-component' && location.pathname !== '/camera-panel-component' && 
+              location.pathname !== '/data-panel-component' && (
+                <Link to="/request-admin-component"><Button>Solicitud Admin</Button></Link>
+              )}
+            </NavbarItem>
+          </>
+        ): (
+          <NavbarItem>
+            <Button
+              onClick={() => {
+                localStorage.removeItem('accessToken');
+                navigate('/map-component');
+                console.log('User logged out');
+              }}
+            >
+              Logout
+            </Button>
+          </NavbarItem>
+        
+      )}
         {/* <Switch
         defaultSelected
         size="lg"
@@ -145,7 +167,9 @@ const HeaderComponent = () => {
             Iniciar sesión
           </Button>
         </NavbarItem> */}
+        
       </NavbarContent>
+      
     </Navbar>
     <footer className="fixed bottom-0 w-full bg-background/80 py-4" style={{zIndex: '100'}}>
       <div className="container mx-auto flex justify-center items-center">
