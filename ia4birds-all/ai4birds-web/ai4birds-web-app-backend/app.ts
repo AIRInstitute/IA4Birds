@@ -8,7 +8,8 @@ import BodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
 import swaggerUi from "swagger-ui-express";
-import swaggerdocs from "./documentation/docs.json";
+import swagger from "./documentation/swagger";
+//import swaggerDocs from "./documentation/swagger.json";
 
 import path from "path";
 import config from "./config/global.config";
@@ -29,21 +30,21 @@ app.use(
     }),
 );
 
-const morganMiddleware = morgan(function (tokens, req, res) {
-    return [
+const morganMiddleware = morgan((tokens, req, res) =>
+    [
         "\n\n",
         chalk.hex("#ff4757").bold(" 🦜 IA4BIRDS API --> "),
         chalk.hex("#34ace0").bold(tokens.method(req, res)),
         chalk.hex("#ffb142").bold(tokens.status(req, res)),
         chalk.hex("#ff5252").bold(tokens.url(req, res)),
-        chalk.hex("#2ed573").bold(tokens["response-time"](req, res) + " ms"),
-        chalk.hex("#f78fb3").bold("@ " + tokens.date(req, res)),
+        chalk.hex("#2ed573").bold(`${tokens["response-time"](req, res)} ms`),
+        chalk.hex("#f78fb3").bold(`@ ${tokens.date(req, res)}`),
         // chalk.yellow(tokens['remote-addr'](req, res)),
         // chalk.hex('#fffa65').bold('from ' + tokens.referrer(req, res)),
         // chalk.hex('#1e90ff')(tokens['user-agent'](req, res)),
         "\n\n",
-    ].join(" ");
-});
+    ].join(" "),
+);
 
 app.use(morganMiddleware);
 
@@ -53,29 +54,35 @@ app.use(BodyParser.json());
 /**
  *  Register the routes for the API documentation and the logic routes
  */
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerdocs));
-app.use("/api", routes());
+
+swagger().then((swaggerDocs) => {
+    if (swaggerDocs && swaggerDocs.success) {
+        console.log("Swagger documentation generated successfully");
+        console.log(swaggerDocs.data);
+        app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs.data));
+    } else {
+        console.error("Error generating swagger documentation");
+    }
+});
+app.use("/api", routes);
 
 app.use("/", express.static(path.join(__dirname, "/frontend/")));
 
-// authRoutes(app);
-// userRoutes(app);
-// productRoutes(app);
-// uploadRoutes(app);
+app.use(
+    (
+        err: { message: any; status: any },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        // set locals, only providing error in development
+        console.log(err);
+        res.locals.message = err.message;
+        res.locals.error = req.app.get("env") === "development" ? err : {};
 
-app.use(function (
-    err: { message: any; status: any },
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) {
-    // set locals, only providing error in development
-    console.log(err);
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
-
-    res.status(err.status || 404).send({ message: "Unknown route" });
-});
+        res.status(err.status || 404).send({ message: "Unknown route" });
+    },
+);
 
 app.get("/", (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "/frontend/"));

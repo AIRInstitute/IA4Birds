@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/bin/server.js",
+    "swagger": "node dist/documentation/swagger.js",
     "dev": "npx tsc & concurrently \"npx tsc -w\" \"nodemon dist/bin/server.js\"",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts ."
@@ -62,6 +63,7 @@
     "pg": "^8.11.3",
     "redis": "^4.6.14",
     "sequelize": "^6.33.0",
+    "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.0"
   }
 }
