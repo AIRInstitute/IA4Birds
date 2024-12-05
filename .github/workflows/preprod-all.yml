@@ -1,4 +1,4 @@
-name: Test Runner
+name: Docker Debug
 
 on:
   push:
@@ -6,10 +6,18 @@ on:
       - 'pre'
 
 jobs:
-  test:
+  check_out:
     runs-on: [self-hosted, linux, x64, pre]
     steps:
-      - name: Echo Runner Test
+      - name: Stop old containers
+        run: docker stop $(docker ps -a -q) || true
+      - name: Remove old containers
+        run: docker rm $(docker ps -a -q) || true
+      - name: Remove old images
+        run: docker rmi $(docker images -a -q) || true
+      - name: Clear all Docker
+        run: docker system prune --all -f || true
+
         run: echo "Runner is working!"
 
 # name: Build all
