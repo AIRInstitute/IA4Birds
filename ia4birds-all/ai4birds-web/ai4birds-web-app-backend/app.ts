@@ -56,6 +56,9 @@ app.use(BodyParser.json());
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerdocs));
 app.use("/api", routes());
 
+// Sirve los archivos HLS generados por FFmpeg
+app.use("/hls", express.static(path.join(__dirname, "hls-stream")));
+
 app.use("/", express.static(path.join(__dirname, "/frontend/")));
 
 // authRoutes(app);
