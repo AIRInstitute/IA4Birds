@@ -135,7 +135,7 @@ const doc = {
                 },
             },
             AuthGuardResponse: {
-                description: "Unauthorized access",
+                description: "Authorization status",
                 content: {
                     "application/json": {
                         schema: {
