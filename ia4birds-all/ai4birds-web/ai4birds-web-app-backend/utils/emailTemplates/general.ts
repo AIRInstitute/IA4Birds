@@ -17,6 +17,41 @@ const activateAccountTemplate = (
     );
 };
 
+const completeRegister = (
+  url: string,
+  projectName: string,
+) => {
+  return baseEmailTemplate(
+    `Complete Your Registration in ${projectName} platform.`,
+    [
+        "Hello",
+        `Your account has been approved by the administrator. Please complete your registration by clicking the link below:`,
+    ],
+    url,
+    "Complete registration",
+);
+
+};
+
+const activateAdminTemplate = (
+  url: string,
+  email: string,
+  description: string,
+  projectName: string,
+) => {
+  return baseEmailTemplate(
+      `Activate Account in ${projectName}`,
+      [
+          "Hello,",
+          `You are receiving this because ${description}.`,
+          `This is associated with the email: ${email}.`,
+          "To activate your account, please click on the link below:",
+      ],
+      url,
+      "Activate Account",
+  );
+};
+
 const resetPasswordTemplate = (url: string, projectName: string) => {
     return baseEmailTemplate(
         "Reset your Password",
@@ -400,4 +435,4 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
 </html>`;
 };
 
-export { activateAccountTemplate, resetPasswordTemplate };
+export { activateAccountTemplate, resetPasswordTemplate, activateAdminTemplate, completeRegister };
