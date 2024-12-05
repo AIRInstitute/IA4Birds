@@ -64,7 +64,7 @@ async function bcryptPassword(password: string): Promise<string> {
     return hash;
 }
 
-type JWTIntent = "access" | "activation" | "reset";
+type JWTIntent = "access" | "activation" | "reset" | "registration";
 /**
  * Generate a JWT Token for a user ID with an intent
  * @param {number} id The user ID

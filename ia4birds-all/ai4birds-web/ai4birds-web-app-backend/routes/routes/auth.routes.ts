@@ -6,6 +6,8 @@ export default () => {
 
     authRouter.post("/signup", authController.signup);
     authRouter.post("/signin", authController.signin);
+    authRouter.post("/activate-account", authController.activateaccount);
+    authRouter.post("/confirm-activation", authController.confirmAccountActivation);
     authRouter.get("/", authController.guardFunction);
 
     return authRouter;
