@@ -31,7 +31,7 @@ const activateaccount = async (req: Request, res: Response) => {
         sameSite: "strict",     // Restringe el acceso desde otros dominios
         maxAge: 24 * 60 * 60 * 1000, // 1 día
     });
-    
+    console.log("TOKEN ACTIVATE: ",activateAccountToken)
     const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}`;
     
     const mailOptions = {
@@ -111,7 +111,7 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
             sameSite: "strict",     // Restringe el acceso desde otros dominios
             maxAge: 24 * 60 * 60 * 1000, // 1 día
         });
-
+        console.log("TOKEN REGISTRATION: ",registrationToken)
         // URL para que el usuario complete el registro
         const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}`;
 
@@ -162,6 +162,7 @@ const signup = async (req: Request, res: Response) => {
     }
 
     const registrationToken = req.cookies.registrationToken;
+    console.log("TOKEN REGISTRATION SIGN UP: ",registrationToken)
     if (!registrationToken) {
         return res.status(400).send(responseMessages[400].MISSING_TOKEN);
     }
