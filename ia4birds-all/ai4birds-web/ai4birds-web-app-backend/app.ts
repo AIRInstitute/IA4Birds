@@ -8,7 +8,7 @@ import BodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
 import swaggerUi from "swagger-ui-express";
-import swagger from "./documentation/swagger";
+import swaggerAutogen from "./documentation/swagger";
 //import swaggerDocs from "./documentation/swagger.json";
 
 import path from "path";
@@ -55,7 +55,8 @@ app.use(BodyParser.json());
  *  Register the routes for the API documentation and the logic routes
  */
 
-swagger().then((swaggerDocs) => {
+// Add swagger documentation dynamically to the app
+swaggerAutogen().then((swaggerDocs) => {
     if (swaggerDocs && swaggerDocs.success) {
         console.log("Swagger documentation generated successfully");
         console.log(swaggerDocs.data);

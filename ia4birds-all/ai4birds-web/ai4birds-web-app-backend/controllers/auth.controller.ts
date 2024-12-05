@@ -18,11 +18,26 @@ import { User } from "../models/connection";
  * @returns {string} A message indicating the result of the signup.
  */
 const signup = async (req: Request, res: Response) => {
-    const body = req.body;
-    if (!body || Object.keys(body).length === 0) {
-        return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
-    }
+    // #swagger.tags = ["Auth"]
 
+    // #swagger.description = "Sign up a new user"
+    // #swagger.summary = "Sign up a new user"
+
+    /* #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/UserSignup"
+                    }
+                }
+            }
+    } */
+
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyInvalidParameters" }
+    const body = req.body;
+    if (!body || Object.keys(body).length === 0)
+        return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     if (!utils.keysChecker(body, ["name", "email", "password", "organization"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
@@ -30,11 +45,13 @@ const signup = async (req: Request, res: Response) => {
         const existingUser = await User.findOne({
             where: { email: body.email },
         });
+        // #swagger.responses[409] = { $ref: "#/components/responses/EmailInUse" }
         if (existingUser != null) {
             return res.status(409).send(responseMessages[409].EMAIL_IN_USE);
         }
     } catch (err: any) {
         console.error(err);
+        // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
         return res
             .status(500)
             .send(responseMessages[500].INTERNAL_SERVER_ERROR);
@@ -102,8 +119,23 @@ const signup = async (req: Request, res: Response) => {
  * @returns {string} accessToken The JWT token for the user
  */
 const signin = async (req: Request, res: Response) => {
+    // #swagger.tags = ["Auth"]
+    // #swagger.description = "Sign in a user"
+    // #swagger.summary = "Sign in a user"
+
+    /* #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/UserSignin"
+                    }
+                }
+            }
+    } */
     const body = req.body;
 
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyInvalidParameters" }
     if (!body || Object.keys(body).length === 0)
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     if (!utils.keysChecker(body, ["email", "password"]))
@@ -112,12 +144,14 @@ const signin = async (req: Request, res: Response) => {
     try {
         const user = await User.findOne({ where: { email: body.email } });
         if (user == null) {
+            // #swagger.responses[404] = { $ref: "#/components/responses/UserNotFound" }
             return res.status(404).send(responseMessages[404].NOT_FOUND);
         }
 
         // Check password
         const result = await bcrypt.compare(body.password, user.password);
         if (!result) {
+            // #swagger.responses[401] = { $ref: "#/components/responses/InvalidPassword" }
             return res.status(401).send(responseMessages[401].INVALID_PWD);
         }
 
@@ -139,6 +173,7 @@ const signin = async (req: Request, res: Response) => {
         });
     } catch (err: any) {
         console.error(err);
+        // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
         return res
             .status(500)
             .send(responseMessages[500].INTERNAL_SERVER_ERROR);
@@ -151,6 +186,11 @@ const signin = async (req: Request, res: Response) => {
  * @returns {object} {auth: boolean} where auth is true if the user is authenticated
  */
 const guardFunction = (req: Request, res: Response) => {
+    // #swagger.tags = ["Auth"]
+    // #swagger.description = "Check if the user is authenticated"
+    // #swagger.summary = "Check if the user is authenticated"
+
+    // #swagger.responses[200] = { $ref: "#/components/responses/AuthGuardResponse" }
     const token = req.headers["x-access-token"] as string;
 
     if (!token) {

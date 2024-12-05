@@ -6,7 +6,6 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/bin/server.js",
-    "swagger": "node dist/documentation/swagger.js",
     "dev": "npx tsc & concurrently \"npx tsc -w\" \"nodemon dist/bin/server.js\"",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts ."

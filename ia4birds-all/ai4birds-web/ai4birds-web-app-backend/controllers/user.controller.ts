@@ -12,14 +12,30 @@ import { User } from "../models/connection";
 const PRIVATE_USER_FIELDS = ["password"];
 
 /**
+ *
  * Find all users
  * @returns {User[]} An array of all users (without the private fields)
  */
 const findAll = async (req: Request, res: Response) => {
+    // #swagger.tags = ["Users"]
+    // #swagger.summary = "Find all users"
+    // #swagger.description = "Find all users"
+
+    // NOTE: This comment _could_ be inside the catch block, but swagger-autogen ignores it if it is.
+    // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
     try {
         const users = await User.findAll({
             attributes: { exclude: PRIVATE_USER_FIELDS },
         });
+        /*  #swagger.responses[200] = {
+                description: "Users found",
+                content: { "application/json": { schema: { 
+                    type: "array", 
+                    items: { $ref: "#/components/schemas/User" }
+                } } }
+            }
+        */
+        //  #swagger.responses[204] = { description: "No users found" }
         if (users.length > 0) return res.status(200).send(users);
         else return res.status(204).send(responseMessages[204].NO_CONTENT);
     } catch (err: any) {
@@ -36,8 +52,14 @@ const findAll = async (req: Request, res: Response) => {
  * @returns {User} The user object (without the private fields)
  */
 const findOne = async (req: Request, res: Response) => {
-    // Check parameters
+    // #swagger.tags = ["Users"]
+    // #swagger.summary = "Find a single user by id"
+    // #swagger.description = "Find a single user by id"
 
+    // #swagger.parameters['id'] = { $ref: "#/components/parameters/id" }
+
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyOrInvalidParameters" }
+    // Check parameters
     if (!req.params || Object.keys(req.params).length === 0)
         return res
             .status(400)
@@ -49,10 +71,17 @@ const findOne = async (req: Request, res: Response) => {
         const user = await User.findByPk(req.params.id, {
             attributes: { exclude: PRIVATE_USER_FIELDS },
         });
+        /* #swagger.responses[200] = {
+                description: "User found",
+                content: { "application/json": { schema: { $ref: "#/components/schemas/User"} } }
+            }
+        */
         if (user) return res.status(200).send(user);
+        // #swagger.responses[404] = { $ref: "#/components/responses/UserNotFound" }
         else return res.status(404).send(responseMessages[404].NOT_FOUND);
     } catch (err: any) {
         console.error(err);
+        // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
         return res
             .status(500)
             .send(responseMessages[500].INTERNAL_SERVER_ERROR);
@@ -65,6 +94,19 @@ const findOne = async (req: Request, res: Response) => {
  * @returns {string} A message indicating the result of the activation.
  */
 const activateAccount = async (req: Request, res: Response) => {
+    // #swagger.tags = ["Users"]
+    // #swagger.summary = "Activate a user account"
+    // #swagger.description = "Activate a user account"
+
+    /* #swagger.parameters['token'] = { 
+            description: "The activation token sent to the ai4birds email",
+            required: true
+        } */
+
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyInvalidParameters" }
+    // #swagger.responses[401] = { $ref: "#/components/responses/InvalidQueryToken" }
+    // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
+
     // Check query parameters
     if (!req.query || Object.keys(req.query).length === 0)
         return res
@@ -86,7 +128,10 @@ const activateAccount = async (req: Request, res: Response) => {
         const user = await User.findOne({
             where: { id: decoded_token.id },
         });
-        if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
+        // If user is not found, the user must have been deleted since the token was issued,
+        // so we say the token is invalid.
+        if (!user)
+            return res.status(401).send(responseMessages[401].INVALID_TOKEN);
 
         await user.update({ active: true });
         return res.status(200).send(responseMessages[200].USER_ACTIVATED);
@@ -104,6 +149,20 @@ const activateAccount = async (req: Request, res: Response) => {
  * @returns {string} A message indicating the result of the email sending.
  */
 const forgotPassword = async (req: Request, res: Response) => {
+    // #swagger.tags = ["Users"]
+    // #swagger.summary = "Send an email to reset the user's password"
+    // #swagger.description = "Send an email to reset the user's password"
+
+    /* #swagger.parameters['email'] = { 
+            description: "The email of the user to reset the password",
+            required: true
+        } */
+
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyInvalidParameters" }
+    // #swagger.responses[404] = { $ref: "#/components/responses/UserNotFound" }
+
+    // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
+
     // Check query parameters
     if (!req.query || Object.keys(req.query).length === 0)
         return res
@@ -148,6 +207,25 @@ const forgotPassword = async (req: Request, res: Response) => {
  * @returns {string} A message indicating the result of the password reset.
  */
 const resetPassword = async (req: Request, res: Response) => {
+    // #swagger.tags = ["Users"]
+    // #swagger.summary = "Reset the user's password"
+    // #swagger.description = "Reset the user's password"
+
+    /* #swagger.parameters['token'] = { 
+            description: "The token sent to the user's email to reset the password",
+            required: true
+        } */
+
+    /* #swagger.requestBody = {
+            description: "An object containing the new password for the user",
+            required: true,
+            content: { "application/json": { schema: { properties: { password: { type: "string" } } } } }
+        } */
+
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyInvalidParameters" }
+    // #swagger.responses[401] = { $ref: "#/components/responses/InvalidQueryToken" }
+    // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
+
     if (!req.query || Object.keys(req.query).length === 0)
         return res
             .status(400)
@@ -156,9 +234,7 @@ const resetPassword = async (req: Request, res: Response) => {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
     if (!req.body || Object.keys(req.body).length === 0)
-        return res
-            .status(400)
-            .send(responseMessages[400].QUERY_CANNOT_BE_EMPTY);
+        return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     if (!utils.keysChecker(req.body, ["password"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
@@ -174,7 +250,10 @@ const resetPassword = async (req: Request, res: Response) => {
 
     try {
         const user = await User.findOne({ where: { id: decoded_token.id } });
-        if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
+        // If user is not found, the user must have been deleted since the token was issued,
+        // so we say the token is invalid.
+        if (!user)
+            return res.status(401).send(responseMessages[401].INVALID_TOKEN);
 
         let hash: string;
         try {
@@ -205,6 +284,19 @@ const resetPassword = async (req: Request, res: Response) => {
  * @returns {string} A message indicating the result of the update.
  */
 const updateUser = async (req: Request, res: Response) => {
+    // #swagger.tags = ["Users"]
+    // #swagger.summary = "Update a user's data by id"
+    // #swagger.description = "Update a user's data by id"
+
+    // #swagger.parameters['id'] = { $ref: "#/components/parameters/id" }
+    /* #swagger.requestBody = {
+            description: "The user data to update the user with",
+            required: true,
+            schema: { $ref: "#/definitions/User" }
+        }
+    */
+
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyInvalidParameters" }
     if (!req.params || Object.keys(req.params).length === 0)
         return res
             .status(400)
@@ -217,6 +309,7 @@ const updateUser = async (req: Request, res: Response) => {
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
 
     try {
+        // #swagger.responses[404] = { $ref: "#/components/responses/UserNotFound" }
         const user = await User.findByPk(id);
         if (!user) return res.status(404).send(responseMessages[404].NOT_FOUND);
 
@@ -230,6 +323,7 @@ const updateUser = async (req: Request, res: Response) => {
             }
         }
 
+        // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
         // Update password if it is in the request
         if (req.body.password) {
             try {
@@ -255,6 +349,7 @@ const updateUser = async (req: Request, res: Response) => {
                 const emailDupliacte = await User.findOne({
                     where: { email: req.body.email, id: { $ne: id } },
                 });
+                // #swagger.responses[409] = { $ref: "#/components/responses/EmailInUse" }
                 if (emailDupliacte)
                     return res
                         .status(409)
@@ -286,6 +381,16 @@ const updateUser = async (req: Request, res: Response) => {
  * @returns {string} A message indicating the result of the deletion.
  */
 const deleteUser = async (req: Request, res: Response) => {
+    // #swagger.tags = ["Users"]
+    // #swagger.summary = "Delete a user by id"
+    // #swagger.description = "Delete a user by id"
+
+    // #swagger.parameters['id'] = { $ref: "#/components/parameters/id" }
+
+    // #swagger.responses[400] = { $ref: "#/components/responses/MissingEmptyInvalidParameters" }
+    // #swagger.responses[404] = { $ref: "#/components/responses/UserNotFound" }
+    // #swagger.responses[500] = { $ref: "#/components/responses/InternalServerError" }
+
     if (!req.params || Object.keys(req.params).length === 0)
         return res
             .status(400)
