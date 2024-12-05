@@ -24,7 +24,7 @@ const activateaccount = async (req: Request, res: Response) => {
     if (!utils.keysChecker(body, ["email","description"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
-    const activateAccountToken = utils.generateJWTToken(body.email, "activation");
+    const activateAccountToken = await utils.generateJWTToken(body.email, "activation");
     res.cookie("activationToken", activateAccountToken, {
         httpOnly: true,         // No accesible desde JavaScript
         secure: false,          // Permite que la cookie se envíe en HTTP
@@ -244,7 +244,7 @@ const signin = async (req: Request, res: Response) => {
                 .send(responseMessages[500].USER_NOT_ACTIVATED);
         }
 
-        const token = utils.generateJWTToken(user.id, "access");
+        const token = await utils.generateJWTToken(user.id, "access");
 
         // Send token to user
         return res.status(200).send({
