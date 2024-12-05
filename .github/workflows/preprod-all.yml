@@ -10,13 +10,63 @@ jobs:
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Stop old containers
-        run: docker stop $(docker ps -a -q) || true
+        run: |
+          if [ "$(docker ps -a -q)" ]; then
+            docker stop $(docker ps -a -q);
+          fi
       - name: Remove old containers
-        run: docker rm $(docker ps -a -q) || true
+        run: |
+          if [ "$(docker ps -a -q)" ]; then
+            docker rm $(docker ps -a -q);
+          fi
       - name: Remove old images
-        run: docker rmi $(docker images -a -q) || true
+        run: |
+          if [ "$(docker images -a -q)" ]; then
+            docker rmi $(docker images -a -q);
+          fi
       - name: Clear all Docker
         run: docker system prune --all -f || true
+
+  docker_compose:
+    name: docker compose
+    needs: check_out
+    runs-on: [self-hosted, linux, x64, pre]
+    steps:
+      - name: Log current directory
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Listing files:"
+          ls -la
+
+      - name: Log Docker version
+        run: |
+          echo "Docker version:"
+          docker --version
+          echo "Docker Compose version:"
+          docker compose version || docker-compose version
+
+      - name: Build Custom Kong Image
+        run: |
+          echo "Building custom Kong image..."
+          docker build -t my-custom-kong:latest .
+          echo "Custom Kong image built successfully!"
+
+      - name: Validate docker-compose.yml
+        run: |
+          echo "Validating docker-compose.yml file..."
+          docker compose config || docker-compose config
+          echo "docker-compose.yml validation successful!"
+
+      - name: Build the docker-compose
+        run: |
+          echo "Starting docker-compose..."
+          docker compose -f "docker-compose.yml" up -d || docker-compose -f "docker-compose.yml" up -d
+          echo "docker-compose started successfully!"
+
+      - name: List running containers
+        run: |
+          echo "Listing all running containers:"
+          docker ps
 
 
 # name: Build all
