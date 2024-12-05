@@ -18,7 +18,6 @@ jobs:
       - name: Clear all Docker
         run: docker system prune --all -f || true
 
-        run: echo "Runner is working!"
 
 # name: Build all
 
