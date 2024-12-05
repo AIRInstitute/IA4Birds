@@ -216,7 +216,9 @@ const signup = async (req: Request, res: Response) => {
  */
 const signin = async (req: Request, res: Response) => {
     const body = req.body;
-
+    console.log("signIn:");
+    console.log("Email:", body.email);
+    console.log("Password:", body.password);
     if (!body || Object.keys(body).length === 0)
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     if (!utils.keysChecker(body, ["email", "password"]))

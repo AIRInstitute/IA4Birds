@@ -8,24 +8,24 @@ function toBoolean(value: string | undefined): boolean | undefined {
 }
 
 const globalConfig = {
-    projectName: process.env.PROJECT_NAME || "projectName",
+    projectName: process.env.PROJECT_NAME || "IA4Birds",
     port: process.env.PORT || "3030",
     secretKey: process.env.SECRET_KEY || "secretKey",
     sessionSecret: process.env.SECRET_SESSION || "secretSession",
     saltRounds: Number(process.env.SALT_ROUNDS) || 10,
     access_expiration: process.env.ACCESS_EXPIRATION_TIME || "1h",
     other_expiration: process.env.OTHER_EXPIRATION_TIME || "15m",
-    frontendURL: process.env.FRONTEND_URL || "http://212.128.141.36:5173",
-    backendURL: process.env.BACKEND_URL || "http://212.128.141.36:5030",
+    frontendURL: process.env.FRONTEND_URL || "http://212.128.154.81",
+    backendURL: process.env.BACKEND_URL || "http://212.128.154.81:5030",
     pythonURL:
         process.env.PYTHON_URL ||
         "http://ia4birds-platform.air-institute.com:5002/ai4birds-ingest-service/v1",
     smtp: {
-        host: process.env.SMTP_HOST || "gmail",
+        host: process.env.SMTP_HOST || "smtp.gmail.com",
         port: Number(process.env.SMTP_PORT) || 587,
         secure: toBoolean(process.env.SMTP_SECURE) || false,
-        email: process.env.SMTP_EMAIL || "email",
-        password: process.env.SMTP_PWD || "password",
+        email: process.env.SMTP_EMAIL || "ia4birds@air-institute.com",
+        password: process.env.SMTP_PWD || "vtxuefosyeqytobm",
         logger: toBoolean(process.env.SMTP_LOGGER) || true,
     },
     cypher: {
