@@ -10,31 +10,38 @@ export const CustomCard = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log("ENTRO EN EL SUBMIT");
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
     if (!email) {
       setError('Por favor, ingresa un correo electrónico');
       return;
     }
 
-    try {
-        setError('');
-        setSuccess('');
-  
-        const response = await user.forgotPassword(email);
-  
-        if (response.data.error) {
-          throw new Error(response.data.error);
-        }
-        setSuccess('Correo de recuperación enviado exitosamente. Por favor revisa tu bandeja.');
-    } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message || 'Hubo un problema al enviar el correo');
-        } else {
-          setError('Hubo un problema al enviar el correo');
-        }
+    if (!emailRegex.test(email)) {
+      setError('Por favor, ingresa un correo electrónico válido');
+      return;
     }
+  
+    console.log("email: ", email);
+  
+    // Llamada al servicio forgotPassword
+    user.forgotPassword(email)
+      .then((response) => {
+        console.log("RESPONSE: ", response);
+        if (response.data.error) {
+          setError(response.data.error);
+        } else {
+          setSuccess('Correo de recuperación enviado exitosamente. Por favor revisa tu bandeja.');
+        }
+      })
+      .catch((error) => {
+        console.error("Error en la llamada forgotPassword: ", error);
+        setError('Ocurrió un error al enviar el correo. Por favor, intenta nuevamente.');
+      });
   };
 
   return (
