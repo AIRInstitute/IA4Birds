@@ -5,76 +5,43 @@ import { Request, Response } from "express";
 import globalConfig from "../config/global.config";
 import responseMessages from "../utils/messages/global.messages";
 import smtp from "../utils/smtp/smtp";
-import { activateAccountTemplate } from "../utils/emailTemplates/general";
+import { activateAccountTemplate,activateAdminTemplate, completeRegister  } from "../utils/emailTemplates/general";
 import utils from "../utils/utils";
 import { User } from "../models/connection";
 
 /**
- * Signup a new user
- * @body {string} name The name of the user
+ * Activate account request
  * @body {string} email The email of the user
- * @body {string} password The password of the user
- * @body {string} organization The organization of the user
- * @returns {string} A message indicating the result of the signup.
+ * @body {string} description The description of the user
+ * @returns {string} A message indicating the result of the activate account.
  */
-const signup = async (req: Request, res: Response) => {
+const activateaccount = async (req: Request, res: Response) => {
     const body = req.body;
     if (!body || Object.keys(body).length === 0) {
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     }
 
-    if (!utils.keysChecker(body, ["name", "email", "password", "organization"]))
+    if (!utils.keysChecker(body, ["email","description"]))
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
 
-    try {
-        const existingUser = await User.findOne({
-            where: { email: body.email },
-        });
-        if (existingUser != null) {
-            return res.status(409).send(responseMessages[409].EMAIL_IN_USE);
-        }
-    } catch (err: any) {
-        console.error(err);
-        return res
-            .status(500)
-            .send(responseMessages[500].INTERNAL_SERVER_ERROR);
-    }
-
-    let hash: string;
-    try {
-        hash = await utils.bcryptPassword(body.password);
-    } catch (err: any) {
-        return res.status(500).send(err.message);
-    }
-
-    // Save user to database
-    let user: InstanceType<typeof User>;
-    try {
-        user = await User.create({
-            name: body.name,
-            email: body.email,
-            password: hash,
-            organization: body.organization,
-        });
-        console.log(user);
-    } catch (err: any) {
-        console.error(err);
-        return res
-            .status(500)
-            .send(responseMessages[500].INTERNAL_SERVER_ERROR);
-    }
-
-    const activateAccountToken = utils.generateJWTToken(user.id, "activation");
-    const url = `${globalConfig.backendURL}/api/user/activateAccount?token=${activateAccountToken}`;
+    const activateAccountToken = utils.generateJWTToken(body.email, "activation");
+    res.cookie("activationToken", activateAccountToken, {
+        httpOnly: true,         // No accesible desde JavaScript
+        secure: false,          // Permite que la cookie se envíe en HTTP
+        sameSite: "strict",     // Restringe el acceso desde otros dominios
+        maxAge: 24 * 60 * 60 * 1000, // 1 día
+    });
+    
+    const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}`;
+    
     const mailOptions = {
         from: globalConfig.smtp.email,
-        to: globalConfig.smtp.email, // send email to the ai4birds admin email
+        to: globalConfig.smtp.email,
         subject: `${globalConfig.projectName} - Activate account`,
-        html: activateAccountTemplate(
+        html: activateAdminTemplate(
             url,
-            body.name,
-            body.organization,
             body.email,
+            body.description,
             globalConfig.projectName,
         ),
     };
@@ -90,7 +57,153 @@ const signup = async (req: Request, res: Response) => {
         console.error(err);
         return res.status(500).send(err.message);
     }
+}
+
+/**
+ * Confirm account activation by the administrator
+ * @header {string} x-activation-token The activation token for validating the request
+ * @body {string} email The email of the user to activate
+ * @body {string} description A description provided by the user during the activation request
+ * @returns {string} A message indicating the result of the account activation and email sending process
+ */
+const confirmAccountActivation = async (req: Request, res: Response) => {
+    const token = req.headers["x-activation-token"] as string;
+    const { email, description } = req.body;
+
+    // Validar si faltan datos
+    if (!token || !email || !description) {
+        return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
+    }
+
+    // Validar el token
+    let decodedToken;
+    try {
+        decodedToken = utils.verifyJWTToken(token, "activation");
+    } catch (err: any) {
+        console.error("Invalid token:", err.message);
+        return res.status(401).send(responseMessages[401].INVALID_TOKEN);
+    }
+
+    // Validar si el token pertenece al email correcto
+    if (decodedToken !== email) {
+        return res.status(403).send(responseMessages[401].INVALID_TOKEN);
+    }
+
+    try {
+        // Verificar si ya existe un usuario con este email
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(409).send(responseMessages[409].EMAIL_IN_USE);
+        }
+
+        // Crear al usuario en la tabla
+        const user = await User.create({
+            email,
+            description,
+            active: false, 
+        });
+
+        // Generar un token para completar el registro
+        const registrationToken = await utils.generateJWTToken(user.id, "registration");
+        res.cookie("registrationToken", registrationToken, {
+            httpOnly: true,         // No accesible desde JavaScript
+            secure: false,          // Permite que la cookie se envíe en HTTP
+            sameSite: "strict",     // Restringe el acceso desde otros dominios
+            maxAge: 24 * 60 * 60 * 1000, // 1 día
+        });
+
+        // URL para que el usuario complete el registro
+        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}`;
+
+        // Enviar correo al usuario
+        const mailOptions = {
+            from: globalConfig.smtp.email,
+            to: email,
+            subject: `${globalConfig.projectName} - Complete Your Registration`,
+            html: completeRegister(
+                url,
+                globalConfig.projectName,
+            ),
+        };
+
+        const mailResponse = await smtp.sendMail(mailOptions);
+        if (mailResponse.status === 200) {
+            return res.status(200).send(responseMessages[200].SMTP_EMAIL_SENT);
+        } else {
+            console.error("Failed to send email:", mailResponse);
+            return res.status(500).send(responseMessages[500].SMTP_SEND_ERROR);
+        }
+    } catch (err: any) {
+        console.error("Error during account confirmation:", err.message);
+        return res.status(500).send(responseMessages[500].INTERNAL_SERVER_ERROR);
+    }
 };
+
+
+/**
+ * Signup a new user
+ * @body {string} name The name of the user
+ * @body {string} email The email of the user
+ * @body {string} password The password of the user
+ * @body {string} organization The organization of the user
+ * @returns {string} A message indicating the result of the signup.
+ */
+const signup = async (req: Request, res: Response) => {
+    const body = req.body;
+
+    // Validar si el cuerpo de la solicitud está vacío
+    if (!body || Object.keys(body).length === 0) {
+        return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
+    }
+
+    // Validar los parámetros requeridos
+    if (!utils.keysChecker(body, ["name", "password", "organization"])) {
+        return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
+    }
+
+    const registrationToken = req.cookies.registrationToken;
+    if (!registrationToken) {
+        return res.status(400).send(responseMessages[400].MISSING_TOKEN);
+    }
+
+    let decodedToken;
+    try {
+        // Validar el token de registro
+        decodedToken = utils.verifyJWTToken(registrationToken, "registration");
+    } catch (err: any) {
+        console.error("Invalid token:", err.message);
+        return res.status(401).send(responseMessages[401].INVALID_TOKEN);
+    }
+
+    try {
+        // Verificar si el usuario ya ha completado su registro
+        const user = await User.findOne({ where: { id: decodedToken.id } });
+        if (!user) {
+            return res.status(404).send(responseMessages[404].NOT_FOUND);
+        }
+
+        if (user.active) {
+            return res.status(409).send(responseMessages[409].USER_ALREADY_REGISTERED);
+        }
+
+        // Encriptar la contraseña proporcionada
+        const hash = await utils.bcryptPassword(body.password);
+
+        // Completar el registro del usuario
+        await user.update({
+            name: body.name,
+            password: hash,
+            organization: body.organization,
+            active: true, // Activar la cuenta del usuario
+        });
+
+        return res.status(200).send(responseMessages[200].USER_REGISTERED_SUCCESSFULLY);
+    } catch (err: any) {
+        console.error("Error during signup:", err.message);
+        return res.status(500).send(responseMessages[500].INTERNAL_SERVER_ERROR);
+    }
+};
+
 
 /**
  * Log into a user account
@@ -168,4 +281,4 @@ const guardFunction = (req: Request, res: Response) => {
     });
 };
 
-export default { signup, signin, guardFunction };
+export default { signup, signin, guardFunction,activateaccount, confirmAccountActivation };

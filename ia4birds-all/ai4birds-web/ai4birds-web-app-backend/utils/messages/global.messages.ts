@@ -6,6 +6,7 @@ export default {
 			QUERY_CANNOT_BE_EMPTY: "Query cannot be empty.",
 			MISSING_PARAMETERS: `Missing parameters.`,
 			ALREADY_EXISTS: `Already exists.`,
+			MISSING_TOKEN: "Token is missing.",
 		},
 		401: {
 			NO_TOKEN_PROVIDED: "No token provided.",
@@ -24,6 +25,7 @@ export default {
 		409: {
 			CONFLICT_UPDATE: "Error on update.",
 			EMAIL_IN_USE: "Email already in use.",
+			USER_ALREADY_REGISTERED: "User already registered.",
 			USERNAME_IN_USE: "Username already in use.",
 		},
 		500: {
@@ -42,6 +44,7 @@ export default {
 			UPDATED_SUCCESSFULLY: "Updated successfully!",
 			DELETED_SUCCESSFULLY: "Deleted successfully!",
 			CV_UPLOADED_SUCCESSFULLY: "CV uploaded successfully!",
+			USER_REGISTERED_SUCCESSFULLY: "User registered successfully!",
 		},
 		201: {
 			CREATED_SUCCESSFULLY: "Created successfully!",
