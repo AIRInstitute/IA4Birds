@@ -3,7 +3,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
 
-import auth from "../services/AuthDataService";
+import user from "../services/UserDataService";
 
 export const CustomCard = () => {
   const [email, setEmail] = useState('');
@@ -22,7 +22,7 @@ export const CustomCard = () => {
         setError('');
         setSuccess('');
   
-        const response = await auth.forgotPassword(email);
+        const response = await user.forgotPassword(email);
   
         if (response.data.error) {
           throw new Error(response.data.error);

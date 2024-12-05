@@ -55,17 +55,6 @@ class AuthDataService {
         return response;
     }
 
-    async forgotPassword(email: string) {
-        if(!email) {
-            return {data: {error: "Please fill in all fields"}};
-        }
-
-        const response = await api.post("/auth/forgot-password", {
-            email: email,
-        });
-        return response;
-    }
-
 }
 
 export default new AuthDataService();
