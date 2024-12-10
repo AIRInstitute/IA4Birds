@@ -23,10 +23,10 @@ const globalConfig = {
     smtp: {
         host: process.env.SMTP_HOST || "gmail",
         port: Number(process.env.SMTP_PORT) || 587,
-        secure: toBoolean(process.env.SMTP_SECURE) || false,
+        secure: toBoolean(process.env.SMTP_SECURE) ?? false,
         email: process.env.SMTP_EMAIL || "email",
         password: process.env.SMTP_PWD || "password",
-        logger: toBoolean(process.env.SMTP_LOGGER) || true,
+        logger: toBoolean(process.env.SMTP_LOGGER) ?? true,
     },
     cypher: {
         algorithm: process.env.ENC_ALGORITHM || "aes-256-abc",
@@ -39,7 +39,5 @@ const globalConfig = {
     },
     whiteList: process.env.WHITE_LIST || [],
 };
-
-console.log(globalConfig.whiteList);
 
 export default globalConfig;
