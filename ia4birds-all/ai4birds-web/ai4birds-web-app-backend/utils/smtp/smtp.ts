@@ -4,7 +4,6 @@ import responseMessages from "../messages/global.messages";
 
 import Mail from "nodemailer/lib/mailer";
 
-console.log(globalConfig);
 const transporter = nodemailer.createTransport({
     host: globalConfig.smtp.host,
     port: globalConfig.smtp.port,
@@ -27,7 +26,7 @@ function testConnection() {
 }
 
 function sendMail(
-    mailOptions: Mail.Options
+    mailOptions: Mail.Options,
 ): Promise<{ status: number; message: string }> {
     return new Promise((resolve, reject) => {
         try {

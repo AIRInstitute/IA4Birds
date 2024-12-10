@@ -6,6 +6,7 @@ import smtp from "../utils/smtp/smtp";
 import { resetPasswordTemplate } from "../utils/emailTemplates/general";
 import utils, { DecodedToken } from "../utils/utils";
 import { User } from "../models/connection";
+import { Op } from "sequelize";
 
 // User fields that won't be returned in the response when using findAll and
 // findOne methods.
@@ -36,7 +37,8 @@ const findAll = async (req: Request, res: Response) => {
             }
         */
         //  #swagger.responses[204] = { description: "No users found" }
-        if (users.length > 0) return res.status(200).send(users);
+        if (users.length > 0)
+            return res.status(200).send(users.map((u) => u.dataValues));
         else return res.status(204).send(responseMessages[204].NO_CONTENT);
     } catch (err: any) {
         console.error(err);
@@ -76,7 +78,7 @@ const findOne = async (req: Request, res: Response) => {
                 content: { "application/json": { schema: { $ref: "#/components/schemas/User"} } }
             }
         */
-        if (user) return res.status(200).send(user);
+        if (user) return res.status(200).send(user.dataValues);
         // #swagger.responses[404] = { $ref: "#/components/responses/UserNotFound" }
         else return res.status(404).send(responseMessages[404].NOT_FOUND);
     } catch (err: any) {
@@ -264,7 +266,7 @@ const resetPassword = async (req: Request, res: Response) => {
 
         user.update({ password: hash });
 
-        res.send(responseMessages[200].PASSWORD_CHANGED);
+        res.status(200).send(responseMessages[200].PASSWORD_CHANGED);
     } catch (err: any) {
         console.error(err);
         return res
@@ -347,7 +349,7 @@ const updateUser = async (req: Request, res: Response) => {
                 // Ignore the current user, otherwise setting an email to the
                 // already existing email would fail because of a duplicate.
                 const emailDupliacte = await User.findOne({
-                    where: { email: req.body.email, id: { $ne: id } },
+                    where: { email: req.body.email, id: { [Op.ne]: id } },
                 });
                 // #swagger.responses[409] = { $ref: "#/components/responses/EmailInUse" }
                 if (emailDupliacte)
@@ -413,7 +415,7 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 };
 
-export default {
+export {
     findAll,
     findOne,
     activateAccount,

@@ -73,7 +73,6 @@ const signup = async (req: Request, res: Response) => {
             password: hash,
             organization: body.organization,
         });
-        console.log(user);
     } catch (err: any) {
         console.error(err);
         return res
@@ -208,4 +207,4 @@ const guardFunction = (req: Request, res: Response) => {
     });
 };
 
-export default { signup, signin, guardFunction };
+export { signup, signin, guardFunction };

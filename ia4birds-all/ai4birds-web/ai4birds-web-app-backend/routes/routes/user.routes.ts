@@ -1,20 +1,24 @@
 import { Router } from "express";
-import userController from "../../controllers/user.controller";
-import authMiddleware from "../../middleware/auth.middleware";
+import {
+    activateAccount,
+    forgotPassword,
+    resetPassword,
+    findAll,
+    findOne,
+    updateUser,
+    deleteUser,
+} from "../../controllers/user.controller";
+import { verifyToken } from "../../middleware/auth.middleware";
 
 const userRouter: Router = Router();
 
-userRouter.get("/activateAccount", userController.activateAccount);
-userRouter.get("/forgotPassword", userController.forgotPassword);
-userRouter.post("/resetPassword", userController.resetPassword);
+userRouter.get("/activateAccount", activateAccount);
+userRouter.get("/forgotPassword", forgotPassword);
+userRouter.post("/resetPassword", resetPassword);
 
-userRouter.get("/", [authMiddleware.verifyToken], userController.findAll);
-userRouter.get("/:id", [authMiddleware.verifyToken], userController.findOne);
-userRouter.put("/:id", [authMiddleware.verifyToken], userController.updateUser);
-userRouter.delete(
-    "/:id",
-    [authMiddleware.verifyToken],
-    userController.deleteUser,
-);
+userRouter.get("/", [verifyToken], findAll);
+userRouter.get("/:id", [verifyToken], findOne);
+userRouter.put("/:id", [verifyToken], updateUser);
+userRouter.delete("/:id", [verifyToken], deleteUser);
 
 export default userRouter;

@@ -42,4 +42,4 @@ const verifyToken = async (
     }
 };
 
-export default { verifyToken };
+export { verifyToken };

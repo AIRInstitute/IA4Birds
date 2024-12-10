@@ -32,7 +32,7 @@ export default (sequelize: Sequelize) => {
             },
             createdAt: {
                 type: DataTypes.DATE,
-                defaultValue: Sequelize.fn("now"),
+                defaultValue: DataTypes.NOW,
             },
             name: DataTypes.STRING,
             email: DataTypes.STRING,
@@ -47,6 +47,6 @@ export default (sequelize: Sequelize) => {
             collate: "utf8_unicode_ci",
             timestamps: false,
             freezeTableName: true,
-        }
+        },
     );
 };

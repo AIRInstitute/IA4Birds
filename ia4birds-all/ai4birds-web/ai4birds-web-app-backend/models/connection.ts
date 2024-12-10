@@ -1,21 +1,26 @@
-import { Sequelize, Dialect, Op } from "sequelize";
+import { Sequelize, Dialect, Op, Options } from "sequelize";
 
 import config from "../config/db.config";
 
 import userModel from "./models/user.models";
 
-const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    {
-        host: config.host,
-        dialect: config.dialect as Dialect,
-        username: config.username,
-        password: config.password,
-        database: config.database,
-    }
-);
+let sequelize: Sequelize;
+if (process.env.NODE_ENV === "test") {
+    sequelize = new Sequelize("sqlite::memory:", { logging: false });
+} else {
+    sequelize = new Sequelize(
+        config.database,
+        config.username,
+        config.password,
+        {
+            host: config.host,
+            dialect: config.dialect as Dialect,
+            username: config.username,
+            password: config.password,
+            database: config.database,
+        },
+    );
+}
 
 const User = userModel(sequelize);
 
