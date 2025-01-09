@@ -7,25 +7,20 @@ on:
 
 jobs:
   check_out:
+    name: check out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Stop old containers
-        run: |
-          if [ "$(docker ps -a -q)" ]; then
-            docker stop $(docker ps -a -q);
-          fi
+        run: sudo docker stop $(docker ps -a -q)
+        continue-on-error: true
       - name: Remove old containers
-        run: |
-          if [ "$(docker ps -a -q)" ]; then
-            docker rm $(docker ps -a -q);
-          fi
+        run: sudo docker rm $(docker ps -a -q)
+        continue-on-error: true
       - name: Remove old images
-        run: |
-          if [ "$(docker images -a -q)" ]; then
-            docker rmi $(docker images -a -q);
-          fi
+        run: sudo docker rmi $(docker images -a -q)
+        continue-on-error: true
       - name: Clear all Docker
-        run: docker system prune --all -f || true
+        run: sudo docker system prune --all -f || true
 
   docker_compose:
     name: docker compose
@@ -46,78 +41,13 @@ jobs:
           docker compose version || docker-compose version
 
       - name: Build Custom Kong Image
-        run: |
-          echo "Building custom Kong image..."
-          docker build -t my-custom-kong:latest .
-          echo "Custom Kong image built successfully!"
+        run: sudo docker build -t my-custom-kong:latest .
 
       - name: Validate docker-compose.yml
-        run: |
-          echo "Validating docker-compose.yml file..."
-          docker compose config || docker-compose config
-          echo "docker-compose.yml validation successful!"
+        run: sudo docker compose config || docker-compose config
 
       - name: Build the docker-compose
-        run: |
-          echo "Starting docker-compose..."
-          docker compose -f "docker-compose.yml" up -d || docker-compose -f "docker-compose.yml" up -d
-          echo "docker-compose started successfully!"
+        run: sudo docker compose -f "docker-compose.yml" up -d || docker-compose -f "docker-compose.yml" up -d
 
       - name: List running containers
-        run: |
-          echo "Listing all running containers:"
-          docker ps
-
-
-# name: Build all
-
-# on:
-#   push:
-#     branches:
-#       - 'pre'
-
-# jobs:
-#   check_out:
-#     name: check out
-#     runs-on: [self-hosted, linux, x64, pre]  
-#     steps:
-#      - uses: actions/checkout@v1
-#      - name: stop old container
-#        run: sudo docker stop $(docker ps -a -q)
-#        continue-on-error: true
-#      - name: remove old container
-#        run: sudo docker rm $(docker ps -a -q)
-#        continue-on-error: true
-#      - name: remove old image
-#        run: sudo docker rmi $(docker images -a -q)
-#        continue-on-error: true
-#      - name: clear all docker
-#        run: sudo docker system prune --all -f
-
-#   docker_compose:
-#     name: docker compose
-#     needs: check_out
-#     runs-on: [self-hosted, linux, x64, pre]
-#     steps:
-#     - name: Build Custom Kong Image
-#       run: sudo docker build -t my-custom-kong:latest .
-#     - name: Build the docker-compose
-#       run: sudo docker compose -f "docker-compose.yml" up -d
-
-  # scan_with_trivy:
-  #   name: scan with trivi
-  #   needs: docker_compose
-  #   runs-on: [self-hosted, linux, x64, pre]
-  #   steps:
-  #     - name: Run Trivy vulnerability scanner in fs mode
-  #       uses: anandg112/trivy-action@feat/add-skip-dirs-option
-  #       with:
-  #         image-ref: $(docker images -a -q)
-  #         scan-type: 'fs'
-  #         scan-ref: '.'
-  #         ignore-unfixed: true
-  #         format: 'table'
-  #       #  output: 'trivy-results-fs.sarif'
-  #       #  severity: 'CRITICAL,HIGH'
-  #         skip-dirs: "ignored-dir"
-      
+        run: sudo docker ps
