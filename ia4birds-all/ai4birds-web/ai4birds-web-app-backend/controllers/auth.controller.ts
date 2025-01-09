@@ -61,32 +61,17 @@ const activateaccount = async (req: Request, res: Response) => {
 
 /**
  * Confirm account activation by the administrator
- * @header {string} x-activation-token The activation token for validating the request
  * @body {string} email The email of the user to activate
  * @body {string} description A description provided by the user during the activation request
- * @returns {string} A message indicating the result of the account activation and email sending process
+ * @returns {string} A message indicating the result of the account activation and email sending process.
+ * 
  */
 const confirmAccountActivation = async (req: Request, res: Response) => {
-    const token = req.headers["x-activation-token"] as string;
     const { email, description } = req.body;
 
     // Validar si faltan datos
-    if (!token || !email || !description) {
+    if (!email || !description) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
-    }
-
-    // Validar el token
-    let decodedToken;
-    try {
-        decodedToken = utils.verifyJWTToken(token, "activation");
-    } catch (err: any) {
-        console.error("Invalid token:", err.message);
-        return res.status(401).send(responseMessages[401].INVALID_TOKEN);
-    }
-
-    // Validar si el token pertenece al email correcto
-    if (decodedToken !== email) {
-        return res.status(403).send(responseMessages[401].INVALID_TOKEN);
     }
 
     try {
@@ -111,7 +96,9 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
             sameSite: "strict",     // Restringe el acceso desde otros dominios
             maxAge: 24 * 60 * 60 * 1000, // 1 día
         });
-        console.log("TOKEN REGISTRATION: ",registrationToken)
+
+        console.log("TOKEN REGISTRATION: ", registrationToken);
+
         // URL para que el usuario complete el registro
         const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}`;
 
@@ -120,10 +107,7 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
             from: globalConfig.smtp.email,
             to: email,
             subject: `${globalConfig.projectName} - Complete Your Registration`,
-            html: completeRegister(
-                url,
-                globalConfig.projectName,
-            ),
+            html: completeRegister(url, globalConfig.projectName),
         };
 
         const mailResponse = await smtp.sendMail(mailOptions);
