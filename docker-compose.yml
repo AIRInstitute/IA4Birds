@@ -58,7 +58,7 @@ services:
     build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
     container_name: backend
     volumes:
-      - ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend:/home/node/app
+      #- ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend:/home/node/app
       - /etc/letsencrypt/archive/ia4birds-platform.air-institute.com:/etc/letsencrypt/archive/ia4birds-platform.air-institute.com
       - /etc/envs/.env:/home/node/app/ai4birds-web-app-backend/.env
       - ./hls-stream:/home/node/app/hls-stream
