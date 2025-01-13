@@ -133,19 +133,12 @@ services:
       - redis-net
 
   gstreamer:
-    image: custom-kong-gstreamer
+    build: .
     container_name: gstreamer
     environment:
       - RTSP_URL=rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
     ports:
       - "8554:8554" # Puerto para WebRTC
-    command: >
-      gst-launch-1.0 rtspsrc location=${RTSP_URL} !
-      rtph264depay !
-      h264parse !
-      queue !
-      rtph264pay pt=96 !
-      webrtcbin stun-server=stun://stun.l.google.com:19302
     networks:
       - bird-net
   
