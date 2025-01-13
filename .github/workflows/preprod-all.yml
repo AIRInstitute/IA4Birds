@@ -10,6 +10,7 @@ jobs:
     name: check out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
+      - uses: actions/checkout@v1
       - name: Stop old containers
         run: sudo docker stop $(docker ps -a -q)
         continue-on-error: true
@@ -27,27 +28,9 @@ jobs:
     needs: check_out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
-      - name: Log current directory
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Listing files:"
-          ls -la
-
-      - name: Log Docker version
-        run: |
-          echo "Docker version:"
-          docker --version
-          echo "Docker Compose version:"
-          docker compose version || docker-compose version
-
       - name: Build Custom Kong Image
-        run: sudo docker build -t my-custom-kong:latest .
-
-      - name: Validate docker-compose.yml
-        run: sudo docker compose config || docker-compose config
-
+        run: sudo docker build -t custom-kong-gstreamer:latest .
       - name: Build the docker-compose
-        run: sudo docker compose -f "docker-compose.yml" up -d || docker-compose -f "docker-compose.yml" up -d
-
+        run: sudo docker compose -f "docker-compose.yml" up -d
       - name: List running containers
         run: sudo docker ps
