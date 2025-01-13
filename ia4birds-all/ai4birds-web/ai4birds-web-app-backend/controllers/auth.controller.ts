@@ -69,6 +69,9 @@ const activateaccount = async (req: Request, res: Response) => {
 const confirmAccountActivation = async (req: Request, res: Response) => {
     const { email, description } = req.body;
 
+    console.log("Req.body in Confirm Activation: ",req.body)
+    console.log("Email in Confirm Activation: ",email)
+    console.log("Description in Confirm Activation: ",description)
     // Validar si faltan datos
     if (!email || !description) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
