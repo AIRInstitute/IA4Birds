@@ -1,4 +1,4 @@
-name: Build all
+name: Docker Debug
 
 on:
   push:
@@ -8,45 +8,46 @@ on:
 jobs:
   check_out:
     name: check out
-    runs-on: [self-hosted, linux, x64, pre]  
+    runs-on: [self-hosted, linux, x64, pre]
     steps:
-     - uses: actions/checkout@v1
-     - name: stop old container
-       run: sudo docker stop $(docker ps -a -q)
-       continue-on-error: true
-     - name: remove old container
-       run: sudo docker rm $(docker ps -a -q)
-       continue-on-error: true
-     - name: remove old image
-       run: sudo docker rmi $(docker images -a -q)
-       continue-on-error: true
-     - name: clear all docker
-       run: sudo docker system prune --all -f
+      - name: Stop old containers
+        run: sudo docker stop $(docker ps -a -q)
+        continue-on-error: true
+      - name: Remove old containers
+        run: sudo docker rm $(docker ps -a -q)
+        continue-on-error: true
+      - name: Remove old images
+        run: sudo docker rmi $(docker images -a -q)
+        continue-on-error: true
+      - name: Clear all Docker
+        run: sudo docker system prune --all -f || true
 
   docker_compose:
     name: docker compose
     needs: check_out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
-    - name: Build Custom Kong Image
-      run: sudo docker build -t my-custom-kong:latest .
-    - name: Build the docker-compose
-      run: sudo docker compose -f "docker-compose.yml" up -d
+      - name: Log current directory
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Listing files:"
+          ls -la
 
-  # scan_with_trivy:
-  #   name: scan with trivi
-  #   needs: docker_compose
-  #   runs-on: [self-hosted, linux, x64, pre]
-  #   steps:
-  #     - name: Run Trivy vulnerability scanner in fs mode
-  #       uses: anandg112/trivy-action@feat/add-skip-dirs-option
-  #       with:
-  #         image-ref: $(docker images -a -q)
-  #         scan-type: 'fs'
-  #         scan-ref: '.'
-  #         ignore-unfixed: true
-  #         format: 'table'
-  #       #  output: 'trivy-results-fs.sarif'
-  #       #  severity: 'CRITICAL,HIGH'
-  #         skip-dirs: "ignored-dir"
-      
+      - name: Log Docker version
+        run: |
+          echo "Docker version:"
+          docker --version
+          echo "Docker Compose version:"
+          docker compose version || docker-compose version
+
+      - name: Build Custom Kong Image
+        run: sudo docker build -t my-custom-kong:latest .
+
+      - name: Validate docker-compose.yml
+        run: sudo docker compose config || docker-compose config
+
+      - name: Build the docker-compose
+        run: sudo docker compose -f "docker-compose.yml" up -d || docker-compose -f "docker-compose.yml" up -d
+
+      - name: List running containers
+        run: sudo docker ps
