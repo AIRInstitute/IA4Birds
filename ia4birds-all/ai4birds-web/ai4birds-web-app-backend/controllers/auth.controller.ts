@@ -96,8 +96,11 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
         const user = await User.create({
             email,
             description,
-            active: false, 
+            active: false,
+            name: "Pending",  
+            password: "temporary-password",  
         });
+        
 
         // Generar un token para completar el registro
         const registrationToken = await utils.generateJWTToken(user.id, "registration");
