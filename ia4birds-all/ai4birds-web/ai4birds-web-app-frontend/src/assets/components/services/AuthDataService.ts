@@ -48,7 +48,7 @@ class AuthDataService {
             return {data: {error: "Please fill in all fields"}};
         }
 
-        const response = await api.post(`/auth/confirm-activation?token=${encodeURIComponent(user.email)}`, {
+        const response = await api.post("/auth/confirm-activation", {
             email: user.email,
             description: user.description,
         });
