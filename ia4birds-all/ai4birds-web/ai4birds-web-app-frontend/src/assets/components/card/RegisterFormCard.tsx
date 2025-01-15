@@ -65,18 +65,18 @@ export const CustomCard = () => {
         //         setError('An error occurred while registering. Please try again.');
         //     });
 
-            auth.register({email: email, name: name, password: password, organization: organization})
-            .then((response) => {
-                if (!response.data.error) {
-                    notify();
-                    navigate("/login-component");
-                } else if (response.data.error) {
-                    setError(response.data.error);
-                }
-            })
-            .catch(() => {
-                setError('An error occurred while registering. Please try again.');
-            });
+        auth.register({email: email, name: name, password: password, organization: organization})
+        .then((response) => {
+            if (!response.data.error) {
+                notify();
+                navigate("/login-component");
+            } else if (response.data.error) {
+                setError(response.data.error);
+            }
+        })
+        .catch(() => {
+            setError('An error occurred while registering. Please try again.');
+        });
     };
 
     return (
