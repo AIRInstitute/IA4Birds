@@ -145,24 +145,25 @@ const signup = async (req: Request, res: Response) => {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
     }
 
-    const registrationToken = req.cookies.registrationToken;
-    console.log("TOKEN REGISTRATION SIGN UP: ",registrationToken)
-    if (!registrationToken) {
-        return res.status(400).send(responseMessages[400].MISSING_TOKEN);
-    }
+    // const registrationToken = req.cookies.registrationToken;
+    // console.log("TOKEN REGISTRATION SIGN UP: ",registrationToken)
+    // if (!registrationToken) {
+    //     return res.status(400).send(responseMessages[400].MISSING_TOKEN);
+    // }
 
-    let decodedToken;
-    try {
-        // Validar el token de registro
-        decodedToken = utils.verifyJWTToken(registrationToken, "registration");
-    } catch (err: any) {
-        console.error("Invalid token:", err.message);
-        return res.status(401).send(responseMessages[401].INVALID_TOKEN);
-    }
+    // let decodedToken;
+    // try {
+    //     // Validar el token de registro
+    //     decodedToken = utils.verifyJWTToken(registrationToken, "registration");
+    // } catch (err: any) {
+    //     console.error("Invalid token:", err.message);
+    //     return res.status(401).send(responseMessages[401].INVALID_TOKEN);
+    // }
 
     try {
         // Verificar si el usuario ya ha completado su registro
-        const user = await User.findOne({ where: { id: decodedToken.id } });
+        let email = body.email;
+        const user = await User.findOne({ where: { email } });
         if (!user) {
             return res.status(404).send(responseMessages[404].NOT_FOUND);
         }
