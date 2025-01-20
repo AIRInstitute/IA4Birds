@@ -51,6 +51,8 @@ services:
       - 80:5173
       - 8080:8080
       - 443:443
+    volumes:
+      - /etc/envs/.env:/app/.env  # Montar el archivo .env dentro del contenedor
     networks:
       - bird-net
 
