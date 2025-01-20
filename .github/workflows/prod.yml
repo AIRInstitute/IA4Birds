@@ -37,7 +37,7 @@ jobs:
     runs-on: [self-hosted, linux, x64, prod]
     steps:
     - name: Build Custom Kong Image
-      run: sudo docker build -t my-custom-kong:latest .
+      run: sudo docker build -t custom-kong-gstreamer:latest .
     - name: Build the docker-compose
       run: sudo docker compose -f "docker-compose.yml" up -d
 

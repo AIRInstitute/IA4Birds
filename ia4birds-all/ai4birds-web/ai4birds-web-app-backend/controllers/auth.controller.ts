@@ -67,13 +67,24 @@ const activateaccount = async (req: Request, res: Response) => {
  * 
  */
 const confirmAccountActivation = async (req: Request, res: Response) => {
-    const { email, description } = req.body;
 
-    // Validar si faltan datos
+    const body = req.body;
+
+    // Validar que el cuerpo no esté vacío
+    if (!body || Object.keys(body).length === 0) {
+        return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
+    }
+
+    console.log("Req.body in Confirm Activation: ",req.body)
+    
+    // Validar que los campos necesarios están presentes
+    const { email, description } = body;
     if (!email || !description) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
     }
 
+    console.log("Email in Confirm Activation: ",email)
+    console.log("Description in Confirm Activation: ",description)
     try {
         // Verificar si ya existe un usuario con este email
         const existingUser = await User.findOne({ where: { email } });
@@ -85,8 +96,11 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
         const user = await User.create({
             email,
             description,
-            active: false, 
+            active: false,
+            name: "Pending",  
+            password: "temporary-password",  
         });
+        
 
         // Generar un token para completar el registro
         const registrationToken = await utils.generateJWTToken(user.id, "registration");

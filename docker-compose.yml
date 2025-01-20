@@ -58,6 +58,7 @@ services:
     build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
     container_name: backend
     volumes:
+      #- ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend:/home/node/app
       - /etc/letsencrypt/archive/ia4birds-platform.air-institute.com:/etc/letsencrypt/archive/ia4birds-platform.air-institute.com
       - /etc/envs/.env:/home/node/app/ai4birds-web-app-backend/.env
       - ./hls-stream:/home/node/app/hls-stream
@@ -131,23 +132,16 @@ services:
     networks:
       - redis-net
 
-  streaming-service:
-    image: jrottenberg/ffmpeg:4.4-alpine
-    container_name: streaming-service
-    command: >
-      -i rtsp://10.189.0.88:10554/axis-media/media.amp
-      -f hls
-      -hls_time 2
-      -hls_list_size 3
-      -hls_wrap 3
-      /usr/share/nginx/html/stream.m3u8
-    volumes:
-      - ./hls-stream:/usr/share/nginx/html
+  gstreamer:
+    build: .
+    container_name: gstreamer
+    environment:
+      - RTSP_URL=rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
+    ports:
+      - "8554:8554" # Puerto para WebRTC
     networks:
       - bird-net
-    restart: always
   
-
 networks:
   bird-net:
     driver: bridge
