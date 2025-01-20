@@ -52,7 +52,7 @@ services:
       - 8080:8080
       - 443:443
     volumes:
-      - /etc/envs/.env:/app/.env  # Montar el archivo .env dentro del contenedor
+      - /etc/envs/.env:/home/node/app/.env  # Montar en la ubicación correcta
     networks:
       - bird-net
 
