@@ -1,15 +1,7 @@
-# Imagen base para Kong
-FROM kong:2.8.1-alpine as kong_base
-
-USER root
-
-# Instalar el plugin usando luarocks
-RUN luarocks install kong-spec-expose
-
 # Imagen base para GStreamer
 FROM restreamio/gstreamer:x86_64-latest-prod as gstreamer_base
 
-# Actualizar los repositorios e instalar los complementos necesarios
+# Actualizar repositorios e instalar complementos necesarios
 RUN apt-get update && apt-get install -y \
     gstreamer1.0-plugins-good \
     gstreamer1.0-plugins-base \
@@ -18,13 +10,15 @@ RUN apt-get update && apt-get install -y \
     gstreamer1.0-libav \
     && rm -rf /var/lib/apt/lists/*
 
-# Si necesitas combinar funcionalidades, puedes elegir una imagen como base final
-FROM kong:2.8.1-alpine
+# Imagen final basada en GStreamer
+FROM restreamio/gstreamer:x86_64-latest-prod
 
-USER root
-
-# Copia las dependencias de GStreamer si es necesario
+# Copia dependencias desde la etapa base
 COPY --from=gstreamer_base /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu
 COPY --from=gstreamer_base /usr/bin /usr/bin
 
-USER kong
+# Define el punto de entrada directo para gst-launch
+ENTRYPOINT [ "gst-launch-1.0" ]
+
+# Si necesitas argumentos adicionales, usa CMD
+CMD [ "rtspsrc", "location=${RTSP_URL} ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! webrtcbin stun-server=stun://stun.l.google.com:19302" ]

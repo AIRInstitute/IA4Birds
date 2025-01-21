@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@nextui-org/input";
 import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
@@ -23,6 +23,16 @@ export const CustomCard = () => {
 
     const notify = () => toast.success('Registro correcto');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Obtener email desde la URL
+        const params = new URLSearchParams(window.location.search);
+        const emailParam = params.get('email');
+        // Decodifica caracteres
+        if (emailParam) {
+            setEmail(decodeURIComponent(emailParam));  
+        }
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -91,12 +101,7 @@ export const CustomCard = () => {
                     <div className="flex w-full flex-wrap gap-4">
                         <Input 
                             type="email" 
-                            isRequired 
-                            isClearable 
-                            onClear={() => {
-                                setEmail('');
-                                console.log("Input email cleared")
-                            }} 
+                            isReadOnly
                             placeholder="ejemplo@ejemplo.com" 
                             label="Email" 
                             value={email} 

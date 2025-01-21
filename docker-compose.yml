@@ -51,6 +51,8 @@ services:
       - 80:5173
       - 8080:8080
       - 443:443
+    volumes:
+      - /etc/envs/.env:/home/node/app/.env  # Montar en la ubicación correcta
     networks:
       - bird-net
 
@@ -58,7 +60,7 @@ services:
     build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
     container_name: backend
     volumes:
-      - ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend:/home/node/app
+      #- ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend:/home/node/app
       - /etc/letsencrypt/archive/ia4birds-platform.air-institute.com:/etc/letsencrypt/archive/ia4birds-platform.air-institute.com
       - /etc/envs/.env:/home/node/app/ai4birds-web-app-backend/.env
       - ./hls-stream:/home/node/app/hls-stream
@@ -133,23 +135,15 @@ services:
       - redis-net
 
   gstreamer:
-    image: custom-kong-gstreamer
+    build: .
     container_name: gstreamer
     environment:
       - RTSP_URL=rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
     ports:
       - "8554:8554" # Puerto para WebRTC
-    command: >
-      gst-launch-1.0 rtspsrc location=${RTSP_URL} !
-      rtph264depay !
-      h264parse !
-      queue !
-      rtph264pay pt=96 !
-      webrtcbin stun-server=stun://stun.l.google.com:19302
     networks:
       - bird-net
   
-
 networks:
   bird-net:
     driver: bridge

@@ -2778,7 +2778,16 @@
         "kind": 5,
         "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
-        "peekOfCode": "DEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_INGEST_HOST'),\n    'port' : os.getenv('POSTGRES_INGEST_PORT'),\n    'user' : os.getenv('POSTGRES_INGEST_USER'),\n    'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),\n    'database' : os.getenv('POSTGRES_INGEST_DB')\n}\nSPECIES_LIST = {",
+        "peekOfCode": "DEBUG_MODE = True\n#DB config\nDB_CONFIG={\n    'host' : os.getenv('POSTGRES_INGEST_HOST'),\n    'port' : os.getenv('POSTGRES_INGEST_PORT'),\n    'user' : os.getenv('POSTGRES_INGEST_USER'),\n    'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),\n    'database' : os.getenv('POSTGRES_INGEST_DB')\n}\nBACKEND_URL = os.getenv('BACKEND_URL')",
+        "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "documentation": {}
+    },
+    {
+        "label": "BACKEND_URL",
+        "kind": 5,
+        "importPath": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "description": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
+        "peekOfCode": "BACKEND_URL = os.getenv('BACKEND_URL')\nSPECIES_LIST = {\n    \"Quebrantahuesos\": \"Gypaetus barbatus\",\n    \"Buitre negro\": \"Aegypius monachus\",\n    \"Buitre leonado\": \"Gyps fulvus\",\n    \"Alimoche común\": \"Neophron percnopterus\",\n    \"Águila perdicera\": \"Aquila fasciata\",\n    \"Águila imperial ibérica\": \"Aquila adalberti\",\n    \"Águila real\": \"Aquila chrysaetos\",\n    \"Águila pescadora\": \"Pandion haliaetus\",",
         "detail": "ia4birds-all.ai4birds-ingest-service.ai4birds_ingest_service.config",
         "documentation": {}
     },
