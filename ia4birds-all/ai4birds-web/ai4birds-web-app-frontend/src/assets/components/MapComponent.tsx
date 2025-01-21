@@ -4,7 +4,7 @@ import SidebarEolic from './sidebar/SideBarEolic';
 import SideBarEolicResources from './sidebar/SideBarEolicResources';
 import ExclusionEolicService from './services/ExclusionEolicService';
 import BirdDataService from './services/BirdDataService';
-import { MapContainer, TileLayer, Circle, Marker, Popup, useMapEvents} from 'react-leaflet';
+import { MapContainer, TileLayer, WMSTileLayer, Circle, Marker, Popup, useMapEvents, GeoJSON } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { Tooltip } from "@nextui-org/tooltip";
@@ -16,7 +16,11 @@ import { FaCheck } from "react-icons/fa6";
 import { TbCarFan1 } from "react-icons/tb";
 import { TbCarFan2 } from "react-icons/tb";
 import L from 'leaflet';
+import { GeoJsonObject } from 'geojson';
 import toast, { Toaster } from 'react-hot-toast';
+
+// Import or define castillaYLeonBorders
+import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 
 const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
@@ -316,7 +320,17 @@ const Mapa = () => {
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {/* <GeoJSON data={castillaYLeonBorders} style={{ color: 'gray', weight: 0.5 }} /> */}
+            <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
+            {showMarkersEolic && (
+              <WMSTileLayer 
+                url="https://idecyl.jcyl.es/geoserver/ps/wms"
+                layers="rn2k_cyl_zepa"
+                format="image/png"
+                transparent={true}
+                version="1.3.0"
+                className="hue-rotate-[240deg]"
+              />
+            )}
             
             {!markersLoaded ?
               <>
