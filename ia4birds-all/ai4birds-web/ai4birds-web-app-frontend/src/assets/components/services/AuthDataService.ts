@@ -49,6 +49,7 @@ class AuthDataService {
         }
 
         const response = await api.post("/auth/activate-account", {
+
             email: user.email,
             description: user.description,
         });
