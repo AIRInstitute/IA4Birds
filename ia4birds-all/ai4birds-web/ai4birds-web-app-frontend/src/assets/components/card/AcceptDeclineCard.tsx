@@ -33,6 +33,15 @@ export const CustomCard = () => {
 
     useEffect(() => {
         // Esta función se ejecutará una vez cuando el componente se monte en el DOM
+        // Obtener parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+        const emailParam = params.get('email');
+        const descriptionParam = params.get('description');
+ 
+        //Decodifica los valores de la URL
+        if (emailParam) setEmail(decodeURIComponent(emailParam));
+        if (descriptionParam) setDescription(decodeURIComponent(descriptionParam));
+
         console.log('La página se ha cargado RequestAdminComponent');
     }, []);
     
