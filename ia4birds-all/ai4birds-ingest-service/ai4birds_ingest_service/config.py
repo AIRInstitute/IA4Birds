@@ -26,6 +26,8 @@ DB_CONFIG={
     'database' : os.getenv('POSTGRES_INGEST_DB')
 }
 
+print("Database Config:", DB_CONFIG)
+
 BACKEND_URL = os.getenv('BACKEND_URL')
 
 SPECIES_LIST = {
