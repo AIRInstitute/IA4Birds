@@ -52,6 +52,24 @@ const activateAdminTemplate = (
   );
 };
 
+const rejectAccountTemplate = (
+  email: string, 
+  projectName: string) => {
+  return `
+      <html>
+      <body>
+          <h1>Account Request Rejected</h1>
+          <p>Dear user,</p>
+          <p>We regret to inform you that your account request with email <strong>${email}</strong> has been rejected by the administrator.</p>
+          <p>If you have any questions, please contact our support team.</p>
+          <br>
+          <p>Regards,</p>
+          <p>${projectName} Team</p>
+      </body>
+      </html>
+  `;
+};
+
 const resetPasswordTemplate = (url: string, projectName: string) => {
     return baseEmailTemplate(
         "Reset your Password",
@@ -435,4 +453,4 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
 </html>`;
 };
 
-export { activateAccountTemplate, resetPasswordTemplate, activateAdminTemplate, completeRegister };
+export { activateAccountTemplate, resetPasswordTemplate, activateAdminTemplate, completeRegister, rejectAccountTemplate };

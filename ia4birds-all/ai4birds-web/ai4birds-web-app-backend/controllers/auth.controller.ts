@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import globalConfig from "../config/global.config";
 import responseMessages from "../utils/messages/global.messages";
 import smtp from "../utils/smtp/smtp";
-import { activateAccountTemplate,activateAdminTemplate, completeRegister  } from "../utils/emailTemplates/general";
+import { activateAccountTemplate,activateAdminTemplate, completeRegister, rejectAccountTemplate  } from "../utils/emailTemplates/general";
 import utils from "../utils/utils";
 import { User } from "../models/connection";
 
@@ -133,6 +133,41 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
         }
     } catch (err: any) {
         console.error("Error during account confirmation:", err.message);
+        return res.status(500).send(responseMessages[500].INTERNAL_SERVER_ERROR);
+    }
+};
+
+/**
+ * Reject account request
+ * @body {string} email The email of the user whose account request is rejected
+ * @returns {string} A message indicating the rejection of the account request.
+ */
+const rejectAccountRequest = async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    // Validar que el email no esté vacío
+    if (!email) {
+        return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
+    }
+
+    // Plantilla de correo para notificar rechazo
+    const mailOptions = {
+        from: globalConfig.smtp.email,
+        to: email,
+        subject: `${globalConfig.projectName} - Account Request Rejected`,
+        html: rejectAccountTemplate(email, globalConfig.projectName),
+    };
+
+    try {
+        const mailResponse = await smtp.sendMail(mailOptions);
+        if (mailResponse.status === 200) {
+            return res.status(200).send(responseMessages[200].SMTP_EMAIL_SENT);
+        } else {
+            console.error("Failed to send rejection email:", mailResponse);
+            return res.status(500).send(responseMessages[500].SMTP_SEND_ERROR);
+        }
+    } catch (err: any) {
+        console.error("Error sending rejection email:", err.message);
         return res.status(500).send(responseMessages[500].INTERNAL_SERVER_ERROR);
     }
 };
@@ -283,4 +318,4 @@ const guardFunction = (req: Request, res: Response) => {
     });
 };
 
-export default { signup, signin, guardFunction,activateaccount, confirmAccountActivation };
+export default { signup, signin, guardFunction,activateaccount, confirmAccountActivation, rejectAccountRequest };
