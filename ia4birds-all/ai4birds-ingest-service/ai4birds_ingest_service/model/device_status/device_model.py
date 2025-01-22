@@ -25,11 +25,11 @@ class DeviceModel:
             device_values = (device_data.gps_latitude, device_data.gps_longitude, device_data.status, device_data.storage_status, device_data.last_update)
             database.execute(device_query, device_values)
 
-            database.conn.commit()
+            database.commit()
             return True
         except Exception as e:
             print(f"Error adding device data to DB: {e}")
-            database.conn.rollback()
+            database.rollback()
             return False
         finally:
             database.close()

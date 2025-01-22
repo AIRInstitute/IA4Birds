@@ -62,7 +62,7 @@ class XenoCantoModel:
             return True
         except Exception as e:
             logger.error(f"Error adding XenoCanto batch data to DB: {e}")
-            database.conn.rollback()
+            database.rollback()
             return False
         finally:
             database.close()
