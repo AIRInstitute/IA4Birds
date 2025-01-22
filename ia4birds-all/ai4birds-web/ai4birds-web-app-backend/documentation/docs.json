@@ -37,6 +37,41 @@
         }
       }
     },
+    "/auth/reject-account": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Reject user account request",
+        "description": "Rejects a user's account creation request and notifies the user via email.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rejection email sent successfully"
+          },
+          "400": {
+            "description": "Request body cannot be empty or missing parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/auth/activateaccount": {
       "post": {
         "tags": ["Auth"],
