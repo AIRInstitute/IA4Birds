@@ -71,7 +71,7 @@ class EBirdModel:
             return True
         except Exception as e:
             print(f"Error in add_batch: {e}")
-            database.conn.rollback()
+            database.rollback()
             return False
         finally:
             database.close()

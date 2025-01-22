@@ -15,6 +15,11 @@ class PostgresSingleton:
         self.password = config.DB_CONFIG['password']
         self.database = config.DB_CONFIG['database']
 
+        # Inicialización de las variables conn y cur para evitar errores de acceso antes de conectar
+        self.conn = None
+        self.cur = None
+
+
     @staticmethod
     def getInstance() -> 'PostgresSingleton':
         if PostgresSingleton.__instance == None:
