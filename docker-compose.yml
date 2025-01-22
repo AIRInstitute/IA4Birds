@@ -94,7 +94,7 @@ services:
       ports:
         - 5002:5000
       env_file: 
-        - - /etc/envs/.env
+        - /etc/envs/.env
       networks:
         - bird-net 
 
