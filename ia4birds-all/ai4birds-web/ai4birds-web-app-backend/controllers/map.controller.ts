@@ -52,7 +52,9 @@ const getExclusionMapDataStreaming = async (req: Request, res: Response) => {
     //       addFact(response.data);
     //   }
 
-    axios.post(`${globalConfig.pythonURL}/exclusionmap/stream-exclusion-data?id=${newClient.id}`).then((response) => {
+    axios.post(`${globalConfig.pythonURL}/exclusionmap/stream-exclusion-data?id=${newClient.id}`)
+    .then((response) => {
+        console.log("Data received");
         if (response.status !== 200) {
             throw new Error('No se pudieron obtener los datos del mapa de exclusión eólica en Stream.');
         }
