@@ -170,7 +170,7 @@ const getWindMapData = async (req, res) => {
         console.log(req.body);
 
         // Hacer la solicitud al mapa eólico ibérico
-        const response = await axios.post(`${globalConfig.pythonURL}/windmap`, {
+        const response = await axios.post(`${globalConfig.pythonURL}/windmap/`, {
             lat: lat,
             lon: lng,
             z: z
@@ -232,7 +232,7 @@ const getExclusionMapData = async (req: Request, res: Response) => {
     try {
         const response = await axios({
             method: 'get',
-            url: `${globalConfig.pythonURL}/exclusionmap/zip`,
+            url: `${globalConfig.pythonURL}/exclusionmap/zip/`,
             responseType: 'arraybuffer'  // Important to handle binary data correctly
         });
 

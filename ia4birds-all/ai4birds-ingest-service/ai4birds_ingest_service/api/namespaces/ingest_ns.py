@@ -282,13 +282,13 @@ class StreamExclusionData(Resource):
         try:
             # params = stream_exclusionmap_parser.parse_args()
             csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH
-            print("PATH FILE:", csv_file_path) 
+            
             client_id = flask_request.args.get('id', None)
             def generate():
                 for data_batch in DataConverter.stream_csv_data(csv_file_path, page_size=50):
                     # yield f"data: {json.dumps(data_batch)}\n\n"
                     # # print(f"Data batch sent: {data_batch}")
-                    print("Sending batch:", data_batch) 
+                    
                     #response = requests.post(f'http://212.128.141.28:5030/api/data/exclusionmap/stream-exclusion-data?client_id={client_id}', json=data_batch)
                     response = requests.post(f'http://{config.BACKEND_URL}/api/data/exclusionmap/stream-exclusion-data?client_id={client_id}', json=data_batch)
                     if response.status_code == 200:
