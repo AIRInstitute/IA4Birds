@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "/home/node/app/ai4birds-web-app-backend/.env" });
 
 function toBoolean(value: string | undefined): boolean | undefined {
     if (value == undefined) return undefined;
@@ -19,7 +19,7 @@ const globalConfig = {
     backendURL: process.env.BACKEND_URL || "http://212.128.154.81:5030",
     pythonURL:
         process.env.PYTHON_URL ||
-        "http://ia4birds-platform.air-institute.com:5002/ai4birds-ingest-service/v1",
+        "http://ia4birds-pre.der.usal.es:5002/ai4birds-ingest-service/v1",
     smtp: {
         host: process.env.SMTP_HOST || "smtp.gmail.com",
         port: Number(process.env.SMTP_PORT) || 587,

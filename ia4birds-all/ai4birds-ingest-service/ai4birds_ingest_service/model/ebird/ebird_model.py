@@ -36,6 +36,10 @@ class EBirdModel:
         database = PostgresSingleton.getInstance()
         database.connect()
 
+        if not database.conn or not database.cur:
+            logger.error("Database connection failed, cannot proceed with insertion.")
+            return False
+
         try:
             
             # Preparar los valores para la inserción de especies

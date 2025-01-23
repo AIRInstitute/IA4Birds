@@ -15,6 +15,7 @@ class PostgresSingleton:
         self.password = config.DB_CONFIG['password']
         self.database = config.DB_CONFIG['database']
 
+
         # Inicialización de las variables conn y cur para evitar errores de acceso antes de conectar
         self.conn = None
         self.cur = None
@@ -28,12 +29,22 @@ class PostgresSingleton:
 
     def connect(self):
         try:
-            self.conn = psycopg2.connect(host=self.host, port=self.port, user=self.user, password=self.password, database=self.database)
-            self.cur = self.conn.cursor()
-            logger.info(f'Connected to PostgreSQL database...')
-            #print('Connected to PostgreSQL database...')
+            if self.conn is None or self.conn.closed:
+                self.conn = psycopg2.connect(
+                    host=self.host, 
+                    port=self.port, 
+                    user=self.user, 
+                    password=self.password, 
+                    database=self.database
+                )
+                self.cur = self.conn.cursor()
+                logger.info('Database connection established')
+            else:
+                logger.info('Reusing existing database connection')
         except Exception as e:
-            print(e)
+            logger.error(f'Error database connection: {e}')
+            self.conn = None
+            self.cur = None  # Aseguramos que no se usen cursores nulos después
 
     def close(self):
         self.cur.close()
@@ -56,12 +67,18 @@ class PostgresSingleton:
             logger.error(f'Error executingMany SQL statement: ' + str(e))
 
     def execute_values(self, sql, data_list, page_size=100):
+        if not self.conn or not self.cur:
+            logger.error('Database connection is not established. Cannot execute query.')
+            raise Exception("Database connection is not established.")
+        
         try:
             execute_values(self.cur, sql, data_list, page_size=page_size)
             self.conn.commit()
         except Exception as e:
             logger.error(f'Error executing Values: {e}')
-            self.conn.rollback()
+            if self.conn:
+                self.conn.rollback()
+            raise
 
     def fetchall(self):
         return self.cur.fetchall()

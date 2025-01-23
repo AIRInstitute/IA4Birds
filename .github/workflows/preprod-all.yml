@@ -1,4 +1,4 @@
-name: Docker Debug
+name: Build pre
 
 on:
   push:
