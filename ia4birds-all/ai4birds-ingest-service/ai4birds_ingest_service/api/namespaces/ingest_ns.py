@@ -282,6 +282,7 @@ class StreamExclusionData(Resource):
         try:
             # params = stream_exclusionmap_parser.parse_args()
             csv_file_path = config.EXCLUSION_EOLICA_CSV_PATH
+            print("PATH FILE:", csv_file_path) 
             client_id = flask_request.args.get('id', None)
             def generate():
                 for data_batch in DataConverter.stream_csv_data(csv_file_path, page_size=50):
