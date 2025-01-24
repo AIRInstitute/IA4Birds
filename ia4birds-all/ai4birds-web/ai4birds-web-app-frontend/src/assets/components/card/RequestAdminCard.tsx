@@ -46,9 +46,6 @@ export const CustomCard = () => {
             });
     };
 
-
-    
-
     return (
         <>
         <Card>

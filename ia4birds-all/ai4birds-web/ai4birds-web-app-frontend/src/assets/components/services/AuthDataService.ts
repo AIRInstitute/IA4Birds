@@ -44,14 +44,24 @@ class AuthDataService {
     }
 
     async requestAdmin(user: { email: string, description: string }) {
-        if(!user.email || !user.description) {
-            return {data: {error: "Please fill in all fields"}};
-        }
-
         const response = await api.post("/auth/activate-account", {
-
             email: user.email,
             description: user.description,
+        });
+        return response;
+    }
+
+    async acceptRequestAdmin(user: { email: string, description: string }) {
+        const response = await api.post("/auth/confirm-activation", {
+            email: user.email,
+            description: user.description,
+        });
+        return response;
+    }
+
+    async declineRequestAdmin(user: { email: string}) {
+        const response = await api.post("/auth/reject-account", {
+            email: user.email,
         });
         return response;
     }
