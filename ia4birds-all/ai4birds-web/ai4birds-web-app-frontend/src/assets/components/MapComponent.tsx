@@ -325,8 +325,8 @@ const Mapa = () => {
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
             {showMarkersEolic && (
               <WMSTileLayer 
-                url="https://idecyl.jcyl.es/geoserver/ps/wms"
-                layers="rn2k_cyl_zepa"
+                url="https://idecyl.jcyl.es/geoserver/er/wms"
+                layers="enre_cyl_excl_eoli"
                 format="image/png"
                 transparent={true}
                 version="1.3.0"
