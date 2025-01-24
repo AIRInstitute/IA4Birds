@@ -1,1 +1,237 @@
-{}
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "IA4BIRDS API",
+    "version": "1.0.0",
+    "description": "API documentation for IA4BIRDS project"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/user/activateAccount": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Activate user account",
+        "description": "Activates a user account using a token provided in the query.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Activation token"
+          }
+        ],
+        "responses": {
+          "200": { "description": "User activated successfully" },
+          "400": { "description": "Query parameter cannot be empty or missing" },
+          "401": { "description": "Invalid token" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/auth/reject-account": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Reject user account request",
+        "description": "Rejects a user's account creation request and notifies the user via email.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rejection email sent successfully"
+          },
+          "400": {
+            "description": "Request body cannot be empty or missing parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/activateaccount": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Request account activation",
+        "description": "Sends an activation request for the user account.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "description": { "type": "string" }
+                },
+                "required": ["email", "description"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Activation request sent successfully" },
+          "400": { "description": "Request body cannot be empty or missing parameters" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/auth/confirm-activation": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Confirm account activation",
+        "description": "Confirms the activation of a user account by an administrator.",
+        "parameters": [
+          {
+            "name": "x-activation-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The activation token provided by the user"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "description": { "type": "string" }
+                },
+                "required": ["email", "description"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Account activation confirmed successfully" },
+          "400": { "description": "Request body or token cannot be empty" },
+          "401": { "description": "Invalid token" },
+          "409": { "description": "Email already in use" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/user/forgotPassword": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Request password reset email",
+        "description": "Sends an email with a password reset link.",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User's email address"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Password reset email sent successfully" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Sign up a new user",
+        "description": "Creates a new user account with the provided information.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "organization": { "type": "string" }
+                },
+                "required": ["name", "email", "password", "organization"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created successfully" },
+          "409": { "description": "Email already in use" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User sign in",
+        "description": "Authenticates a user and returns an access token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "accessToken": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Invalid credentials or user not activated" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    }
+  }
+}

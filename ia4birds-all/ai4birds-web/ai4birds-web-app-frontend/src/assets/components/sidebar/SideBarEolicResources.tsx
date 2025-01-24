@@ -1,5 +1,8 @@
-import React, {useState,useEffect} from 'react';
-import {Divider,Link, Card, CardHeader, CardBody,Chip} from "@nextui-org/react";
+import { useState,useEffect } from 'react';
+import { Divider } from "@nextui-org/divider";
+import { Link } from "@nextui-org/link";
+import { Card, CardHeader, CardBody } from "@nextui-org/card";
+import { Chip } from "@nextui-org/chip";
 import { RxCross1 } from "react-icons/rx";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -8,10 +11,18 @@ import {WindRose} from '../Charts/WindRose';
 import { Weibull } from '../Charts/Weibull';
 import { VerticalWindSpeed } from '../Charts/VerticalWindSpeed';
 import ExclusionEolicService from '../services/ExclusionEolicService';
+import {Spinner} from "@nextui-org/spinner";
 
+interface EolicWindMapData {
+  daily_wind_temp: any;
+  wind_rose: any;
+  weibull_distribution: any;
+  wind_profile: any;
+}
 const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
-
-    const [eolicWindMapData, setEolicWindMapData] = useState([]);
+  
+  const CarouselAny = Carousel as any;  
+    const [eolicWindMapData, setEolicWindMapData] = useState<EolicWindMapData | null>(null);
 
     const getEolicResources = () => { 
       const body = {
@@ -55,15 +66,14 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
         );
       };
 
-
   return (
     <div className={`sidebarExclusionResources ${isOpen ? 'open' : ''}`}>
       <div className="content">
-      <div className="header py-3">
+        <div className="header py-3">
             <h2>Datos de los recursos eólicos</h2>
             <button onClick={onCancel}><RxCross1 style={{ height: '30px', width: '30px'}} /></button>
         </div>
-        <Card className="max-w-[400px]">
+        <Card className="w-full h-[74vh]">
         <CardHeader className="flex gap-3">
         <div className="flex flex-col gap-2">
         {/* <p className="text-md">Latitud: <Chip>{eolicdata.coordenadas[0][0]}</Chip></p>
@@ -75,7 +85,7 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
         </CardHeader>
         <CardBody>
         <div className="min-h-460 sm:h-64 xl:h-80 2xl:h-96">
-        <Carousel
+        <CarouselAny
                 showArrows={true} 
                 autoPlay={false} 
                 infiniteLoop={true} 
@@ -85,23 +95,27 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
                 renderIndicator={renderIndicator}
                 
             >
+              {eolicWindMapData ? (<div>
                 <div>
-                    <FrequencyWindSpeed eolicWindMapData={eolicWindMapData.daily_wind_temp}/>
-                    {/* <p className="legend">Perfil medio diario de la velocidad del viento</p> */}
+                <FrequencyWindSpeed  eolicWindMapData={eolicWindMapData.daily_wind_temp}/> 
                 </div>
                 <div>
-                    <WindRose eolicWindMapData={eolicWindMapData.wind_rose}/ >
-                    {/* <p className="legend">Slide 2</p> */}
+                <WindRose eolicWindMapData={eolicWindMapData.wind_rose}/> 
                 </div>
                 <div>
-                    <Weibull eolicWindMapData={eolicWindMapData.weibull_distribution}/>
-                    {/* <p className="legend">Slide 3</p> */}
+                  <Weibull eolicWindMapData={eolicWindMapData.weibull_distribution}/>
                 </div>
                 <div>
-                    <VerticalWindSpeed eolicWindMapData={eolicWindMapData.wind_profile}/>
-                    {/* <p className="legend">Slide 4</p> */}
+                  <VerticalWindSpeed eolicWindMapData={eolicWindMapData.wind_profile}/> 
                 </div>
-            </Carousel>
+                </div>
+                ): 
+                <div>
+                  <div className='mb-2 h-10' >Cargando... el proceso puede tardar unos segundos...</div>
+                  <Spinner />
+                </div> }
+                
+            </CarouselAny>
         </div>
         </CardBody>
         </Card>

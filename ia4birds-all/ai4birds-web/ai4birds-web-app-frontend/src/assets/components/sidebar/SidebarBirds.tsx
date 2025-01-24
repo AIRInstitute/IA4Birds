@@ -1,5 +1,7 @@
-import React from 'react';
-import {Tabs, Tab, Card, CardBody, Progress} from "@nextui-org/react";
+import * as React from 'react';
+import {Tabs, Tab } from "@nextui-org/tabs";
+import { Card, CardBody } from "@nextui-org/card";
+import { Progress } from "@nextui-org/progress";
 import { RxCross1 } from "react-icons/rx";
 
 const Sidebar = ({ isOpen, onCancel, birdData }) => {
@@ -17,14 +19,14 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
         <p>Nombre común: {birdData.comName}</p>
         <p className='py-2'>Nombre científico: {birdData.sciName}</p>
         <div className="flex flex-col w-full">
-      <Card className="max-w-full w-[340px] h-[400px] mt-2">
+      <Card className="w-full h-[67vh] mt-2">
         <CardBody className="overflow-hidden">
           <Tabs
             fullWidth
             size="md"
             aria-label="Tabs form"
             selectedKey={selected}
-            onSelectionChange={setSelected}
+            onSelectionChange={(key) => setSelected(key.toString())}
           >
             <Tab title="Aves">
               <p className='py-2'>Latitud: {birdData.observations[0].lat}</p>

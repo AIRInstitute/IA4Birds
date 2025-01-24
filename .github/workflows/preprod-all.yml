@@ -1,0 +1,36 @@
+name: Build pre
+
+on:
+  push:
+    branches:
+      - 'pre'
+
+jobs:
+  check_out:
+    name: check out
+    runs-on: [self-hosted, linux, x64, pre]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Stop old containers
+        run: sudo docker stop $(docker ps -a -q)
+        continue-on-error: true
+      - name: Remove old containers
+        run: sudo docker rm $(docker ps -a -q)
+        continue-on-error: true
+      - name: Remove old images
+        run: sudo docker rmi $(docker images -a -q)
+        continue-on-error: true
+      - name: Clear all Docker
+        run: sudo docker system prune --all -f || true
+
+  docker_compose:
+    name: docker compose
+    needs: check_out
+    runs-on: [self-hosted, linux, x64, pre]
+    steps:
+      - name: Build Custom Kong Image
+        run: sudo docker build -t custom-kong-gstreamer:latest .
+      - name: Build the docker-compose
+        run: sudo docker compose -f "docker-compose.yml" up -d
+      - name: List running containers
+        run: sudo docker ps

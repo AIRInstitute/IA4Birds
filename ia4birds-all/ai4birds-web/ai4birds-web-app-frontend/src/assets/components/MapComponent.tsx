@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import SidebarBirds from './sidebar/SidebarBirds';
 import SidebarEolic from './sidebar/SideBarEolic';
 import SideBarEolicResources from './sidebar/SideBarEolicResources';
 import ExclusionEolicService from './services/ExclusionEolicService';
 import BirdDataService from './services/BirdDataService';
-import { MapContainer, TileLayer, Circle, Marker, Popup, useMapEvents} from 'react-leaflet';
+import { MapContainer, TileLayer, WMSTileLayer, Circle, Marker, Popup, useMapEvents, GeoJSON } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
-import { Button, Tooltip, Card, CardBody } from "@nextui-org/react";
+import { Tooltip } from "@nextui-org/tooltip";
+import { Button } from "@nextui-org/button";
+import { Card, CardBody } from "@nextui-org/card";
 import { IconCrow } from '../components/icons/Icon';
 import { TbCarFan } from "react-icons/tb";
 import { FaCheck } from "react-icons/fa6";
 import { TbCarFan1 } from "react-icons/tb";
 import { TbCarFan2 } from "react-icons/tb";
 import L from 'leaflet';
+import { GeoJsonObject } from 'geojson';
 import toast, { Toaster } from 'react-hot-toast';
+
+// Import or define castillaYLeonBorders
+import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 
 const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [showMarkersEolicResources, setShowMarkersEolicResources] = useState(false);
   const [streamingEolicData, setstreamingEolicData] = useState(false);
-  const [eolicMarkers, setEolicMarkers] = useState([]);
-  const [birdMarkers, setBirdsMarkers] = useState([]);
-  const [eolicResourcesMarkers, setEolicResourcesMarkers] = useState([]);
-  const [clickedLatLng, setClickedLatLng] = useState(null);
+  const [eolicMarkers, setEolicMarkers] = useState<{ coordenadas: L.LatLng[] }[]>([]);
+  const [birdMarkers, setBirdsMarkers] = useState<{ observations: { lat: number, lng: number }[] }[]>([]);
+  const [eolicResourcesMarkers, setEolicResourcesMarkers] = useState<{ lat: number, lng: number }[]>([]);
+  const [clickedLatLng, setClickedLatLng] = useState<L.LatLng | null>(null);
 
   const birdData = [
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
@@ -62,7 +68,7 @@ const Mapa = () => {
   const [sidebarEolicOpen, setSidebarEolicOpen] = useState(false);
   const [sidebarEolicResourcesOpen, setSidebarEolicResourcesOpen] = useState(false);
   const [selectedButton, setSelectedButton] = useState('');
-  const [selectedButtonEolicResources, setSelectedButtonEolicResources] = useState('');
+  const [selectedButtonEolicResources, setSelectedButtonEolicResources] = useState<{ lat: number, lng: number } | null>(null);
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false); // Para poner el pájaro de carga
   
@@ -133,8 +139,10 @@ const Mapa = () => {
       if (!listening) {
         //get a Node
         //const events = new EventSource('http://localhost:5030/api/data/exclusionmap/stream-exclusion-data');
-        const events = new EventSource('http://212.128.141.36:5030/api/data/exclusionmap/stream-exclusion-data');
-  
+        //const events = new EventSource('http://212.128.154.81:5030/api/data/exclusionmap/stream-exclusion-data');
+        //const events = new EventSource(`http://${process.env.BACKEND_URL}/api/data/exclusionmap/stream-exclusion-data`);
+        const events = new EventSource(`http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_HTTP_PORT}/api/data/exclusionmap/stream-exclusion-data`);
+
         events.onmessage = (event) => {
           const parsedData = JSON.parse(event.data);
           if(parsedData.message === 'Data streaming completed.') {
@@ -251,7 +259,7 @@ const Mapa = () => {
     // </Marker>
     showMarkersEolicResources && (
       <Marker position={clickedLatLng} icon={defaultIcon}>
-       <Popup position={clickedLatLng} openOnClick={true}>
+       <Popup position={clickedLatLng}>
          Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
        </Popup>
      </Marker>
@@ -314,7 +322,17 @@ const Mapa = () => {
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {/* <GeoJSON data={castillaYLeonBorders} style={{ color: 'gray', weight: 0.5 }} /> */}
+            <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
+            {showMarkersEolic && (
+              <WMSTileLayer 
+                url="https://idecyl.jcyl.es/geoserver/er/wms"
+                layers="enre_cyl_excl_eoli"
+                format="image/png"
+                transparent={true}
+                version="1.3.0"
+                className="hue-rotate-[240deg]"
+              />
+            )}
             
             {!markersLoaded ?
               <>
@@ -322,7 +340,7 @@ const Mapa = () => {
                 </div>
                 <div className="ajaxLoad">
                   <svg className='loader-bird'
-                    x="0px" y="0px" viewBox="0 0 1498.2 1265.9" enable-background="new 0 0 1498.2 1265.9" xml:space="preserve">
+                    x="0px" y="0px" viewBox="0 0 1498.2 1265.9" enable-background="new 0 0 1498.2 1265.9" xmlSpace="preserve">
                     <g>
                       <path fill-rule="evenodd" clip-rule="evenodd" fill="#FF9900" d="M890.8,920c26,29.6,83.7,79,122,96.6c0,0-83,3.1-89.2,84.2
                       c108.6-148.5,240.7,17.2,185.2,97.9c69.1-48.2,18.3-126.4-6.7-147.9c0,0,69.9,45.4,63.1,117.8c53.4-132.4-119.4-144.6-228.9-261.6
@@ -417,7 +435,7 @@ const Mapa = () => {
                 </MarkerClusterGroup> */}
                 <MarkerClusterGroup
                   maxClusterRadius={80}>
-                  {eolicMarkers.length > 0 && eolicMarkers.map((coordinatesValues, coordinates) => {
+                  {eolicMarkers.length > 0 && eolicMarkers.map((coordinatesValues: { coordenadas: L.LatLng[] }, coordinates: number) => {
                     console.log('Coordenadas de los marcadores eólicos: ', coordinatesValues);
                     console.log('COORDENADAS.LENGTH: ', coordinatesValues.coordenadas.length);
                     for (let i = 0; i < coordinatesValues.coordenadas.length; i++) {
@@ -489,7 +507,7 @@ const Mapa = () => {
           />
         )}
 
-        {selectedButtonEolicResources && (
+        {selectedButtonEolicResources && selectedButtonEolicResources.lat && selectedButtonEolicResources.lng && (
           <SideBarEolicResources
             key={selectedButtonEolicResources.lat + '-' + selectedButtonEolicResources.lng} // Clave única
             isOpen={sidebarEolicResourcesOpen}

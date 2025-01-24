@@ -1,5 +1,7 @@
-import React from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Divider } from "@nextui-org/divider";
+import { Link } from "@nextui-org/link";
+import { Image } from "@nextui-org/image";
 export const BlogCard = ({ blogData }) => (
     <>
   {/* <div className="flex gap-4"  style={{ justifyContent:'center'}} >
