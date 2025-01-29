@@ -67,7 +67,7 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
       };
 
   return (
-    <div className={`sidebarExclusionResources ${isOpen ? 'open' : ''}`}>
+    <div className={`sidebarExclusionResources ${isOpen ? 'open' : ''} z-50`}>
       <div className="content">
         <div className="header py-3">
             <h2>Datos de los recursos eólicos</h2>

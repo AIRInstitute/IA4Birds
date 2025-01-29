@@ -37,6 +37,12 @@ const Mapa = () => {
     { id: 3, name: 'Ave 3', description: 'Descripción Ave 3', url: 'https://www.nationalgeographic.com.es/medio/2022/12/13/muchuelo-alpino_8598e7e9_221213120701_1280x853.jpg', num: '40' },
   ];
 
+  const filterOptions = [
+    { id: 1, label: "3 meses", value: 3 },
+    { id: 2, label: "6 meses", value: 6 },
+    { id: 3, label: "12 meses", value: 12 }
+  ];
+
   const coordinatesCameras = 
     [{"lat": 40.48648648648644, "lng": -3.860493503041469}, 
     {"lat": 40.216216216216196, "lng": -4.185270037209593}, 
@@ -71,6 +77,7 @@ const Mapa = () => {
   const [selectedButtonEolicResources, setSelectedButtonEolicResources] = useState<{ lat: number, lng: number } | null>(null);
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false); // Para poner el pájaro de carga
+  const [dataBird, setDataBird] = useState([]);
   
 
   //SSE ServerSent Events
@@ -78,6 +85,19 @@ const Mapa = () => {
   const [listening, setListening] = useState(false);
 
   const notify = () => toast('Toca cualquier parte del mapa para ver los datos de la mesoescala');
+
+  // useEffect(() => {
+  //   const fetchBirds = async () => {
+  //     try {
+  //       const response = await api.get("/birds");
+  //       setDataBird(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching birds:", error);
+  //     }
+  //   };
+  
+  //   fetchBirds();
+  // }, []);
 
   useEffect(() => {
    console.log('facts', facts)
@@ -205,6 +225,11 @@ const Mapa = () => {
     });
   };
 
+  const handleFilter = (value: number) => {
+    console.log(`Filter selected: ${value} months`);
+    // Add your filter logic here
+  };
+
   const handleButtonClickBirds = (button) => {
     setSelectedButtonBirds(button);
     setSidebarBirdOpen(true);
@@ -308,6 +333,23 @@ const Mapa = () => {
                 </div>
                 )}
               </div>
+            </CardBody>
+          </Card>
+        </div>
+        <div className="fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90">
+          <Card className="">
+            <CardBody className="flex flex-col gap-3">
+              <p className="text-lg font-semibold">Filtrar por tiempo</p>
+              <select
+                onChange={(e) => handleFilter(parseInt(e.target.value))}
+                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {filterOptions.map((option) => (
+                  <option key={option.id} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </CardBody>
           </Card>
         </div>
