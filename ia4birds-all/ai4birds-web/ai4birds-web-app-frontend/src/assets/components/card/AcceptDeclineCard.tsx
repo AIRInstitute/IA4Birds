@@ -78,7 +78,7 @@ export const CustomCard = () => {
                                 isReadOnly
                                 className="max-w-xm"
                                 type="text"
-                                label="Description"
+                                label="Descripción"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />

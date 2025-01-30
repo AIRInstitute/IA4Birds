@@ -71,9 +71,10 @@ export const CustomCard = () => {
                             />
                         <Textarea 
                             className="max-w-xm" 
-                            type="text" 
+                            type="text"
+                            placeholder="Ejemplo: Somos la Junta de Castilla y León y queremos solicitar una cuenta para ver la información de las aves..." 
                             description="Por favor, introduce una razón válida" 
-                            label="Description" 
+                            label="Descripción" 
                             value={description} 
                             onChange={(e) => setDescription(e.target.value)}
                             />

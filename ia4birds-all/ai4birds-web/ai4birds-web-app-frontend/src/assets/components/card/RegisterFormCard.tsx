@@ -139,7 +139,7 @@ export const CustomCard = () => {
                             onChange={(e) => setOrganization(e.target.value)}
                         />
                         <div className="relative w-full">
-                            <Input type={showPassword ? "text" : "password"} isRequired label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
+                            <Input type={showPassword ? "text" : "password"} isRequired label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                                 <Button 
                                 isIconOnly
                                 onClick={() => setShowPassword(!showPassword)}
@@ -152,7 +152,7 @@ export const CustomCard = () => {
 
                         </div>
                         <div className="relative w-full">
-                            <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repeat Password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
+                            <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repite la Contraseña" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
                                     <Button 
                                     isIconOnly
                                     onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
