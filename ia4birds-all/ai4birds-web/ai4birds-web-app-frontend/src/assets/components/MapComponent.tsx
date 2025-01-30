@@ -38,9 +38,10 @@ const Mapa = () => {
   ];
 
   const filterOptions = [
-    { id: 1, label: "3 meses", value: 3 },
-    { id: 2, label: "6 meses", value: 6 },
-    { id: 3, label: "12 meses", value: 12 }
+    { id: 1, label: "1 mes", value: 1 },
+    { id: 2, label: "3 meses", value: 3 },
+    { id: 3, label: "6 meses", value: 6 },
+    { id: 4, label: "12 meses", value: 12 }
   ];
 
   const coordinatesCameras = 
