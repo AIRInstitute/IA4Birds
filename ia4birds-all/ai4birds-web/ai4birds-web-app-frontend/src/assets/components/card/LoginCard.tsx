@@ -81,7 +81,7 @@ export const CustomCard = ()=> {
                 <div className="flex w-full flex-wrap gap-4">
                     <Input type="email" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <div className="relative w-full">
-                        <Input type={showPassword ? "text" : "password"} label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
+                        <Input type={showPassword ? "text" : "password"} label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                             <Button 
                             isIconOnly
                             onClick={() => setShowPassword(!showPassword)}

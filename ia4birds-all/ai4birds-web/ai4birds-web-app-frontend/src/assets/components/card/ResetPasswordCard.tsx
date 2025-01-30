@@ -75,7 +75,7 @@ export const CustomCard = ()=> {
             <div className="form-group">
                 <div className="flex w-full flex-wrap gap-4">
                     <div className="relative w-full">
-                        <Input type={showPassword ? "text" : "password"} isRequired label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
+                        <Input type={showPassword ? "text" : "password"} isRequired label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                             <Button 
                             isIconOnly
                             onClick={() => setShowPassword(!showPassword)}
@@ -88,7 +88,7 @@ export const CustomCard = ()=> {
 
                     </div>
                     <div className="relative w-full">
-                        <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repeat Password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
+                        <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repite la Contraseña" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
                                 <Button 
                                 isIconOnly
                                 onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
