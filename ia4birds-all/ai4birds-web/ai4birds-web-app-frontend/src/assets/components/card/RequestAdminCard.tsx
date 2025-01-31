@@ -15,6 +15,7 @@ export const CustomCard = () => {
     const [error, setError] = React.useState('');
     const [organization, setOrganization] = React.useState('');
     const [entity, setEntity] = React.useState(new Set([""]));
+    const [ocupation, setOcupation] = React.useState('');
 
     const {isOpen, onOpenChange} = useDisclosure();
     
@@ -42,7 +43,7 @@ export const CustomCard = () => {
             return;
         }
 
-        auth.requestAdmin({email: email, organization: organization, entity: Array.from(entity).join(', '), description: description})
+        auth.requestAdmin({email: email, organization: organization, entity: Array.from(entity).join(', '), ocupation: ocupation, description: description})
             .then((response) => {
                 if (!response.data.error) {
                   notify();
@@ -114,6 +115,12 @@ export const CustomCard = () => {
                             </DropdownMenu>
                           </Dropdown>
                         </div>
+                        <Input
+                            type="text"
+                            label="Ocupación"
+                            value={ocupation}
+                            onChange={(e) => setOcupation(e.target.value)}
+                        />
                         <Textarea 
                             className="max-w-xm" 
                             type="text"

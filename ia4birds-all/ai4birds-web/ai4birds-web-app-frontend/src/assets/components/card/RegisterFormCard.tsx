@@ -17,7 +17,8 @@ export const CustomCard = () => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [organization, setOrganization] = React.useState('');
-    const [entity, setEntity] = React.useState(new Set([""]));
+    const [entity, setEntity] = React.useState('');
+    const [ocupation, setOcupation] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const [error, setError] = React.useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -25,13 +26,6 @@ export const CustomCard = () => {
 
     const notify = () => toast.success('Registro correcto');
     const navigate = useNavigate();
-
-    const options = [
-        { value: "public", label: "Pública" },
-        { value: "private", label: "Privada" },
-        { value: "external", label: "Externa" }
-      ];
-      const selectedValue = options.find(option => entity.has(option.value))?.label || "Selecciona una entidad";
 
     useEffect(() => {
         // Obtener email desde la URL
@@ -84,7 +78,7 @@ export const CustomCard = () => {
         //         setError('An error occurred while registering. Please try again.');
         //     });
 
-        auth.register({email: email, name: name, password: password, organization: organization, entity: Array.from(entity).join(', ')})
+        auth.register({email: email, name: name, password: password, organization: organization, entity: entity, ocupation: ocupation})
         .then((response) => {
             if (!response.data.error) {
                 notify();
@@ -111,7 +105,6 @@ export const CustomCard = () => {
                         <Input 
                             type="email" 
                             isReadOnly
-                            placeholder="ejemplo@ejemplo.com" 
                             label="Email" 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
@@ -119,7 +112,6 @@ export const CustomCard = () => {
                         <Input 
                             type="text" 
                             isRequired 
-                            placeholder="Nombre" 
                             label="Nombre" 
                             value={name} 
                             onChange={(e) => setName(e.target.value)} 
@@ -141,32 +133,26 @@ export const CustomCard = () => {
                             onChange={(e) => setUsername(e.target.value)} 
                             /> */}
                         <Input
+                            isReadOnly
                             type="text"
-                            placeholder="Organización"
                             label="Organización"
                             value={organization}
                             onChange={(e) => setOrganization(e.target.value)}
                         />
-                        <div className="flex items-center space-x-2">
-                          <p>Entidad: </p>
-                          <Dropdown>
-                            <DropdownTrigger>
-                              <Button className="capitalize" variant="bordered">{selectedValue}</Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                              disallowEmptySelection
-                              aria-label="Entity Selection"
-                              selectedKeys={entity}
-                              selectionMode="single"
-                              variant="flat"
-                              onSelectionChange={(keys) => setEntity(new Set(Array.from(keys).map(String)))}
-                            >
-                              {options.map((option) => (
-                                <DropdownItem key={option.value}>{option.label}</DropdownItem>
-                              ))}
-                            </DropdownMenu>
-                          </Dropdown>
-                        </div>
+                        <Input
+                            isReadOnly
+                            type="text"
+                            label="Entidad"
+                            value={entity}
+                            onChange={(e) => setEntity(e.target.value)}
+                        />
+                        <Input
+                            isReadOnly
+                            type="text"
+                            label="Ocupación"
+                            value={ocupation}
+                            onChange={(e) => setOcupation(e.target.value)}
+                        />
                         <div className="relative w-full">
                             <Input type={showPassword ? "text" : "password"} isRequired label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                                 <Button 
