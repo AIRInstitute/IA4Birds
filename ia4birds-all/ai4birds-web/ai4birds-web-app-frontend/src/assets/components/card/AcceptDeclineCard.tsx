@@ -14,12 +14,13 @@ export const CustomCard = () => {
     const [successMessage, setSuccessMessage] = React.useState('');
     const [organization, setOrganization] = React.useState('');
     const [entity, setEntity] = React.useState('');
+    const [ocupation, setOcupation] = React.useState('');
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     
     const handleAccept = async () => {
         try {
-            const response = await AuthDataService.acceptRequestAdmin({ email, description });
+            const response = await AuthDataService.acceptRequestAdmin({ email, organization, entity, ocupation, description });
             if (response.data.error) {
                 setError(response.data.error);
             } else {
@@ -90,6 +91,13 @@ export const CustomCard = () => {
                                 label="Entidad"
                                 value={entity}
                                 onChange={(e) => setEntity(e.target.value)}
+                            />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Ocupación"
+                                value={ocupation}
+                                onChange={(e) => setOcupation(e.target.value)}
                             />
                             <Textarea
                                 isReadOnly
