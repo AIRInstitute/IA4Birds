@@ -5,6 +5,7 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure}
 import { Button } from "@nextui-org/button";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 import auth from "../services/AuthDataService";
 
@@ -12,11 +13,20 @@ export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [error, setError] = React.useState('');
+    const [organization, setOrganization] = React.useState('');
+    const [entity, setEntity] = React.useState(new Set([""]));
 
     const {isOpen, onOpenChange} = useDisclosure();
     
     const notify = () => toast.success('Solicitud enviada correctamente');
     const navigate = useNavigate();
+
+    const options = [
+      { value: "public", label: "Pública" },
+      { value: "private", label: "Privada" },
+      { value: "external", label: "Externa" }
+    ];
+    const selectedValue = options.find(option => entity.has(option.value))?.label || "Selecciona una entidad";
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,7 +42,7 @@ export const CustomCard = () => {
             return;
         }
 
-        auth.requestAdmin({email: email, description: description})
+        auth.requestAdmin({email: email, organization: organization, entity: Array.from(entity).join(', '), description: description})
             .then((response) => {
                 if (!response.data.error) {
                   notify();
@@ -69,6 +79,41 @@ export const CustomCard = () => {
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
                             />
+                        <Input
+                            type="text"
+                            label="Organización"
+                            value={organization}
+                            onChange={(e) => setOrganization(e.target.value)}
+                        />
+                        {/* <select
+                            value={entity}
+                            onChange={(e) => setEntity(e.target.value)}
+                        >
+                            <option value="" disabled>Selecciona una entidad</option>
+                            <option value="public">Pública</option>
+                            <option value="private">Privada</option>
+                            <option value="external">Externa</option>
+                        </select> */}
+                        <div className="flex items-center space-x-2">
+                          <p>Entidad: </p>
+                          <Dropdown>
+                            <DropdownTrigger>
+                              <Button className="capitalize" variant="bordered">{selectedValue}</Button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                              disallowEmptySelection
+                              aria-label="Entity Selection"
+                              selectedKeys={entity}
+                              selectionMode="single"
+                              variant="flat"
+                              onSelectionChange={(keys) => setEntity(new Set(Array.from(keys).map(String)))}
+                            >
+                              {options.map((option) => (
+                                <DropdownItem key={option.value}>{option.label}</DropdownItem>
+                              ))}
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
                         <Textarea 
                             className="max-w-xm" 
                             type="text"
