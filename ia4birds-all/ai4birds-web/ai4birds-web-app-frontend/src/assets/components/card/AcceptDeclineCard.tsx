@@ -5,12 +5,15 @@ import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import AuthDataService from "../services/AuthDataService";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [error, setError] = React.useState('');
     const [successMessage, setSuccessMessage] = React.useState('');
+    const [organization, setOrganization] = React.useState('');
+    const [entity, setEntity] = React.useState('');
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     
@@ -73,6 +76,20 @@ export const CustomCard = () => {
                                 label="Email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Organización"
+                                value={organization}
+                                onChange={(e) => setOrganization(e.target.value)}
+                            />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Entidad"
+                                value={entity}
+                                onChange={(e) => setEntity(e.target.value)}
                             />
                             <Textarea
                                 isReadOnly

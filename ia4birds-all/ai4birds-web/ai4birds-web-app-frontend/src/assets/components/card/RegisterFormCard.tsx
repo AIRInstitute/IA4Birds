@@ -6,6 +6,7 @@ import { Button } from "@nextui-org/button";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 import auth from "../services/AuthDataService";
 
@@ -16,6 +17,7 @@ export const CustomCard = () => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [organization, setOrganization] = React.useState('');
+    const [entity, setEntity] = React.useState(new Set([""]));
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const [error, setError] = React.useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +25,13 @@ export const CustomCard = () => {
 
     const notify = () => toast.success('Registro correcto');
     const navigate = useNavigate();
+
+    const options = [
+        { value: "public", label: "Pública" },
+        { value: "private", label: "Privada" },
+        { value: "external", label: "Externa" }
+      ];
+      const selectedValue = options.find(option => entity.has(option.value))?.label || "Selecciona una entidad";
 
     useEffect(() => {
         // Obtener email desde la URL
@@ -75,7 +84,7 @@ export const CustomCard = () => {
         //         setError('An error occurred while registering. Please try again.');
         //     });
 
-        auth.register({email: email, name: name, password: password, organization: organization})
+        auth.register({email: email, name: name, password: password, organization: organization, entity: Array.from(entity).join(', ')})
         .then((response) => {
             if (!response.data.error) {
                 notify();
@@ -138,6 +147,26 @@ export const CustomCard = () => {
                             value={organization}
                             onChange={(e) => setOrganization(e.target.value)}
                         />
+                        <div className="flex items-center space-x-2">
+                          <p>Entidad: </p>
+                          <Dropdown>
+                            <DropdownTrigger>
+                              <Button className="capitalize" variant="bordered">{selectedValue}</Button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                              disallowEmptySelection
+                              aria-label="Entity Selection"
+                              selectedKeys={entity}
+                              selectionMode="single"
+                              variant="flat"
+                              onSelectionChange={(keys) => setEntity(new Set(Array.from(keys).map(String)))}
+                            >
+                              {options.map((option) => (
+                                <DropdownItem key={option.value}>{option.label}</DropdownItem>
+                              ))}
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
                         <div className="relative w-full">
                             <Input type={showPassword ? "text" : "password"} isRequired label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                                 <Button 
