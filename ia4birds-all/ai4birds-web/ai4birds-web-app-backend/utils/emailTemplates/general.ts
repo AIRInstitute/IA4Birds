@@ -49,14 +49,18 @@ projectName: string,
 ) => {
 return baseEmailTemplate(
     `Activación de cuenta en ${projectName}`,
-    [
-        "Hola,",
-        `Has recibido este correo porque ${description}.`,
-        `Este registro está asociado al correo: ${email}, perteneciente a la organización ${organization}, con la ocupación ${ocupation} y tipo de entidad ${entity}.`,
-        "Para activar la cuenta, por favor haz clic en el siguiente enlace:",
-    ],
-    url,
-    "Activar cuenta",
+[
+    "Hola,",
+    `Has recibido este correo porque se ha solicitado la activación de una cuenta con la siguiente información:`,
+    `<strong>Correo electrónico:</strong> ${email}`,
+    `<strong>Organización:</strong> ${organization}`,
+    `<strong>Ocupación:</strong> ${ocupation}`,
+    `<strong>Tipo de entidad:</strong> ${entity}`,
+    `<strong>Descripción:</strong> ${description}`,
+    "Para confirmar y activar esta cuenta, haz clic en el siguiente enlace:",
+],
+url,
+"Activar cuenta",
 );
 };
 

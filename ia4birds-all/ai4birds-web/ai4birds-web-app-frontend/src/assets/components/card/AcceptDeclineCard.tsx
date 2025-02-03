@@ -52,10 +52,16 @@ export const CustomCard = () => {
         const params = new URLSearchParams(window.location.search);
         const emailParam = params.get('email');
         const descriptionParam = params.get('description');
+        const organizationParam = params.get('organization');
+        const ocupationParam = params.get('ocupation');
+        const entityParam = params.get('entity');
  
         //Decodifica los valores de la URL
         if (emailParam) setEmail(decodeURIComponent(emailParam));
         if (descriptionParam) setDescription(decodeURIComponent(descriptionParam));
+        if (organizationParam) setOrganization(decodeURIComponent(organizationParam));
+        if (ocupationParam) setOcupation(decodeURIComponent(ocupationParam));
+        if (entityParam) setEntity(decodeURIComponent(entityParam));
 
 
         console.log('La página se ha cargado RequestAdminComponent');
