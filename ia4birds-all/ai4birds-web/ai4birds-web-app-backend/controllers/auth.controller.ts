@@ -15,7 +15,7 @@ import { User } from "../models/connection";
  * @body {string} description The description of the user
  * @body {string} organization The organization of the user
  * @body {string} ocupation The ocupation of the user
- * @body {string} entidad The type of entity (Publica, Privada, Externo)
+ * @body {string} entity The type of entity (Publica, Privada, Externo)
  * @returns {string} A message indicating the result of the activate account request.
  */
 const activateaccount = async (req: Request, res: Response) => {
@@ -25,7 +25,7 @@ const activateaccount = async (req: Request, res: Response) => {
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     }
 
-    if (!utils.keysChecker(body, ["email", "description", "organization", "ocupation", "entidad"])) {
+    if (!utils.keysChecker(body, ["email", "description", "organization", "ocupation", "entity"])) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
     }
 
@@ -42,7 +42,7 @@ const activateaccount = async (req: Request, res: Response) => {
     console.log("TOKEN ACTIVATE:", activateAccountToken);
 
     // Construcción de la URL con los nuevos parámetros
-    const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}&organization=${encodeURIComponent(body.organization)}&ocupation=${encodeURIComponent(body.ocupation)}&entidad=${encodeURIComponent(body.entidad)}`;
+    const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}&organization=${encodeURIComponent(body.organization)}&ocupation=${encodeURIComponent(body.ocupation)}&entity=${encodeURIComponent(body.entity)}`;
 
     const mailOptions = {
         from: globalConfig.smtp.email,
@@ -54,7 +54,7 @@ const activateaccount = async (req: Request, res: Response) => {
             body.description,
             body.organization,
             body.ocupation,
-            body.entidad,
+            body.entity,
             globalConfig.projectName
         ),
     };
@@ -79,7 +79,7 @@ const activateaccount = async (req: Request, res: Response) => {
  * @body {string} description A description provided by the user during the activation request
  * @body {string} organization The organization of the user
  * @body {string} ocupation The ocupation of the user
- * @body {string} entidad The type of entity (Publica, Privada, Externo)
+ * @body {string} entity The type of entity (Publica, Privada, Externo)
  * @returns {string} A message indicating the result of the account activation and email sending process.
  */
 const confirmAccountActivation = async (req: Request, res: Response) => {
@@ -91,9 +91,9 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
 
     console.log("Req.body in Confirm Activation:", req.body);
 
-    const { email, description, organization, ocupation, entidad } = body;
+    const { email, description, organization, ocupation, entity } = body;
 
-    if (!email || !description || !organization || !ocupation || !entidad) {
+    if (!email || !description || !organization || !ocupation || !entity) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
     }
 
@@ -101,7 +101,7 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
     console.log("Description in Confirm Activation:", description);
     console.log("Organization in Confirm Activation:", organization);
     console.log("Ocupation in Confirm Activation:", ocupation);
-    console.log("Entidad in Confirm Activation:", entidad);
+    console.log("entity in Confirm Activation:", entity);
 
     try {
         // Verificar si ya existe un usuario con este email
@@ -116,7 +116,7 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
             description,
             organization,
             ocupation,
-            entidad,
+            entity,
             active: false,
             name: "Pending",
             password: "temporary-password",
@@ -135,14 +135,14 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
         console.log("TOKEN REGISTRATION:", registrationToken);
 
         // URL para que el usuario complete el registro con los nuevos parámetros
-        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}&organization=${encodeURIComponent(organization)}&ocupation=${encodeURIComponent(ocupation)}&entidad=${encodeURIComponent(entidad)}`;
+        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}&organization=${encodeURIComponent(organization)}&ocupation=${encodeURIComponent(ocupation)}&entity=${encodeURIComponent(entity)}`;
 
         // Enviar correo al usuario
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: email,
             subject: `${globalConfig.projectName} - Complete Your Registration`,
-            html: completeRegister(url, globalConfig.projectName, organization, ocupation, entidad),
+            html: completeRegister(url, globalConfig.projectName, organization, ocupation, entity),
         };
 
         const mailResponse = await smtp.sendMail(mailOptions);
