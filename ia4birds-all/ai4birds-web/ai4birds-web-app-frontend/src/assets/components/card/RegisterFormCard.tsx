@@ -31,10 +31,16 @@ export const CustomCard = () => {
         // Obtener email desde la URL
         const params = new URLSearchParams(window.location.search);
         const emailParam = params.get('email');
+        const organizationParam = params.get('organization');
+        const ocupationParam = params.get('ocupation');
+        const entityParam = params.get('entity');
         // Decodifica caracteres
         if (emailParam) {
             setEmail(decodeURIComponent(emailParam));  
         }
+        if (organizationParam) setOrganization(decodeURIComponent(organizationParam));
+        if (ocupationParam) setOcupation(decodeURIComponent(ocupationParam));
+        if (entityParam) setEntity(decodeURIComponent(entityParam));
     }, []);
 
     const handleSubmit = (e) => {
