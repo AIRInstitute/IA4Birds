@@ -3,7 +3,7 @@ const activateAccountTemplate = (
   username: string,
   organization: string,
   ocupation: string,
-  entidad: string,
+  entity: string,
   email: string,
   projectName: string,
 ) => {
@@ -11,7 +11,7 @@ const activateAccountTemplate = (
       `Activar la cuenta de ${username}`,
       [
           "Hola,",
-          `Has recibido este correo porque ${username}, que pertenece a la organización ${organization} con la ocupación ${ocupation} y tipo de entidad ${entidad}, se ha registrado con el correo electrónico ${email} en la plataforma ${projectName}.`,
+          `Has recibido este correo porque ${username}, que pertenece a la organización ${organization} con la ocupación ${ocupation} y tipo de entidad ${entity}, se ha registrado con el correo electrónico ${email} en la plataforma ${projectName}.`,
           "Para activar la cuenta, por favor haz clic en el siguiente enlace:",
       ],
       url,
@@ -24,13 +24,13 @@ url: string,
 projectName: string,
 organization: string,
 ocupation: string,
-entidad: string,
+entity: string,
 ) => {
 return baseEmailTemplate(
   `Completa tu registro en la plataforma ${projectName}`,
   [
       "Hola,",
-      `Tu cuenta ha sido aprobada por el administrador. Perteneces a la organización ${organization}, con la ocupación ${ocupation} y tipo de entidad ${entidad}.`,
+      `Tu cuenta ha sido aprobada por el administrador. Perteneces a la organización ${organization}, con la ocupación ${ocupation} y tipo de entidad ${entity}.`,
       "Por favor, completa tu registro haciendo clic en el siguiente enlace:",
   ],
   url,
@@ -44,7 +44,7 @@ email: string,
 description: string,
 organization: string,
 ocupation: string,
-entidad: string,
+entity: string,
 projectName: string,
 ) => {
 return baseEmailTemplate(
@@ -52,7 +52,7 @@ return baseEmailTemplate(
     [
         "Hola,",
         `Has recibido este correo porque ${description}.`,
-        `Este registro está asociado al correo: ${email}, perteneciente a la organización ${organization}, con la ocupación ${ocupation} y tipo de entidad ${entidad}.`,
+        `Este registro está asociado al correo: ${email}, perteneciente a la organización ${organization}, con la ocupación ${ocupation} y tipo de entidad ${entity}.`,
         "Para activar la cuenta, por favor haz clic en el siguiente enlace:",
     ],
     url,

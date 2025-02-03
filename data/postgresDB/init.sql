@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     organization VARCHAR(255),
     ocupation VARCHAR(255), -- Nuevo campo de ocupación
-    entidad entidad_enum NOT NULL, -- Nuevo campo ENUM
+    entity entidad_enum NOT NULL, -- Nuevo campo ENUM
     description VARCHAR(255),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active BOOLEAN DEFAULT FALSE
