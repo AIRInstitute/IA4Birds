@@ -9,6 +9,13 @@ import { activateAccountTemplate,activateAdminTemplate, completeRegister, reject
 import utils from "../utils/utils";
 import { User } from "../models/connection";
 
+const ENTITY_TRANSLATION: Record<string, string> = {
+    "public": "Pública",
+    "private": "Privada",
+    "external": "Externo"
+};
+
+
 /**
  * Activate account request
  * @body {string} email The email of the user
@@ -29,6 +36,9 @@ const activateaccount = async (req: Request, res: Response) => {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
     }
 
+    // Traducir entity antes de enviarlo al template
+    const entityTranslated = ENTITY_TRANSLATION[body.entity] || body.entity;
+
     // Generar token de activación
     const activateAccountToken = await utils.generateJWTToken(body.email, "activation");
 
@@ -47,14 +57,14 @@ const activateaccount = async (req: Request, res: Response) => {
     const mailOptions = {
         from: globalConfig.smtp.email,
         to: globalConfig.smtp.email,
-        subject: `${globalConfig.projectName} - Activate account`,
+        subject: `${globalConfig.projectName} - Activar cuenta`,
         html: activateAdminTemplate(
             url,
             body.email,
             body.description,
             body.organization,
             body.ocupation,
-            body.entity,
+            entityTranslated,
             globalConfig.projectName
         ),
     };
@@ -141,7 +151,7 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: email,
-            subject: `${globalConfig.projectName} - Complete Your Registration`,
+            subject: `${globalConfig.projectName} - Completa tu registro`,
             html: completeRegister(url, globalConfig.projectName, organization, ocupation, entity),
         };
 
@@ -175,7 +185,7 @@ const rejectAccountRequest = async (req: Request, res: Response) => {
     const mailOptions = {
         from: globalConfig.smtp.email,
         to: email,
-        subject: `${globalConfig.projectName} - Account Request Rejected`,
+        subject: `${globalConfig.projectName} - Solicitud de cuenta rechazada`,
         html: rejectAccountTemplate(email, globalConfig.projectName, ),
     };
 
