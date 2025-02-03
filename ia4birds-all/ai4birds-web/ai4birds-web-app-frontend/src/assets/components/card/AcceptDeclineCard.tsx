@@ -5,18 +5,22 @@ import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import AuthDataService from "../services/AuthDataService";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [error, setError] = React.useState('');
     const [successMessage, setSuccessMessage] = React.useState('');
+    const [organization, setOrganization] = React.useState('');
+    const [entity, setEntity] = React.useState('');
+    const [ocupation, setOcupation] = React.useState('');
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     
     const handleAccept = async () => {
         try {
-            const response = await AuthDataService.acceptRequestAdmin({ email, description });
+            const response = await AuthDataService.acceptRequestAdmin({ email, organization, entity, ocupation, description });
             if (response.data.error) {
                 setError(response.data.error);
             } else {
@@ -74,11 +78,32 @@ export const CustomCard = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Organización"
+                                value={organization}
+                                onChange={(e) => setOrganization(e.target.value)}
+                            />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Entidad"
+                                value={entity}
+                                onChange={(e) => setEntity(e.target.value)}
+                            />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Ocupación"
+                                value={ocupation}
+                                onChange={(e) => setOcupation(e.target.value)}
+                            />
                             <Textarea
                                 isReadOnly
                                 className="max-w-xm"
                                 type="text"
-                                label="Description"
+                                label="Descripción"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />

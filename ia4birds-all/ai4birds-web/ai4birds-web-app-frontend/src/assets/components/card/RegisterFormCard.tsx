@@ -6,6 +6,7 @@ import { Button } from "@nextui-org/button";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 import auth from "../services/AuthDataService";
 
@@ -16,6 +17,8 @@ export const CustomCard = () => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [organization, setOrganization] = React.useState('');
+    const [entity, setEntity] = React.useState('');
+    const [ocupation, setOcupation] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const [error, setError] = React.useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -75,7 +78,7 @@ export const CustomCard = () => {
         //         setError('An error occurred while registering. Please try again.');
         //     });
 
-        auth.register({email: email, name: name, password: password, organization: organization})
+        auth.register({email: email, name: name, password: password, organization: organization, entity: entity, ocupation: ocupation})
         .then((response) => {
             if (!response.data.error) {
                 notify();
@@ -102,7 +105,6 @@ export const CustomCard = () => {
                         <Input 
                             type="email" 
                             isReadOnly
-                            placeholder="ejemplo@ejemplo.com" 
                             label="Email" 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
@@ -110,7 +112,6 @@ export const CustomCard = () => {
                         <Input 
                             type="text" 
                             isRequired 
-                            placeholder="Nombre" 
                             label="Nombre" 
                             value={name} 
                             onChange={(e) => setName(e.target.value)} 
@@ -132,14 +133,28 @@ export const CustomCard = () => {
                             onChange={(e) => setUsername(e.target.value)} 
                             /> */}
                         <Input
+                            isReadOnly
                             type="text"
-                            placeholder="Organización"
                             label="Organización"
                             value={organization}
                             onChange={(e) => setOrganization(e.target.value)}
                         />
+                        <Input
+                            isReadOnly
+                            type="text"
+                            label="Entidad"
+                            value={entity}
+                            onChange={(e) => setEntity(e.target.value)}
+                        />
+                        <Input
+                            isReadOnly
+                            type="text"
+                            label="Ocupación"
+                            value={ocupation}
+                            onChange={(e) => setOcupation(e.target.value)}
+                        />
                         <div className="relative w-full">
-                            <Input type={showPassword ? "text" : "password"} isRequired label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
+                            <Input type={showPassword ? "text" : "password"} isRequired label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                                 <Button 
                                 isIconOnly
                                 onClick={() => setShowPassword(!showPassword)}
@@ -152,7 +167,7 @@ export const CustomCard = () => {
 
                         </div>
                         <div className="relative w-full">
-                            <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repeat Password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
+                            <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repite la Contraseña" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
                                     <Button 
                                     isIconOnly
                                     onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}

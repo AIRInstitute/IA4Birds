@@ -13,27 +13,37 @@ import { User } from "../models/connection";
  * Activate account request
  * @body {string} email The email of the user
  * @body {string} description The description of the user
- * @returns {string} A message indicating the result of the activate account.
+ * @body {string} organization The organization of the user
+ * @body {string} ocupation The ocupation of the user
+ * @body {string} entidad The type of entity (Publica, Privada, Externo)
+ * @returns {string} A message indicating the result of the activate account request.
  */
 const activateaccount = async (req: Request, res: Response) => {
     const body = req.body;
+
     if (!body || Object.keys(body).length === 0) {
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     }
 
-    if (!utils.keysChecker(body, ["email","description"]))
+    if (!utils.keysChecker(body, ["email", "description", "organization", "ocupation", "entidad"])) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
+    }
 
+    // Generar token de activación
     const activateAccountToken = await utils.generateJWTToken(body.email, "activation");
+
     res.cookie("activationToken", activateAccountToken, {
-        httpOnly: true,         // No accesible desde JavaScript
-        secure: false,          // Permite que la cookie se envíe en HTTP
-        sameSite: "strict",     // Restringe el acceso desde otros dominios
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
         maxAge: 24 * 60 * 60 * 1000, // 1 día
     });
-    console.log("TOKEN ACTIVATE: ",activateAccountToken)
-    const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}`;
-    
+
+    console.log("TOKEN ACTIVATE:", activateAccountToken);
+
+    // Construcción de la URL con los nuevos parámetros
+    const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}&organization=${encodeURIComponent(body.organization)}&ocupation=${encodeURIComponent(body.ocupation)}&entidad=${encodeURIComponent(body.entidad)}`;
+
     const mailOptions = {
         from: globalConfig.smtp.email,
         to: globalConfig.smtp.email,
@@ -42,9 +52,13 @@ const activateaccount = async (req: Request, res: Response) => {
             url,
             body.email,
             body.description,
-            globalConfig.projectName,
+            body.organization,
+            body.ocupation,
+            body.entidad,
+            globalConfig.projectName
         ),
     };
+
     try {
         const mailResponse = await smtp.sendMail(mailOptions);
         if (mailResponse.status === 200) {
@@ -57,34 +71,38 @@ const activateaccount = async (req: Request, res: Response) => {
         console.error(err);
         return res.status(500).send(err.message);
     }
-}
+};
 
 /**
  * Confirm account activation by the administrator
  * @body {string} email The email of the user to activate
  * @body {string} description A description provided by the user during the activation request
+ * @body {string} organization The organization of the user
+ * @body {string} ocupation The ocupation of the user
+ * @body {string} entidad The type of entity (Publica, Privada, Externo)
  * @returns {string} A message indicating the result of the account activation and email sending process.
- * 
  */
 const confirmAccountActivation = async (req: Request, res: Response) => {
-
     const body = req.body;
 
-    // Validar que el cuerpo no esté vacío
     if (!body || Object.keys(body).length === 0) {
         return res.status(400).send(responseMessages[400].BODY_CANNOT_BE_EMPTY);
     }
 
-    console.log("Req.body in Confirm Activation: ",req.body)
-    
-    // Validar que los campos necesarios están presentes
-    const { email, description } = body;
-    if (!email || !description) {
+    console.log("Req.body in Confirm Activation:", req.body);
+
+    const { email, description, organization, ocupation, entidad } = body;
+
+    if (!email || !description || !organization || !ocupation || !entidad) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
     }
 
-    console.log("Email in Confirm Activation: ",email)
-    console.log("Description in Confirm Activation: ",description)
+    console.log("Email in Confirm Activation:", email);
+    console.log("Description in Confirm Activation:", description);
+    console.log("Organization in Confirm Activation:", organization);
+    console.log("Ocupation in Confirm Activation:", ocupation);
+    console.log("Entidad in Confirm Activation:", entidad);
+
     try {
         // Verificar si ya existe un usuario con este email
         const existingUser = await User.findOne({ where: { email } });
@@ -96,32 +114,35 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
         const user = await User.create({
             email,
             description,
+            organization,
+            ocupation,
+            entidad,
             active: false,
-            name: "Pending",  
-            password: "temporary-password",  
+            name: "Pending",
+            password: "temporary-password",
         });
-        
 
         // Generar un token para completar el registro
         const registrationToken = await utils.generateJWTToken(user.id, "registration");
+
         res.cookie("registrationToken", registrationToken, {
-            httpOnly: true,         // No accesible desde JavaScript
-            secure: false,          // Permite que la cookie se envíe en HTTP
-            sameSite: "strict",     // Restringe el acceso desde otros dominios
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000, // 1 día
         });
 
-        console.log("TOKEN REGISTRATION: ", registrationToken);
+        console.log("TOKEN REGISTRATION:", registrationToken);
 
-        // URL para que el usuario complete el registro
-        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}`;
+        // URL para que el usuario complete el registro con los nuevos parámetros
+        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}&organization=${encodeURIComponent(organization)}&ocupation=${encodeURIComponent(ocupation)}&entidad=${encodeURIComponent(entidad)}`;
 
         // Enviar correo al usuario
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: email,
             subject: `${globalConfig.projectName} - Complete Your Registration`,
-            html: completeRegister(url, globalConfig.projectName),
+            html: completeRegister(url, globalConfig.projectName, organization, ocupation, entidad),
         };
 
         const mailResponse = await smtp.sendMail(mailOptions);
@@ -155,7 +176,7 @@ const rejectAccountRequest = async (req: Request, res: Response) => {
         from: globalConfig.smtp.email,
         to: email,
         subject: `${globalConfig.projectName} - Account Request Rejected`,
-        html: rejectAccountTemplate(email, globalConfig.projectName),
+        html: rejectAccountTemplate(email, globalConfig.projectName, ),
     };
 
     try {
@@ -178,7 +199,6 @@ const rejectAccountRequest = async (req: Request, res: Response) => {
  * @body {string} name The name of the user
  * @body {string} email The email of the user
  * @body {string} password The password of the user
- * @body {string} organization The organization of the user
  * @returns {string} A message indicating the result of the signup.
  */
 const signup = async (req: Request, res: Response) => {
@@ -190,7 +210,7 @@ const signup = async (req: Request, res: Response) => {
     }
 
     // Validar los parámetros requeridos
-    if (!utils.keysChecker(body, ["name", "password", "organization"])) {
+    if (!utils.keysChecker(body, ["name", "password"])) {
         return res.status(400).send(responseMessages[400].MISSING_PARAMETERS);
     }
 
@@ -228,7 +248,7 @@ const signup = async (req: Request, res: Response) => {
         await user.update({
             name: body.name,
             password: hash,
-            organization: body.organization,
+            // organization: body.organization,
             active: true, // Activar la cuenta del usuario
         });
 

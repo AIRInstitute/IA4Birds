@@ -11,7 +11,7 @@ const SidebarEolic = ({ isOpen, onCancel,eolicdata}) => {
     console.log('EolicData dentro del SideBarEolic: ', eolicdata);
 
   return (
-    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+    <div className={`sidebar ${isOpen ? 'open' : ''} z-50`}>
       <div className="content">
       <div className="header py-3">
             <h2>Datos de la exclusión eólica</h2>
