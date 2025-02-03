@@ -15,7 +15,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare organization: string;
     declare ocupation: string;
     declare description: string;
-    declare entity: "Publica" | "Privada" | "Externo"
+    declare entity: "public" | "private" | "external"
     declare active: CreationOptional<boolean>;
     declare createdAt: CreationOptional<Date>;
 }
@@ -44,7 +44,7 @@ export default (sequelize: Sequelize) => {
             ocupation: DataTypes.STRING,
             description: DataTypes.STRING,
             entity: {
-                type: DataTypes.ENUM("Publica", "Privada", "Externo"),
+                type: DataTypes.ENUM("public", "private", "external"),
                 allowNull: false, // Puedes cambiarlo a `true` si lo necesitas opcional
             },
         },
