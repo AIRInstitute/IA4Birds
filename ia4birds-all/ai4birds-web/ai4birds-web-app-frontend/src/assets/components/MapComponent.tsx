@@ -74,7 +74,7 @@ const Mapa = () => {
   const [sidebarBirdOpen, setSidebarBirdOpen] = useState(false);
   const [sidebarEolicOpen, setSidebarEolicOpen] = useState(false);
   const [sidebarEolicResourcesOpen, setSidebarEolicResourcesOpen] = useState(false);
-  const [selectedButton, setSelectedButton] = useState('');
+  const [selectedButton, setSelectedButton] = useState<L.LatLng[]>([]);
   const [selectedButtonEolicResources, setSelectedButtonEolicResources] = useState<{ lat: number, lng: number } | null>(null);
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false); // Para poner el pájaro de carga
@@ -187,6 +187,33 @@ const Mapa = () => {
       }
     }
   }
+
+  const getNearbyEolicMarkers = (clickedPoint, allMarkers, maxDistance = 10000) => {
+    const toRadians = (degrees) => degrees * (Math.PI / 180);
+    const R = 6371000; // Radio de la Tierra en metros (6371 km)
+  
+    return allMarkers.filter((marker) => {
+      if (!marker.coordenadas || marker.coordenadas.length === 0) return false;
+  
+      const [lat1, lon1] = clickedPoint; // Punto de referencia
+      const [lat2, lon2] = marker.coordenadas[0]; // Punto a comparar
+  
+      // Convertir latitudes y longitudes a radianes
+      const dLat = toRadians(lat2 - lat1);
+      const dLon = toRadians(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) *
+          Math.cos(toRadians(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+  
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = R * c; // Distancia en metros
+  
+      return distance <= maxDistance;
+    });
+  };
   
 //====================================================================
   //FILL EOLIC RESOURCES
@@ -240,11 +267,59 @@ const Mapa = () => {
     setSidebarBirdOpen(false);
   };
 
-  const handleButtonClickEolic = (button) => {
+  // const handleButtonClickEolic = (button) => {
 
-    setSelectedButton(button);
+  //   setSelectedButton(button);
+  //   setSidebarEolicOpen(true);
+  // };
+
+  const handleButtonClickEolic = (clickedPoint) => {
+    const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers);
+  
+    console.log("Puntos dentro de 40km:", nearbyEolicMarkers); // 🔍 Verifica que no está vacío
+  
+    setSelectedButton(nearbyEolicMarkers); // Guarda solo los puntos cercanos
     setSidebarEolicOpen(true);
   };
+
+  // const handleButtonClickEolic = (clickedPoint) => {
+  //   setSidebarEolicOpen(true);
+  
+  //   const R = 6371; // Radio de la Tierra en km
+  //   const maxDistance = 40; // 40 km
+  
+  //   const getDistance = (lat1, lon1, lat2, lon2) => {
+  //     const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  //     const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  //     const a =
+  //       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  //       Math.cos((lat1 * Math.PI) / 180) *
+  //         Math.cos((lat2 * Math.PI) / 180) *
+  //         Math.sin(dLon / 2) *
+  //         Math.sin(dLon / 2);
+  //     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  //     return R * c; // Distancia en km
+  //   };
+  
+  //   // Filtrar los puntos dentro de 40 km
+  //   const nearbyEolicMarkers = eolicMarkers.flatMap(({ coordenadas }) =>
+  //     coordenadas.filter((point) => {
+  //       const distance = getDistance(
+  //         clickedPoint.lat,
+  //         clickedPoint.lng,
+  //         point.lat,
+  //         point.lng
+  //       );
+  //       return distance <= maxDistance;
+  //     })
+  //   );
+  
+  //   console.log("Puntos dentro de 40km:", nearbyEolicMarkers);
+    
+  //   // Guardar los puntos filtrados en el estado
+  //   setSelectedButton(nearbyEolicMarkers);
+  // };
+  
 
   const handleCancelClickEolic = () => {
     setSidebarEolicOpen(false);
@@ -259,39 +334,39 @@ const Mapa = () => {
   function LocationMarker() {
 
     if(showMarkersEolicResources){
-    useMapEvents({
-      click(e) {
-        setClickedLatLng(e.latlng);
-        console.log('Latitud y longitud', e.latlng);
-        handleButtonClickEolicResources(e.latlng);
-      }
-    });
-  }
+      useMapEvents({
+        click(e) {
+          setClickedLatLng(e.latlng);
+          console.log('Latitud y longitud', e.latlng);
+          handleButtonClickEolicResources(e.latlng);
+        }
+      });
+    }
 
-  const defaultIcon = new L.Icon({
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-    shadowSize: [41, 41]
-  });
-  
-  return clickedLatLng === null ? null : (
-    // <Marker position={clickedLatLng} icon={defaultIcon}>
-    //   <Popup position={clickedLatLng} openOnClick={true}>
-    //     Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
-    //   </Popup>
-    // </Marker>
-    showMarkersEolicResources && (
-      <Marker position={clickedLatLng} icon={defaultIcon}>
-       <Popup position={clickedLatLng}>
-         Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
-       </Popup>
-     </Marker>
-    )
-  );
-}
+    const defaultIcon = new L.Icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+    
+    return clickedLatLng === null ? null : (
+      // <Marker position={clickedLatLng} icon={defaultIcon}>
+      //   <Popup position={clickedLatLng} openOnClick={true}>
+      //     Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
+      //   </Popup>
+      // </Marker>
+      showMarkersEolicResources && (
+        <Marker position={clickedLatLng} icon={defaultIcon}>
+        <Popup position={clickedLatLng}>
+          Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
+        </Popup>
+      </Marker>
+      )
+    );
+  }
   return (
     <>
     <Toaster containerStyle={{top: 150,
@@ -476,7 +551,7 @@ const Mapa = () => {
                     </>
                   ))}
                 </MarkerClusterGroup> */}
-                <MarkerClusterGroup
+                {/* <MarkerClusterGroup
                   maxClusterRadius={80}>
                   {eolicMarkers.length > 0 && eolicMarkers.map((coordinatesValues: { coordenadas: L.LatLng[] }, coordinates: number) => {
                     console.log('Coordenadas de los marcadores eólicos: ', coordinatesValues);
@@ -490,7 +565,8 @@ const Mapa = () => {
                               key={coordinates}
                               center={eolicPoint} 
                               pathOptions={{ fillColor: 'blue', color: 'blue' }} 
-                              radius={100}
+                              // pathOptions={{ fillOpacity: 0, stroke: false }} // Con esto hago invisibles los círculos
+                              radius={1500} // Radio del círculo aumentado de 100 a 1500
                               eventHandlers={{
                                   click: () => {
                                       handleButtonClickEolic(coordinates)
@@ -501,7 +577,43 @@ const Mapa = () => {
                       );
                     }
                   })}
+                </MarkerClusterGroup> */}
+
+                {/* <MarkerClusterGroup maxClusterRadius={80}>
+                  {eolicMarkers.length > 0 &&
+                    eolicMarkers.flatMap((coordinatesValues: { coordenadas: L.LatLng[] }, coordinates: number) => {
+                      // console.log('Coordenadas de los marcadores eólicos: ', coordinatesValues);
+                      return coordinatesValues.coordenadas.map((eolicPoint, i) => (
+                        <Circle
+                          key={`${coordinates}-${i}`} // Unique key for each circle
+                          center={eolicPoint} 
+                          pathOptions={{ fillColor: 'blue', color: 'blue' }} 
+                          radius={1500}
+                          eventHandlers={{
+                            click: () => handleButtonClickEolic(coordinates),
+                          }}
+                        />
+                      ));
+                    })}
+                </MarkerClusterGroup> */}
+
+                <MarkerClusterGroup maxClusterRadius={80}>
+                  {eolicMarkers.length > 0 &&
+                    eolicMarkers.flatMap(({ coordenadas }, index) =>
+                      coordenadas.map((eolicPoint, i) => (
+                        <Circle
+                          key={`${index}-${i}`} 
+                          center={eolicPoint}
+                          pathOptions={{ fillColor: "blue", color: "blue" }}
+                          radius={1500}
+                          eventHandlers={{
+                            click: () => handleButtonClickEolic(eolicPoint),
+                          }}
+                        />
+                      ))
+                    )}
                 </MarkerClusterGroup>
+
                 <LocationMarker />
 
                 {eolicResourcesMarkers.length > 0 && eolicResourcesMarkers.map((coordinatesValues, coordinates) => {
@@ -542,13 +654,23 @@ const Mapa = () => {
           />
         )}
 
-        {selectedButton && eolicMarkers[selectedButton] && (
+        {/* {selectedButton && eolicMarkers[selectedButton] && (
           <SidebarEolic
             isOpen={sidebarEolicOpen}
             onCancel={handleCancelClickEolic}
             eolicdata={eolicMarkers[selectedButton]}
+            // eolicdata={nearbyEolicMarkers}
+          />
+        )} */}
+
+        {selectedButton.length > 0 && (
+          <SidebarEolic
+            isOpen={sidebarEolicOpen}
+            onCancel={handleCancelClickEolic}
+            eolicdata={selectedButton} // Ahora pasamos todos los puntos cercanos
           />
         )}
+
 
         {selectedButtonEolicResources && selectedButtonEolicResources.lat && selectedButtonEolicResources.lng && (
           <SideBarEolicResources
