@@ -26,6 +26,7 @@
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.7.8",
     "framer-motion": "^10.16.12",
+    "geolocation-utils": "^1.2.5",
     "leaflet": "^1.9.4",
     "ol": "^8.2.0",
     "primereact": "^10.7.0",
