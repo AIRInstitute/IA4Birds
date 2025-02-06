@@ -30,6 +30,7 @@ const Mapa = () => {
   const [birdMarkers, setBirdsMarkers] = useState<{ observations: { lat: number, lng: number }[] }[]>([]);
   const [eolicResourcesMarkers, setEolicResourcesMarkers] = useState<{ lat: number, lng: number }[]>([]);
   const [clickedLatLng, setClickedLatLng] = useState<L.LatLng | null>(null);
+  const [showFilter, setShowFilter] = useState(false);
 
   const birdData = [
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
@@ -173,6 +174,7 @@ const Mapa = () => {
           }
   
           setShowMarkersEolic(true);
+          setShowFilter(true);
   
         };
   
@@ -182,6 +184,7 @@ const Mapa = () => {
     }else{
       setEolicMarkers([]);
       setShowMarkersEolic(false);
+      setShowFilter(false);
       if(!showMarkersEolicResources && showMarkersEolic){
         fillBirdData();
       }
@@ -223,6 +226,7 @@ const Mapa = () => {
     if(!showMarkersEolicResources){
       notify();
       setBirdsMarkers([]);
+      setShowFilter(true);
       //setEolicResourcesMarkers(coordinatesCameras);
       setShowMarkersEolicResources(true);
 
@@ -230,6 +234,7 @@ const Mapa = () => {
       setSidebarEolicResourcesOpen(false);
       setEolicResourcesMarkers([]);
       setShowMarkersEolicResources(false);
+      setShowFilter(false);
       if(!showMarkersEolic && showMarkersEolicResources){
         fillBirdData();
       }
@@ -412,7 +417,7 @@ const Mapa = () => {
             </CardBody>
           </Card>
         </div>
-        <div className="fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90">
+        <div className={`fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90 ${showFilter ? 'hidden' : ''}`}>
           <Card className="">
             <CardBody className="flex flex-col gap-3">
               <p className="text-lg font-semibold">Filtrar por tiempo</p>
