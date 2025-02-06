@@ -40,14 +40,14 @@ export const CustomCard = () => {
       })
       .catch((error) => {
         console.error("Error en la llamada forgotPassword: ", error);
-        setError('Ocurrió un error al enviar el correo. Por favor, intenta nuevamente.');
+        setError('Ocurrió un error al enviar el correo. Por favor, inténtalo de nuevo.');
       });
   };
 
   return (
     <Card>
       <CardHeader>
-        <h2>Enviar correo de recuperación</h2>
+        <h2>Solicitar correo de recuperación</h2>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit}>

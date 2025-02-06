@@ -23,7 +23,7 @@ export const CustomCard = ({ cameraPanelData }) => (
                     </div>
                     
                     <div className="flex-1/4 w-1/4 p-2 h-[69vh]">
-                        <h2 className="text-lg font-bold">Video Data</h2>
+                        <h2 className="text-lg font-bold">Datos del vídeo</h2>
                         <p>Datos GPS</p>
                         <p>Datos estado cam</p>
                         <p>Datos almacenamiento</p>

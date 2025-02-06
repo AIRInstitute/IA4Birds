@@ -24,12 +24,12 @@ export const CustomCard = () => {
             if (response.data.error) {
                 setError(response.data.error);
             } else {
-                setSuccessMessage("Request accepted successfully!");
+                setSuccessMessage("¡Solicitud aceptada con éxito!");
                 console.log("Accept response:", response.data);
             }
         } catch (err) {
             console.error("Error accepting request:", err);
-            setError("An error occurred while accepting the request.");
+            setError("Se ha producido un error al aceptar la solicitud.");
         }
     };
 
@@ -39,12 +39,12 @@ export const CustomCard = () => {
             if (response.data.error) {
                 setError(response.data.error);
             } else {
-                setSuccessMessage("Request declined successfully!");
+                setSuccessMessage("¡Solicitud rechazada con éxito!");
                 console.log("Decline response:", response.data);
             }
         } catch (err) {
             console.error("Error declining request:", err);
-            setError("An error occurred while declining the request.");
+            setError("Se ha producido un error al rechazar la solicitud.");
         }
     };
 

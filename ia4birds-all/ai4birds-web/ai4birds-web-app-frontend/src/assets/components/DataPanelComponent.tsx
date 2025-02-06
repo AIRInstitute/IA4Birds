@@ -27,7 +27,7 @@ const DataPanelComponent = () => {
         }
         setDataPanelData(response.data); // Set fetched data
       } catch (err) {
-        setError("Error fetching data. Please try again later.");
+        setError("Error en la obtención de datos. Vuelva a intentarlo más tarde.");
         console.error("Error fetching data: ", err);
       } finally {
         setIsLoading(false);
