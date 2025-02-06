@@ -53,21 +53,21 @@ export const CustomCard = () => {
         //     return;
         // }
         if (!email || !name || !password || !passwordConfirmation || !organization) {
-            setError('Please fill in all fields');
+            setError('Rellene todos los campos');
             return;
         }
         if (!emailRegex.test(email)) {
-            setError('Please enter a valid email');
+            setError('Introduzca una dirección de correo electrónico válida');
             return;
         }
 
         if (!passwordRegex.test(password)) {
-            setError('Password must contain at least one number and one uppercase and lowercase letter, and at least 6 characters');
+            setError('La contraseña debe contener al menos un número y una letra mayúscula y minúscula, y al menos 6 caracteres');
             return;
         }
 
         if (password !== passwordConfirmation) {
-            setError('Passwords do not match');
+            setError('Las contraseñas no coinciden');
             return;
         }
 
@@ -94,7 +94,7 @@ export const CustomCard = () => {
             }
         })
         .catch(() => {
-            setError('An error occurred while registering. Please try again.');
+            setError('Se ha producido un error al registrarse. Por favor, inténtelo de nuevo.');
         });
     };
 
@@ -102,7 +102,7 @@ export const CustomCard = () => {
         <>
         <Card>
             <CardHeader>
-                <h2>Formulario de registro</h2>
+                <h2>Regístrate</h2>
             </CardHeader>
             <CardBody>
             <form onSubmit={handleSubmit}>

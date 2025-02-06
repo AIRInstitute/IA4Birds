@@ -122,7 +122,7 @@ const HeaderComponent = () => {
             <NavbarItem>
               {location.pathname !== '/login-component' && location.pathname !== '/admin-panel-component' && location.pathname !== '/camera-panel-component' && 
               location.pathname !== '/data-panel-component' && (
-                <Link to="/login-component"><Button>Login</Button></Link>
+                <Link to="/login-component"><Button>Iniciar sesión</Button></Link>
               )}
             </NavbarItem>
             <NavbarItem>
@@ -141,7 +141,7 @@ const HeaderComponent = () => {
                 console.log('User logged out');
               }}
             >
-              Logout
+              Cerrar sesión
             </Button>
           </NavbarItem>
         

@@ -28,11 +28,11 @@ export const CustomCard = ()=> {
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
       if (!email || !password) {
-        setError('Please fill in all fields');
+        setError('Rellene todos los campos');
         return;
       }
       if (!emailRegex.test(email)) {
-        setError('Please enter a valid email');
+        setError('Introduzca una dirección de correo electrónico válida');
         return;
       }
 
@@ -65,7 +65,7 @@ export const CustomCard = ()=> {
             }
         })
         .catch(() => {
-            setError('An error occurred. Please try again.');
+            setError('Se ha producido un error. Por favor, inténtelo de nuevo.');
         });
     };
 
@@ -73,7 +73,7 @@ export const CustomCard = ()=> {
     <>
   <Card>
     <CardHeader>
-        <h2>Iniciar Sesión</h2>
+        <h2>Inicio de Sesión</h2>
     </CardHeader>
     <CardBody>
         <form onSubmit={handleSubmit}>
