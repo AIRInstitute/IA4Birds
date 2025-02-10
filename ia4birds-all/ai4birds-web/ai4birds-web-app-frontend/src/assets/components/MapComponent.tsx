@@ -18,6 +18,8 @@ import { TbCarFan2 } from "react-icons/tb";
 import L from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import toast, { Toaster } from 'react-hot-toast';
+// import { ImageOverlay } from 'react-leaflet';
+// import Image from '../images/ps-rn2k_cyl_zepa.png';
 
 // Import or define castillaYLeonBorders
 import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
@@ -38,6 +40,11 @@ const Mapa = () => {
     { id: 3, name: 'Ave 3', description: 'Descripción Ave 3', url: 'https://www.nationalgeographic.com.es/medio/2022/12/13/muchuelo-alpino_8598e7e9_221213120701_1280x853.jpg', num: '40' },
   ];
 
+  // const bounds: [[number, number], [number, number]] = [
+  //   [39.95, -7.20], // Esquina suroeste
+  //   [43.40, -1.50]  // Esquina noreste
+  // ];
+  
   const filterOptions = [
     { id: 1, label: "1 mes", value: 1 },
     { id: 2, label: "3 meses", value: 3 },
@@ -281,7 +288,7 @@ const Mapa = () => {
   const handleButtonClickEolic = (clickedPoint) => {
     const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers);
   
-    console.log("Puntos dentro de 40km:", nearbyEolicMarkers); // 🔍 Verifica que no está vacío
+    console.log("Puntos dentro de 10km:", nearbyEolicMarkers); // 🔍 Verifica que no está vacío
   
     setSelectedButton(nearbyEolicMarkers); // Guarda solo los puntos cercanos
     setSidebarEolicOpen(true);
@@ -291,7 +298,7 @@ const Mapa = () => {
   //   setSidebarEolicOpen(true);
   
   //   const R = 6371; // Radio de la Tierra en km
-  //   const maxDistance = 40; // 40 km
+  //   const maxDistance = 10; // 10 km
   
   //   const getDistance = (lat1, lon1, lat2, lon2) => {
   //     const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -306,7 +313,7 @@ const Mapa = () => {
   //     return R * c; // Distancia en km
   //   };
   
-  //   // Filtrar los puntos dentro de 40 km
+  //   // Filtrar los puntos dentro de 10 km
   //   const nearbyEolicMarkers = eolicMarkers.flatMap(({ coordenadas }) =>
   //     coordenadas.filter((point) => {
   //       const distance = getDistance(
@@ -319,7 +326,7 @@ const Mapa = () => {
   //     })
   //   );
   
-  //   console.log("Puntos dentro de 40km:", nearbyEolicMarkers);
+  //   console.log("Puntos dentro de 10km:", nearbyEolicMarkers);
     
   //   // Guardar los puntos filtrados en el estado
   //   setSelectedButton(nearbyEolicMarkers);
@@ -468,6 +475,14 @@ const Mapa = () => {
                 className="hue-rotate-[240deg]"
               />
             )}
+
+            {/* {showMarkersEolic && (
+              <ImageOverlay
+                url={Image}  // Ruta local de la imagen
+                bounds={bounds}  // Especifica los límites geográficos
+                opacity={0.7}  // Ajusta la opacidad si es necesario
+              />
+            )} */}
             
             {!markersLoaded ?
               <>
