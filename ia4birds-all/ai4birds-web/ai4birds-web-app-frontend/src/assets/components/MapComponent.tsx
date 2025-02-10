@@ -456,6 +456,18 @@ const Mapa = () => {
                 className="hue-rotate-[240deg]"
               />
             )}
+
+            <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
+            {showMarkersEolic && (
+              <WMSTileLayer 
+                url="https://idecyl.jcyl.es/geoserver/ps/wms"
+                layers="rn2k_cyl_zepa"
+                format="image/png"
+                transparent={true}
+                version="1.3.0"
+                className="hue-rotate-[240deg]"
+              />
+            )}
             
             {!markersLoaded ?
               <>
