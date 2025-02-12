@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SidebarBirds from './sidebar/SidebarBirds';
 import SidebarEolic from './sidebar/SideBarEolic';
 import SideBarEolicResources from './sidebar/SideBarEolicResources';
 import ExclusionEolicService from './services/ExclusionEolicService';
 import BirdDataService from './services/BirdDataService';
-import { MapContainer, TileLayer, WMSTileLayer, Circle, Marker, Popup, useMapEvents, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, WMSTileLayer, Circle, Marker, Popup, useMapEvents, GeoJSON, Tooltip } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
-import { Tooltip } from "@nextui-org/tooltip";
+import { Tooltip as TooltipNext } from "@nextui-org/tooltip";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
 import { IconCrow } from '../components/icons/Icon';
@@ -28,11 +28,13 @@ const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [showMarkersEolicResources, setShowMarkersEolicResources] = useState(false);
   const [streamingEolicData, setstreamingEolicData] = useState(false);
-  const [eolicMarkers, setEolicMarkers] = useState<{ coordenadas: L.LatLng[] }[]>([]);
+  const [eolicMarkers, setEolicMarkers] = useState<{ coordenadas: L.LatLng[], espacio?: string }[]>([]);
   const [birdMarkers, setBirdsMarkers] = useState<{ observations: { lat: number, lng: number }[] }[]>([]);
   const [eolicResourcesMarkers, setEolicResourcesMarkers] = useState<{ lat: number, lng: number }[]>([]);
   const [clickedLatLng, setClickedLatLng] = useState<L.LatLng | null>(null);
   const [showFilter, setShowFilter] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipContent, setTooltipContent] = useState("");
 
   const birdData = [
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
@@ -267,7 +269,7 @@ const Mapa = () => {
 
   const handleFilter = (value: number) => {
     console.log(`Filter selected: ${value} months`);
-    // Add your filter logic here
+    // Missing logic for the filter
   };
 
   const handleButtonClickBirds = (button) => {
@@ -288,10 +290,18 @@ const Mapa = () => {
   const handleButtonClickEolic = (clickedPoint) => {
     const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers);
   
-    console.log("Puntos dentro de 10km:", nearbyEolicMarkers); // 🔍 Verifica que no está vacío
+    console.log("Puntos dentro de 10km:", nearbyEolicMarkers); // Verifica que no está vacío
   
     setSelectedButton(nearbyEolicMarkers); // Guarda solo los puntos cercanos
     setSidebarEolicOpen(true);
+
+    if (nearbyEolicMarkers.length > 0) {
+      setTooltipContent(`Zona de exclusión eólica: ${nearbyEolicMarkers[0].espacio}`);
+      setTooltipVisible(true); // Show tooltip
+      console.log('EOEOEOEOEOEO entro al tooltip: ', nearbyEolicMarkers[0].espacio);
+    } else {
+      setTooltipVisible(false); // Hide tooltip if no markers
+    }
   };
 
   // const handleButtonClickEolic = (clickedPoint) => {
@@ -399,21 +409,21 @@ const Mapa = () => {
                 <Button className='camera'  isIconOnly color="primary" size='lg' onClick={addMarkersCameras}><FaCrow/></Button>
               </Tooltip>  */}
                <div className="flex items-center gap-2">
-                <Tooltip placement="right" content="Capa exclusión eólica">
+                <TooltipNext placement="right" content="Capa exclusión eólica">
                   <Button className='camera' disabled={streamingEolicData} color={!showMarkersEolic ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersStreamExclusion}>
                     <TbCarFan style={{ height: '25px', width: '25px' }} />
                   </Button>
-                </Tooltip>
+                </TooltipNext>
                 {showMarkersEolic && (
                   <FaCheck />
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Tooltip placement="right" content="Capa recursos eólicos">
+                <TooltipNext placement="right" content="Capa recursos eólicos">
                   <Button className='camera' disabled={streamingEolicData} color={!showMarkersEolicResources ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersResources}>
                     <TbCarFan2 style={{ height: '25px', width: '25px' }} />
                   </Button>
-                </Tooltip>
+                </TooltipNext>
                 {showMarkersEolicResources && (
                   <div className="d-flex align-items-center gap-2">
                   <FaCheck />
@@ -631,7 +641,7 @@ const Mapa = () => {
 
                 <MarkerClusterGroup maxClusterRadius={80}>
                   {eolicMarkers.length > 0 &&
-                    eolicMarkers.flatMap(({ coordenadas }, index) =>
+                    eolicMarkers.flatMap(({ coordenadas, espacio }, index) =>
                       coordenadas.map((eolicPoint, i) => (
                         <Circle
                           key={`${index}-${i}`} 
@@ -641,7 +651,11 @@ const Mapa = () => {
                           eventHandlers={{
                             click: () => handleButtonClickEolic(eolicPoint),
                           }}
-                        />
+                        >
+                           <Tooltip direction="top" permanent={tooltipVisible}>
+                            {`Zona de exclusión eólica: ${espacio || "Sin información"}`}
+                          </Tooltip>
+                        </Circle>
                       ))
                     )}
                 </MarkerClusterGroup>
