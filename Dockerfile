@@ -39,10 +39,6 @@ ENTRYPOINT [ "gst-launch-1.0" ]
 
 # Ejecutar el pipeline RTSP con TCP para evitar bloqueos por firewall
 CMD [ 
-    "rtspsrc", "location=${RTSP_URL}", "protocols=tcp",
-    "!", "rtph264depay",
-    "!", "h264parse",
-    "!", "queue",
-    "!", "rtph264pay", "pt=96",
-    "!", "fakesink"
+    "gst-launch-1.0", 
+    "rtspsrc location=${RTSP_URL} protocols=tcp ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! fakesink"
 ]
