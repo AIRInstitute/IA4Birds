@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SidebarBirds from './sidebar/SidebarBirds';
 import SidebarEolic from './sidebar/SideBarEolic';
 import SideBarEolicResources from './sidebar/SideBarEolicResources';
 import ExclusionEolicService from './services/ExclusionEolicService';
 import BirdDataService from './services/BirdDataService';
-import { MapContainer, TileLayer, WMSTileLayer, Circle, Marker, Popup, useMapEvents, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, WMSTileLayer, Circle, Marker, Popup, useMapEvents, GeoJSON, Tooltip } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
-import { Tooltip } from "@nextui-org/tooltip";
+import { Tooltip as TooltipNext } from "@nextui-org/tooltip";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
 import { IconCrow } from '../components/icons/Icon';
@@ -18,6 +18,8 @@ import { TbCarFan2 } from "react-icons/tb";
 import L from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import toast, { Toaster } from 'react-hot-toast';
+// import { ImageOverlay } from 'react-leaflet';
+// import Image from '../images/ps-rn2k_cyl_zepa.png';
 
 // Import or define castillaYLeonBorders
 import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
@@ -26,10 +28,13 @@ const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [showMarkersEolicResources, setShowMarkersEolicResources] = useState(false);
   const [streamingEolicData, setstreamingEolicData] = useState(false);
-  const [eolicMarkers, setEolicMarkers] = useState<{ coordenadas: L.LatLng[] }[]>([]);
+  const [eolicMarkers, setEolicMarkers] = useState<{ coordenadas: L.LatLng[], espacio?: string }[]>([]);
   const [birdMarkers, setBirdsMarkers] = useState<{ observations: { lat: number, lng: number }[] }[]>([]);
   const [eolicResourcesMarkers, setEolicResourcesMarkers] = useState<{ lat: number, lng: number }[]>([]);
   const [clickedLatLng, setClickedLatLng] = useState<L.LatLng | null>(null);
+  const [showFilter, setShowFilter] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipContent, setTooltipContent] = useState("");
 
   const birdData = [
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
@@ -37,6 +42,11 @@ const Mapa = () => {
     { id: 3, name: 'Ave 3', description: 'Descripción Ave 3', url: 'https://www.nationalgeographic.com.es/medio/2022/12/13/muchuelo-alpino_8598e7e9_221213120701_1280x853.jpg', num: '40' },
   ];
 
+  // const bounds: [[number, number], [number, number]] = [
+  //   [39.95, -7.20], // Esquina suroeste
+  //   [43.40, -1.50]  // Esquina noreste
+  // ];
+  
   const filterOptions = [
     { id: 1, label: "1 mes", value: 1 },
     { id: 2, label: "3 meses", value: 3 },
@@ -74,7 +84,7 @@ const Mapa = () => {
   const [sidebarBirdOpen, setSidebarBirdOpen] = useState(false);
   const [sidebarEolicOpen, setSidebarEolicOpen] = useState(false);
   const [sidebarEolicResourcesOpen, setSidebarEolicResourcesOpen] = useState(false);
-  const [selectedButton, setSelectedButton] = useState('');
+  const [selectedButton, setSelectedButton] = useState<L.LatLng[]>([]);
   const [selectedButtonEolicResources, setSelectedButtonEolicResources] = useState<{ lat: number, lng: number } | null>(null);
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false); // Para poner el pájaro de carga
@@ -173,6 +183,7 @@ const Mapa = () => {
           }
   
           setShowMarkersEolic(true);
+          setShowFilter(true);
   
         };
   
@@ -182,11 +193,39 @@ const Mapa = () => {
     }else{
       setEolicMarkers([]);
       setShowMarkersEolic(false);
+      setShowFilter(false);
       if(!showMarkersEolicResources && showMarkersEolic){
         fillBirdData();
       }
     }
   }
+
+  const getNearbyEolicMarkers = (clickedPoint, allMarkers, maxDistance = 10000) => {
+    const toRadians = (degrees) => degrees * (Math.PI / 180);
+    const R = 6371000; // Radio de la Tierra en metros (6371 km)
+  
+    return allMarkers.filter((marker) => {
+      if (!marker.coordenadas || marker.coordenadas.length === 0) return false;
+  
+      const [lat1, lon1] = clickedPoint; // Punto de referencia
+      const [lat2, lon2] = marker.coordenadas[0]; // Punto a comparar
+  
+      // Convertir latitudes y longitudes a radianes
+      const dLat = toRadians(lat2 - lat1);
+      const dLon = toRadians(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) *
+          Math.cos(toRadians(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+  
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = R * c; // Distancia en metros
+  
+      return distance <= maxDistance;
+    });
+  };
   
 //====================================================================
   //FILL EOLIC RESOURCES
@@ -196,6 +235,7 @@ const Mapa = () => {
     if(!showMarkersEolicResources){
       notify();
       setBirdsMarkers([]);
+      setShowFilter(true);
       //setEolicResourcesMarkers(coordinatesCameras);
       setShowMarkersEolicResources(true);
 
@@ -203,6 +243,7 @@ const Mapa = () => {
       setSidebarEolicResourcesOpen(false);
       setEolicResourcesMarkers([]);
       setShowMarkersEolicResources(false);
+      setShowFilter(false);
       if(!showMarkersEolic && showMarkersEolicResources){
         fillBirdData();
       }
@@ -228,7 +269,7 @@ const Mapa = () => {
 
   const handleFilter = (value: number) => {
     console.log(`Filter selected: ${value} months`);
-    // Add your filter logic here
+    // Missing logic for the filter
   };
 
   const handleButtonClickBirds = (button) => {
@@ -240,11 +281,67 @@ const Mapa = () => {
     setSidebarBirdOpen(false);
   };
 
-  const handleButtonClickEolic = (button) => {
+  // const handleButtonClickEolic = (button) => {
 
-    setSelectedButton(button);
+  //   setSelectedButton(button);
+  //   setSidebarEolicOpen(true);
+  // };
+
+  const handleButtonClickEolic = (clickedPoint) => {
+    const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers);
+  
+    console.log("Puntos dentro de 10km:", nearbyEolicMarkers); // Verifica que no está vacío
+  
+    setSelectedButton(nearbyEolicMarkers); // Guarda solo los puntos cercanos
     setSidebarEolicOpen(true);
+
+    if (nearbyEolicMarkers.length > 0) {
+      setTooltipContent(`Zona de exclusión eólica: ${nearbyEolicMarkers[0].espacio}`);
+      setTooltipVisible(true); // Show tooltip
+      console.log('EOEOEOEOEOEO entro al tooltip: ', nearbyEolicMarkers[0].espacio);
+    } else {
+      setTooltipVisible(false); // Hide tooltip if no markers
+    }
   };
+
+  // const handleButtonClickEolic = (clickedPoint) => {
+  //   setSidebarEolicOpen(true);
+  
+  //   const R = 6371; // Radio de la Tierra en km
+  //   const maxDistance = 10; // 10 km
+  
+  //   const getDistance = (lat1, lon1, lat2, lon2) => {
+  //     const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  //     const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  //     const a =
+  //       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  //       Math.cos((lat1 * Math.PI) / 180) *
+  //         Math.cos((lat2 * Math.PI) / 180) *
+  //         Math.sin(dLon / 2) *
+  //         Math.sin(dLon / 2);
+  //     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  //     return R * c; // Distancia en km
+  //   };
+  
+  //   // Filtrar los puntos dentro de 10 km
+  //   const nearbyEolicMarkers = eolicMarkers.flatMap(({ coordenadas }) =>
+  //     coordenadas.filter((point) => {
+  //       const distance = getDistance(
+  //         clickedPoint.lat,
+  //         clickedPoint.lng,
+  //         point.lat,
+  //         point.lng
+  //       );
+  //       return distance <= maxDistance;
+  //     })
+  //   );
+  
+  //   console.log("Puntos dentro de 10km:", nearbyEolicMarkers);
+    
+  //   // Guardar los puntos filtrados en el estado
+  //   setSelectedButton(nearbyEolicMarkers);
+  // };
+  
 
   const handleCancelClickEolic = () => {
     setSidebarEolicOpen(false);
@@ -259,39 +356,39 @@ const Mapa = () => {
   function LocationMarker() {
 
     if(showMarkersEolicResources){
-    useMapEvents({
-      click(e) {
-        setClickedLatLng(e.latlng);
-        console.log('Latitud y longitud', e.latlng);
-        handleButtonClickEolicResources(e.latlng);
-      }
-    });
-  }
+      useMapEvents({
+        click(e) {
+          setClickedLatLng(e.latlng);
+          console.log('Latitud y longitud', e.latlng);
+          handleButtonClickEolicResources(e.latlng);
+        }
+      });
+    }
 
-  const defaultIcon = new L.Icon({
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-    shadowSize: [41, 41]
-  });
-  
-  return clickedLatLng === null ? null : (
-    // <Marker position={clickedLatLng} icon={defaultIcon}>
-    //   <Popup position={clickedLatLng} openOnClick={true}>
-    //     Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
-    //   </Popup>
-    // </Marker>
-    showMarkersEolicResources && (
-      <Marker position={clickedLatLng} icon={defaultIcon}>
-       <Popup position={clickedLatLng}>
-         Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
-       </Popup>
-     </Marker>
-    )
-  );
-}
+    const defaultIcon = new L.Icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+    
+    return clickedLatLng === null ? null : (
+      // <Marker position={clickedLatLng} icon={defaultIcon}>
+      //   <Popup position={clickedLatLng} openOnClick={true}>
+      //     Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
+      //   </Popup>
+      // </Marker>
+      showMarkersEolicResources && (
+        <Marker position={clickedLatLng} icon={defaultIcon}>
+        <Popup position={clickedLatLng}>
+          Lat: {clickedLatLng.lat} <br/> Lng: {clickedLatLng.lng}
+        </Popup>
+      </Marker>
+      )
+    );
+  }
   return (
     <>
     <Toaster containerStyle={{top: 150,
@@ -312,21 +409,21 @@ const Mapa = () => {
                 <Button className='camera'  isIconOnly color="primary" size='lg' onClick={addMarkersCameras}><FaCrow/></Button>
               </Tooltip>  */}
                <div className="flex items-center gap-2">
-                <Tooltip placement="right" content="Capa exclusión eólica">
+                <TooltipNext placement="right" content="Capa exclusión eólica">
                   <Button className='camera' disabled={streamingEolicData} color={!showMarkersEolic ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersStreamExclusion}>
                     <TbCarFan style={{ height: '25px', width: '25px' }} />
                   </Button>
-                </Tooltip>
+                </TooltipNext>
                 {showMarkersEolic && (
                   <FaCheck />
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Tooltip placement="right" content="Capa recursos eólicos">
+                <TooltipNext placement="right" content="Capa recursos eólicos">
                   <Button className='camera' disabled={streamingEolicData} color={!showMarkersEolicResources ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersResources}>
                     <TbCarFan2 style={{ height: '25px', width: '25px' }} />
                   </Button>
-                </Tooltip>
+                </TooltipNext>
                 {showMarkersEolicResources && (
                   <div className="d-flex align-items-center gap-2">
                   <FaCheck />
@@ -337,7 +434,7 @@ const Mapa = () => {
             </CardBody>
           </Card>
         </div>
-        <div className="fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90">
+        <div className={`fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90 ${showFilter ? 'hidden' : ''}`}>
           <Card className="">
             <CardBody className="flex flex-col gap-3">
               <p className="text-lg font-semibold">Filtrar por tiempo</p>
@@ -376,6 +473,26 @@ const Mapa = () => {
                 className="hue-rotate-[240deg]"
               />
             )}
+
+            <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
+            {showMarkersEolic && (
+              <WMSTileLayer 
+                url="https://idecyl.jcyl.es/geoserver/ps/wms"
+                layers="rn2k_cyl_zepa"
+                format="image/png"
+                transparent={true}
+                version="1.3.0"
+                className="hue-rotate-[240deg]"
+              />
+            )}
+
+            {/* {showMarkersEolic && (
+              <ImageOverlay
+                url={Image}  // Ruta local de la imagen
+                bounds={bounds}  // Especifica los límites geográficos
+                opacity={0.7}  // Ajusta la opacidad si es necesario
+              />
+            )} */}
             
             {!markersLoaded ?
               <>
@@ -476,7 +593,7 @@ const Mapa = () => {
                     </>
                   ))}
                 </MarkerClusterGroup> */}
-                <MarkerClusterGroup
+                {/* <MarkerClusterGroup
                   maxClusterRadius={80}>
                   {eolicMarkers.length > 0 && eolicMarkers.map((coordinatesValues: { coordenadas: L.LatLng[] }, coordinates: number) => {
                     console.log('Coordenadas de los marcadores eólicos: ', coordinatesValues);
@@ -490,7 +607,8 @@ const Mapa = () => {
                               key={coordinates}
                               center={eolicPoint} 
                               pathOptions={{ fillColor: 'blue', color: 'blue' }} 
-                              radius={100}
+                              // pathOptions={{ fillOpacity: 0, stroke: false }} // Con esto hago invisibles los círculos
+                              radius={1500} // Radio del círculo aumentado de 100 a 1500
                               eventHandlers={{
                                   click: () => {
                                       handleButtonClickEolic(coordinates)
@@ -501,7 +619,47 @@ const Mapa = () => {
                       );
                     }
                   })}
+                </MarkerClusterGroup> */}
+
+                {/* <MarkerClusterGroup maxClusterRadius={80}>
+                  {eolicMarkers.length > 0 &&
+                    eolicMarkers.flatMap((coordinatesValues: { coordenadas: L.LatLng[] }, coordinates: number) => {
+                      // console.log('Coordenadas de los marcadores eólicos: ', coordinatesValues);
+                      return coordinatesValues.coordenadas.map((eolicPoint, i) => (
+                        <Circle
+                          key={`${coordinates}-${i}`} // Unique key for each circle
+                          center={eolicPoint} 
+                          pathOptions={{ fillColor: 'blue', color: 'blue' }} 
+                          radius={1500}
+                          eventHandlers={{
+                            click: () => handleButtonClickEolic(coordinates),
+                          }}
+                        />
+                      ));
+                    })}
+                </MarkerClusterGroup> */}
+
+                <MarkerClusterGroup maxClusterRadius={80}>
+                  {eolicMarkers.length > 0 &&
+                    eolicMarkers.flatMap(({ coordenadas, espacio }, index) =>
+                      coordenadas.map((eolicPoint, i) => (
+                        <Circle
+                          key={`${index}-${i}`} 
+                          center={eolicPoint}
+                          pathOptions={{ fillColor: "blue", color: "blue" }}
+                          radius={1500}
+                          eventHandlers={{
+                            click: () => handleButtonClickEolic(eolicPoint),
+                          }}
+                        >
+                           <Tooltip direction="top" permanent={tooltipVisible}>
+                            {`Zona de exclusión eólica: ${espacio || "Sin información"}`}
+                          </Tooltip>
+                        </Circle>
+                      ))
+                    )}
                 </MarkerClusterGroup>
+
                 <LocationMarker />
 
                 {eolicResourcesMarkers.length > 0 && eolicResourcesMarkers.map((coordinatesValues, coordinates) => {
@@ -542,13 +700,23 @@ const Mapa = () => {
           />
         )}
 
-        {selectedButton && eolicMarkers[selectedButton] && (
+        {/* {selectedButton && eolicMarkers[selectedButton] && (
           <SidebarEolic
             isOpen={sidebarEolicOpen}
             onCancel={handleCancelClickEolic}
             eolicdata={eolicMarkers[selectedButton]}
+            // eolicdata={nearbyEolicMarkers}
+          />
+        )} */}
+
+        {selectedButton.length > 0 && (
+          <SidebarEolic
+            isOpen={sidebarEolicOpen}
+            onCancel={handleCancelClickEolic}
+            eolicdata={selectedButton} // Ahora pasamos todos los puntos cercanos
           />
         )}
+
 
         {selectedButtonEolicResources && selectedButtonEolicResources.lat && selectedButtonEolicResources.lng && (
           <SideBarEolicResources

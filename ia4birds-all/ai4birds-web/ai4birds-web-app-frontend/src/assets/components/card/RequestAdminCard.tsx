@@ -34,12 +34,12 @@ export const CustomCard = () => {
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email || !description) {
-            setError('Please fill in all fields');
+            setError('Rellene todos los campos');
             return;
         }
 
         if (!emailRegex.test(email)) {
-            setError('*Please enter a valid email');
+            setError('Introduzca una dirección de correo electrónico válida');
             return;
         }
 
@@ -53,7 +53,7 @@ export const CustomCard = () => {
                 }
             })
             .catch(() => {
-                setError('An error occurred while registering. Please try again.');
+                setError('Se ha producido un error al realizar la solicitud. Por favor, inténtelo de nuevo.');
             });
     };
 
@@ -163,7 +163,7 @@ export const CustomCard = () => {
               </ModalBody>
               <ModalFooter>
                 <Button className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20" onPress={onClose}>
-                  Close
+                  Cerrar
                 </Button>
               </ModalFooter>
             </>
