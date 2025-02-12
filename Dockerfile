@@ -38,7 +38,4 @@ RUN apt-get update && apt-get install -y \
 ENTRYPOINT [ "gst-launch-1.0" ]
 
 # Ejecutar el pipeline RTSP con TCP para evitar bloqueos por firewall
-CMD [ 
-    "gst-launch-1.0", 
-    "rtspsrc location=${RTSP_URL} protocols=tcp ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! fakesink"
-]
+CMD [ "rtspsrc", "location=${RTSP_URL} ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! webrtcbin stun-server=stun://stun.l.google.com:19302" ]
