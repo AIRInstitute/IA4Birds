@@ -140,7 +140,7 @@ services:
     env_file:
       - /etc/envs/.env
     environment:
-       - RTSP_URL=${RTSP_URL}  # Usa la variable desde el .env
+      RTSP_URL: ${RTSP_URL}  # Usa la variable desde el .env
     ports:
       - "8554:8554" # Puerto para WebRTC
     networks:
