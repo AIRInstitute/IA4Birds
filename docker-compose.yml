@@ -139,8 +139,8 @@ services:
     container_name: gstreamer
     env_file:
       - /etc/envs/.env
-    environment:
-      - RTSP_URL=${RTSP_URL_CAM}
+    # environment:
+    #   - RTSP_URL=${RTSP_URL_CAM}
     ports:
       - "8554:8554"
     networks:
