@@ -42,4 +42,5 @@ ENTRYPOINT [ "sh", "-c" ]
 # Ejecutar el pipeline RTSP con TCP para evitar bloqueos por firewall
 #CMD [ "rtspsrc", "location=${RTSP_URL} ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! webrtcbin stun-server=stun://stun.l.google.com:19302" ]
 #CMD [ "sh", "-c", "gst-launch-1.0 rtspsrc location=${RTSP_URL} ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! webrtcbin stun-server=stun://stun.l.google.com:19302" ]
-CMD [ "gst-launch-1.0 rtspsrc location=$RTSP_URL ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! webrtcbin stun-server=stun://stun.l.google.com:19302" ]
+#CMD [ "gst-launch-1.0 rtspsrc location=$RTSP_URL ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! webrtcbin stun-server=stun://stun.l.google.com:19302" ]
+CMD [ "gst-launch-1.0 rtspsrc location=$RTSP_URL_CAM ! rtph264depay ! h264parse ! queue ! rtph264pay pt=96 ! webrtcbin stun-server=stun://stun.l.google.com:19302" ]
