@@ -134,17 +134,18 @@ services:
     networks:
       - redis-net
 
-  gstreamer:
-    build: .
-    container_name: gstreamer
-    env_file:
-      - /etc/envs/.env
-    # environment:
-    #   - RTSP_URL=${RTSP_URL_CAM}
+  rtsp-stream:
+    image: roverr/rtsp-stream:2
+    container_name: rtsp-stream
     ports:
-      - "8554:8554"
+      - "8080:8080"
+    environment:
+      - RTSP_STREAM_DEBUG=true
+    volumes:
+      - ./rtsp-stream.yml:/app/rtsp-stream.yml
     networks:
       - bird-net
+
 
   
 networks:
