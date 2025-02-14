@@ -8,7 +8,16 @@ endpoints:
     enabled: true
   list:
     enabled: true
+
 listen:
-   - alias: camera1
-     uri: rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
-     enabled: true
+  - alias: camera1
+    uri: rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
+    enabled: true
+    running: true
+
+ffmpegOptions:
+  input: "-rtsp_transport tcp"
+  output: "-c:v libx264 -preset ultrafast -tune zerolatency -b:v 4000k -maxrate 5000k -bufsize 10000k -c:a aac -b:a 128>
+ready: true
+
+timeout: 300
