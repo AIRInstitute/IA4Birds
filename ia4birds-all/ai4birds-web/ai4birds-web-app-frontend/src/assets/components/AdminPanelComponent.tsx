@@ -14,10 +14,10 @@ const AdminPanelComponent = () => {
 
   const [panelAdminData, setPanelAdminData] = useState<PanelAdminData[]>([]);
   const [cameraAdminData] = useState([
-    { id: 1, name: 'Camera 1', location: '', views: '23 views', url: '/public/Buitre negro.jpg' },
-    { id: 2, name: 'Camera 2', location: '', views: '100 views', url: '/public/Buitre negro.jpg' },
-    { id: 3, name: 'Camera 3', location: '', views: '50 views', url: '/public/Buitre negro.jpg' },
-    { id: 4, name: 'Camera 4', location: '', views: '500 views', url: '/public/Buitre negro.jpg' },
+    { id: 1, name: 'Cámara 1', location: '', views: '273 views', gpsData: "latitude: 40.416775, longitude: -3.703790", storageData: "15.5", status: "Activa", url: '/public/playVideo.png' },
+    { id: 2, name: 'Cámara 2', location: '', views: '100 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
+    { id: 3, name: 'Cámara 3', location: '', views: '50 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
+    { id: 4, name: 'Cámara 4', location: '', views: '500 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
   ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -27,6 +27,7 @@
     "flowbite-react": "^0.7.8",
     "framer-motion": "^10.16.12",
     "geolocation-utils": "^1.2.5",
+    "hls.js": "^1.5.20",
     "leaflet": "^1.9.4",
     "ol": "^8.2.0",
     "primereact": "^10.7.0",
@@ -40,6 +41,7 @@
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
     "react-multi-carousel": "^2.8.5",
+    "react-player": "^2.16.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.20.1",
     "react-windrose-chart": "^0.2.3"
