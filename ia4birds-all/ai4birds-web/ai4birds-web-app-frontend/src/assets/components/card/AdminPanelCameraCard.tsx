@@ -16,9 +16,9 @@ export const CustomCardCamera = ({ cameraAdminData }) => {
               <h2 className="p-1 text-center">
                 {camera.name} 
                 {index === 0 ? (
-                  <span className="text-green-500"> (Activo)</span>
+                  <span className="text-green-500"> (Activa)</span>
                 ) : (
-                  <span className="text-red-500"> (Inactivo)</span>
+                  <span className="text-red-500"> (Inactiva)</span>
                 )}
               </h2>
               <CardBody>
