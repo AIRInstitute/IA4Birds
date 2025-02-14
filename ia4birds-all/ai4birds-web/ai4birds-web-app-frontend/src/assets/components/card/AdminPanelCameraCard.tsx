@@ -11,21 +11,31 @@ export const CustomCardCamera = ({ cameraAdminData }) => {
       </CardHeader>
       <CardBody className="overflow-visible py-2">
         <div className="my-3 flex grid grid-cols-2 justify-center w-full gap-4">
-          {cameraAdminData.map(camera => (
+          {cameraAdminData.map((camera, index) => (
             <Card key={camera.id} className="w-full py-3">
-              <h2 className="p-1 text-center">{camera.name}</h2>
+              <h2 className="p-1 text-center">
+                {camera.name} 
+                {index === 0 ? (
+                  <span className="text-green-500"> (Activo)</span>
+                ) : (
+                  <span className="text-red-500"> (Inactivo)</span>
+                )}
+              </h2>
               <CardBody>
                 <div className="my-2 flex justify-center">
-                  <Image
-                    alt={`Imagen de ${camera.name}`}
-                    className="max-h-[14vh] object-cover content-center"
-                    src={camera.url}
-                  />
+                  {/* Envolvemos la imagen en un Link para que sea clickeable */}
+                  <Link to={`/camera-panel-component?camera=${camera.id}`}>
+                    <Image
+                      alt={`Imagen de ${camera.name}`}
+                      className="max-h-[14vh] object-cover content-center cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+                      src={camera.url}
+                    />
+                  </Link>
                 </div>
                 <div>
-                  <p>Datos GPS</p>
-                  <p>Datos estado cam</p>
-                  <p>Datos almacenamiento</p>
+                  <p><strong>Datos GPS:</strong> {camera.gpsData || "No disponible"}</p>
+                  <p><strong>Estado cámara:</strong> {camera.status || "No disponible"}</p>
+                  <p><strong>Datos de almacenamiento:</strong> {camera.storageData || "No disponible"}</p>
                 </div>
                 <div className="w-full flex justify-end">
                   <Link
