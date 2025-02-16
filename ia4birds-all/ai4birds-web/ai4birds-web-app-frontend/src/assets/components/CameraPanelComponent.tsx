@@ -9,7 +9,7 @@ const CameraPanelComponent = () => {
     const [selectedData, setSelectedData] = React.useState(selectedDataFromQuery || 1);
 
     const cameraPanelData = [
-        { id: 1, name: 'Camera 1', location: '', views: '273 views', gpsData: "latitude: 40.416775, longitude: -3.703790", storageData: "15.5", status: "Activa", url: 'http://ia4birds-pre.der.usal.es:8083/hls/79866f8d-75fc-4167-9d45-dc36c58e9277/index.m3u8' },
+        { id: 1, name: 'Camera 1', location: '', views: '273 views', gpsData: "latitude: 40.416775, longitude: -3.703790", storageData: "15.5", status: "Activa", url: "http://ia4birds-pre.der.usal.es:8083/hls/129d9c94-e321-4c69-b7b6-8dd7bd6d8d56/index.m3u8" },
         { id: 2, name: 'Camera 2', location: '', views: '100 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '' },
         { id: 3, name: 'Camera 3', location: '', views: '50 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '' },
         { id: 4, name: 'Camera 4', location: '', views: '500 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '' }, 
