@@ -13,8 +13,8 @@ const CameraComponent = () => {
             name: "Cámara 1",
             location: "Edificio Air Institute",
             views: "273 views",
-            url: import.meta.env.HLS_BASE_URL
-            //url: "http://ia4birds-pre.der.usal.es:8083/hls/79866f8d-75fc-4167-9d45-dc36c58e9277/index.m3u8"
+            //url: import.meta.env.HLS_BASE_URL
+            url: "http://ia4birds-pre.der.usal.es:8083/hls/129d9c94-e321-4c69-b7b6-8dd7bd6d8d56/index.m3u8"
         },
         {
             id: 2,
