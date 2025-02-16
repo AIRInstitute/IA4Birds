@@ -39,7 +39,7 @@ class XenoCanto_Extractor():
                 response.raise_for_status()
                 
                 data = response.json()
-                print(f"Datos obtenidos de la API (página {page}):", data)
+                #print(f"Datos obtenidos de la API (página {page}):", data)
                 all_results.extend(bird for bird in data['recordings'] if 'Castilla y León' in bird.get('loc'))
                 
                 
@@ -64,7 +64,7 @@ class XenoCanto_Extractor():
         formatted_results = []
         for bird in data:
             full_species_name = f"{bird['gen']} {bird['sp']}"
-            print(f"Especie encontrada: {full_species_name}")
+            #print(f"Especie encontrada: {full_species_name}")
             if full_species_name in species_list:  # Filtra por especie
                 formatted_results.append({
                     "speciesSciName": full_species_name,
