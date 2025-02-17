@@ -129,6 +129,13 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
         // Transformar el valor de entity al formato esperado por la base de datos
         const entityTranslated = ENTITY_MAPPING[entity] || entity;
 
+        console.log("entity translated in Confirm Activation:", entityTranslated);
+
+        if (!entityTranslated) {
+            console.error(`Invalid entity value: ${entity}`);
+            return res.status(400).send({ error: "Invalid entity type. Must be 'Pública', 'Privada', or 'Externo'." });
+        }
+
         // Crear al usuario en la tabla
         const user = await User.create({
             email,

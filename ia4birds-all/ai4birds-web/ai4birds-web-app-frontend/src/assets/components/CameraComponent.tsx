@@ -14,7 +14,7 @@ const CameraComponent = () => {
             location: "Edificio Air Institute",
             views: "273 visitas",
             //url: import.meta.env.HLS_BASE_URL
-            url: "http://ia4birds-pre.der.usal.es:8083/hls/129d9c94-e321-4c69-b7b6-8dd7bd6d8d56/index.m3u8"
+            url: "http://ia4birds-platform.air-institute.com:8083/hls/b481723f-aa35-46a4-a7a2-b75e273d0ad8/index.m3u8"
         },
         {
             id: 2,
