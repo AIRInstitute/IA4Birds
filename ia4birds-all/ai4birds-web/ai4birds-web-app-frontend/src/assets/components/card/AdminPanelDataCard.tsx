@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const CustomCardData = ({ panelAdminData }) => {
   if (!panelAdminData || panelAdminData.length === 0) {
-    return <p>Loading data...</p>; // Fallback for no data
+    return <p>Cargando datos...</p>; // Fallback for no data
   }
 
   return (

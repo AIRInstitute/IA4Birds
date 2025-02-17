@@ -27,7 +27,7 @@ export const CustomCard = ()=> {
     if (tokenFromQuery) {
       setToken(tokenFromQuery);
     } else {
-      setError("Token is missing from the URL.");
+      setError("Falta el token en la URL.");
     }
   }, [location.search]);
 
@@ -35,12 +35,12 @@ export const CustomCard = ()=> {
     e.preventDefault();
 
     if (!password || !passwordConfirmation) {
-      setError("Please fill in all fields.");
+      setError("Rellene todos los campos.");
       return;
     }
 
     if (password !== passwordConfirmation) {
-      setError("Passwords do not match.");
+      setError("Las contraseñas no coinciden.");
       return;
     }
 
@@ -54,12 +54,12 @@ export const CustomCard = ()=> {
         if (response.data.error) {
           setError(response.data.error);
         } else {
-          setSuccess("Password reset successfully!");
+          setSuccess("¡Contraseña restablecida con éxito!");
         }
       })
       .catch((error) => {
         console.error("Error en la llamada resetPassword: ", error);
-        setError("An error occurred while resetting the password. Please try again.");
+        setError("Se ha producido un error al restablecer la contraseña. Por favor, inténtalo de nuevo.");
       });
   };
     
@@ -68,14 +68,14 @@ export const CustomCard = ()=> {
     <>
   <Card>
     <CardHeader>
-        <h2>Resetear Contraseña</h2>
+        <h2>Restablecer Contraseña</h2>
     </CardHeader>
     <CardBody>
         <form onSubmit={handleSubmit}>
             <div className="form-group">
                 <div className="flex w-full flex-wrap gap-4">
                     <div className="relative w-full">
-                        <Input type={showPassword ? "text" : "password"} isRequired label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
+                        <Input type={showPassword ? "text" : "password"} isRequired label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                             <Button 
                             isIconOnly
                             onClick={() => setShowPassword(!showPassword)}
@@ -88,7 +88,7 @@ export const CustomCard = ()=> {
 
                     </div>
                     <div className="relative w-full">
-                        <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repeat Password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
+                        <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repite la Contraseña" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
                                 <Button 
                                 isIconOnly
                                 onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
@@ -105,7 +105,7 @@ export const CustomCard = ()=> {
             {success && <p className="success" style={{ color: 'green' }}>{success}</p>}
             <div className="flex justify-end mt-4">
                 <Button color="primary" type="submit">
-                Resetear Contraseña
+                Restablecer Contraseña
                 </Button>
             </div>
         </form>

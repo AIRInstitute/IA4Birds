@@ -1,87 +1,101 @@
 const activateAccountTemplate = (
-    url: string,
-    username: string,
-    organization: string,
-    email: string,
-    projectName: string,
+  url: string,
+  username: string,
+  organization: string,
+  ocupation: string,
+  entity: string,
+  email: string,
+  projectName: string,
 ) => {
-    return baseEmailTemplate(
-        `Activate ${username}'s Account`,
-        [
-            "Hello",
-            `You are receiving this because ${username} from organization ${organization} has signed up with the email ${email} in the ${projectName} platform.`,
-            "To activate the account, please click on the link below: ",
-        ],
-        url,
-        "Activate account",
-    );
+  return baseEmailTemplate(
+      `Activar la cuenta de ${username}`,
+      [
+          "Hola,",
+          `Has recibido este correo porque ${username}, que pertenece a la organización ${organization} con la ocupación ${ocupation} y tipo de entidad ${entity}, se ha registrado con el correo electrónico ${email} en la plataforma ${projectName}.`,
+          "Para activar la cuenta, por favor haz clic en el siguiente enlace:",
+      ],
+      url,
+      "Activar cuenta",
+  );
 };
 
 const completeRegister = (
-  url: string,
-  projectName: string,
+url: string,
+projectName: string,
+organization: string,
+ocupation: string,
+entity: string,
 ) => {
-  return baseEmailTemplate(
-    `Complete Your Registration in ${projectName} platform.`,
-    [
-        "Hello",
-        `Your account has been approved by the administrator. Please complete your registration by clicking the link below:`,
-    ],
-    url,
-    "Complete registration",
+return baseEmailTemplate(
+  `Completa tu registro en la plataforma ${projectName}`,
+  [
+      "Hola,",
+      `Tu cuenta ha sido aprobada por el administrador. Perteneces a la organización ${organization}, con la ocupación ${ocupation} y tipo de entidad ${entity}.`,
+      "Por favor, completa tu registro haciendo clic en el siguiente enlace:",
+  ],
+  url,
+  "Completar registro",
 );
-
 };
 
 const activateAdminTemplate = (
-  url: string,
-  email: string,
-  description: string,
-  projectName: string,
+url: string,
+email: string,
+description: string,
+organization: string,
+ocupation: string,
+entity: string,
+projectName: string,
 ) => {
-  return baseEmailTemplate(
-      `Activate Account in ${projectName}`,
-      [
-          "Hello,",
-          `You are receiving this because ${description}.`,
-          `This is associated with the email: ${email}.`,
-          "To activate your account, please click on the link below:",
-      ],
-      url,
-      "Activate Account",
-  );
+return baseEmailTemplate(
+    `Activación de cuenta en ${projectName}`,
+[
+    "Hola,",
+    `Has recibido este correo porque se ha solicitado la activación de una cuenta con la siguiente información:`,
+    `<strong>Correo electrónico:</strong> ${email}`,
+    `<strong>Organización:</strong> ${organization}`,
+    `<strong>Ocupación:</strong> ${ocupation}`,
+    `<strong>Tipo de entidad:</strong> ${entity}`,
+    `<strong>Descripción:</strong> ${description}`,
+    "Para confirmar y activar esta cuenta, haz clic en el siguiente enlace:",
+],
+url,
+"Activar cuenta",
+);
 };
 
 const rejectAccountTemplate = (
   email: string, 
-  projectName: string) => {
+  projectName: string
+) => {
   return `
-      <html>
+    <html>
       <body>
-          <h1>Account Request Rejected</h1>
-          <p>Dear user,</p>
-          <p>We regret to inform you that your account request with email <strong>${email}</strong> has been rejected by the administrator.</p>
-          <p>If you have any questions, please contact our support team.</p>
+          <h1>Solicitud de cuenta rechazada</h1>
+          <p>Estimado usuario,</p>
+          <p>Lamentamos informarte que tu solicitud de cuenta con el correo <strong>${email}</strong> ha sido rechazada por el administrador.</p>
+          <p>Si tienes alguna pregunta, por favor contacta con nuestro equipo de soporte.</p>
           <br>
-          <p>Regards,</p>
-          <p>${projectName} Team</p>
+          <p>Atentamente,</p>
+          <p>Equipo de ${projectName}</p>
       </body>
-      </html>
+    </html>
   `;
 };
 
 const resetPasswordTemplate = (url: string, projectName: string) => {
     return baseEmailTemplate(
-        "Reset your Password",
+        "Restablece tu contraseña",
         [
-            "Hello",
-            `You are receiving this because you (or someone else) is trying to reset your password in ${projectName} platform.`,
-            "To reset the password, please click on the link below: ",
+            "Hola,",
+            `Has recibido este correo porque tú (o alguien más) ha solicitado restablecer tu contraseña en la plataforma ${projectName}.`,
+            "Para restablecer la contraseña, por favor haz clic en el siguiente enlace:",
         ],
         url,
-        "Reset password",
+        "Restablecer contraseña",
     );
 };
+
 
 const baseEmailTemplate = (
     title: string,

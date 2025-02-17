@@ -33,27 +33,35 @@ class AuthDataService {
     //     return response;
     // }
 
-    async register(user: { email: string, name: string, password: string, organization: string }) {
+    async register(user: { email: string, name: string, password: string, organization: string, entity: string, ocupation: string }) {
         const response = await api.post("/auth/signup", {
             name: user.name,
             email: user.email,
             password: user.password,
-            organization: user.organization
+            organization: user.organization,
+            entity: user.entity,
+            ocupation: user.ocupation
         });
         return response;
     }
 
-    async requestAdmin(user: { email: string, description: string }) {
+    async requestAdmin(user: { email: string, organization: string, entity: string, ocupation: string, description: string }) {
         const response = await api.post("/auth/activate-account", {
             email: user.email,
+            organization: user.organization,
+            entity: user.entity,
+            ocupation: user.ocupation,
             description: user.description,
         });
         return response;
     }
 
-    async acceptRequestAdmin(user: { email: string, description: string }) {
+    async acceptRequestAdmin(user: { email: string, organization: string, entity: string, ocupation: string, description: string }) {
         const response = await api.post("/auth/confirm-activation", {
             email: user.email,
+            organization: user.organization,
+            entity: user.entity,
+            ocupation: user.ocupation,
             description: user.description,
         });
         return response;

@@ -1,0 +1,24 @@
+version: 1.0
+endpoints:
+  start:
+    enabled: true
+  static:
+    enabled: true
+  stop:
+    enabled: true
+  list:
+    enabled: true
+
+listen:
+  - alias: camera1
+    uri: rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
+    enabled: true
+    running: true
+
+ffmpegOptions:
+  input: "-rtsp_transport tcp"
+  output: "-c:v libx264 -preset ultrafast -tune zerolatency -b:v 4000k -maxrate 5000k -bufsize 10000k -c:a aac -b:a 128k -f hls -hls_time 10 -hls_list_size 5 -hls_flags delete_segments"
+
+ready: true
+
+timeout: 300

@@ -5,27 +5,31 @@ import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import AuthDataService from "../services/AuthDataService";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [error, setError] = React.useState('');
     const [successMessage, setSuccessMessage] = React.useState('');
+    const [organization, setOrganization] = React.useState('');
+    const [entity, setEntity] = React.useState('');
+    const [ocupation, setOcupation] = React.useState('');
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     
     const handleAccept = async () => {
         try {
-            const response = await AuthDataService.acceptRequestAdmin({ email, description });
+            const response = await AuthDataService.acceptRequestAdmin({ email, organization, entity, ocupation, description });
             if (response.data.error) {
                 setError(response.data.error);
             } else {
-                setSuccessMessage("Request accepted successfully!");
+                setSuccessMessage("¡Solicitud aceptada con éxito!");
                 console.log("Accept response:", response.data);
             }
         } catch (err) {
             console.error("Error accepting request:", err);
-            setError("An error occurred while accepting the request.");
+            setError("Se ha producido un error al aceptar la solicitud.");
         }
     };
 
@@ -35,12 +39,12 @@ export const CustomCard = () => {
             if (response.data.error) {
                 setError(response.data.error);
             } else {
-                setSuccessMessage("Request declined successfully!");
+                setSuccessMessage("¡Solicitud rechazada con éxito!");
                 console.log("Decline response:", response.data);
             }
         } catch (err) {
             console.error("Error declining request:", err);
-            setError("An error occurred while declining the request.");
+            setError("Se ha producido un error al rechazar la solicitud.");
         }
     };
 
@@ -48,10 +52,16 @@ export const CustomCard = () => {
         const params = new URLSearchParams(window.location.search);
         const emailParam = params.get('email');
         const descriptionParam = params.get('description');
+        const organizationParam = params.get('organization');
+        const ocupationParam = params.get('ocupation');
+        const entityParam = params.get('entity');
  
         //Decodifica los valores de la URL
         if (emailParam) setEmail(decodeURIComponent(emailParam));
         if (descriptionParam) setDescription(decodeURIComponent(descriptionParam));
+        if (organizationParam) setOrganization(decodeURIComponent(organizationParam));
+        if (ocupationParam) setOcupation(decodeURIComponent(ocupationParam));
+        if (entityParam) setEntity(decodeURIComponent(entityParam));
 
 
         console.log('La página se ha cargado RequestAdminComponent');
@@ -74,11 +84,32 @@ export const CustomCard = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Organización"
+                                value={organization}
+                                onChange={(e) => setOrganization(e.target.value)}
+                            />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Entidad"
+                                value={entity}
+                                onChange={(e) => setEntity(e.target.value)}
+                            />
+                            <Input
+                                isReadOnly
+                                type="text"
+                                label="Ocupación"
+                                value={ocupation}
+                                onChange={(e) => setOcupation(e.target.value)}
+                            />
                             <Textarea
                                 isReadOnly
                                 className="max-w-xm"
                                 type="text"
-                                label="Description"
+                                label="Descripción"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />

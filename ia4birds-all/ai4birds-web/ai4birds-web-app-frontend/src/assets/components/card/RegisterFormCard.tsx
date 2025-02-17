@@ -6,6 +6,7 @@ import { Button } from "@nextui-org/button";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 import auth from "../services/AuthDataService";
 
@@ -16,6 +17,8 @@ export const CustomCard = () => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [organization, setOrganization] = React.useState('');
+    const [entity, setEntity] = React.useState('');
+    const [ocupation, setOcupation] = React.useState('');
     const [passwordConfirmation, setPasswordConfirmation] = React.useState('');
     const [error, setError] = React.useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -28,10 +31,16 @@ export const CustomCard = () => {
         // Obtener email desde la URL
         const params = new URLSearchParams(window.location.search);
         const emailParam = params.get('email');
+        const organizationParam = params.get('organization');
+        const ocupationParam = params.get('ocupation');
+        const entityParam = params.get('entity');
         // Decodifica caracteres
         if (emailParam) {
             setEmail(decodeURIComponent(emailParam));  
         }
+        if (organizationParam) setOrganization(decodeURIComponent(organizationParam));
+        if (ocupationParam) setOcupation(decodeURIComponent(ocupationParam));
+        if (entityParam) setEntity(decodeURIComponent(entityParam));
     }, []);
 
     const handleSubmit = (e) => {
@@ -44,21 +53,21 @@ export const CustomCard = () => {
         //     return;
         // }
         if (!email || !name || !password || !passwordConfirmation || !organization) {
-            setError('Please fill in all fields');
+            setError('Rellene todos los campos');
             return;
         }
         if (!emailRegex.test(email)) {
-            setError('Please enter a valid email');
+            setError('Introduzca una dirección de correo electrónico válida');
             return;
         }
 
         if (!passwordRegex.test(password)) {
-            setError('Password must contain at least one number and one uppercase and lowercase letter, and at least 6 characters');
+            setError('La contraseña debe contener al menos un número y una letra mayúscula y minúscula, y al menos 6 caracteres');
             return;
         }
 
         if (password !== passwordConfirmation) {
-            setError('Passwords do not match');
+            setError('Las contraseñas no coinciden');
             return;
         }
 
@@ -75,7 +84,7 @@ export const CustomCard = () => {
         //         setError('An error occurred while registering. Please try again.');
         //     });
 
-        auth.register({email: email, name: name, password: password, organization: organization})
+        auth.register({email: email, name: name, password: password, organization: organization, entity: entity, ocupation: ocupation})
         .then((response) => {
             if (!response.data.error) {
                 notify();
@@ -85,7 +94,7 @@ export const CustomCard = () => {
             }
         })
         .catch(() => {
-            setError('An error occurred while registering. Please try again.');
+            setError('Se ha producido un error al registrarse. Por favor, inténtelo de nuevo.');
         });
     };
 
@@ -93,7 +102,7 @@ export const CustomCard = () => {
         <>
         <Card>
             <CardHeader>
-                <h2>Formulario de registro</h2>
+                <h2>Regístrate</h2>
             </CardHeader>
             <CardBody>
             <form onSubmit={handleSubmit}>
@@ -102,7 +111,6 @@ export const CustomCard = () => {
                         <Input 
                             type="email" 
                             isReadOnly
-                            placeholder="ejemplo@ejemplo.com" 
                             label="Email" 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
@@ -110,7 +118,6 @@ export const CustomCard = () => {
                         <Input 
                             type="text" 
                             isRequired 
-                            placeholder="Nombre" 
                             label="Nombre" 
                             value={name} 
                             onChange={(e) => setName(e.target.value)} 
@@ -132,14 +139,28 @@ export const CustomCard = () => {
                             onChange={(e) => setUsername(e.target.value)} 
                             /> */}
                         <Input
+                            isReadOnly
                             type="text"
-                            placeholder="Organización"
                             label="Organización"
                             value={organization}
                             onChange={(e) => setOrganization(e.target.value)}
                         />
+                        <Input
+                            isReadOnly
+                            type="text"
+                            label="Entidad"
+                            value={entity}
+                            onChange={(e) => setEntity(e.target.value)}
+                        />
+                        <Input
+                            isReadOnly
+                            type="text"
+                            label="Ocupación"
+                            value={ocupation}
+                            onChange={(e) => setOcupation(e.target.value)}
+                        />
                         <div className="relative w-full">
-                            <Input type={showPassword ? "text" : "password"} isRequired label="Password" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
+                            <Input type={showPassword ? "text" : "password"} isRequired label="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} endContent={
                                 <Button 
                                 isIconOnly
                                 onClick={() => setShowPassword(!showPassword)}
@@ -152,7 +173,7 @@ export const CustomCard = () => {
 
                         </div>
                         <div className="relative w-full">
-                            <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repeat Password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
+                            <Input type={showPasswordConfirmation ? "text" : "password"} isRequired label="Repite la Contraseña" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} endContent={
                                     <Button 
                                     isIconOnly
                                     onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}

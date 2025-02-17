@@ -1,3 +1,6 @@
+-- Definir el tipo ENUM para el campo entity
+CREATE TYPE entity_enum AS ENUM ('public', 'private', 'external');
+
 CREATE TABLE IF NOT EXISTS species (
     id SERIAL PRIMARY KEY,
     comName VARCHAR(255),
@@ -46,6 +49,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     organization VARCHAR(255),
+    ocupation VARCHAR(255), -- Nuevo campo de ocupación
+    entity entity_enum NOT NULL, -- Nuevo campo ENUM
     description VARCHAR(255),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active BOOLEAN DEFAULT FALSE

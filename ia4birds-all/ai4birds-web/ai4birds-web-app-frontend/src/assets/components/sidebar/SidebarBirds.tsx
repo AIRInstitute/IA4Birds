@@ -10,7 +10,7 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
     console.log('Estoy dentro de Sidebar y este es el birdData: ', birdData);
 
   return (
-    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+    <div className={`sidebar ${isOpen ? 'open' : ''} z-50`}>
       <div className="content">
       <div className="header">
         <h2 className='mb-5'> Datos de la especie </h2>

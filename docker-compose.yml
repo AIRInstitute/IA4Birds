@@ -134,16 +134,33 @@ services:
     networks:
       - redis-net
 
-  gstreamer:
-    build: .
-    container_name: gstreamer
-    environment:
-      - RTSP_URL=rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
+  rtsp-stream:
+    image: roverr/rtsp-stream:2
+    container_name: rtsp-stream
     ports:
-      - "8554:8554" # Puerto para WebRTC
+      - "8082:8080"
+    environment:
+      - RTSP_STREAM_DEBUG=true
+      - RTSP_STREAM_KEEP_FILES=true
+      - RTSP_STREAM_PROCESS_LOGGING=true
+    volumes:
+      - ./rtsp-stream.yml:/app/rtsp-stream.yml
+      - ./hls:/app/hls  # Asegura que la carpeta hls esté montada
+      - ./logs:/var/log/rtsp-stream
+      - ia4birds_videos_data:/app/videos
     networks:
       - bird-net
-  
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-hls
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ia4birds_videos_data:/usr/share/nginx/html/videos:ro
+    ports:
+      - "8083:8083"
+    restart: always
+
 networks:
   bird-net:
     driver: bridge
@@ -151,6 +168,8 @@ networks:
     driver: bridge
 
 volumes:
+  ia4birds_videos_data:
+    external: true
   cache:
     driver: local
 

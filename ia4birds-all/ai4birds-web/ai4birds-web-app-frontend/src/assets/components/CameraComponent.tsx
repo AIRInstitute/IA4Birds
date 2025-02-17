@@ -1,51 +1,76 @@
-import {Spacer} from "@nextui-org/spacer";
-import {CustomCard} from "./card/CameraCard";
-import XenocantoDataService from './services/XenocantoDataService';
-import {FrequencyWindSpeed} from './Charts/FrequencyWindSpeed';
-import { useState, useEffect } from 'react';
-import * as React from 'react';
+import { Spacer } from "@nextui-org/spacer";
+import { CustomCard } from "./card/CameraCard";
+import XenocantoDataService from "./services/XenocantoDataService";
+import { useEffect } from "react";
+import * as React from "react";
+import { Link } from "react-router-dom"; // Importa Link
 
 const CameraComponent = () => {
+    // Lista de cámaras con enlaces HLS
     const camerasData = [
-        { id: 1, name: 'Camera 1', location: 'Avenida Madrigal', views: '23 views', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrHm-9dQxCTmsSPkH5zZ9iijHXXX8MOHnnlQ&usqp=CAU'},
-        { id: 2, name: 'Camera 2', location: '', views: '100 views', url: '/public/Buitre negro.jpg'},
-        { id: 3, name: 'Camera 3', location: '', views: '50 views', url: '/public/Buitre negro.jpg'},
-        
-      ];
-      useEffect(() => {
-        // Esta función se ejecutará una vez cuando el componente se monte en el DOM
-        console.log('La página se ha cargado cameraComponent');
-        
-        // Llama a tu función aquí
+        {
+            id: 1,
+            name: "Cámara 1",
+            location: "Edificio Air Institute",
+            views: "273 visitas",
+            //url: import.meta.env.HLS_BASE_URL
+            url: "http://ia4birds-pre.der.usal.es:8083/hls/129d9c94-e321-4c69-b7b6-8dd7bd6d8d56/index.m3u8"
+        },
+        {
+            id: 2,
+            name: "Cámara 2",
+            location: "No disponible",
+            // views: "23 visitas",
+            url: "http://ia4birds-pre.der.usal.es:8083/hls/4ed3e2f5-8d39-4d68-8033-d3bada5dbb71/index.m3u8"
+        },
+        {
+            id: 3,
+            name: "Cámara 3",
+            location: "No disponible",
+            // views: "35 visitas",
+            url: "http://ia4birds-pre.der.usal.es:8083/hls/4ed3e2f5-8d39-4d68-8033-d3bada5dbb71/index.m3u8"
+        },
+        {
+            id: 4,
+            name: "Cámara 4",
+            location: "No disponible",
+            // views: "48 visitas",
+            url: "http://ia4birds-pre.der.usal.es:8083/hls/4ed3e2f5-8d39-4d68-8033-d3bada5dbb71/index.m3u8"
+        }
+    ];
+
+    useEffect(() => {
+        console.log("Cargando CameraComponent...");
         getXenocantoData();
-      }, []); // es un array vacío porque se ejecuta según se forma el componente, si pones el nombre de la variable se ejecuta cada vez que cambia esa variable
+    }, []);
 
-      const getXenocantoData = () => {
+    const getXenocantoData = () => {
         XenocantoDataService.getXenocanto().then((response) => {
-          if (response.status === 200) {
-            console.log("Xenocanto Response",response.data)
-          }
-          else {
-            throw new Error(response.data);
-          }
-        });
-      };
+            if (response.status === 200) {
+                console.log("Xenocanto Response", response.data);
+            } else {
+                console.error("Error al obtener datos de Xenocanto", response.data);
+            }
+        }).catch(error => console.error("Error en la petición Xenocanto:", error));
+    };
 
-  return (
-    <>
-    <div className="camera-component">
-      <Spacer y={5} />
-      <div className="flex flex-wrap justify-center gap-6">
-        {camerasData.map ((camera) => (
-          <React.Fragment key={camera.id}>
-            <CustomCard cameraData = {camera}/>
-            <Spacer x={4}/>
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
-    </>
-  );
-}
+    return (
+        <div className="camera-component mx-6 my-6">
+            <Spacer y={5} />
+            <div className="flex flex-wrap justify-center gap-8"> {/* Aumenté el gap de 6 a 8 */}
+                {camerasData.map((camera) => (
+                    <React.Fragment key={camera.id}>
+                         <Link to={`/camera-panel-component?camera=${camera.id}`}>
+                            <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+                              <CustomCard cameraData={camera} />
+                            </div>
+                        </Link>
+                        <Spacer x={4} />
+                    </React.Fragment>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 export default CameraComponent;

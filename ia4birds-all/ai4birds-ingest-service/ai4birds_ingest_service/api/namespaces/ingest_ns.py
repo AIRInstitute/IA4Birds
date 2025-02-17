@@ -94,6 +94,7 @@ class XenoCanto(Resource):
         max_retries = 3
         backoff_factor = 1
         xenocanto_data_raw = xenocanto_extractor.xenocanto_query(max_retries=max_retries, backoff_factor=backoff_factor)
+        print("Datos obtenidos de XenoCanto:", xenocanto_data_raw)  # Depuración
 
         if xenocanto_data_raw:
             # Crear instancias de XenoCantoData desde los datos brutos obtenidos
