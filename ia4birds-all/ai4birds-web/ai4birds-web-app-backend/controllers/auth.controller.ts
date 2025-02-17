@@ -135,7 +135,7 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
             description,
             organization,
             ocupation,
-            entityTranslated,
+            entity: entityTranslated,
             active: false,
             name: "Pending",
             password: "temporary-password",
