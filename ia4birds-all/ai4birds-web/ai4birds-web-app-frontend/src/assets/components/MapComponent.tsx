@@ -35,6 +35,8 @@ const Mapa = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipContent, setTooltipContent] = useState("");
+  const [selectedCircle, setSelectedCircle] = useState(null);
+  const maxDistance = 10000;
 
   const birdData = [
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
@@ -200,7 +202,9 @@ const Mapa = () => {
     }
   }
 
-  const getNearbyEolicMarkers = (clickedPoint, allMarkers, maxDistance = 10000) => {
+  const getNearbyEolicMarkers = (clickedPoint, allMarkers, maxDistance) => {
+    console.log('SADFHSDAHFSDHFA MAXDISTANCE', maxDistance);
+    // maxDistance = maxDistance ?? 10000;
     const toRadians = (degrees) => degrees * (Math.PI / 180);
     const R = 6371000; // Radio de la Tierra en metros (6371 km)
   
@@ -281,6 +285,11 @@ const Mapa = () => {
     setSidebarBirdOpen(false);
   };
 
+  // Cambiando color de los círculos (Ongoing)
+  // const handleCardClick = (coordenadas) => {
+  //   setSelectedCircle(coordenadas);
+  // };
+
   // const handleButtonClickEolic = (button) => {
 
   //   setSelectedButton(button);
@@ -288,7 +297,7 @@ const Mapa = () => {
   // };
 
   const handleButtonClickEolic = (clickedPoint) => {
-    const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers);
+    const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers, maxDistance);
   
     console.log("Puntos dentro de 10km:", nearbyEolicMarkers); // Verifica que no está vacío
   
@@ -296,9 +305,8 @@ const Mapa = () => {
     setSidebarEolicOpen(true);
 
     if (nearbyEolicMarkers.length > 0) {
-      setTooltipContent(`Zona de exclusión eólica: ${nearbyEolicMarkers[0].espacio}`);
+      setTooltipContent(`Zona de exclusión eólica: ${nearbyEolicMarkers.espacio}`);
       setTooltipVisible(true); // Show tooltip
-      console.log('EOEOEOEOEOEO entro al tooltip: ', nearbyEolicMarkers[0].espacio);
     } else {
       setTooltipVisible(false); // Hide tooltip if no markers
     }
@@ -434,7 +442,8 @@ const Mapa = () => {
             </CardBody>
           </Card>
         </div>
-        <div className={`fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90 ${showFilter ? 'hidden' : ''}`}>
+        {/* Comentado para la muestra (Es el filtro de meses pájaros) */}
+        {/* <div className={`fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90 ${showFilter ? 'hidden' : ''}`}>
           <Card className="">
             <CardBody className="flex flex-col gap-3">
               <p className="text-lg font-semibold">Filtrar por tiempo</p>
@@ -450,7 +459,7 @@ const Mapa = () => {
               </select>
             </CardBody>
           </Card>
-        </div>
+        </div> */}
         <div className='map'>
           <MapContainer
             center={[41.6528, -4.7281]}
@@ -647,6 +656,10 @@ const Mapa = () => {
                           key={`${index}-${i}`} 
                           center={eolicPoint}
                           pathOptions={{ fillColor: "blue", color: "blue" }}
+                          // pathOptions={{
+                          //   fillColor: selectedCircle === eolicPoint ? "red" : "blue",
+                          //   color: selectedCircle === eolicPoint ? "red" : "blue",
+                          // }}
                           radius={1500}
                           eventHandlers={{
                             click: () => handleButtonClickEolic(eolicPoint),
@@ -713,7 +726,9 @@ const Mapa = () => {
           <SidebarEolic
             isOpen={sidebarEolicOpen}
             onCancel={handleCancelClickEolic}
-            eolicdata={selectedButton} // Ahora pasamos todos los puntos cercanos
+            eolicdata={selectedButton}
+            // onSelectCircle={handleCardClick}
+            maxDistance={maxDistance}
           />
         )}
 

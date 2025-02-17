@@ -57,7 +57,8 @@ import { Card, CardHeader } from "@nextui-org/card";
 import { RxCross1 } from "react-icons/rx";
 import { Chip } from "@nextui-org/chip";
 
-const SidebarEolic = ({ isOpen, onCancel, eolicdata }) => {
+// const SidebarEolic = ({ isOpen, onCancel, eolicdata, onSelectCircle, maxDistance }) => {
+const SidebarEolic = ({ isOpen, onCancel, eolicdata, maxDistance }) => {
   console.log("Estoy dentro de SidebarEolic");
   console.log("EolicData dentro del SideBarEolic: ", eolicdata);
 
@@ -65,7 +66,7 @@ const SidebarEolic = ({ isOpen, onCancel, eolicdata }) => {
     <div className={`sidebar ${isOpen ? "open" : ""} z-50`}>
       <div className="content">
         <div className="header py-3">
-          <h2>Datos de la exclusión eólica</h2>
+          <h2>Datos de la exclusión eólica ({(maxDistance / 1000).toFixed(1)} km)</h2>
           <button onClick={onCancel}>
             <RxCross1 style={{ height: "30px", width: "30px" }} />
           </button>
@@ -73,7 +74,8 @@ const SidebarEolic = ({ isOpen, onCancel, eolicdata }) => {
 
         {Array.isArray(eolicdata) ? (
           eolicdata.map((data, index) => (
-            <Card key={index} className="w-full h-[30vh] mb-4">
+            // <Card key={index} className="w-full h-[30vh] mb-4 cursor-pointer hover:bg-gray-100 transition"  onClick={() => onSelectCircle(data)}>
+            <Card key={index} className="w-full h-[30vh] mb-4 cursor-pointer hover:bg-gray-100 transition">
               <CardHeader className="flex gap-3">
                 <div className="flex flex-col gap-2">
                   <p className="text-md">
