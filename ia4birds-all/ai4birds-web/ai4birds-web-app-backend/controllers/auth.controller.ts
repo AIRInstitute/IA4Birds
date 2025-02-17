@@ -15,6 +15,12 @@ const ENTITY_TRANSLATION: Record<string, string> = {
     "external": "Externo"
 };
 
+const ENTITY_MAPPING: Record<string, string> = {
+    "Pública": "public",
+    "Privada": "private",
+    "Externo": "external"
+};
+
 
 /**
  * Activate account request
@@ -120,13 +126,16 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
             return res.status(409).send(responseMessages[409].EMAIL_IN_USE);
         }
 
+        // Transformar el valor de entity al formato esperado por la base de datos
+        const entityTranslated = ENTITY_MAPPING[entity] || entity;
+
         // Crear al usuario en la tabla
         const user = await User.create({
             email,
             description,
             organization,
             ocupation,
-            entity,
+            entityTranslated,
             active: false,
             name: "Pending",
             password: "temporary-password",
@@ -144,18 +153,17 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
 
         console.log("TOKEN REGISTRATION:", registrationToken);
 
-        // Traducir entity antes de enviarlo al template
-        const entityTranslated = ENTITY_TRANSLATION[entity] || entity;
+        
 
         // URL para que el usuario complete el registro con los nuevos parámetros
-        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}&organization=${encodeURIComponent(organization)}&ocupation=${encodeURIComponent(ocupation)}&entity=${encodeURIComponent(entityTranslated)}`;
+        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}&organization=${encodeURIComponent(organization)}&ocupation=${encodeURIComponent(ocupation)}&entity=${encodeURIComponent(entity)}`;
 
         // Enviar correo al usuario
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: email,
             subject: `${globalConfig.projectName} - Completa tu registro`,
-            html: completeRegister(url, globalConfig.projectName, organization, ocupation, entityTranslated),
+            html: completeRegister(url, globalConfig.projectName, organization, ocupation, entity),
         };
 
         const mailResponse = await smtp.sendMail(mailOptions);
