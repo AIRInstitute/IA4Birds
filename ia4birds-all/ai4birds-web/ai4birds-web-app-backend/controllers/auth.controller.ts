@@ -52,7 +52,7 @@ const activateaccount = async (req: Request, res: Response) => {
     console.log("TOKEN ACTIVATE:", activateAccountToken);
 
     // Construcción de la URL con los nuevos parámetros
-    const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}&organization=${encodeURIComponent(body.organization)}&ocupation=${encodeURIComponent(body.ocupation)}&entity=${encodeURIComponent(body.entity)}`;
+    const url = `${globalConfig.frontendURL}/accept-decline-component?email=${encodeURIComponent(body.email)}&description=${encodeURIComponent(body.description)}&organization=${encodeURIComponent(body.organization)}&ocupation=${encodeURIComponent(body.ocupation)}&entity=${encodeURIComponent(entityTranslated)}`;
 
     const mailOptions = {
         from: globalConfig.smtp.email,
@@ -144,15 +144,18 @@ const confirmAccountActivation = async (req: Request, res: Response) => {
 
         console.log("TOKEN REGISTRATION:", registrationToken);
 
+        // Traducir entity antes de enviarlo al template
+        const entityTranslated = ENTITY_TRANSLATION[entity] || entity;
+
         // URL para que el usuario complete el registro con los nuevos parámetros
-        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}&organization=${encodeURIComponent(organization)}&ocupation=${encodeURIComponent(ocupation)}&entity=${encodeURIComponent(entity)}`;
+        const url = `${globalConfig.frontendURL}/register-form-component?email=${encodeURIComponent(email)}&organization=${encodeURIComponent(organization)}&ocupation=${encodeURIComponent(ocupation)}&entity=${encodeURIComponent(entityTranslated)}`;
 
         // Enviar correo al usuario
         const mailOptions = {
             from: globalConfig.smtp.email,
             to: email,
             subject: `${globalConfig.projectName} - Completa tu registro`,
-            html: completeRegister(url, globalConfig.projectName, organization, ocupation, entity),
+            html: completeRegister(url, globalConfig.projectName, organization, ocupation, entityTranslated),
         };
 
         const mailResponse = await smtp.sendMail(mailOptions);

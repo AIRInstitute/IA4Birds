@@ -14,10 +14,10 @@ const AdminPanelComponent = () => {
 
   const [panelAdminData, setPanelAdminData] = useState<PanelAdminData[]>([]);
   const [cameraAdminData] = useState([
-    { id: 1, name: 'Cámara 1', location: '', views: '273 views', gpsData: "latitude: 40.416775, longitude: -3.703790", storageData: "15.5", status: "Activa", url: '/public/playVideo.png' },
-    { id: 2, name: 'Cámara 2', location: '', views: '100 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
-    { id: 3, name: 'Cámara 3', location: '', views: '50 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
-    { id: 4, name: 'Cámara 4', location: '', views: '500 views', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
+    { id: 1, name: 'Cámara 1', location: '', views: '273 visitas', gpsData: "Latitud: 40.416775, Longitud: -3.703790", storageData: "15.5", status: "Activa", url: '/public/playVideo.png' },
+    { id: 2, name: 'Cámara 2', location: '', views: '100 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
+    { id: 3, name: 'Cámara 3', location: '', views: '50 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
+    { id: 4, name: 'Cámara 4', location: '', views: '500 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
   ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
