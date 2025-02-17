@@ -1,73 +1,46 @@
-name: Build all
+name: Build pre
 
 on:
   push:
     branches:
-      - 'prod'
+      - 'pre'
 
 jobs:
   check_out:
     name: check out
-    runs-on: [self-hosted, linux, x64, prod]  
+    runs-on: [self-hosted, linux, x64, pre]
     steps:
       - uses: actions/checkout@v1
-
-      - name: Stop old containers except rtsp-stream and nginx-hls (if exist)
+      # - name: Stop old containers
+      #   run: sudo docker stop $(docker ps -a -q)
+      #   continue-on-error: true
+      # - name: Remove old containers
+      #   run: sudo docker rm $(docker ps -a -q)
+      #   continue-on-error: true
+      - name: Stop old containers except rtsp-stream and nginx-hls
         run: sudo docker ps -a --format '{{.ID}} {{.Names}}' | awk '!/rtsp-stream|nginx-hls/ {print $1}' | xargs -r sudo docker stop
         continue-on-error: true
-
-      - name: Remove old containers except rtsp-stream and nginx-hls (if exist)
+      - name: Remove old containers except rtsp-stream and nginx-hls
         run: sudo docker ps -a --format '{{.ID}} {{.Names}}' | awk '!/rtsp-stream|nginx-hls/ {print $1}' | xargs -r sudo docker rm
         continue-on-error: true
 
       - name: Remove old images
         run: sudo docker rmi $(docker images -a -q)
         continue-on-error: true
-      
       - name: Clear all Docker
         run: sudo docker system prune --all -f || true
 
-  copy_file:
-    name: copy file
-    needs: check_out
-    runs-on: [self-hosted, linux, x64, prod]
-    steps:
-      - name: copy file
-        run: cp /etc/envs/.env .
-
   docker_compose:
     name: docker compose
-    needs: copy_file
-    runs-on: [self-hosted, linux, x64, prod]
+    needs: check_out
+    runs-on: [self-hosted, linux, x64, pre]
     steps:
       - name: Build Custom Kong Image
         run: sudo docker build -t custom-kong-gstreamer:latest .
-      
-      - name: Build the docker-compose excluding rtsp-stream and nginx if they exist
-        run: |
-          RTSP_EXISTS=$(sudo docker ps -a --format '{{.Names}}' | grep -w "rtsp-stream" || echo "no")
-          NGINX_EXISTS=$(sudo docker ps -a --format '{{.Names}}' | grep -w "nginx-hls" || echo "no")
-
-          if [[ "$RTSP_EXISTS" != "no" && "$NGINX_EXISTS" != "no" ]]; then
-            sudo docker compose up -d --remove-orphans --no-recreate rtsp-stream nginx-hls
-          fi
-          
-          sudo docker compose up -d --remove-orphans
+      # - name: Build the docker-compose
+      #   run: sudo docker compose -f "docker-compose.yml" up -d
+      - name: Build the docker-compose excluding rtsp-stream and nginx
+        run: sudo docker compose up -d --remove-orphans --no-recreate rtsp-stream nginx && sudo docker compose up -d --remove-orphans
 
       - name: List running containers
         run: sudo docker ps
-
-  scan_with_trivy:
-    name: scan with trivy
-    needs: docker_compose
-    runs-on: [self-hosted, linux, x64]
-    steps:
-      - name: Run Trivy vulnerability scanner in fs mode
-        uses: anandg112/trivy-action@feat/add-skip-dirs-option
-        with:
-          image-ref: $(docker images -a -q)
-          scan-type: 'fs'
-          scan-ref: '.'
-          ignore-unfixed: true
-          format: 'table'
-          skip-dirs: "ignored-dir"
