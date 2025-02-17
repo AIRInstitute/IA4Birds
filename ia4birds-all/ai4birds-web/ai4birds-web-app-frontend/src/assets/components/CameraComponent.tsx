@@ -12,7 +12,7 @@ const CameraComponent = () => {
             id: 1,
             name: "Cámara 1",
             location: "Edificio Air Institute",
-            views: "273 views",
+            views: "273 visitas",
             //url: import.meta.env.HLS_BASE_URL
             url: "http://ia4birds-pre.der.usal.es:8083/hls/129d9c94-e321-4c69-b7b6-8dd7bd6d8d56/index.m3u8"
         },
@@ -20,21 +20,21 @@ const CameraComponent = () => {
             id: 2,
             name: "Cámara 2",
             location: "No disponible",
-            // views: "23 views",
+            // views: "23 visitas",
             url: "http://ia4birds-pre.der.usal.es:8083/hls/4ed3e2f5-8d39-4d68-8033-d3bada5dbb71/index.m3u8"
         },
         {
             id: 3,
             name: "Cámara 3",
             location: "No disponible",
-            // views: "35 views",
+            // views: "35 visitas",
             url: "http://ia4birds-pre.der.usal.es:8083/hls/4ed3e2f5-8d39-4d68-8033-d3bada5dbb71/index.m3u8"
         },
         {
             id: 4,
             name: "Cámara 4",
             location: "No disponible",
-            // views: "48 views",
+            // views: "48 visitas",
             url: "http://ia4birds-pre.der.usal.es:8083/hls/4ed3e2f5-8d39-4d68-8033-d3bada5dbb71/index.m3u8"
         }
     ];
