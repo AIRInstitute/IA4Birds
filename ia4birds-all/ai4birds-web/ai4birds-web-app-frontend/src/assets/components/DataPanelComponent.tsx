@@ -58,7 +58,7 @@ const DataPanelComponent = () => {
       </div>
       <div className="card-container flex-grow mx-5">
         {isLoading ? (
-          <p>Loading data...</p>
+          <p>Cargando datos...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : (

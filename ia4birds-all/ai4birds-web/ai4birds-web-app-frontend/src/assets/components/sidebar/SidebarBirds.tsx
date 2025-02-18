@@ -37,7 +37,7 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
                         color="primary"  
                         label="Número de aves" 
                         maxValue={100} 
-                        aria-label="Loading..." 
+                        aria-label="Cargando..." 
                         showValueLabel={true} 
                         formatOptions={{style: "decimal"}}
                         value={birdData.observations[0].numObservation}/>
