@@ -5,7 +5,7 @@ export const CustomCard = ({ dataPanelData }) => (
   <>
     <Card className="my-3 py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        <h4 className="font-bold text-large">{dataPanelData.name || "Details"}</h4>
+        <h4 className="font-bold text-large">{dataPanelData.name || "Detalles"}</h4>
       </CardHeader>
       <CardBody className="overflow-x py-2 h-[73vh]">
         <CopyBlock

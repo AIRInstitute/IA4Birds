@@ -52,7 +52,7 @@ const AdminPanelComponent = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>Cargando...</p>;
   }
 
   if (error) {
