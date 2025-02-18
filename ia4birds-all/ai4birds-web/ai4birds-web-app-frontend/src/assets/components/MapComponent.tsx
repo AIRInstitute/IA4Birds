@@ -472,26 +472,26 @@ const Mapa = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
-            {showMarkersEolic && (
+            {(showMarkersEolic || showMarkersEolicResources) && (
               <WMSTileLayer 
                 url="https://idecyl.jcyl.es/geoserver/er/wms"
                 layers="enre_cyl_excl_eoli"
                 format="image/png"
                 transparent={true}
                 version="1.3.0"
-                className="hue-rotate-[240deg]"
+                className="hue-rotate-[10deg]"
               />
             )}
 
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
-            {showMarkersEolic && (
+            {(showMarkersEolic || showMarkersEolicResources) && (
               <WMSTileLayer 
                 url="https://idecyl.jcyl.es/geoserver/ps/wms"
                 layers="rn2k_cyl_zepa"
                 format="image/png"
                 transparent={true}
                 version="1.3.0"
-                className="hue-rotate-[240deg]"
+                className="hue-rotate-[10deg]"
               />
             )}
 
@@ -655,7 +655,7 @@ const Mapa = () => {
                         <Circle
                           key={`${index}-${i}`} 
                           center={eolicPoint}
-                          pathOptions={{ fillColor: "blue", color: "blue" }}
+                          pathOptions={{ fillColor: "#FF9999", color: "#FF6666" }}
                           // pathOptions={{
                           //   fillColor: selectedCircle === eolicPoint ? "red" : "blue",
                           //   color: selectedCircle === eolicPoint ? "red" : "blue",
