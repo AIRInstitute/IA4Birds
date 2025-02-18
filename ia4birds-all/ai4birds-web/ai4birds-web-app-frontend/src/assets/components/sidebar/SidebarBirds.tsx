@@ -56,9 +56,9 @@ const Sidebar = ({ isOpen, onCancel, birdData }) => {
                 <Progress color="primary" aria-label="Loading..." value={9}/>
                 </React.Fragment> */}
             </Tab>
-            <Tab  title="Sensibilidad eólica">
+            {/*<Tab  title="Sensibilidad eólica">
               <p>Datos de la sensibilidad eólica</p>
-            </Tab>
+            </Tab> */}
           </Tabs>
         </CardBody>
       </Card>
