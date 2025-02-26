@@ -160,6 +160,18 @@ services:
     ports:
       - "8083:8083"
     restart: always
+  
+  celery:
+    build:
+      context: ./ia4birds-all/ai4birds-celery 
+      dockerfile: Dockerfile
+    container_name: celery
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      - redis
+    networks:
+      - redis-net
 
 networks:
   bird-net:
