@@ -4,8 +4,8 @@
 celery -A tasks worker --loglevel=info &
 
 # Ejecutamos el beat de Celery
-# TODO
+celery -A tasks beat --loglevel=info &
 
-# Esperamos a que termine el worker
+# Esperamos a que termine todo 
 wait
 
