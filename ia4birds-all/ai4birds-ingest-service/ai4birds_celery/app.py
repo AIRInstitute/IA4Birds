@@ -7,7 +7,7 @@ from os import environ
 REDIS_HOST = environ.get("REDIS_HOST", "redis");
 REDIS_PASSWORD = environ.get("REDIS_PASSWORD");
 celery = Celery(
-    'tasks',
+    'XenoCantoEBirdExtractor',
     broker=f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379/0",
 )
 
@@ -16,9 +16,8 @@ celery.conf.update(
     timezone = 'UTC',
     beat_schedule = {
         'Extraer datos de eBird y Xenocanto': {
-            'task': 'ai4birds-celery.app.extract',
-            # 'schedule': crontab(minute='0', hour='2', day_of_month='1'),
-            'schedule': crontab(minute='*/2')
+            'task': 'ai4birds_celery.app.extract',
+            'schedule': crontab(minute='0', hour='2', day_of_month='1'),
         }
     },
 )
@@ -65,3 +64,4 @@ def xenocanto_extract() -> None:
         logger.info("Successfully stored Xenocanto data in the database.")
     else:
         logger.warning("No data found in Xenocanto API.")
+
