@@ -8,7 +8,7 @@ from ai4birds_ingest_service.model.xenocanto.xenocanto_data import XenoCantoData
 
 from ai4birds_ingest_service.log import logger
 
-from app import celery
+from .app import celery
 
 # Extraer datos de eBird y Xenocanto
 @celery.task(name='ai4birds_celery.tasks.extract')
