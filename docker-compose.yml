@@ -164,7 +164,7 @@ services:
   celery-worker:
     build: ./ia4birds-all/ai4birds-ingest-service
     container_name: celery-worker 
-    command: celery -A ai4birds_celery.app worker --loglevel=info
+    command: python3 ai4birds_celery/sched.py worker --loglevel=info
     env_file:
       - /etc/envs/.env
     environment:
@@ -179,7 +179,7 @@ services:
   celery-beat:
     build: ./ia4birds-all/ai4birds-ingest-service
     container_name: celery-beat
-    command: celery -A ai4birds_celery.app beat --loglevel=info
+    command: python3 ai4birds_celery/sched.py beat --loglevel=info
     env_file:
       - /etc/envs/.env
     environment:
