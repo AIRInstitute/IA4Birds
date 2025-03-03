@@ -4,8 +4,8 @@ from os import environ
 
 # Aplicación de Celery utilizando el broker de redis
 # (que se encuentra en el contenedor llamado "redis")
-REDIS_HOST = environ.get("REDIS_HOST", "redis");
-REDIS_PASSWORD = environ.get("REDIS_PASSWORD");
+REDIS_HOST = environ.get("REDIS_HOST", "redis")
+REDIS_PASSWORD = environ.get("REDIS_PASSWORD")
 celery = Celery(
     'XenoCantoEBirdExtractor',
     broker=f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379/0",
@@ -18,7 +18,7 @@ celery.conf.update(
     beat_schedule = {
         'Extraer datos de eBird y Xenocanto': {
             'task': 'ai4birds_celery.tasks.extract',
-            'schedule': crontab(),
+            'schedule': crontab(minute='0', hour='2', day_of_month='1'),
         }
     },
 )
