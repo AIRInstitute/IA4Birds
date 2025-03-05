@@ -4,8 +4,8 @@ import { Image } from "@nextui-org/image";
 import Hls from "hls.js"; // Importamos hls.js
 
 export const CustomCard = ({ cameraPanelData }) => {
-    const videoRef = useRef<HTMLVideoElement>(null); // Creamos una referencia al video
-    const videoUrl = cameraPanelData.url; // Obtenemos la URL del video
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const videoUrl = cameraPanelData.url;
 
     useEffect(() => {
         // Verificamos si el navegador soporta hls.js

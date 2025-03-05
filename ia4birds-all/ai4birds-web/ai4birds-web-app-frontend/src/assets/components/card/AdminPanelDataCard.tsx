@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const CustomCardData = ({ panelAdminData }) => {
   if (!panelAdminData || panelAdminData.length === 0) {
-    return <p>Cargando datos...</p>; // Fallback for no data
+    return <p>Cargando datos...</p>;
   }
 
   return (
@@ -22,7 +22,7 @@ export const CustomCardData = ({ panelAdminData }) => {
                 <div className="max-w-full overflow-x-auto">
                   <CopyBlock
                     language="json"
-                    text={JSON.stringify(data.data, null, 2)} // Use current data entry
+                    text={JSON.stringify(data.data, null, 2)}
                     codeBlock
                     showLineNumbers={false}
                   />

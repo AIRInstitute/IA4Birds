@@ -86,15 +86,6 @@ export const CustomCard = () => {
                             value={organization}
                             onChange={(e) => setOrganization(e.target.value)}
                         />
-                        {/* <select
-                            value={entity}
-                            onChange={(e) => setEntity(e.target.value)}
-                        >
-                            <option value="" disabled>Selecciona una entidad</option>
-                            <option value="public">Pública</option>
-                            <option value="private">Privada</option>
-                            <option value="external">Externa</option>
-                        </select> */}
                         <div className="flex items-center space-x-2">
                           <p>Entidad: </p>
                           <Dropdown>

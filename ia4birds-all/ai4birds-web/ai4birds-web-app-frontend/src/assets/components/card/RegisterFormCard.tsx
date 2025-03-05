@@ -48,10 +48,7 @@ export const CustomCard = () => {
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-        // if (!email || !name || !surnames || !username || !password || !passwordConfirmation || !organization) {
-        //     setError('Please fill in all fields');
-        //     return;
-        // }
+
         if (!email || !name || !password || !passwordConfirmation || !organization) {
             setError('Rellene todos los campos');
             return;
@@ -70,19 +67,6 @@ export const CustomCard = () => {
             setError('Las contraseñas no coinciden');
             return;
         }
-
-        // auth.register({email: email, name: name, surnames: surnames, username: username, password: password, organization: organization})
-        //     .then((response) => {
-        //         if (!response.data.error) {
-        //             notify();
-        //             navigate("/login-component");
-        //         } else if (response.data.error) {
-        //             setError(response.data.error);
-        //         }
-        //     })
-        //     .catch(() => {
-        //         setError('An error occurred while registering. Please try again.');
-        //     });
 
         auth.register({email: email, name: name, password: password, organization: organization, entity: entity, ocupation: ocupation})
         .then((response) => {
@@ -122,22 +106,6 @@ export const CustomCard = () => {
                             value={name} 
                             onChange={(e) => setName(e.target.value)} 
                             />
-                        {/* <Input 
-                            type="text" 
-                            isRequired 
-                            placeholder="Apellidos" 
-                            label="Apellidos" 
-                            value={surnames} 
-                            onChange={(e) => setSurnames(e.target.value)} 
-                            />
-                        <Input 
-                            type="text" 
-                            isRequired 
-                            placeholder="Nombre usuario" 
-                            label="Nombre usuario" 
-                            value={username} 
-                            onChange={(e) => setUsername(e.target.value)} 
-                            /> */}
                         <Input
                             isReadOnly
                             type="text"

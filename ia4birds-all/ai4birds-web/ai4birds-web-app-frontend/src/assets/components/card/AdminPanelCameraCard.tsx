@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
-import { Link } from "react-router-dom"; // Usa React Router para manejar enlaces dinámicos.
+import { Link } from "react-router-dom";
 
 export const CustomCardCamera = ({ cameraAdminData }) => {
   return (
@@ -23,7 +23,6 @@ export const CustomCardCamera = ({ cameraAdminData }) => {
               </h2>
               <CardBody>
                 <div className="my-2 flex justify-center">
-                  {/* Envolvemos la imagen en un Link para que sea clickeable */}
                   <Link to={`/camera-panel-component?camera=${camera.id}`}>
                     <Image
                       alt={`Imagen de ${camera.name}`}
