@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
-import { Image } from "@nextui-org/image";
 import Hls from "hls.js"; // Importamos hls.js
 
 export const CustomCard = ({ cameraPanelData }) => {

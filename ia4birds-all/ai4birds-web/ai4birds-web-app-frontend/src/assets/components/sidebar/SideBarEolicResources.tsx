@@ -1,6 +1,4 @@
 import { useState,useEffect } from 'react';
-import { Divider } from "@nextui-org/divider";
-import { Link } from "@nextui-org/link";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 import { RxCross1 } from "react-icons/rx";

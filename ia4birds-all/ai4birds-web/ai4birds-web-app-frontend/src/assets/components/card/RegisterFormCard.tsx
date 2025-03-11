@@ -6,7 +6,6 @@ import { Button } from "@nextui-org/button";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 import auth from "../services/AuthDataService";
 
