@@ -36,3 +36,4 @@ pandas
 lru_cache
 python-dotenv
 flask-socketio
+celery[redis]

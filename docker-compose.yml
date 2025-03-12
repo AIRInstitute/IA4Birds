@@ -160,6 +160,37 @@ services:
     ports:
       - "8083:8083"
     restart: always
+  
+  celery-worker:
+    build: ./ia4birds-all/ai4birds-ingest-service
+    container_name: celery-worker 
+    command: celery -A ai4birds_celery.app worker --loglevel=info 
+    env_file:
+      - /etc/envs/.env
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      - ai4birds-ingest-service
+      - redis
+    networks:
+      - redis-net
+      - bird-net
+
+  celery-beat:
+    build: ./ia4birds-all/ai4birds-ingest-service
+    container_name: celery-beat
+    command: celery -A ai4birds_celery.app beat --loglevel=info 
+    env_file:
+      - /etc/envs/.env
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    depends_on:
+      - ai4birds-ingest-service
+      - celery-worker
+    networks:
+      - redis-net
+      - bird-net
+
 
 networks:
   bird-net:
