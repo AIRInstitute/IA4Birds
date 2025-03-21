@@ -28,7 +28,6 @@ export const CustomCard = () => {
   
     console.log("email: ", email);
   
-    // Llamada al servicio forgotPassword
     user.forgotPassword(email)
       .then((response) => {
         console.log("RESPONSE: ", response);
