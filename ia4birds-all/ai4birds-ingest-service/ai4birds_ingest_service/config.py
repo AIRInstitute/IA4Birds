@@ -59,5 +59,5 @@ CORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_
 # EXCLUSION_EOLICA_CSV_PATH = './ai4birds_ingest_service/utils/exclusion_eolica (5).csv'
 # API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
 
-EXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'
+EXCLUSION_EOLICA_CSV_PATH = '/app/ai4birds_ingest_service/utils/exclusion_eolica.csv'
 API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
