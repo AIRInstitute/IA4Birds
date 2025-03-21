@@ -230,7 +230,7 @@ class ExclusionMap(Resource):
                 if not json_data:  # Verificar si los datos JSON están vacíos (página fuera de rango)
                      return jsonify({"message": "Data not found for the specified page parameters"}), 404
 
-                return jsonify(json_data)  # Usar jsonify para asegurar la serialización correcta
+                return jsonify(json_data)
                 
                 # # Decidir qué método usar basado en una configuración o un parámetro
                 # if csv_file_path.endswith('.gz'):
@@ -240,7 +240,7 @@ class ExclusionMap(Resource):
                 # return jsonify(result)
         except Exception as e:
             logger.error(f"Error: {e}")  # Asegúrate de loguear el error
-            return jsonify({'error': str(e)}), 500  # Devolver como JSON
+            api.abort(500, f"Error interno: {e}")
         
 
 @ns_exclusionmap.route('/zip')

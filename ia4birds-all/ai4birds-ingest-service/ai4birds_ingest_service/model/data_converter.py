@@ -148,10 +148,6 @@ class DataConverter:
                 'metadata': pagination_result['pagination_info']
             }
             
-            
-        except Exception as e:
-            print(f"Error converting CSV to JSON: {e}")
-            return {'error': str(e)}
 
     @staticmethod
     @lru_cache(maxsize=128)
