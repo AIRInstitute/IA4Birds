@@ -9,6 +9,7 @@ from functools import lru_cache
 from shapely import wkt
 from time import sleep
 import gzip
+from ai4birds_ingest_service.log import logger
 
 class DataConverter:
     @staticmethod
@@ -111,43 +112,36 @@ class DataConverter:
 
     @staticmethod
     @lru_cache(maxsize=128)
-    def csv_to_json(filepath, page=1, page_size=10):
-        try:
-            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
-            clean_data = DataConverter.clean_invalid_characters(data)
-            
-            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
-            
-            # Extrae y procesa las coordenadas de la columna 'WKT'
-            clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
-            
+    def csv_to_json(filepath: str, page: int = 1, page_size: int = 10) -> dict:
+        # Pandas ya decodifica automáticamente los caracteres inválidos y se
+        # salta las líneas con errores, por lo que no es necesario limpiar los datos
+        data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
+        data['identific'] = data['identific'].fillna('null').str.replace('"', '')
 
-            # Crear una lista de diccionarios, cada uno representando una fila
-            data_list = []
-            #for index, row in paginated_data.iterrows():
-            for index, row in clean_data.iterrows():
-                
-                row_dict = {
-                    'fid': row['fid'],
-                    'criterio': row['criterio'],
-                    't_instalac': row['t_instalac'],
-                    'ambito': row['ambito'],
-                    'area_excl': row['area_excl'],
-                    'espacio': row['espacio'],
-                    'identific': row['identific'],
-                    'coordenadas': row['coordenadas']  
-                }
-                data_list.append(row_dict)
-                
-            # Antes de devolver, usa _paginate_data para paginar data_list
-            pagination_result = DataConverter._paginate_data(data_list, page_size, page)
-
-            print("Tamaño de los datos paginados:", len(pagination_result['data']))  # Muestra el tamaño del array de datos
-            return {
-                'data': pagination_result['data'],
-                'metadata': pagination_result['pagination_info']
+        # Crear una lista de diccionarios, cada uno representando una fila
+        data_list = [
+            {
+                'fid': row['fid'],
+                'criterio': row['criterio'],
+                't_instalac': row['t_instalac'],
+                'ambito': row['ambito'],
+                'area_excl': row['area_excl'],
+                'espacio': row['espacio'],
+                'identific': row['identific'],
+                'coordenadas': [row['Latitud'], row['Longitud']]
             }
+
+            for _, row in data.iterrows()
+        ]
             
+        # Antes de devolver, usa _paginate_data para paginar data_list
+        pagination_result = DataConverter._paginate_data(data_list, page_size, page)
+
+        logger.info(f"Data paginated: {len(pagination_result['data'])}")
+        return {
+            'data': pagination_result['data'],
+            'metadata': pagination_result['pagination_info']
+        }
 
     @staticmethod
     @lru_cache(maxsize=128)
