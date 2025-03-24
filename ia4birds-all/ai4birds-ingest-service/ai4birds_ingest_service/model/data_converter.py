@@ -125,12 +125,20 @@ class DataConverter:
 
         # Crear una lista de diccionarios, cada uno representando una fila
         data_list = data.to_dict('records')
+
+        # Si el tamaño de la página es 0, devolver todos los datos
+        if page_size == 0:
+            return {
+                'data': data_list,
+                'metadata': {
+                    'current_page': 1,
+                    'total_data': len(data_list),
+                    'total_pages': 1,
+                    'page_size': 0
+                }
             }
 
-            for _, row in data.iterrows()
-        ]
-            
-        # Antes de devolver, usa _paginate_data para paginar data_list
+        # Si no, usa _paginate_data para paginar data_list
         pagination_result = DataConverter._paginate_data(data_list, page_size, page)
 
         logger.info(f"Data paginated: {len(pagination_result['data'])}")
@@ -141,48 +149,27 @@ class DataConverter:
 
     @staticmethod
     @lru_cache(maxsize=128)
-    def csv_to_json_full(filepath):
+    def csv_to_json_full(filepath: str) -> str:
         """Convierte un CSV completo a JSON y lo guarda en un archivo ZIP."""
-        try:
-            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
-            clean_data = DataConverter.clean_invalid_characters(data)
-            print(f"Invalid Character OK")
-            # Procesar datos adicionales si es necesario
-            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')            
-            clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
-            
-            # Excluir las columnas 'WKT', 'gml_id', y 'geometry'
-            if 'WKT' in clean_data.columns:
-                clean_data.drop('WKT', axis=1, inplace=True)
-            if 'gml_id' in clean_data.columns:
-                clean_data.drop('gml_id', axis=1, inplace=True)
-            if 'geometry' in clean_data.columns:
-                clean_data.drop('geometry', axis=1, inplace=True)
+        # Leer el archivo CSV y convertirlo a JSON
+        json_data = DataConverter.csv_to_json(filepath, page_size=0)['data']
+        logger.info(f"Data converted to JSON: {len(json_data)}")
 
-            # Convertir DataFrame a una lista de diccionarios para JSON
-            data_list = clean_data.to_dict(orient='records')
-            print(f"Data List OK")
-            # Convertir a string JSON
-            json_str = json.dumps({'data': data_list}, ensure_ascii=False, indent=4)
-            print(f"Convert a STRING OK")
-            # Crear un archivo temporal para el JSON
-            fd_json, path_json = tempfile.mkstemp(suffix='.json')
-            with os.fdopen(fd_json, 'w', encoding="utf-8") as tmp_json:
-                tmp_json.write(json_str)
-            print(f"PATH JSON {path_json}")
-            # Crear otro archivo temporal para el ZIP
-            fd_zip, path_zip = tempfile.mkstemp(suffix='.zip')
-            with zipfile.ZipFile(path_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                zipf.write(path_json, arcname='data.json')
-            print(f"PATH ZIP {path_zip}")
-            # Limpiar el archivo temporal JSON
-            os.remove(path_json)
-            print(f"CLEAND TEMP FILE OK")
-            # Retornar la ruta del archivo ZIP
-            return path_zip
-        except Exception as e:
-            print(f"Error al convertir CSV a JSON y comprimir: {e}")
-            return None
+        # Crear un archivo temporal para el JSON
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False, encoding='utf-8') as tmp_json:
+            json.dump(json_data, tmp_json, ensure_ascii=False, indent=4)
+        logger.info(f"JSON data saved to temporary file: {tmp_json.name}")
+        
+        # Crear otro archivo temporal para el ZIP
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.zip') as tmp_zip:
+            with zipfile.ZipFile(tmp_zip.name, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                zipf.write(tmp_json.name, arcname='data.json')
+        logger.info(f"JSON data zipped to temporary file: {tmp_zip.name}")
+        
+        # Eliminar el archivo temporal JSON
+        os.remove(tmp_json.name)
+
+        return tmp_zip.name
         
     @staticmethod
     @lru_cache(maxsize=128)

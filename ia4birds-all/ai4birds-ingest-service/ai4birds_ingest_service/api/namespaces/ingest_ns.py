@@ -254,7 +254,6 @@ class ExclusionMapZip(Resource):
             
             if zip_path:
                 # Enviar el archivo ZIP como respuesta
-                #return send_file(zip_path, as_attachment=True, attachment_filename='data.zip', mimetype='application/zip')
                 return send_file(zip_path, as_attachment=True, download_name='data.zip', mimetype='application/zip')
 
             else:
