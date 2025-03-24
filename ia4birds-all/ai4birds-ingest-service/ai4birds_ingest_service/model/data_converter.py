@@ -119,17 +119,12 @@ class DataConverter:
         data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
         data['identific'] = data['identific'].fillna('null').str.replace('"', '')
 
+        # Combinamos las columnas de latitud y longitud en una sola lista de coordenadas
+        data['coordenadas'] = data[['Latitud', 'Longitud']].values.tolist()
+        data.drop(['Latitud', 'Longitud'], axis=1, inplace=True)
+
         # Crear una lista de diccionarios, cada uno representando una fila
-        data_list = [
-            {
-                'fid': row['fid'],
-                'criterio': row['criterio'],
-                't_instalac': row['t_instalac'],
-                'ambito': row['ambito'],
-                'area_excl': row['area_excl'],
-                'espacio': row['espacio'],
-                'identific': row['identific'],
-                'coordenadas': [row['Latitud'], row['Longitud']]
+        data_list = data.to_dict('records')
             }
 
             for _, row in data.iterrows()
