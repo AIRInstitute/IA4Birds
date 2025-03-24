@@ -13,7 +13,8 @@ from ai4birds_ingest_service.log import logger
 
 class DataConverter:
     @staticmethod
-    def clean_invalid_characters(data_frame):
+    def clean_invalid_characters(data_frame: pd.DataFrame) -> pd.DataFrame:
+        """Limpia los caracteres inválidos de un DataFrame de Pandas."""
         for column in data_frame.columns:
             if data_frame[column].dtype == object:
                 data_frame[column] = data_frame[column].apply(
