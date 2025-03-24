@@ -238,7 +238,7 @@ const Mapa = () => {
     
     if(!showMarkersEolicResources){
       notify();
-      setBirdsMarkers([]);
+      // setBirdsMarkers([]); // Vacío el array de aves para que aparezcan ocultas
       setShowFilter(true);
       //setEolicResourcesMarkers(coordinatesCameras);
       setShowMarkersEolicResources(true);
@@ -416,7 +416,10 @@ const Mapa = () => {
               {/* <Tooltip  placement="right" content="Capa de cámaras">
                 <Button className='camera'  isIconOnly color="primary" size='lg' onClick={addMarkersCameras}><FaCrow/></Button>
               </Tooltip>  */}
-               <div className="flex items-center gap-2">
+
+
+              {/*Botón de exclusion eólica*/}
+               {/* <div className="flex items-center gap-2">
                 <TooltipNext placement="right" content="Capa exclusión eólica">
                   <Button className='camera' disabled={streamingEolicData} color={!showMarkersEolic ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersStreamExclusion}>
                     <TbCarFan style={{ height: '25px', width: '25px' }} />
@@ -425,7 +428,9 @@ const Mapa = () => {
                 {showMarkersEolic && (
                   <FaCheck />
                 )}
-              </div>
+              </div> */}
+
+
               <div className="flex items-center gap-2">
                 <TooltipNext placement="right" content="Capa recursos eólicos">
                   <Button className='camera' disabled={streamingEolicData} color={!showMarkersEolicResources ? 'primary' : 'danger'} isIconOnly size='lg' onClick={addEolicMarkersResources}>
@@ -472,7 +477,7 @@ const Mapa = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
-            {(showMarkersEolic || showMarkersEolicResources) &&(
+            {/* {(showMarkersEolic || showMarkersEolicResources) &&( */}
               <WMSTileLayer 
                 url="https://idecyl.jcyl.es/geoserver/er/wms"
                 layers="enre_cyl_excl_eoli"
@@ -481,10 +486,10 @@ const Mapa = () => {
                 version="1.3.0"
                 className="hue-rotate-[10deg]"
               />
-            )}
+            {/* )} */}
 
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
-            {(showMarkersEolic || showMarkersEolicResources) &&(
+            {/* {(showMarkersEolic || showMarkersEolicResources) &&( */}
               <WMSTileLayer 
                 url="https://idecyl.jcyl.es/geoserver/ps/wms"
                 layers="rn2k_cyl_zepa"
@@ -493,7 +498,7 @@ const Mapa = () => {
                 version="1.3.0"
                 className="hue-rotate-[10deg]"
               />
-            )}
+            {/* )} */}
 
             {/* {showMarkersEolic && (
               <ImageOverlay
