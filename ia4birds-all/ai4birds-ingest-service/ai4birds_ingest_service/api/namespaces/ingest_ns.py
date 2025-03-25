@@ -5,7 +5,7 @@ import json, time
 import os
 from os import path
 from flask import jsonify, send_from_directory
-from flask import Response, request as flask_request
+from flask import Response, request as flask_request, make_response
 import tempfile
 from flask_restx import Resource
 from ai4birds_ingest_service import config
@@ -303,7 +303,7 @@ class StreamExclusionData(Resource):
 
         except Exception as e:
             logger.error(f"Error during data streaming: {e}")
-            return jsonify({'error': str(e)}), 500
+            return make_response(jsonify({'error': str(e)}), 500)
 
 @ns_sensitivity.route('/')
 class Sensitivity(Resource):
