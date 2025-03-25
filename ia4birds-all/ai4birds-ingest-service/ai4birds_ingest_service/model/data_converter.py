@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import Iterator, List
 import json
 import tempfile
 import zipfile
@@ -223,34 +224,15 @@ class DataConverter:
         
     @staticmethod
     # @lru_cache(maxsize=128)
-    def stream_csv_data(filepath, page_size=50):
-        try:
-            data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
-            clean_data = DataConverter.clean_invalid_characters(data)
+    def stream_csv_data(filepath: str, page_size:int = 50) -> Iterator[List[dict]]:
+        data = pd.read_csv(filepath, sep=';', encoding='utf-8', on_bad_lines='skip')
 
-            clean_data['identific'] = clean_data['identific'].fillna('null').str.replace('"', '')
-            clean_data['coordenadas'] = clean_data['WKT'].apply(DataConverter.extract_coordinates_from_wkt)
+        data['identific'] = data['identific'].fillna('null').str.replace('"', '')
+        data['coordenadas'] = data[['Latitud', 'Longitud']].values.tolist()
+        data.drop(['Latitud', 'Longitud'], axis=1, inplace=True)
 
-            for start in range(0, len(clean_data), page_size):
-                end = start + page_size
-                batch = clean_data.iloc[start:end]
+        for start in range(0, len(data), page_size):
+            end = start + page_size
+            batch = data.iloc[start:end]
 
-                data_list = [
-                    {
-                        'fid': row['fid'],
-                        'criterio': row['criterio'],
-                        't_instalac': row['t_instalac'],
-                        'ambito': row['ambito'],
-                        'area_excl': row['area_excl'],
-                        'espacio': row['espacio'],
-                        'identific': row['identific'],
-                        'coordenadas': row['coordenadas']  
-                    }
-                    for _, row in batch.iterrows()
-                ]
-                yield data_list
-
-        except Exception as e:
-            print(e)
-            print(f"Error streaming CSV data: {e.__str__()}")
-            yield {'error': str(e)}
+            yield batch.to_dict('records')
