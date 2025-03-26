@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SidebarBirds from './sidebar/SidebarBirds';
 import SidebarEolic from './sidebar/SideBarEolic';
 import SideBarEolicResources from './sidebar/SideBarEolicResources';
@@ -18,6 +18,7 @@ import { TbCarFan2 } from "react-icons/tb";
 import L from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import toast, { Toaster } from 'react-hot-toast';
+import {Switch} from "@nextui-org/react";
 // import { ImageOverlay } from 'react-leaflet';
 // import Image from '../images/ps-rn2k_cyl_zepa.png';
 
@@ -27,6 +28,10 @@ import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [showMarkersEolicResources, setShowMarkersEolicResources] = useState(false);
+  const [showLegend, setShowLegend] = useState(false);
+  const [switchSelected, setSwitchSelected] = useState(false);
+  const [switchSelected2, setSwitchSelected2] = useState(false);
+  const [selectedBirds, setSelectedBirds] = useState<string[]>([]);
   const [streamingEolicData, setstreamingEolicData] = useState(false);
   const [eolicMarkers, setEolicMarkers] = useState<{ coordenadas: L.LatLng[], espacio?: string }[]>([]);
   const [birdMarkers, setBirdsMarkers] = useState<{ observations: { lat: number, lng: number }[] }[]>([]);
@@ -42,6 +47,25 @@ const Mapa = () => {
     { id: 1, name: 'Ave 1', description: 'Descripción Ave 1', url: 'https://t2.ea.ltmcdn.com/es/posts/3/3/8/caracteristicas_de_las_aves_24833_orig.jpg', num: '12' },
     { id: 2, name: 'Ave 2', description: 'Descripción Ave 2', url: 'https://okdiario.com/img/2018/06/21/reproduccion-de-las-aves.jpg', num: '4' },
     { id: 3, name: 'Ave 3', description: 'Descripción Ave 3', url: 'https://www.nationalgeographic.com.es/medio/2022/12/13/muchuelo-alpino_8598e7e9_221213120701_1280x853.jpg', num: '40' },
+  ];
+
+  const birdList = [
+    "Buitre negro",
+    "Águila imperial ibérica",
+    "Águila real",
+    "Águila perdicera",
+    "Alondra ricotí",
+    "Cigüeña negra",
+    "Aguilucho pálido",
+    "Aguilucho cenizo",
+    "Cernícalo primilla",
+    "Grulla común",
+    "Quebrantahuesos",
+    "Buitre leonado",
+    "Milano real",
+    "Alimoche común",
+    "Águila pescadora",
+    "Urogallo común",
   ];
 
   // const bounds: [[number, number], [number, number]] = [
@@ -98,6 +122,64 @@ const Mapa = () => {
   const [listening, setListening] = useState(false);
 
   const notify = () => toast('Toca cualquier parte del mapa para ver los datos de la mesoescala');
+
+  // Función para alternar la selección de una ave individual
+  const toggleBirdSelection = (bird) => {
+    setSelectedBirds((prevSelected) => {
+      const newSelectedBirds = prevSelected.includes(bird)
+        ? prevSelected.filter((b) => b !== bird)
+        : [...prevSelected, bird];
+      
+      // Si no quedan aves seleccionadas, desactivamos el Switch de "Aves protegidas"
+      if (newSelectedBirds.length === 0) {
+        setSwitchSelected(false);
+        // setSwitchSelected2(true); // Activamos "Filtrar por aves específicas"
+      }
+
+      // Si se deselecciona cualquier ave, activamos el Switch de "Filtrar por aves específicas" y desactivamos el de "Aves protegidas"
+      if (prevSelected.includes(bird)) {
+        setSwitchSelected(false); // Desactivamos "Aves protegidas"
+        setSwitchSelected2(true); // Activamos "Filtrar por aves específicas"
+      }
+
+      // Si todas las aves están seleccionadas, activamos el Switch de "Aves protegidas"
+      if (newSelectedBirds.length === birdList.length) {
+        setSwitchSelected(true); // Activamos "Aves protegidas"
+        setSwitchSelected2(false); // Desactivamos "Filtrar por aves específicas"
+      }
+
+      return newSelectedBirds;
+    });
+  };
+
+  // Función para seleccionar todas las aves
+  const toggleAllBirdsSelection = (isSelected) => {
+    if (isSelected) {
+      setSelectedBirds(birdList); // Si está seleccionado, selecciona todas las aves
+      setSwitchSelected(true); // Activamos "Aves protegidas"
+      setSwitchSelected2(false); // Desactivamos "Filtrar por aves específicas"
+    } else {
+      setSelectedBirds([]); // Si no está seleccionado, desmarcar todas las aves
+      setSwitchSelected(false); // Desactivamos "Aves protegidas"
+      // setSwitchSelected2(true); // Activamos "Filtrar por aves específicas"
+    }
+  };
+
+   // Función para manejar el cambio en el Switch de "Aves protegidas"
+   const handleProtectedSwitch = (isSelected) => {
+    setSwitchSelected(isSelected);
+    toggleAllBirdsSelection(isSelected);
+  };
+
+  // Función para manejar el cambio en el Switch de "Filtrar por aves específicas"
+  const handleSpecificBirdSwitch = (isSelected) => {
+    setSwitchSelected2(isSelected);
+
+    if (isSelected) {
+      setSwitchSelected(false); // Desactivamos "Aves protegidas"
+      setSelectedBirds([]); // Limpiamos las aves seleccionadas
+    }
+  };
 
   // useEffect(() => {
   //   const fetchBirds = async () => {
@@ -407,9 +489,9 @@ const Mapa = () => {
     position="top-center" />
       <div className='map-component'>
         <div className='map-button' >
-          <Card className='buttons' >
+          <Card className='buttons opacity-90' >
             <CardBody className='butttons gap-3'>
-              <p className="p-1">Capas</p>
+              <p className="p-1 font-semibold">Capas</p>
               {/* <Tooltip placement="right" content="Capa de aves">
                 <Button className='bird' isIconOnly color="primary" size='lg' onClick={addMarkersBirds}><FaCrow/></Button>
               </Tooltip> */}
@@ -448,8 +530,8 @@ const Mapa = () => {
           </Card>
         </div>
         {/* Comentado para la muestra (Es el filtro de meses pájaros) */}
-        {/* <div className={`fixed top-20 right-4 z-10 bg-white shadow-lg rounded-lg p-4 w-60 opacity-90 ${showFilter ? 'hidden' : ''}`}>
-          <Card className="">
+        <div className={`fixed top-20 right-4 z-10 rounded-lg p-4 w-60 opacity-90`}>
+          <Card className="p-1">
             <CardBody className="flex flex-col gap-3">
               <p className="text-lg font-semibold">Filtrar por tiempo</p>
               <select
@@ -462,9 +544,129 @@ const Mapa = () => {
                   </option>
                 ))}
               </select>
+
+              {/* <div className="flex flex-col gap-2">
+                <Switch
+                  isSelected={switchSelected}
+                  onValueChange={(isSelected) => {
+                    setSwitchSelected(isSelected);
+                    toggleAllBirdsSelection(isSelected); // Marcar todas las aves cuando se activa el switch
+                  }}
+                >
+                  Aves protegidas
+                </Switch>
+              </div> */}
+              <div className="flex flex-col gap-2">
+                <Switch
+                  isSelected={switchSelected}
+                  onValueChange={handleProtectedSwitch} // Usamos la función personalizada
+                >
+                  Aves protegidas
+                </Switch>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Switch
+                  isSelected={switchSelected2}
+                  onValueChange={handleSpecificBirdSwitch} // Usamos la función personalizada
+                >
+                  Filtrar por aves específicas
+                </Switch>
+              </div>
+              {/* <div className="flex flex-col gap-2">
+                <Switch isSelected={switchSelected2} onValueChange={setSwitchSelected2}>
+                  Selección aves protegidas
+                </Switch>
+              </div> */}
             </CardBody>
           </Card>
-        </div> */}
+
+          {/* Card flotante para aves específicas */}
+          {(switchSelected2 || switchSelected) && (
+            <div
+              style={{
+                position: "fixed", // Cambié a "fixed" para que siempre esté visible en la esquina
+                bottom: 70, // Espaciado desde la parte inferior
+                left: 20, // Espaciado desde la parte izquierda
+                zIndex: 1000, // Aseguramos que se sobreponga al contenido
+                background: "white",
+                padding: "10px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                width: "350px",
+              }}
+            >
+              <p className="font-semibold">Selecciona las aves:</p>
+              <div className="grid grid-cols-2 gap-2">
+                {birdList.map((bird) => (
+                  <label key={bird} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedBirds.includes(bird)}
+                      onChange={() => toggleBirdSelection(bird)}
+                    />
+                    {bird}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div style={{ position: "fixed", bottom: 70, right: 20, zIndex: 10, fontSize: "12px" }}>
+          {/* Botón para mostrar/ocultar leyenda */}
+          <button
+            onClick={() => setShowLegend(!showLegend)}
+            style={{
+              background: "#fff",
+              border: "1px solid #ccc",
+              padding: "5px 10px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+          >
+            {showLegend ? "❌ Cerrar leyenda" : "ℹ️ Leyenda"}
+          </button>
+
+          {/* Contenedor de la leyenda */}
+          {showLegend && (
+            <div
+              style={{
+                background: "white",
+                padding: "10px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                marginTop: "5px",
+                width: "150px",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <p style={{ margin: 0, fontWeight: "bold" }}>Leyenda</p>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px" }}>
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "15px",
+                    height: "15px",
+                    backgroundColor: "#FF6666",
+                    borderRadius: "50%",
+                    marginRight: "5px",
+                  }}
+                ></span>
+                <span>Exclusión eólica</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px" }}>
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" height="22px" style={{ marginRight: '5px' }} width="22px" xmlns="http://www.w3.org/2000/svg"><path d="M544 32h-16.36C513.04 12.68 490.09 0 464 0c-44.18 0-80 35.82-80 80v20.98L12.09 393.57A30.216 30.216 0 0 0 0 417.74c0 22.46 23.64 37.07 43.73 27.03L165.27 384h96.49l44.41 120.1c2.27 6.23 9.15 9.44 15.38 7.17l22.55-8.21c6.23-2.27 9.44-9.15 7.17-15.38L312.94 384H352c1.91 0 3.76-.23 5.66-.29l44.51 120.38c2.27 6.23 9.15 9.44 15.38 7.17l22.55-8.21c6.23-2.27 9.44-9.15 7.17-15.38l-41.24-111.53C485.74 352.8 544 279.26 544 192v-80l96-16c0-35.35-42.98-64-96-64zm-80 72c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"></path></svg>
+                <span>Datos Xenocanto y eBird</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginRight: "5px" }}>
+                <img style={{ height: '22px', width: '22px', marginRight: '5px' }} src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png"></img>
+                <span>Datos de los recursos eólicos</span>
+              </div>
+            </div>
+          )}
+        </div>
         <div className='map'>
           <MapContainer
             center={[41.6528, -4.7281]}
@@ -490,14 +692,14 @@ const Mapa = () => {
 
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
             {/* {(showMarkersEolic || showMarkersEolicResources) &&( */}
-              <WMSTileLayer 
+              {/* <WMSTileLayer 
                 url="https://idecyl.jcyl.es/geoserver/ps/wms"
                 layers="rn2k_cyl_zepa"
                 format="image/png"
                 transparent={true}
                 version="1.3.0"
-                className="hue-rotate-[10deg]"
-              />
+                className="hue-rotate-[5deg]"
+              /> */}
             {/* )} */}
 
             {/* {showMarkersEolic && (
@@ -660,7 +862,7 @@ const Mapa = () => {
                         <Circle
                           key={`${index}-${i}`} 
                           center={eolicPoint}
-                          pathOptions={{ fillColor: "#FF9999", color: "#FF6666" }}
+                          pathOptions={{ fillColor: "#FF9999", color: "#FF9999" }}
                           // pathOptions={{
                           //   fillColor: selectedCircle === eolicPoint ? "red" : "blue",
                           //   color: selectedCircle === eolicPoint ? "red" : "blue",
