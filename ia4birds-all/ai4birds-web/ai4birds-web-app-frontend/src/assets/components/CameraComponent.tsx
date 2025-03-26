@@ -1,11 +1,18 @@
 import { Spacer } from "@nextui-org/spacer";
 import { CustomCard } from "./card/CameraCard";
 import XenocantoDataService from "./services/XenocantoDataService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as React from "react";
-import { Link } from "react-router-dom"; // Importa Link
+import { Link } from "react-router-dom";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from "@nextui-org/react";
 
 const CameraComponent = () => {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [cameraName, setCameraName] = useState("");
+    const [cameraLocation, setCameraLocation] = useState("");
+    const [cameraUrl, setCameraUrl] = useState("");
+
     // Lista de cámaras con enlaces HLS
     const camerasData = [
         {
@@ -68,7 +75,27 @@ const CameraComponent = () => {
                         <Spacer x={4} />
                     </React.Fragment>
                 ))}
+                {/* <Link to="/add-camera"> */}
+                    <div className="w-[424px] h-[300px] mt-3 flex items-center justify-center border-2 border-dashed border-gray-400 rounded-lg cursor-pointer hover:border-gray-600 transition"
+                    onClick={() => setIsModalOpen(true)}>
+                        <span className="text-gray-500 text-xl font-semibold">+ Añadir Cámara</span>
+                    </div>
+                {/* </Link> */}
             </div>
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <ModalContent>
+                    <ModalHeader>Agregar Nueva Cámara</ModalHeader>
+                    <ModalBody>
+                        <Input label="Nombre de la Cámara" value={cameraName} onChange={(e) => setCameraName(e.target.value)} />
+                        <Input label="Ubicación" value={cameraLocation} onChange={(e) => setCameraLocation(e.target.value)} />
+                        <Input label="URL de la Cámara" value={cameraUrl} onChange={(e) => setCameraUrl(e.target.value)} />
+                    </ModalBody>
+                    <ModalFooter className="flex justify-between">
+                        <Button onClick={() => setIsModalOpen(false)}>Cancelar</Button>
+                        <Button color="primary" onClick={() => { console.log(cameraName, cameraLocation, cameraUrl); setIsModalOpen(false); }}>Agregar</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </div>
     );
 };
