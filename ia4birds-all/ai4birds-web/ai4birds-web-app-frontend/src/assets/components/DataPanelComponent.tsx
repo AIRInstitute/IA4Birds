@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { CustomCard } from "./card/DataPanelCard";
 import bird from './services/BirdDataService';
 import xenocanto from './services/XenocantoDataService';
+import exclusionData from './services/ExclusionEolicService';
 
 const DataPanelComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,6 +55,7 @@ const DataPanelComponent = () => {
         >
           <option value={1}>Xenocanto</option>
           <option value={2}>eBird</option>
+          <option value={3}>Eolic Exclusion</option>
         </select>
       </div>
       <div className="card-container flex-grow mx-5">

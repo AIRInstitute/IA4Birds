@@ -36,7 +36,12 @@ class ExclusionEolicService {
        //}
        )
        return response;
-   } 
+   }
+   
+   async getEolicExclusionMap(){
+        const response = await api.get("data/eolicexclusionmap")
+        return response;
+   }
 
 }
 
