@@ -4,6 +4,7 @@ import { CustomCardCamera } from './card/AdminPanelCameraCard';
 import { CustomCardData } from './card/AdminPanelDataCard';
 import bird from './services/BirdDataService';
 import xenocanto from './services/XenocantoDataService';
+import eolic from './services/ExclusionEolicService';
 
 const AdminPanelComponent = () => {
   interface PanelAdminData {
@@ -27,6 +28,7 @@ const AdminPanelComponent = () => {
       try {
         const exclusionResponse = await bird.getExclusionMap();
         const xenocantoResponse = await xenocanto.getXenocanto();
+        // const eolicExclusionResponse = await eolic.getEolicExclusionMap();
 
         setPanelAdminData([
           {
@@ -38,6 +40,12 @@ const AdminPanelComponent = () => {
             id: 2,
             name: 'eBird',
             data: exclusionResponse.data, 
+          },
+          {
+            id: 3,
+            name: 'Exclusión Eólica',
+            // data: eolicExclusionResponse.data, 
+            data: { "error": "No se han podido obtener los datos"}
           },
         ]);
       } catch (err) {
