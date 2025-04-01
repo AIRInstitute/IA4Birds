@@ -80,6 +80,8 @@ services:
   ai4birds-coordinate-service:
       build: ./ia4birds-all/ai4birds-coordinate-service
       container_name: ai4birds-coordinate
+      env_file:
+        - /etc/envs/.env
       ports:
         - 5001:5000
       networks:
