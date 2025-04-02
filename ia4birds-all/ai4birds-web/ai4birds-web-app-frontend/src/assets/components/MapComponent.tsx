@@ -113,7 +113,7 @@ const Mapa = () => {
   const [selectedButton, setSelectedButton] = useState<L.LatLng[]>([]);
   const [selectedButtonEolicResources, setSelectedButtonEolicResources] = useState<{ lat: number, lng: number } | null>(null);
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
-  const [markersLoaded, setMarkersLoaded] = useState(false); // Para poner el pájaro de carga
+  const [markersLoaded, setMarkersLoaded] = useState(false);
   const [dataBird, setDataBird] = useState([]);
   
 
@@ -133,19 +133,19 @@ const Mapa = () => {
       // Si no quedan aves seleccionadas, desactivamos el Switch de "Aves protegidas"
       if (newSelectedBirds.length === 0) {
         setSwitchSelected(false);
-        // setSwitchSelected2(true); // Activamos "Filtrar por aves específicas"
+        // setSwitchSelected2(true); 
       }
 
       // Si se deselecciona cualquier ave, activamos el Switch de "Filtrar por aves específicas" y desactivamos el de "Aves protegidas"
       if (prevSelected.includes(bird)) {
-        setSwitchSelected(false); // Desactivamos "Aves protegidas"
-        setSwitchSelected2(true); // Activamos "Filtrar por aves específicas"
+        setSwitchSelected(false);
+        setSwitchSelected2(true);
       }
 
       // Si todas las aves están seleccionadas, activamos el Switch de "Aves protegidas"
       if (newSelectedBirds.length === birdList.length) {
-        setSwitchSelected(true); // Activamos "Aves protegidas"
-        setSwitchSelected2(false); // Desactivamos "Filtrar por aves específicas"
+        setSwitchSelected(true); 
+        setSwitchSelected2(false); 
       }
 
       return newSelectedBirds;
@@ -155,13 +155,13 @@ const Mapa = () => {
   // Función para seleccionar todas las aves
   const toggleAllBirdsSelection = (isSelected) => {
     if (isSelected) {
-      setSelectedBirds(birdList); // Si está seleccionado, selecciona todas las aves
-      setSwitchSelected(true); // Activamos "Aves protegidas"
-      setSwitchSelected2(false); // Desactivamos "Filtrar por aves específicas"
+      setSelectedBirds(birdList); 
+      setSwitchSelected(true); 
+      setSwitchSelected2(false);
     } else {
-      setSelectedBirds([]); // Si no está seleccionado, desmarcar todas las aves
-      setSwitchSelected(false); // Desactivamos "Aves protegidas"
-      // setSwitchSelected2(true); // Activamos "Filtrar por aves específicas"
+      setSelectedBirds([]); 
+      setSwitchSelected(false); 
+      // setSwitchSelected2(true); 
     }
   };
 
@@ -176,8 +176,8 @@ const Mapa = () => {
     setSwitchSelected2(isSelected);
 
     if (isSelected) {
-      setSwitchSelected(false); // Desactivamos "Aves protegidas"
-      setSelectedBirds([]); // Limpiamos las aves seleccionadas
+      setSwitchSelected(false);
+      setSelectedBirds([]);
     }
   };
 
@@ -356,6 +356,7 @@ const Mapa = () => {
   const handleFilter = (value: number) => {
     console.log(`Filter selected: ${value} months`);
     // Missing logic for the filter
+    // Cuando exista el endpoint, se debe enviar el ${value} al backend
   };
 
   const handleButtonClickBirds = (button) => {
@@ -559,7 +560,7 @@ const Mapa = () => {
               <div className="flex flex-col gap-2">
                 <Switch
                   isSelected={switchSelected}
-                  onValueChange={handleProtectedSwitch} // Usamos la función personalizada
+                  onValueChange={handleProtectedSwitch}
                 >
                   Aves protegidas
                 </Switch>
@@ -568,7 +569,7 @@ const Mapa = () => {
               <div className="flex flex-col gap-2">
                 <Switch
                   isSelected={switchSelected2}
-                  onValueChange={handleSpecificBirdSwitch} // Usamos la función personalizada
+                  onValueChange={handleSpecificBirdSwitch}
                 >
                   Filtrar por aves específicas
                 </Switch>
@@ -585,10 +586,10 @@ const Mapa = () => {
           {(switchSelected2 || switchSelected) && (
             <div
               style={{
-                position: "fixed", // Cambié a "fixed" para que siempre esté visible en la esquina
-                bottom: 70, // Espaciado desde la parte inferior
-                left: 20, // Espaciado desde la parte izquierda
-                zIndex: 1000, // Aseguramos que se sobreponga al contenido
+                position: "fixed",
+                bottom: 70,
+                left: 20,
+                zIndex: 1000,
                 background: "white",
                 padding: "10px",
                 borderRadius: "8px",

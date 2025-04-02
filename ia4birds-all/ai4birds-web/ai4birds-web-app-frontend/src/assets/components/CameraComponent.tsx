@@ -16,16 +16,34 @@ const CameraComponent = () => {
     const [storageInfo, setStorageInfo] = useState("");
     const isLoggedIn = localStorage.getItem('accessToken');
     const [additionalData, setAdditionalData] = useState("");
-    const [activeTab, setActiveTab] = useState("externa"); // Estado para la tab activa
+    const [activeTab, setActiveTab] = useState("externa");
+
+    const resetForm = () => {
+        setCameraName("");
+        setCameraLocation("");
+        setCameraUrl("");
+        setDatosGPS({ latitude: "", longitude: "" });
+        setCameraStatus(false);
+        setStorageInfo("");
+        setAdditionalData("");
+    };
 
     const handleGPSChange = (name, value) => {
         setDatosGPS((prevState) => ({ ...prevState, [name]: value }));
     };
 
     const handleAddCamera = () => {
-        const newCameraData = { name: cameraName, location: cameraLocation, url: cameraUrl, gps: datosGPS, status: cameraStatus, storage: storageInfo, };
+        const newCameraData = { 
+            name: cameraName, 
+            location: cameraLocation, 
+            url: cameraUrl, 
+            gps: datosGPS, 
+            status: cameraStatus, 
+            storage: storageInfo, 
+        };
         console.log("Datos de la nueva cámara:", newCameraData);
         setIsModalOpen(false);
+        resetForm();
     };
 
     const camerasData = [
@@ -108,14 +126,17 @@ const CameraComponent = () => {
                                 </div>
                                 <div className="mb-4 flex items-center gap-4">
                                     <span>Estado Cámara:</span>
-                                    <Switch checked={cameraStatus} onChange={(e) => setCameraStatus(e.target.checked)} />
+                                    <Switch
+                                        isSelected={cameraStatus}
+                                        onChange={(e) => setCameraStatus(e.target.checked)}
+                                    />
                                     <p className="text-small text-default-500">{cameraStatus ? "Activa" : "Inactiva"}</p>
                                 </div>
                                 <div className="mb-4">
                                     <Input label="Datos de Almacenamiento" value={storageInfo} onChange={(e) => setStorageInfo(e.target.value)} />
                                 </div>
                             </Tab>
-                            <Tab key="otro" title="Propia"> {/* Cambié el título a "Propia" */}
+                            <Tab key="otro" title="Propia">
                                 <div className="mb-4">
                                     <Input
                                         label="Información Adicional"
@@ -128,7 +149,7 @@ const CameraComponent = () => {
                         </Tabs>
                     </ModalBody>
                     <ModalFooter className="flex justify-between">
-                        <Button onClick={() => setIsModalOpen(false)}>Cancelar</Button>
+                        <Button onClick={() => { setIsModalOpen(false); resetForm(); }}>Cancelar</Button>
                         <Button color="primary" onClick={handleAddCamera}>Agregar</Button>
                     </ModalFooter>
                 </ModalContent>
