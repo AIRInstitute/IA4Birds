@@ -10,5 +10,5 @@ from ai4birds_coordinate_service.api.namespaces.coordinate_ns import coordinate_
 
 
 
-namespaces = []
-namespaces.append(coordinate_ns)
+namespaces = [coordinate_ns]
+

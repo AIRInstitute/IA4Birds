@@ -6,7 +6,7 @@ from ai4birds_coordinate_service import config
 
 def require_token():
     """
-    Verifica que el token JWT sea válido. No se verifica el rol.
+    Verifies that the JWT token is valid. Role is not checked.
     """
     def decorator(func):
         @wraps(func)
