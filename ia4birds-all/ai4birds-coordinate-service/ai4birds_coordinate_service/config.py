@@ -23,8 +23,10 @@ DB_CONFIG={
 }
 
 # URLS
-EBIRD_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/ebird/'
-CRUD_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/crud/'
-XENOCANTO_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/xenocanto/'
-WINDMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/windmap/'
-EXCLUSIONMAP_URL = 'http://localhost:5001/ai4birds-ingest-service/v1/exclusionmap/'
+
+
+#URL_INGEST = 'http://ia4birds-pre.der.usal.es:5002/ai4birds-ingest-service/v1'
+URL_INGEST = os.getenv('PYTHON_URL')
+
+#SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY ="secretKey"

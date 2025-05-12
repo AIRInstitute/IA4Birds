@@ -80,6 +80,8 @@ services:
   ai4birds-coordinate-service:
       build: ./ia4birds-all/ai4birds-coordinate-service
       container_name: ai4birds-coordinate
+      env_file:
+        - /etc/envs/.env
       ports:
         - 5001:5000
       networks:
@@ -133,32 +135,48 @@ services:
     networks:
       - redis-net
 
-  rtsp-stream:
-    image: roverr/rtsp-stream:2
-    container_name: rtsp-stream
+  # rtsp-stream:
+  #   image: roverr/rtsp-stream:2
+  #   container_name: rtsp-stream
+  #   ports:
+  #     - "8082:8080"
+  #   environment:
+  #     - RTSP_STREAM_DEBUG=true
+  #     - RTSP_STREAM_KEEP_FILES=true
+  #     - RTSP_STREAM_PROCESS_LOGGING=true
+  #   volumes:
+  #     - ./rtsp-stream.yml:/app/rtsp-stream.yml
+  #     - ./hls:/app/hls  # Asegura que la carpeta hls esté montada
+  #     - ./logs:/var/log/rtsp-stream
+  #     - ia4birds_videos_data:/app/videos
+  #   networks:
+  #     - bird-net
+
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx-hls
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ia4birds_videos_data:/usr/share/nginx/html/videos:ro
+  #   ports:
+  #     - "8083:8083"
+  #   restart: always
+
+  mediamtx:
+    build: ./mediamtx-custom
+    container_name: mediamtx
     ports:
-      - "8082:8080"
-    environment:
-      - RTSP_STREAM_DEBUG=true
-      - RTSP_STREAM_KEEP_FILES=true
-      - RTSP_STREAM_PROCESS_LOGGING=true
+      - "8554:8554"
+      - "9997:9997"
+      - "8888:8888"
+      - "8889:8889"
+      - "8890:8890/udp"
+      - "8189:8189"
     volumes:
-      - ./rtsp-stream.yml:/app/rtsp-stream.yml
-      - ./hls:/app/hls  # Asegura que la carpeta hls esté montada
-      - ./logs:/var/log/rtsp-stream
-      - ia4birds_videos_data:/app/videos
+      - camara-config:/app
     networks:
       - bird-net
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx-hls
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ia4birds_videos_data:/usr/share/nginx/html/videos:ro
-    ports:
-      - "8083:8083"
-    restart: always
   
   celery-worker:
     build: ./ia4birds-all/ai4birds-ingest-service

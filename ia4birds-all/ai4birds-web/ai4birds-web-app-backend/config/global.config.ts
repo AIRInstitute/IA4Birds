@@ -38,6 +38,10 @@ const globalConfig = {
         key: process.env.SSL_KEY || "key",
     },
     whiteList: process.env.WHITE_LIST || [],
+    //AÑADIR AL .ENV DE LOS SERVIDORES ****
+    mediamtxApi: process.env.MEDIAMTX_API || "http://mediamtx:9997",
+    streamBaseURL: process.env.STREAM_BASE_URL || "https://ia4birds-pre.der.usal.es/streams"
+
 };
 
 console.log(globalConfig.whiteList);

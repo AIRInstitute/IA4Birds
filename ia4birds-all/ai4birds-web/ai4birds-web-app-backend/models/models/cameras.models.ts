@@ -1,0 +1,63 @@
+import {
+    Sequelize,
+    DataTypes,
+    Model,
+    InferAttributes,
+    InferCreationAttributes,
+    CreationOptional,
+} from "sequelize";
+
+class Camera extends Model<InferAttributes<Camera>, InferCreationAttributes<Camera>> {
+    declare id: CreationOptional<number>;
+    declare name: string;
+    declare source_type: "RTSP" | "RTMP" | "HLS" | "WebRTC" | "YouTube" | "Twitch" | "MJPEG" | "DASH" | "Other";
+    declare source_url: string;
+    declare playback_url: CreationOptional<string>;
+    declare status: CreationOptional<string>;
+    declare location: CreationOptional<string>;
+}
+
+export default (sequelize: Sequelize) => {
+    return Camera.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            source_type: {
+                type: DataTypes.ENUM("RTSP", "RTMP", "HLS", "WebRTC", "YouTube", "Twitch", "MJPEG", "DASH", "Other"),
+                allowNull: false,
+            },
+            source_url: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            playback_url: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            status: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                defaultValue: "pending",
+            },
+            location: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+        },
+        {
+            tableName: "cameras",
+            sequelize,
+            charset: "utf8",
+            collate: "utf8_unicode_ci",
+            timestamps: false,
+            freezeTableName: true,
+        }
+    );
+};

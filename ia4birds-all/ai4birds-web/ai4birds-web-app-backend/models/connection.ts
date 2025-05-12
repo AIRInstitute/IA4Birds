@@ -3,6 +3,7 @@ import { Sequelize, Dialect, Op } from "sequelize";
 import config from "../config/db.config";
 
 import userModel from "./models/user.models";
+import cameraModel from "./models/cameras.models"
 
 const sequelize = new Sequelize(
     config.database,
@@ -18,6 +19,7 @@ const sequelize = new Sequelize(
 );
 
 const User = userModel(sequelize);
+const Camera = cameraModel(sequelize);
 
 async function testConnection() {
     try {
@@ -32,4 +34,4 @@ async function testConnection() {
     }
 }
 
-export { User, testConnection };
+export { User, Camera, testConnection };
