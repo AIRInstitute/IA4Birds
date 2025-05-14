@@ -89,6 +89,7 @@ services:
       build: ./ia4birds-all/ai4birds-ingest-service
       container_name: ai4birds-ingest
       mem_limit: 6g
+      memswap_limit: 6g
       volumes:
         - /home/bisite/exclusion_eolica.csv:/home/exclusion_eolica.csv
       ports:
@@ -172,4 +173,3 @@ volumes:
     external: true
   cache:
     driver: local
-
