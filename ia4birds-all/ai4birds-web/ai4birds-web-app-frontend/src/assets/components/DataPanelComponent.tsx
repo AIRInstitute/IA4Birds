@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { CustomCard } from "./card/DataPanelCard";
 import bird from './services/BirdDataService';
 import xenocanto from './services/XenocantoDataService';
+import exclusionData from './services/ExclusionEolicService';
 
 const DataPanelComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,8 +25,14 @@ const DataPanelComponent = () => {
           response = await xenocanto.getXenocanto(); // Fetch Xenocanto data
         } else if (selectedData === 2) {
           response = await bird.getExclusionMap(); // Fetch eBird data
+        }else if (selectedData === 3) {
+          response = await exclusionData.getExclusionMapAll(); // Añade esta línea
         }
-        setDataPanelData(response.data); // Set fetched data
+        if (response?.data) {
+          setDataPanelData(response.data.data || response.data);
+        } else {
+          throw new Error("Respuesta inválida");
+        }
       } catch (err) {
         setError("Error en la obtención de datos. Vuelva a intentarlo más tarde.");
         console.error("Error fetching data: ", err);
@@ -54,6 +61,7 @@ const DataPanelComponent = () => {
         >
           <option value={1}>Xenocanto</option>
           <option value={2}>eBird</option>
+          <option value={3}>Eolic Exclusion</option>
         </select>
       </div>
       <div className="card-container flex-grow mx-5">

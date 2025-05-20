@@ -16,6 +16,7 @@ import config from "./config/global.config";
 import uploadRoutes from "./routes/routes/upload.routes";
 import morgan from "morgan";
 import chalk from "chalk";
+import  insertDefaultCamera  from "./scripts/initCamera";
 
 const app: Express = express();
 
@@ -83,5 +84,8 @@ app.use(function (
 app.get("/", (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "/frontend/"));
 });
+
+// Inserta la cámara del air al arrancar
+insertDefaultCamera(); 
 
 export default app;

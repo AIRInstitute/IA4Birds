@@ -35,11 +35,11 @@ class EBird_Extractor:
         url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
         for attempt in range(max_retries):
             try:
-                #logger.error(f'Request ebird')
+                
                 response = requests.get(url, headers=headers)
-                #logger.error(f'Despues response')
+                
                 response.raise_for_status()
-                #logger.error(f'Despues raise')
+                
                 return self._format_results(json.loads(response.text))
             except requests.exceptions.RequestException as e:
                 logger.error(f'Error get query: {e}')
@@ -49,7 +49,7 @@ class EBird_Extractor:
     def _format_results(self, data):
         species_list = config.SPECIES_LIST.values()
         formatted_results = []
-        #ogger.error(f'Format_RESULTS')
+        
         for observation in data:
             if observation['sciName'] in species_list:
                 formatted_results.append({
@@ -66,19 +66,4 @@ class EBird_Extractor:
                         "numObservation": observation.get('howMany', None)
                     }]
                 })
-            # formatted_results.append({
-            #     "speciesSciName": observation['sciName'],
-            #     "speciesCode": observation['speciesCode'],
-            #     "comName": observation['comName'],
-            #     "observations": [{
-            #         "obsDt": observation['obsDt'],
-            #         "locationId": observation['locId'],
-            #         "locationName": observation['locName'],
-            #         "lat": observation['lat'],
-            #         "lng": observation['lng'],
-            #         "date": observation['obsDt'],
-            #         "numObservation": observation.get('howMany', None)
-            #     }]
-            # })
-        #logger.error(f'antes return')
         return formatted_results 

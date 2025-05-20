@@ -2,125 +2,362 @@
 # Copyright 2023 AIRInstitute
 # See LICENSE for details.
 # Author: AIRInstitute (@AIRInstitute on GitHub)
+from flask import Blueprint, request, jsonify
 import requests
-from flask import json
-from flask_restx import Resource
-from ai4birds_coordinate_service.api.v1 import api 
-from ai4birds_coordinate_service.api.models.coordinate_models import get_input_model, post_input_model, put_input_model, delete_input_model, output_model
-from ai4birds_coordinate_service.api.parsers.coordinate_parsers import get_parser, post_parser, put_parser, delete_parser 
-from ai4birds_coordinate_service.utils import handle400error, handle404error, handle500error
-from ai4birds_coordinate_service.model.coordinate_model import CheckModel, XenoCanto, EBird, WindMap, ExclusionMap
+#from auth.decorators import require_role
+from ...utils.decorators import require_token
+from ai4birds_coordinate_service import config
+from flask_restx import Namespace, Resource
+from ai4birds_coordinate_service.log import serve_application_logger
 
-ns = api.namespace('IngestApi', description='Coordinate endpoints')
-ebird_ns = api.namespace('EBird', description='EBird requests')
-xenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') 
-windmap_ns = api.namespace('WindMap', description='Windmap requests')
-exclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')
+coordinate_ns = Namespace("coordinate", description="Coordinate API Gateway")
+logger = serve_application_logger()
+# -------------------- ENDPOINT PRIVADOS --------------------
 
-@ns.route('/')
-class Coordinate(Resource):
-    @ns.expect(get_parser)
+@coordinate_ns.route("/ebird")
+class EBird(Resource):
+    @require_token()
     def get(self):
-        try :
-            args = get_parser.parse_args()
-            id = args['id']
-        except Exception as e:
-            return handle400error(ns, e)
+        """
+        Retrieves bird observation data from the eBird API in Castilla y León.
+
+        This endpoint acts as a proxy to the `/ebird/` endpoint in the ingestion API (`ai4birds-ingest-service`).
+
+        Authentication:
+            This endpoint is private and requires a valid JWT access token in the `Authorization` header.
+
+        Returns:
+            :return: Data from the eBird ingestion service.
+            :rtype: dict
+        """
+
+        try:
+            logger.error(f"{config.URL_INGEST}/ebird/")
+            response = requests.get(f"{config.URL_INGEST}/ebird/")
+
+            if response.status_code != 200:
+                response.raise_for_status()
+
+            data = response.json()
+            return data, 200
         
-        model = CheckModel()
-        return model.get(id) 
-    
-    @ns.expect(post_input_model)
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[eBird] Error response: {response.status_code} - {response.text}")
+            return {"error": f"Failed to fetch eBird data: {error_message}"}, response.status_code
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"[eBird] Exception during request: {e}")
+            return {"error": "Failed to contact ingestion API for eBird."}, 500
+
+        except ValueError as e:
+            logger.error(f"[eBird] Invalid JSON response: {e}")
+            return {"error": "Ingestion API returned invalid JSON."}, 500
+
+@coordinate_ns.route("/xenocanto")
+class Xenocanto(Resource):
+    @require_token()
+    def get(self):
+        """
+        Retrieves bird sound recordings from the XenoCanto API in Castilla y León.
+
+        This endpoint proxies the `/xenocanto/` endpoint in the ingestion API (`ai4birds-ingest-service`).
+
+        Authentication:
+            This endpoint is private and requires a valid JWT access token in the `Authorization` header.
+
+        Returns:
+            :return: Data from the XenoCanto ingestion service.
+            :rtype: dict
+        """
+
+        try:
+            response = requests.get(f"{config.URL_INGEST}/xenocanto/")
+
+            if response.status_code != 200:
+                response.raise_for_status()
+
+            data = response.json()
+            return data, 200
+
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[XenoCanto] Error response: {response.status_code} - {response.text}")
+            return {"error": f"Failed to fetch XenoCanto data: {error_message}"}, response.status_code
+        
+        except requests.exceptions.RequestException as e:
+            logger.error(f"[XenoCanto] Exception during request: {e}")
+            return {"error": "Failed to contact ingestion API for XenoCanto."}, 500
+
+        except ValueError as e:
+            logger.error(f"[XenoCanto] Invalid JSON response: {e}")
+            return {"error": "Ingestion API returned invalid JSON."}, 500
+        
+@coordinate_ns.route("/sensitivity")
+class Sensitivity(Resource):
+    @require_token()
+    def get(self):
+        """
+        Retrieves bird sensitivity zone data in Castilla y León.
+
+        This endpoint proxies the `sensitivity/` endpoint in the ingestion API (`ai4birds-ingest-service`).
+
+        Authentication:
+            This endpoint is private and requires a valid JWT access token in the `Authorization` header.
+
+        Returns:
+            :return: Sensitivity data from the ingestion service.
+            :rtype: dict
+        """
+
+        try:
+            response = requests.get(f"{config.URL_INGEST}/sensitivity/")
+
+            if response.status_code != 200:
+                response.raise_for_status()
+
+            data = response.json()
+            return data, 200
+
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[Sensitivity] Error response: {response.status_code} - {response.text}")
+            return {"error": f"Failed to fetch sensitivity data: {error_message}"}, response.status_code
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"[Sensitivity] Exception during request: {e}")
+            return {"error": "Failed to contact ingestion API for sensitivity data."}, 500
+
+        except ValueError as e:
+            logger.error(f"[Sensitivity] Invalid JSON response: {e}")
+            return {"error": "Ingestion API returned invalid JSON."}, 500
+        
+# -------------------- ENDPOINTS PUBLICOS --------------------
+
+@coordinate_ns.route("/dataBird")
+class DataBird(Resource):
+    def get(self):
+        """
+        Forwards GET request to the ingestion API for combined eBird and XenoCanto data.
+
+        Returns:
+            :return: Combined bird data from ingestion service.
+            :rtype: dict
+        """
+        try:
+            response = requests.get(f"{config.URL_INGEST}/dataBird/")  
+            if response.status_code != 200:
+                response.raise_for_status()
+
+            return response.json(), 200
+
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[DataBird] Error: {response.status_code} - {response.text}")
+            return {"error": f"Error retrieving DataBird information: {error_message}"}, response.status_code
+
+        except Exception as e:
+            logger.error(f"[DataBird] Exception: {e}")
+            return {"error": "Failed to call DataBird ingestion service."}, 500
+
+
+@coordinate_ns.route("/windmap")
+class WindMap(Resource):
     def post(self):
+        """
+        Forwards wind map POST request to ingestion API.
+
+        Returns:
+            :return: Result from ingestion windmap endpoint.
+            :rtype: dict
+        """
         try:
-            args = post_parser.parse_args()
-            data = {
-                "data": {
-                    "key1": args['param1'],
-                    "key2": args['param2']
-                }
-            }
+            response = requests.post(f"{config.URL_INGEST}/windmap/", json=request.get_json())
+            if response.status_code != 200:
+                response.raise_for_status()
+            return response.json(), 200
+        
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[WindMap] Error: {response.status_code} - {response.text}")
+            return {"error": f"Error getting wind map data: {error_message}"}, response.status_code
+
         except Exception as e:
-            return handle400error(ns, e)
-        
-        model = CheckModel()
-        return model.post(data)
-        
+            logger.error(f"[WindMap] Exception: {e}")
+            return {"error": "Failed to call wind map ingestion service."}, 500
 
-    @ns.expect(put_input_model)
-    def put(self):
-        try:
-            args = put_parser.parse_args()
-            id = args['id']
-            data = {
-                "data": {
-                    "key1": args['param1'],
-                    "key2": args['param2']
-                }
-            }
-        except Exception as e:
-            return handle400error(ns, e)
-        
-        model = CheckModel()
-        return model.put(id, data)
-        
 
-    @ns.expect(delete_parser)
-    def delete(self):
-        try:
-            args = delete_parser.parse_args()
-            id = args['id']
-        
-        except Exception as e:
-            return handle400error(ns, e)
-        
-        model = CheckModel()
-        return model.delete(id)
-
-@ebird_ns.route('/')
-class EBirdCoordinate(Resource):
-    """
-    Gets data from the last 30 days in Castilla y León using eBird API.
-
-    Returns:
-        :return: Data from eBird API.
-        :rtype: dict
-    """
-    def get(self):
-        return EBird.get()
-
-@xenocanto_ns.route('/')
-class XenoCantoCoordinate(Resource):
-    """
-    Gets data from XencoCanto API in Castilla y León.
-
-    Returns:
-        :return: Data from XenoCanto API.
-        :rtype: dict
-    """
-    def get(self):
-        return XenoCanto.get()
-
-@windmap_ns.route('/')
-class WindMapCoordinate(Resource):
-    """
-    Obtain wind map data with coordinates.
-
-    Returns:
-        :return: Result of the wind map extraction.
-        :rtype: dict
-    """
-    def get(self, lat: float, lon: float, z: int):
-        return WindMap.get(lat, lon, z)
-
-@exclusionmap_ns.route('/')
+@coordinate_ns.route("/exclusionmap")
 class ExclusionMap(Resource):
+    def post(self):
+        """
+        Forwards exclusion map POST request to ingestion API.
+
+        Returns:
+            :return: Result from ingestion exclusion map endpoint.
+            :rtype: dict
+        """
+        try:
+            response = requests.post(f"{config.URL_INGEST}/exclusionmap/", json=request.get_json())
+            if response.status_code != 200:
+                response.raise_for_status()
+            return response.json(), 200
+        
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[ExclusionMap] Error: {response.status_code} - {response.text}")
+            return {"error": f"Error getting exclusion map data: {error_message}"}, response.status_code
+        
+        except Exception as e:
+            logger.error(f"[ExclusionMap] Exception: {e}")
+            return {"error": "Failed to call exclusion map ingestion service."}, 500
+
+
+@coordinate_ns.route("/exclusionmap/zip")
+class ExclusionMapZip(Resource):
+    def get(self):
+        """
+        Forwards exclusion map ZIP request to ingestion API.
+
+        Returns:
+            :return: ZIP file from ingestion.
+            :rtype: FileResponse
+        """
+        try:
+            response = requests.get(f"{config.URL_INGEST}/exclusionmap/zip")
+            return (response.content, response.status_code, {
+                "Content-Type": "application/zip",
+                "Content-Disposition": "attachment; filename=data.zip"
+            })
+
+        except Exception as e:
+            logger.error(f"[ExclusionMapZip] Exception: {e}")
+            return {"error": "Failed to download exclusion map ZIP."}, 500
+        
+@coordinate_ns.route("/exclusionmap/all")
+class ExclusionMapAll(Resource):
     """
-    Saves a file *.shp for the eolic exclusion map.
+    Forwards exclusion map full JSON data from ingestion API.
 
     Returns:
-        :return: Message indicating the completion of the download.
-        :rtype: str
+        dict: All exclusion zone data from ingestion.
     """
     def get(self):
-        return ExclusionMap.get()
+        try:
+            # Petición al servicio de ingesta
+            response = requests.get(f"{config.URL_INGEST}/exclusionmap/all")
+
+            # Si falla, lanzar excepción controlada
+            response.raise_for_status()
+
+            # Devolver el JSON directamente
+            return response.json(), response.status_code
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"[ExclusionMapAll] Request error: {e}")
+            return {"error": "Failed to fetch exclusion map data from ingestion."}, 500
+
+
+@coordinate_ns.route("/exclusionmap/stream-exclusion-data")
+class ExclusionMapStream(Resource):
+    def post(self):
+        """
+        Forwards exclusion map streaming request to ingestion API.
+
+        Returns:
+            :return: Stream response status from ingestion.
+            :rtype: dict
+        """
+        try:
+            response = requests.post(f"{config.URL_INGEST}/exclusionmap/stream-exclusion-data", json=request.get_json())
+            if response.status_code != 200:
+                response.raise_for_status()
+            return response.json(), 200
+        
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[ExclusionMapStream] Error: {response.status_code} - {response.text}")
+            return {"error": f"Error streaming exclusion data: {error_message}"}, response.status_code
+
+        except Exception as e:
+            logger.error(f"[ExclusionMapStream] Exception: {e}")
+            return {"error": "Failed to call exclusion map stream endpoint."}, 500
+
+
+@coordinate_ns.route("/device-status")
+class DeviceStatus(Resource):
+    def post(self):
+        """
+        Forwards device status POST request to ingestion API.
+
+        Returns:
+            :return: Result from ingestion device-status endpoint.
+            :rtype: dict
+        """
+        try:
+            response = requests.post(f"{config.URL_INGEST}/device-status/", json=request.get_json())
+            if response.status_code != 200:
+                response.raise_for_status()
+            
+            return response.json(), 200
+        
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[DeviceStatus] Error: {response.status_code} - {response.text}")
+            return {"error": f"Error posting device status: {error_message}"}, response.status_code
+        
+        except Exception as e:
+            logger.error(f"[DeviceStatus] Exception: {e}")
+            return {"error": "Failed to call device-status ingestion service."}, 500
+
+
+@coordinate_ns.route("/device-status/latest")
+class DeviceStatusLatest(Resource):
+    def get(self):
+        """
+        Forwards request to get the latest device status.
+
+        Returns:
+            :return: Latest status from ingestion API.
+            :rtype: dict
+        """
+        try:
+            response = requests.get(f"{config.URL_INGEST}/device-status/latest")
+            if response.status_code != 200:
+                response.raise_for_status()
+            return response.json(), 200
+        
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[DeviceStatusLatest] Error: {response.status_code} - {response.text}")
+            return {"error": f"Error getting latest device status: {error_message}"}, response.status_code
+        
+        except Exception as e:
+            logger.error(f"[DeviceStatusLatest] Exception: {e}")
+            return {"error": "Failed to get latest device status."}, 500
+
+
+@coordinate_ns.route("/device-status/health")
+class DeviceHealth(Resource):
+    def get(self):
+        """
+        Forwards request to get device health status.
+
+        Returns:
+            :return: Device health from ingestion API.
+            :rtype: dict
+        """
+        try:
+            response = requests.get(f"{config.URL_INGEST}/device-status/health")
+            if response.status_code != 200:
+                response.raise_for_status()
+            return response.json(), 200
+        
+        except request.exceptions.HTTPError as e:
+            error_message = response.json().get("error", response.text)
+            logger.error(f"[DeviceHealth] Error: {response.status_code} - {response.text}")
+            return {"error": f"Error getting device health: {error_message}"}, response.status_code
+        
+        except Exception as e:
+            logger.error(f"[DeviceHealth] Exception: {e}")
+            return {"error": "Failed to get device health status."}, 500

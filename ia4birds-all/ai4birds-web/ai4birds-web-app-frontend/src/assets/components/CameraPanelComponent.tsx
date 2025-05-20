@@ -1,55 +1,82 @@
 import * as React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CustomCard } from './card/CameraPanelCard';
+import CameraService from './services/CameraDataService';
+
+// Define Camera type (igual que en el resto del proyecto)
+type Camera = {
+  id: number;
+  name: string;
+  source_url: string;
+  source_type: string;
+  location?: string;
+  playback_url?: string;
+  status: "active" | "inactive" | "pending";
+  latitude?: string;
+  longitude?: string;
+  storage_info?: string;
+  additional_data?: string;
+};
 
 const CameraPanelComponent = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const queryParam = searchParams.get('camera');
-    const selectedDataFromQuery = Number(queryParam); // Convert queryParam to a number
-    const [selectedData, setSelectedData] = React.useState(selectedDataFromQuery || 1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParam = searchParams.get('camera');
+  const selectedDataFromQuery = Number(queryParam);
+  const [selectedCamera, setSelectedCamera] = React.useState<Camera | null>(null);
+  const [allCameras, setAllCameras] = React.useState<Camera[]>([]);
 
-    const cameraPanelData = [
-        { id: 1, name: 'Cámara 1', location: '', views: '273 visitas', gpsData: "Latitud: 40.416775, Longitud: -3.703790", storageData: "15.5", status: "Activa", url: "http://ia4birds-pre.der.usal.es:8083/hls/129d9c94-e321-4c69-b7b6-8dd7bd6d8d56/index.m3u8" },
-        { id: 2, name: 'Cámara 2', location: '', views: '100 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '' },
-        { id: 3, name: 'Cámara 3', location: '', views: '50 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '' },
-        { id: 4, name: 'Cámara 4', location: '', views: '500 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '' }, 
-    ];
+  // Fetch all cameras once to populate the dropdown
+  React.useEffect(() => {
+    const fetchCameras = async () => {
+      try {
+        const data = await CameraService.getAllCamera();
+        setAllCameras(data);
 
-    React.useEffect(() => {
-        const isValidNumber = !isNaN(selectedDataFromQuery) && Number.isInteger(selectedDataFromQuery);
-        const isValidCamera = cameraPanelData.some(item => item.id === selectedDataFromQuery);
+        const validCamera = data.find(cam => cam.id === selectedDataFromQuery);
+        const selectedId = validCamera ? selectedDataFromQuery : data[0]?.id || 1;
 
-        if (!isValidNumber || !isValidCamera) {
-            setSearchParams({ camera: '1' }); // Redirect to camera 1
-        } else {
-            setSelectedData(selectedDataFromQuery);
-        }
-    }, [selectedDataFromQuery, setSearchParams, cameraPanelData]);
-
-    const handleDropdownChange = (event) => {
-        const selectedId = Number(event.target.value);
-        setSelectedData(selectedId);
-        setSearchParams({ camera: selectedId.toString() }); // Update the queryParam
+        setSearchParams({ camera: selectedId.toString() });
+        fetchCameraById(selectedId);
+      } catch (error) {
+        console.error("Error fetching cameras:", error);
+      }
     };
 
-    const selectedCamera = cameraPanelData.find(item => item.id === selectedData);
+    fetchCameras();
+  }, []);
 
-    return (
-        <div className="camera-panel-container">
-            <div className="w-full flex justify-end">
-                <select onChange={handleDropdownChange} value={selectedData} className="mr-6 mb-2 cursor-pointer">
-                    {cameraPanelData.map(item => (
-                        <option key={item.id} value={item.id}>
-                            {item.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div className="card-container flex-grow mx-5">
-                {selectedCamera && <CustomCard cameraPanelData={selectedCamera} />}
-            </div>
-        </div>
-    );
+  // Fetch a single camera when the param changes
+  const fetchCameraById = async (id: number) => {
+    try {
+      const camera = await CameraService.getCameraById(id);
+      setSelectedCamera(camera);
+    } catch (error) {
+      console.error("Error fetching camera by ID:", error);
+    }
+  };
+
+  const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = Number(event.target.value);
+    setSearchParams({ camera: selectedId.toString() });
+    fetchCameraById(selectedId);
+  };
+
+  return (
+    <div className="camera-panel-container">
+      <div className="w-full flex justify-end">
+        <select onChange={handleDropdownChange} value={selectedCamera?.id || ""} className="mr-6 mb-2 cursor-pointer">
+          {allCameras.map(item => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="card-container flex-grow mx-5">
+        {selectedCamera && <CustomCard cameraPanelData={selectedCamera} />}
+      </div>
+    </div>
+  );
 };
 
 export default CameraPanelComponent;

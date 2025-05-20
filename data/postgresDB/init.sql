@@ -1,6 +1,14 @@
 -- Definir el tipo ENUM para el campo entity
 CREATE TYPE entity_enum AS ENUM ('public', 'private', 'external');
 
+CREATE TYPE camera_source_enum AS ENUM (
+  'RTSP', 'RTMP', 'HLS', 'WebRTC', 'YouTube', 'Twitch', 'MJPEG', 'DASH', 'Other'
+);
+
+CREATE TYPE camera_status_enum AS ENUM ('active', 'inactive', 'pending');
+
+
+
 CREATE TABLE IF NOT EXISTS species (
     id SERIAL PRIMARY KEY,
     comName VARCHAR(255),
@@ -54,4 +62,18 @@ CREATE TABLE IF NOT EXISTS users (
     description VARCHAR(255),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     active BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS cameras (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL,
+  source_type camera_source_enum NOT NULL,
+  source_url VARCHAR NOT NULL,
+  playback_url VARCHAR,
+  status VARCHAR NOT NULL DEFAULT 'pending',
+  location VARCHAR,
+  latitude VARCHAR,
+  longitude VARCHAR,
+  storage_info VARCHAR,
+  additional_data TEXT
 );
