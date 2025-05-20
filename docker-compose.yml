@@ -1,13 +1,13 @@
 version: "3.9"
-  
-services: 
+
+services:
 
   postgresql:
     image: "postgres:14-alpine"
     container_name: postgres
+    env_file:
+      - /etc/envs/.env
     volumes:
-      - /etc/envs/.env:/etc/envs/.env
-      #- /etc/ai4birds-data-db/data:/var/lib/postgresql/data
       - ./data/postgresDB/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -19,8 +19,9 @@ services:
   postgresql-ingest:
     image: "postgres:14-alpine"
     container_name: postgres-ingest
+    env_file:
+      - /etc/envs/.env
     volumes:
-      - /etc/envs/.env:/etc/envs/.env
       - /etc/ai4birds-ingest-db/data:/var/lib/postgresql/data
       - ./data/postgresIngestDB/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
@@ -33,10 +34,10 @@ services:
   postgresql-analysis:
     image: "postgres:14-alpine"
     container_name: postgres-analysis
+    env_file:
+      - /etc/envs/.env
     volumes:
-      - /etc/envs/.env:/etc/envs/.env
       - /etc/ai4birds-analysis-db/data:/var/lib/postgresql/data
-      #- ./data/postgresAnalysisDB/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=${POSTGRES_ANALYSIS_USER}
       - POSTGRES_DB=${POSTGRES_ANALYSIS_DB}
@@ -51,18 +52,18 @@ services:
       - 80:5173
       - 8080:8080
       - 443:443
-    volumes:
-      - /etc/envs/.env:/home/node/app/.env  # Montar en la ubicación correcta
+    env_file:
+      - /etc/envs/.env
     networks:
       - bird-net
 
   backend:
     build: ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend
     container_name: backend
+    env_file:
+      - /etc/envs/.env
     volumes:
-      #- ./ia4birds-all/ai4birds-web/ai4birds-web-app-backend:/home/node/app
       - /etc/letsencrypt/archive/ia4birds-platform.air-institute.com:/etc/letsencrypt/archive/ia4birds-platform.air-institute.com
-      - /etc/envs/.env:/home/node/app/ai4birds-web-app-backend/.env
       - ./hls-stream:/home/node/app/hls-stream
     ports:
       - 5030:3030
@@ -72,35 +73,35 @@ services:
       - bird-net
 
   ai4birds-ai-service:
-      build: ./ia4birds-all/ai4birds-ai-service
-      container_name: ai4birds-ai
-      ports:
-        - 5000:5000
-      networks:
-        - bird-net 
+    build: ./ia4birds-all/ai4birds-ai-service
+    container_name: ai4birds-ai
+    ports:
+      - 5000:5000
+    networks:
+      - bird-net
 
   ai4birds-coordinate-service:
-      build: ./ia4birds-all/ai4birds-coordinate-service
-      container_name: ai4birds-coordinate
-      env_file:
-        - /etc/envs/.env
-      ports:
-        - 5001:5000
-      networks:
-        - bird-net 
-     
+    build: ./ia4birds-all/ai4birds-coordinate-service
+    container_name: ai4birds-coordinate
+    env_file:
+      - /etc/envs/.env
+    ports:
+      - 5001:5000
+    networks:
+      - bird-net
+
   ai4birds-ingest-service:
-      build: ./ia4birds-all/ai4birds-ingest-service
-      container_name: ai4birds-ingest
-      mem_limit: 6g
-      volumes:
-        - /home/bisite/exclusion_eolica.csv:/home/exclusion_eolica.csv
-      ports:
-        - 5002:5000
-      env_file: 
-        - /etc/envs/.env
-      networks:
-        - bird-net 
+    build: ./ia4birds-all/ai4birds-ingest-service
+    container_name: ai4birds-ingest
+    mem_limit: 6g
+    env_file:
+      - /etc/envs/.env
+    volumes:
+      - /home/bisite/exclusion_eolica.csv:/home/exclusion_eolica.csv
+    ports:
+      - 5002:5000
+    networks:
+      - bird-net
 
   redis:
     image: redis:6.2-alpine
@@ -110,7 +111,7 @@ services:
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass "${REDIS_PASSWORD}"
-    volumes: 
+    volumes:
       - cache:/data
     networks:
       - bird-net
@@ -130,40 +131,10 @@ services:
       HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD}
     ports:
       - 8081:8081
-    volumes:
-      - /etc/envs/.env:/etc/envs/.env
     depends_on:
       - redis
     networks:
       - redis-net
-
-
-  # rtsp-stream:
-  #   image: roverr/rtsp-stream:2
-  #   container_name: rtsp-stream
-  #   ports:
-  #     - "8082:8080"
-  #   environment:
-  #     - RTSP_STREAM_DEBUG=true
-  #     - RTSP_STREAM_KEEP_FILES=true
-  #     - RTSP_STREAM_PROCESS_LOGGING=true
-  #   volumes:
-  #     - ./rtsp-stream.yml:/app/rtsp-stream.yml
-  #     - ./hls:/app/hls  # Asegura que la carpeta hls esté montada
-  #     - ./logs:/var/log/rtsp-stream
-  #     - ia4birds_videos_data:/app/videos
-  #   networks:
-  #     - bird-net
-
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: nginx-hls
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
-  #     - ia4birds_videos_data:/usr/share/nginx/html/videos:ro
-  #   ports:
-  #     - "8083:8083"
-  #   restart: always
 
   mediamtx:
     build: ./mediamtx-custom
@@ -180,15 +151,12 @@ services:
     networks:
       - bird-net
 
-  
   celery-worker:
     build: ./ia4birds-all/ai4birds-ingest-service
-    container_name: celery-worker 
-    command: celery -A ai4birds_celery.app worker --loglevel=info 
+    container_name: celery-worker
+    command: celery -A ai4birds_celery.app worker --loglevel=info
     env_file:
       - /etc/envs/.env
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
     depends_on:
       - ai4birds-ingest-service
       - redis
@@ -199,18 +167,15 @@ services:
   celery-beat:
     build: ./ia4birds-all/ai4birds-ingest-service
     container_name: celery-beat
-    command: celery -A ai4birds_celery.app beat --loglevel=info 
+    command: celery -A ai4birds_celery.app beat --loglevel=info
     env_file:
       - /etc/envs/.env
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
     depends_on:
       - ai4birds-ingest-service
       - celery-worker
     networks:
       - redis-net
       - bird-net
-
 
 networks:
   bird-net:
@@ -224,4 +189,3 @@ volumes:
   cache:
     driver: local
   camara-config:
-
