@@ -28,7 +28,7 @@ import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [showMarkersEolicResources, setShowMarkersEolicResources] = useState(false);
-  const [showLegend, setShowLegend] = useState(false);
+  const [showLegend, setShowLegend] = useState(true);
   const [switchSelected, setSwitchSelected] = useState(false);
   const [switchSelected2, setSwitchSelected2] = useState(false);
   const [selectedBirds, setSelectedBirds] = useState<string[]>([]);

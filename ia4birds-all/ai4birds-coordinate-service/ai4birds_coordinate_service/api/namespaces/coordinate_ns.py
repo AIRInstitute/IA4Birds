@@ -32,6 +32,7 @@ class EBird(Resource):
         """
 
         try:
+            logger.error(f"{config.URL_INGEST}/ebird/")
             response = requests.get(f"{config.URL_INGEST}/ebird/")
 
             if response.status_code != 200:
@@ -232,6 +233,29 @@ class ExclusionMapZip(Resource):
         except Exception as e:
             logger.error(f"[ExclusionMapZip] Exception: {e}")
             return {"error": "Failed to download exclusion map ZIP."}, 500
+        
+@coordinate_ns.route("/exclusionmap/all")
+class ExclusionMapAll(Resource):
+    """
+    Forwards exclusion map full JSON data from ingestion API.
+
+    Returns:
+        dict: All exclusion zone data from ingestion.
+    """
+    def get(self):
+        try:
+            # Petición al servicio de ingesta
+            response = requests.get(f"{config.URL_INGEST}/exclusionmap/all")
+
+            # Si falla, lanzar excepción controlada
+            response.raise_for_status()
+
+            # Devolver el JSON directamente
+            return response.json(), response.status_code
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"[ExclusionMapAll] Request error: {e}")
+            return {"error": "Failed to fetch exclusion map data from ingestion."}, 500
 
 
 @coordinate_ns.route("/exclusionmap/stream-exclusion-data")

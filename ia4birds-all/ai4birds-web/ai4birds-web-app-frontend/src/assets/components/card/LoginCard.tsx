@@ -44,14 +44,15 @@ export const CustomCard = ()=> {
             console.log("RESPONSE: ", response);
             if (response.data.accessToken) {
                 notify();
-                setUser({
+                const userObject = {
                     id: response.data.id,
                     name: response.data.name,
                     email: response.data.email,
                     token: response.data.accessToken
-                });
-                localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
-                localStorage.setItem("user", JSON.stringify(user));
+                };
+                setUser(userObject); 
+                localStorage.setItem("accessToken", response.data.accessToken);
+                localStorage.setItem("user", JSON.stringify(userObject));
                 navigate("/map-component");
                 console.log("Access token: ", response.data.accessToken);
             } else if (response.data.error) {

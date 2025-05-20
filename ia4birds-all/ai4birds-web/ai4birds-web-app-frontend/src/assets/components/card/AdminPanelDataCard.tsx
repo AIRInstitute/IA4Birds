@@ -46,12 +46,21 @@ export const CustomCardData = ({ panelAdminData }) => {
               <h2 className="p-1 text-center font-bold">{panelAdminData[2].name}</h2>
               <CardBody>
                 <div className="max-w-full overflow-x-auto h-[206px]">
-                  <CopyBlock
-                    language="json"
-                    text={JSON.stringify(panelAdminData[2].data, null, 2)}
-                    codeBlock
-                    showLineNumbers={false}
-                  />
+                  {Array.isArray(panelAdminData[2].data) ? (
+                    <CopyBlock
+                      language="json"
+                      text={JSON.stringify(panelAdminData[2].data.slice(0, 20), null, 2)}
+                      codeBlock
+                      showLineNumbers={false}
+                    />
+                  ) : (
+                    <CopyBlock
+                      language="json"
+                      text={JSON.stringify(panelAdminData[2].data, null, 2).slice(0, 1000)} // Fallback para objetos
+                      codeBlock
+                      showLineNumbers={false}
+                    />
+                  )}
                 </div>
                 <div className="w-full flex justify-end">
                   <Link

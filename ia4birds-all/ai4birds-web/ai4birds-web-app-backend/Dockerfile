@@ -12,6 +12,7 @@ COPY controllers /home/node/app/controllers
 COPY middleware /home/node/app/middleware
 COPY models /home/node/app/models
 COPY routes /home/node/app/routes
+COPY scripts /home/node/app/scripts
 COPY utils /home/node/app/utils
 COPY documentation /home/node/app/documentation
 COPY app.ts /home/node/app/app.ts

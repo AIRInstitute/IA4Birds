@@ -9,7 +9,7 @@ RUN npm run build
 
 #Build backend
 WORKDIR /home/node/app
-COPY ./ai4birds-web-app-backend ./ai4birds-web-app-backend
+COPY ./ai4birds-web-app-backend/ ./ai4birds-web-app-backend/
 WORKDIR /home/node/app/ai4birds-web-app-backend
 RUN npm install
 RUN npm run build

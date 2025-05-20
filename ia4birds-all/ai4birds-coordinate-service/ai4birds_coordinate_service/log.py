@@ -3,12 +3,13 @@
 # See LICENSE for details.
 # Author: AIRInstitute (@AIRInstitute on GitHub)
 
-
 import logging
 import logging.config
 from os import path
 from typing import Any
+import os
 
+IS_TESTING = os.getenv("PYTEST_RUNNING") == "1"
 
 LOGGER_NAME = 'ai4birds_coordinate_service'
 LOGGING_CONFIG = {
@@ -22,7 +23,7 @@ LOGGING_CONFIG = {
         LOGGER_NAME: {
             'level': 'DEBUG',
             'propagate': False,
-            'handlers': ['consoleHandler', 'fileHandler']
+            'handlers': ['consoleHandler'] if IS_TESTING else ['consoleHandler', 'fileHandler']
         }
     },
     'formatters': {
@@ -40,35 +41,26 @@ LOGGING_CONFIG = {
             'formatter': 'consoleFormatter',
             'class': 'logging.StreamHandler'
         },
-        'fileHandler': {
-            'level': 'WARNING',
-            'formatter': 'fileFormatter',
-            'class': 'logging.FileHandler',
-            'filename': f'/var/log/{LOGGER_NAME}.errors.log'
-        }
+        **({
+            'fileHandler': {
+                'level': 'WARNING',
+                'formatter': 'fileFormatter',
+                'class': 'logging.FileHandler',
+                'filename': f'/var/log/{LOGGER_NAME}.errors.log'
+            }
+        } if not IS_TESTING else {})
     }
 }
 
 logger = None
 has_setup = False
 
-
 def setup_logger() -> None:
-    """Setups logger for cookiecutter.application_
-    """
-
     global logger
     logging.config.dictConfig(LOGGING_CONFIG)
     logger = logging.getLogger(LOGGER_NAME)
 
-
 def serve_application_logger() -> Any:
-    """Setups logger for application if not initializes, and servers the application logger.
-
-    Returns: 
-        :obj:`logging.logger` application logger
-    """
-
     global has_setup, logger
     if not has_setup:
         setup_logger()
