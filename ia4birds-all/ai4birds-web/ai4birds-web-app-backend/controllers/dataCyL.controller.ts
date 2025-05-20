@@ -6,8 +6,18 @@ import redis from '../config/redis.config';
 
 const getXenoCantoRecordings = async (req, res) => {
     try {
+        const token = req.headers["x-access-token"] as string;
+
+        if (!token) {
+        return res.status(403).json({ error: "Token no proporcionado" });
+        }
+
         // Hacer la solicitud al servidor Python para obtener las grabaciones
-        const response = await axios.get(`${globalConfig.pythonURL}/xenocanto/`);
+        const response = await axios.get(`${globalConfig.pythonURL}/xenocanto`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
         // Verificar si la solicitud fue exitosa
         if (response.status !== 200) {
@@ -29,8 +39,20 @@ const getXenoCantoRecordings = async (req, res) => {
 
 const getEBirdData = async (req, res) => {
     try {
+        const token = req.headers["x-access-token"] as string;
+
+        if (!token) {
+        return res.status(403).json({ error: "Token no proporcionado" });
+        }
+        
+        console.log("Calling:", `${globalConfig.pythonURL}/ebird`);
+        console.log("TOKEN:", token);
         // Hacer la solicitud al servidor Python para obtener los datos de avistamientos de aves
-        const response = await axios.get(`${globalConfig.pythonURL}/ebird/`);
+        const response = await axios.get(`${globalConfig.pythonURL}/ebird`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
         // Verificar si la solicitud fue exitosa
         if (response.status !== 200) {
@@ -42,12 +64,17 @@ const getEBirdData = async (req, res) => {
 
         // Enviar las coordenadas al frontend
         return res.status(200).json(coordinates);
-    } catch (err) {
-        console.error(err);
+    } catch (err: any) {
+        if (axios.isAxiosError(err)) {
+            console.error("AXIOS ERROR:", err.response?.status, err.response?.data);
+        } else {
+            console.error("GENERAL ERROR:", err.message);
+        }
         return res.status(500).send({
             message: globalMessages[500].INTERNAL_SERVER_ERROR,
         });
     }
+
 };
 
 const getDataBird = async (req, res) => {
@@ -56,7 +83,7 @@ const getDataBird = async (req, res) => {
         if (cachedData) {
             return res.status(200).json(JSON.parse(cachedData));
         } else {
-            const dataBirdResponse = await axios.get(`${globalConfig.pythonURL}/dataBird/`);
+            const dataBirdResponse = await axios.get(`${globalConfig.pythonURL}/dataBird`);
 
             if (dataBirdResponse.status !== 200) {
                 throw new Error('No se pudieron obtener los datos necesarios.');
@@ -77,8 +104,21 @@ const getDataBird = async (req, res) => {
 
 const getSensitivityData = async (req, res) => {
     try {
+
+        const token = req.headers["x-access-token"] as string;
+
+        if (!token) {
+        return res.status(403).json({ error: "Token no proporcionado" });
+        }
+
         // Hacer la solicitud al servidor Python para obtener los datos de sensibilidad
-        const sesitivityResponse = await axios.get(`${globalConfig.pythonURL}/sensitivity/`);
+        const sesitivityResponse = await axios.get(`${globalConfig.pythonURL}/sensitivity`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        
 
         // Verificar si la solicitud fue exitosa
         if (sesitivityResponse.status !== 200) {

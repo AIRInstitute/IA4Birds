@@ -39,7 +39,7 @@ class XenoCanto_Extractor():
                 response.raise_for_status()
                 
                 data = response.json()
-                #print(f"Datos obtenidos de la API (página {page}):", data)
+                
                 all_results.extend(bird for bird in data['recordings'] if 'Castilla y León' in bird.get('loc'))
                 
                 
@@ -56,7 +56,7 @@ class XenoCanto_Extractor():
                 sleep_time = backoff_factor * (2 ** retry_count)
                 logger.error(f'Request xenocanto ERROR, will retry after {sleep_time} seconds.')
                 time.sleep(sleep_time)
-        print(f"Total de grabaciones antes de filtrar por especies: {len(all_results)}")
+       
         return self._format_results(all_results)
     
     def _format_results(self, data):
@@ -64,7 +64,6 @@ class XenoCanto_Extractor():
         formatted_results = []
         for bird in data:
             full_species_name = f"{bird['gen']} {bird['sp']}"
-            #print(f"Especie encontrada: {full_species_name}")
             if full_species_name in species_list:  # Filtra por especie
                 formatted_results.append({
                     "speciesSciName": full_species_name,
@@ -81,21 +80,4 @@ class XenoCanto_Extractor():
                         "date": bird['date']
                     }]
                 })
-            # formatted_results.append({
-            #     "speciesSciName": f"{bird['gen']} {bird['sp']}",
-            #     "recordings": [{
-            #         "recordingId": bird['id'],
-            #         "location": bird['loc'],
-            #         "quality": bird['q'],
-            #         "lat": bird['lat'],
-            #         "lng": bird['lng'],
-            #         "alt": bird['alt'],
-            #         "file": bird['file'],
-            #         "file-name": bird['file-name'],
-            #         "time": bird['time'],
-            #         "date": bird['date']
-            #     }]
-            # })
-            
-        print(f"Total de grabaciones después de filtrar por especies: {len(formatted_results)}")
         return formatted_results

@@ -25,8 +25,14 @@ const DataPanelComponent = () => {
           response = await xenocanto.getXenocanto(); // Fetch Xenocanto data
         } else if (selectedData === 2) {
           response = await bird.getExclusionMap(); // Fetch eBird data
+        }else if (selectedData === 3) {
+          response = await exclusionData.getExclusionMapAll(); // Añade esta línea
         }
-        setDataPanelData(response.data); // Set fetched data
+        if (response?.data) {
+          setDataPanelData(response.data.data || response.data);
+        } else {
+          throw new Error("Respuesta inválida");
+        }
       } catch (err) {
         setError("Error en la obtención de datos. Vuelva a intentarlo más tarde.");
         console.error("Error fetching data: ", err);

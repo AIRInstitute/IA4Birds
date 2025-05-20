@@ -26,6 +26,16 @@ class ExclusionEolicService {
         })
         return response;
     }  
+
+    async getExclusionMapAll() {
+         const response = await api.get("/data/exclusionmap/all", {
+            headers: {
+        //         "x-access-token": getToken(),
+                    'Cache-Control': 'no-cache'
+              },
+        })
+        return response;
+    }  
     
     async getExclusionResourcesMap(body) {
          const response = await api.post("/data/windmap", body

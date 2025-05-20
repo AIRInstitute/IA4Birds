@@ -252,6 +252,39 @@ const getExclusionMapData = async (req: Request, res: Response) => {
     }
 };
 
+const getExclusionMapAll = async (req: Request, res: Response) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${globalConfig.pythonURL}/exclusionmap/all`
+    });
+
+    if (response.status !== 200) {
+      throw new Error('No se pudieron obtener los datos del mapa de exclusión eólica.');
+    }
+
+    const exclusionMapData = response.data;
+
+    // Extrae solo los primeros 100 elementos del array que está en "data"
+    if (Array.isArray(exclusionMapData.data)) {
+      const limitedData = {
+        ...exclusionMapData,
+        data: exclusionMapData.data.slice(0, 100)
+      };
+      return res.status(200).json(limitedData);
+    } else {
+      console.warn("La propiedad 'data' no es un array.");
+      return res.status(200).json(exclusionMapData);
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({
+      message: globalMessages[500].INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+
 
 // };
-export { getWindMapData, getExclusionMapData, getExclusionMapDataStreaming, addFact };
+export { getWindMapData, getExclusionMapData, getExclusionMapDataStreaming, addFact, getExclusionMapAll };

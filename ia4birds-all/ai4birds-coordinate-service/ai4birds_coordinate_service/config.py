@@ -26,7 +26,7 @@ DB_CONFIG={
 
 
 #URL_INGEST = 'http://ia4birds-pre.der.usal.es:5002/ai4birds-ingest-service/v1'
-URL_INGEST = os.getenv('PYTHON_URL')
+URL_INGEST = os.getenv('PYTHON_INGEST_URL')
 
 #SECRET_KEY = os.getenv('SECRET_KEY')
 SECRET_KEY ="secretKey"
