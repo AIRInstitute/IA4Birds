@@ -21,6 +21,16 @@ const sequelize = new Sequelize(
 const User = userModel(sequelize);
 const Camera = cameraModel(sequelize);
 
+Camera.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user",
+});
+
+User.hasMany(Camera, {
+  foreignKey: "user_id",
+  as: "cameras",
+});
+
 async function testConnection() {
     try {
         //alter = true updates the database if schema has changed

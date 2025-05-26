@@ -1,3 +1,4 @@
+// cameras.model.ts
 import {
   Sequelize,
   DataTypes,
@@ -5,20 +6,23 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  ForeignKey,
 } from "sequelize";
 
 class Camera extends Model<InferAttributes<Camera>, InferCreationAttributes<Camera>> {
   declare id: CreationOptional<number>;
+  declare user_id: ForeignKey<number>;
   declare name: string;
   declare source_type: "RTSP" | "RTMP" | "HLS" | "WebRTC" | "YouTube" | "Twitch" | "MJPEG" | "DASH" | "Other";
   declare source_url: string;
   declare playback_url: CreationOptional<string>;
-  declare status: CreationOptional<string>;
+  declare status: CreationOptional<"active" | "inactive" | "pending">;
   declare location: CreationOptional<string>;
   declare latitude: CreationOptional<string>;
   declare longitude: CreationOptional<string>;
   declare storage_info: CreationOptional<string>;
   declare additional_data: CreationOptional<string>;
+  declare is_public: CreationOptional<boolean>;
 }
 
 export default (sequelize: Sequelize) => {
@@ -28,6 +32,14 @@ export default (sequelize: Sequelize) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+        },
       },
       name: {
         type: DataTypes.STRING,
@@ -46,7 +58,7 @@ export default (sequelize: Sequelize) => {
         allowNull: true,
       },
       status: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM("active", "inactive", "pending"),
         allowNull: false,
         defaultValue: "pending",
       },
@@ -69,6 +81,11 @@ export default (sequelize: Sequelize) => {
       additional_data: {
         type: DataTypes.TEXT,
         allowNull: true,
+      },
+      is_public: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     {
