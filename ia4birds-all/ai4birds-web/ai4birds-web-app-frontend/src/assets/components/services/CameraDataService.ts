@@ -1,4 +1,5 @@
 import api from "./main";
+import { getToken } from "@/utils/utils";
 
 class CameraService {
   async getAllCamera() {
@@ -21,8 +22,28 @@ class CameraService {
     longitude?: string;
     storage_info?: string;
     additional_data?: string;
+    availability?: string;
   }) {
     const response = await api.post("/camera", cameraData);
+    return response.data;
+  }
+
+  async getAccessibleCameras() {
+    const response = await api.get("/camera/accessible", {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    });
+    return response.data;
+  }
+
+  // Si en el futuro necesitas este también:
+  async getPrivateCameras() {
+    const response = await api.get("/camera/private", {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    });
     return response.data;
   }
 }

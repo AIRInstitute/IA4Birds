@@ -1,4 +1,5 @@
 import { Spacer } from "@nextui-org/spacer";
+import { Tooltip } from "@nextui-org/tooltip";
 import { CustomCard } from "./card/CameraCard";
 import { useEffect, useState } from "react";
 import * as React from "react";
@@ -8,6 +9,7 @@ import {
   Button, Input, Switch, Tabs, Tab, Select, SelectItem
 } from "@nextui-org/react";
 
+import { RxQuestionMarkCircled } from "react-icons/rx";
 import CameraService from "./services/CameraDataService";
 
 // Definición del tipo Camera
@@ -23,6 +25,7 @@ type Camera = {
   longitude?: string;
   storage_info?: string;
   additional_data?: string;
+  availability?: "public" | "private";
 };
 
 const CameraComponent = () => {
@@ -31,13 +34,18 @@ const CameraComponent = () => {
   const [cameraLocation, setCameraLocation] = useState("");
   const [cameraUrl, setCameraUrl] = useState("");
   const [cameraStatus, setCameraStatus] = useState<"active" | "inactive">("inactive");
+  const [cameraAvailability, setCameraAvailability] = useState<"public" | "private">("private");
   const [cameraSourceType, setCameraSourceType] = useState("RTSP");
   const [datosGPS, setDatosGPS] = useState({ latitude: "", longitude: "" });
   const [storageInfo, setStorageInfo] = useState("");
   const [additionalData, setAdditionalData] = useState("");
   const [activeTab, setActiveTab] = useState("externa");
   const [camerasData, setCamerasData] = useState<Camera[]>([]);
+  const [viewTab, setViewTab] = useState("public"); // para las pestañas de visualización
   const isLoggedIn = localStorage.getItem("accessToken");
+
+  const publicCameras = camerasData.filter((camera) => camera.availability === "public");
+  const privateCameras = camerasData.filter((camera) => camera.availability === "private");
 
   useEffect(() => {
     const fetchCameras = async () => {
@@ -62,6 +70,7 @@ const CameraComponent = () => {
     setCameraSourceType("RTSP");
     setDatosGPS({ latitude: "", longitude: "" });
     setCameraStatus("inactive");
+    setCameraAvailability("private");
     setStorageInfo("");
     setAdditionalData("");
   };
@@ -76,18 +85,13 @@ const CameraComponent = () => {
       latitude: datosGPS.latitude,
       longitude: datosGPS.longitude,
       storage_info: storageInfo,
-      additional_data: additionalData
+      additional_data: additionalData,
+      availability: cameraAvailability,
     };
-
-    console.log("Datos de la nueva cámara:", newCameraData);
 
     try {
       const createdCamera = await CameraService.insertCamera(newCameraData);
-      console.log("Camera created:", createdCamera);
-
-      // Actualiza la lista sin recargar
       setCamerasData((prev) => [...prev, createdCamera]);
-
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
@@ -95,27 +99,67 @@ const CameraComponent = () => {
     }
   };
 
+  // const renderCameraCards = (availability: "public" | "private") => (
+  //   <div className="flex flex-wrap justify-center gap-8 mt-6">
+  //     {camerasData.filter((camera) => camera.availability === availability).map((camera) => (
+  //       <Link key={camera.id} to={`/camera-panel-component?camera=${camera.id}`}>
+  //         <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+  //           <CustomCard
+  //             cameraData={{
+  //               id: camera.id,
+  //               name: camera.name,
+  //               location: camera.location || "Desconocida",
+  //               views: "N/A",
+  //               url: camera.playback_url,
+  //             }}
+  //           />
+  //         </div>
+  //       </Link>
+  //     ))}
+  //   </div>
+  // );
+
   return (
     <div className="camera-component mx-6 my-6">
       <Spacer y={5} />
+
+      {/* Sección cámaras públicas */}
+      <h2 className="text-2xl font-bold mb-4">Cámaras Públicas</h2>
+      <div className="flex flex-wrap justify-center gap-8 mb-10">
+        {publicCameras.map((camera) => (
+          <Link key={camera.id} to={`/camera-panel-component?camera=${camera.id}`}>
+            <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+              <CustomCard
+                cameraData={{
+                  id: camera.id,
+                  name: camera.name,
+                  location: camera.location || "Desconocida",
+                  views: "N/A",
+                  url: camera.playback_url,
+                }}
+              />
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Sección cámaras privadas */}
+      <h2 className="text-2xl font-bold mb-4">Tus Cámaras Privadas</h2>
       <div className="flex flex-wrap justify-center gap-8">
-        {camerasData.map((camera: any) => (
-          <React.Fragment key={camera.id}>
-            <Link to={`/camera-panel-component?camera=${camera.id}`}>
-              <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
-                <CustomCard
-                  cameraData={{
-                    id: camera.id,
-                    name: camera.name,
-                    location: camera.location || "Desconocida",
-                    views: "N/A",
-                    url: camera.playback_url,
-                  }}
-                />
-              </div>
-            </Link>
-            <Spacer x={4} />
-          </React.Fragment>
+        {privateCameras.map((camera) => (
+          <Link key={camera.id} to={`/camera-panel-component?camera=${camera.id}`}>
+            <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+              <CustomCard
+                cameraData={{
+                  id: camera.id,
+                  name: camera.name,
+                  location: camera.location || "Desconocida",
+                  views: "N/A",
+                  url: camera.playback_url,
+                }}
+              />
+            </div>
+          </Link>
         ))}
         {isLoggedIn && (
           <div
@@ -127,7 +171,7 @@ const CameraComponent = () => {
         )}
       </div>
 
-      {/* MODAL */}
+      {/* MODAL (sin cambios) */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalContent>
           <ModalHeader>
@@ -152,16 +196,16 @@ const CameraComponent = () => {
                 </div>
                 <div className="mb-4">
                   <Select label="Tipo de Fuente" value={cameraSourceType} onChange={(e) => setCameraSourceType(e.target.value)}>
-                  <SelectItem key="RTSP" value="RTSP">RTSP</SelectItem>
-                  <SelectItem key="RTMP" value="RTMP">RTMP</SelectItem>
-                  <SelectItem key="HLS" value="HLS">HLS</SelectItem>
-                  <SelectItem key="WebRTC" value="WebRTC">WebRTC</SelectItem>
-                  <SelectItem key="YouTube" value="YouTube">YouTube</SelectItem>
-                  <SelectItem key="Twitch" value="Twitch">Twitch</SelectItem>
-                  <SelectItem key="MJPEG" value="MJPEG">MJPEG</SelectItem>
-                  <SelectItem key="DASH" value="DASH">DASH</SelectItem>
-                  <SelectItem key="Other" value="Other">Other</SelectItem>
-                </Select>
+                    <SelectItem key="RTSP" value="RTSP">RTSP</SelectItem>
+                    <SelectItem key="RTMP" value="RTMP">RTMP</SelectItem>
+                    <SelectItem key="HLS" value="HLS">HLS</SelectItem>
+                    <SelectItem key="WebRTC" value="WebRTC">WebRTC</SelectItem>
+                    <SelectItem key="YouTube" value="YouTube">YouTube</SelectItem>
+                    <SelectItem key="Twitch" value="Twitch">Twitch</SelectItem>
+                    <SelectItem key="MJPEG" value="MJPEG">MJPEG</SelectItem>
+                    <SelectItem key="DASH" value="DASH">DASH</SelectItem>
+                    <SelectItem key="Other" value="Other">Other</SelectItem>
+                  </Select>
                 </div>
 
                 <div className="mb-4">
@@ -182,6 +226,19 @@ const CameraComponent = () => {
                 </div>
                 <div className="mb-4">
                   <Input label="Datos de Almacenamiento" value={storageInfo} onChange={(e) => setStorageInfo(e.target.value)} />
+                </div>
+                <div className="mb-4 flex items-center gap-4">
+                  <span>Visibilidad de la cámara:</span>
+                  <Switch
+                    isSelected={cameraAvailability === "public"}
+                    onChange={(e) => setCameraAvailability(e.target.checked ? "public" : "private")}
+                  />
+                  <p className="text-small text-default-500">{cameraAvailability === "public" ? "Pública" : "Privada"}</p>
+                  <Tooltip content="Si selecciona 'pública' la cámara será visible para todos los usuarios, en cambio, si selecciona 'privada' sólo será visible para usted.">
+                    <span className="cursor-pointer text-lg text-gray-500 ml-auto">
+                      <RxQuestionMarkCircled />
+                    </span>
+                  </Tooltip>
                 </div>
               </Tab>
               <Tab key="otro" title="Propia">
