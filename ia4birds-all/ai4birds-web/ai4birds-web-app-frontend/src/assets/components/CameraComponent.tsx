@@ -25,6 +25,7 @@ type Camera = {
   longitude?: string;
   storage_info?: string;
   additional_data?: string;
+  availability?: "public" | "private";
 };
 
 const CameraComponent = () => {
@@ -40,7 +41,11 @@ const CameraComponent = () => {
   const [additionalData, setAdditionalData] = useState("");
   const [activeTab, setActiveTab] = useState("externa");
   const [camerasData, setCamerasData] = useState<Camera[]>([]);
+  const [viewTab, setViewTab] = useState("public"); // para las pestañas de visualización
   const isLoggedIn = localStorage.getItem("accessToken");
+
+  const publicCameras = camerasData.filter((camera) => camera.availability === "public");
+  const privateCameras = camerasData.filter((camera) => camera.availability === "private");
 
   useEffect(() => {
     const fetchCameras = async () => {
@@ -84,15 +89,9 @@ const CameraComponent = () => {
       availability: cameraAvailability,
     };
 
-    console.log("Datos de la nueva cámara:", newCameraData);
-
     try {
       const createdCamera = await CameraService.insertCamera(newCameraData);
-      console.log("Camera created:", createdCamera);
-
-      // Actualiza la lista sin recargar
       setCamerasData((prev) => [...prev, createdCamera]);
-
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
@@ -100,27 +99,67 @@ const CameraComponent = () => {
     }
   };
 
+  // const renderCameraCards = (availability: "public" | "private") => (
+  //   <div className="flex flex-wrap justify-center gap-8 mt-6">
+  //     {camerasData.filter((camera) => camera.availability === availability).map((camera) => (
+  //       <Link key={camera.id} to={`/camera-panel-component?camera=${camera.id}`}>
+  //         <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+  //           <CustomCard
+  //             cameraData={{
+  //               id: camera.id,
+  //               name: camera.name,
+  //               location: camera.location || "Desconocida",
+  //               views: "N/A",
+  //               url: camera.playback_url,
+  //             }}
+  //           />
+  //         </div>
+  //       </Link>
+  //     ))}
+  //   </div>
+  // );
+
   return (
     <div className="camera-component mx-6 my-6">
       <Spacer y={5} />
+
+      {/* Sección cámaras públicas */}
+      <h2 className="text-2xl font-bold mb-4">Cámaras Públicas</h2>
+      <div className="flex flex-wrap justify-center gap-8 mb-10">
+        {publicCameras.map((camera) => (
+          <Link key={camera.id} to={`/camera-panel-component?camera=${camera.id}`}>
+            <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+              <CustomCard
+                cameraData={{
+                  id: camera.id,
+                  name: camera.name,
+                  location: camera.location || "Desconocida",
+                  views: "N/A",
+                  url: camera.playback_url,
+                }}
+              />
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Sección cámaras privadas */}
+      <h2 className="text-2xl font-bold mb-4">Tus Cámaras Privadas</h2>
       <div className="flex flex-wrap justify-center gap-8">
-        {camerasData.map((camera: any) => (
-          <React.Fragment key={camera.id}>
-            <Link to={`/camera-panel-component?camera=${camera.id}`}>
-              <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
-                <CustomCard
-                  cameraData={{
-                    id: camera.id,
-                    name: camera.name,
-                    location: camera.location || "Desconocida",
-                    views: "N/A",
-                    url: camera.playback_url,
-                  }}
-                />
-              </div>
-            </Link>
-            <Spacer x={4} />
-          </React.Fragment>
+        {privateCameras.map((camera) => (
+          <Link key={camera.id} to={`/camera-panel-component?camera=${camera.id}`}>
+            <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+              <CustomCard
+                cameraData={{
+                  id: camera.id,
+                  name: camera.name,
+                  location: camera.location || "Desconocida",
+                  views: "N/A",
+                  url: camera.playback_url,
+                }}
+              />
+            </div>
+          </Link>
         ))}
         {isLoggedIn && (
           <div
@@ -132,7 +171,7 @@ const CameraComponent = () => {
         )}
       </div>
 
-      {/* MODAL */}
+      {/* MODAL (sin cambios) */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalContent>
           <ModalHeader>
