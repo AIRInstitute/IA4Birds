@@ -1,4 +1,5 @@
 import { Spacer } from "@nextui-org/spacer";
+import { Tooltip } from "@nextui-org/tooltip";
 import { CustomCard } from "./card/CameraCard";
 import { useEffect, useState } from "react";
 import * as React from "react";
@@ -8,6 +9,7 @@ import {
   Button, Input, Switch, Tabs, Tab, Select, SelectItem
 } from "@nextui-org/react";
 
+import { RxQuestionMarkCircled } from "react-icons/rx";
 import CameraService from "./services/CameraDataService";
 
 // Definición del tipo Camera
@@ -31,6 +33,7 @@ const CameraComponent = () => {
   const [cameraLocation, setCameraLocation] = useState("");
   const [cameraUrl, setCameraUrl] = useState("");
   const [cameraStatus, setCameraStatus] = useState<"active" | "inactive">("inactive");
+  const [cameraAvailability, setCameraAvailability] = useState<"public" | "private">("private");
   const [cameraSourceType, setCameraSourceType] = useState("RTSP");
   const [datosGPS, setDatosGPS] = useState({ latitude: "", longitude: "" });
   const [storageInfo, setStorageInfo] = useState("");
@@ -62,6 +65,7 @@ const CameraComponent = () => {
     setCameraSourceType("RTSP");
     setDatosGPS({ latitude: "", longitude: "" });
     setCameraStatus("inactive");
+    setCameraAvailability("private");
     setStorageInfo("");
     setAdditionalData("");
   };
@@ -76,7 +80,8 @@ const CameraComponent = () => {
       latitude: datosGPS.latitude,
       longitude: datosGPS.longitude,
       storage_info: storageInfo,
-      additional_data: additionalData
+      additional_data: additionalData,
+      availability: cameraAvailability,
     };
 
     console.log("Datos de la nueva cámara:", newCameraData);
@@ -152,16 +157,16 @@ const CameraComponent = () => {
                 </div>
                 <div className="mb-4">
                   <Select label="Tipo de Fuente" value={cameraSourceType} onChange={(e) => setCameraSourceType(e.target.value)}>
-                  <SelectItem key="RTSP" value="RTSP">RTSP</SelectItem>
-                  <SelectItem key="RTMP" value="RTMP">RTMP</SelectItem>
-                  <SelectItem key="HLS" value="HLS">HLS</SelectItem>
-                  <SelectItem key="WebRTC" value="WebRTC">WebRTC</SelectItem>
-                  <SelectItem key="YouTube" value="YouTube">YouTube</SelectItem>
-                  <SelectItem key="Twitch" value="Twitch">Twitch</SelectItem>
-                  <SelectItem key="MJPEG" value="MJPEG">MJPEG</SelectItem>
-                  <SelectItem key="DASH" value="DASH">DASH</SelectItem>
-                  <SelectItem key="Other" value="Other">Other</SelectItem>
-                </Select>
+                    <SelectItem key="RTSP" value="RTSP">RTSP</SelectItem>
+                    <SelectItem key="RTMP" value="RTMP">RTMP</SelectItem>
+                    <SelectItem key="HLS" value="HLS">HLS</SelectItem>
+                    <SelectItem key="WebRTC" value="WebRTC">WebRTC</SelectItem>
+                    <SelectItem key="YouTube" value="YouTube">YouTube</SelectItem>
+                    <SelectItem key="Twitch" value="Twitch">Twitch</SelectItem>
+                    <SelectItem key="MJPEG" value="MJPEG">MJPEG</SelectItem>
+                    <SelectItem key="DASH" value="DASH">DASH</SelectItem>
+                    <SelectItem key="Other" value="Other">Other</SelectItem>
+                  </Select>
                 </div>
 
                 <div className="mb-4">
@@ -182,6 +187,19 @@ const CameraComponent = () => {
                 </div>
                 <div className="mb-4">
                   <Input label="Datos de Almacenamiento" value={storageInfo} onChange={(e) => setStorageInfo(e.target.value)} />
+                </div>
+                <div className="mb-4 flex items-center gap-4">
+                  <span>Visibilidad de la cámara:</span>
+                  <Switch
+                    isSelected={cameraAvailability === "public"}
+                    onChange={(e) => setCameraAvailability(e.target.checked ? "public" : "private")}
+                  />
+                  <p className="text-small text-default-500">{cameraAvailability === "public" ? "Pública" : "Privada"}</p>
+                  <Tooltip content="Si selecciona 'pública' la cámara será visible para todos los usuarios, en cambio, si selecciona 'privada' sólo será visible para usted.">
+                    <span className="cursor-pointer text-lg text-gray-500 ml-auto">
+                      <RxQuestionMarkCircled />
+                    </span>
+                  </Tooltip>
                 </div>
               </Tab>
               <Tab key="otro" title="Propia">
