@@ -1,9 +1,6 @@
-import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-
 import responseMessages from "../utils/messages/global.messages";
 import { User } from "../models/connection";
-import globalConfig from "../config/global.config";
 import utils from "../utils/utils";
 
 type RequestWithSession = Request & {

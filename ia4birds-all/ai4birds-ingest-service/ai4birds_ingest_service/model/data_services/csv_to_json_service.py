@@ -3,12 +3,13 @@ from .cleaner import DataCleaner
 from .coordinate_extractor import CoordinateExtractor
 from .paginator import Paginator
 from .row_mapper import RowMapper
+from functools import lru_cache
 
 class CSVToJsonService:
     """
     Service that orchestrates CSV-to-JSON conversion with cleaning, coordinate parsing, and pagination.
     """
-
+    @lru_cache(maxsize=128)
     def convert(self, filepath: str, page: int = 1, page_size: int = 10):
         """
         Main method to read, clean, extract, and paginate CSV data.
