@@ -10,20 +10,25 @@ RUN npm run build
 #Build backend
 WORKDIR /home/node/app
 COPY ./ai4birds-web-app-backend/ ./ai4birds-web-app-backend/
-WORKDIR /home/node/app/ai4birds-web-app-backend
+WORKDIR /home/node/app/ai4birds-web-app-backend/
 RUN npm install
 RUN npm run build
 
 FROM node:18.12.1-alpine as production
-WORKDIR /home/node/app
-COPY --from=builder /home/node/app/ ./
+WORKDIR /home/node/app/ai4birds-web-app-backend
+COPY --from=builder /home/node/app /home/node/app
 
-WORKDIR /home/node/app
+
+WORKDIR /home/node/app/ai4birds-web-app-backend
 
 RUN mkdir /home/node/app/ai4birds-web-app-backend/static
 
 RUN cp -r /home/node/app/ai4birds-web-app-frontend/dist/* /home/node/app/ai4birds-web-app-backend/static
 
+RUN mkdir /home/node/app/ai4birds-web-app-backend/dist/frontend 
+
+RUN mv /home/node/app/ai4birds-web-app-backend/static/* /home/node/app/ai4birds-web-app-backend/dist/frontend/
+
 EXPOSE 80
 
-CMD ["node", "./ai4birds-web-app-frontend/build/index.js"]
+CMD ["npm", "run", "start"]
