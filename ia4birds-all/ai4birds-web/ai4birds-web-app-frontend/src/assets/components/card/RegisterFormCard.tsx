@@ -27,13 +27,11 @@ export const CustomCard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Obtener email desde la URL
         const params = new URLSearchParams(window.location.search);
         const emailParam = params.get('email');
         const organizationParam = params.get('organization');
         const ocupationParam = params.get('ocupation');
         const entityParam = params.get('entity');
-        // Decodifica caracteres
         if (emailParam) {
             setEmail(decodeURIComponent(emailParam));  
         }

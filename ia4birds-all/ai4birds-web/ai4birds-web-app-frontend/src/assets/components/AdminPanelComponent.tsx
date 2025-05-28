@@ -78,7 +78,7 @@ const AdminPanelComponent = () => {
       }
     };
 
-    // Llamadas paralelas
+
     fetchXenocanto();
     fetchEbird();
     fetchEolic();

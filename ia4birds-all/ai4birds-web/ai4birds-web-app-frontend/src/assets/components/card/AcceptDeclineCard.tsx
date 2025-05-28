@@ -55,7 +55,6 @@ export const CustomCard = () => {
         const ocupationParam = params.get('ocupation');
         const entityParam = params.get('entity');
  
-        //Decodifica los valores de la URL
         if (emailParam) setEmail(decodeURIComponent(emailParam));
         if (descriptionParam) setDescription(decodeURIComponent(descriptionParam));
         if (organizationParam) setOrganization(decodeURIComponent(organizationParam));

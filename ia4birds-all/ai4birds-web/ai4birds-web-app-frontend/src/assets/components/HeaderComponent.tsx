@@ -84,7 +84,6 @@ const HeaderComponent = () => {
           to="/map-component" 
           color={location.pathname == "/map-component" ? '#55436F': 'foreground'} 
           style={location.pathname == "/map-component" ? { color:'#55436F'} : {textDecoration: 'none'} }
-        // Add more styles as needed
              aria-current="page">
             Mapa
           </Link>

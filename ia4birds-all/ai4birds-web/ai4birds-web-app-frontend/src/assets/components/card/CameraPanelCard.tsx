@@ -17,6 +17,7 @@ export const CustomCard = ({ cameraPanelData, onDelete }) => {
   const status = cameraPanelData.status || "No disponible";
   const name = cameraPanelData.name?.trim() || "Cámara sin nombre";
   const location = cameraPanelData.location || "Ubicación desconocida";
+  const isPublic = cameraPanelData.is_public ? "Pública" : "Privada";
 
   useEffect(() => {
     if (Hls.isSupported() && videoRef.current) {
@@ -73,6 +74,7 @@ export const CustomCard = ({ cameraPanelData, onDelete }) => {
               <p><strong>Datos GPS:</strong> {gpsData}</p>
               <p><strong>Estado cámara:</strong> {status}</p>
               <p><strong>Datos de almacenamiento:</strong> {storageInfo}</p>
+              <p><strong>Visibilidad:</strong> {isPublic}</p>
             </div>
           </div>
         </div>
