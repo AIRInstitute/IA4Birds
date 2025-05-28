@@ -17,7 +17,7 @@ module.exports = {
             DEFAULT: "#55436F",
           },
           secondary: {
-            DEFAULT: "#03637D",
+            DEFAULT: "white",
           },
           danger: {
             DEFAULT: "#31283d",
@@ -53,7 +53,7 @@ module.exports = {
             DEFAULT: "#03637D",
           },
           secondary: {
-            DEFAULT: "#55436F",
+            DEFAULT: "white",
           },
           danger: {
             DEFAULT: "#31283d",

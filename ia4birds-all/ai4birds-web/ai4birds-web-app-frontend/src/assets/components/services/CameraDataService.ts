@@ -23,6 +23,7 @@ class CameraService {
     storage_info?: string;
     additional_data?: string;
     availability?: string;
+    is_public: boolean;
   }) {
     const response = await api.post("/camera", cameraData);
     return response.data;
@@ -39,6 +40,15 @@ class CameraService {
 
   async getPrivateCameras() {
     const response = await api.get("/camera/private", {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    });
+    return response.data;
+  }
+
+  async deleteCamera(id: number) {
+    const response = await api.delete(`/camera/${id}`, {
       headers: {
         "x-access-token": getToken(),
       },
