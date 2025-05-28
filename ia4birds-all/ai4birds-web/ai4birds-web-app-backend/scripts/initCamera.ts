@@ -32,6 +32,7 @@ const insertDefaultCamera = async () => {
 
     const playback_url = `${globalConfig.streamBaseURL}/${name}/index.m3u8`;
 
+    // Insertar en la base de datos con los nuevos campos requeridos
     await Camera.create({
       name,
       source_type: "RTSP",
@@ -39,6 +40,12 @@ const insertDefaultCamera = async () => {
       location,
       status: "pending",
       playback_url,
+      latitude: null,
+      longitude: null,
+      storage_info: null,
+      additional_data: null,
+      is_public: true,
+      user_id: 1
     });
 
     console.log("Default camera registered in MediaMTX and database.");
