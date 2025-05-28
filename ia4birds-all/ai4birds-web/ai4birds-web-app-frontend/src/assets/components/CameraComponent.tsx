@@ -10,9 +10,9 @@ import {
 } from "@nextui-org/react";
 
 import { RxQuestionMarkCircled } from "react-icons/rx";
+import { RxTrash } from "react-icons/rx";
 import CameraService from "./services/CameraDataService";
 
-// Definición del tipo Camera
 type Camera = {
   id: number;
   name: string;
@@ -25,7 +25,7 @@ type Camera = {
   longitude?: string;
   storage_info?: string;
   additional_data?: string;
-  is_public?: boolean; // Ahora es booleano
+  is_public: boolean;
 };
 
 const CameraComponent = () => {
@@ -34,34 +34,30 @@ const CameraComponent = () => {
   const [cameraLocation, setCameraLocation] = useState("");
   const [cameraUrl, setCameraUrl] = useState("");
   const [cameraStatus, setCameraStatus] = useState<"active" | "inactive">("inactive");
-  const [cameraIsPublic, setCameraIsPublic] = useState<boolean>(false); // false por defecto (privada)
+  const [cameraIsPublic, setCameraIsPublic] = useState<boolean>(false);
   const [cameraSourceType, setCameraSourceType] = useState("RTSP");
   const [datosGPS, setDatosGPS] = useState({ latitude: "", longitude: "" });
   const [storageInfo, setStorageInfo] = useState("");
   const [additionalData, setAdditionalData] = useState("");
   const [activeTab, setActiveTab] = useState("externa");
   const [camerasData, setCamerasData] = useState<Camera[]>([]);
-  const [viewTab, setViewTab] = useState("public"); // Estado para la pestaña de visualización
-  const isLoggedIn = localStorage.getItem("accessToken"); // Obtiene el token de sesión
+  const [viewTab, setViewTab] = useState("public");
+  const isLoggedIn = localStorage.getItem("accessToken");
+  const [cameraToDelete, setCameraToDelete] = useState<number | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCameras = async () => {
       try {
         const data = await CameraService.getAllCamera();
-        // Mapea los datos para asegurar que 'is_public' tenga un valor por defecto si no existe
-        const processedData = data.map((camera: Camera) => {
-          console.log(`Cámara ID: ${camera.id}, is_public recibido del backend: ${camera.is_public}`);
-          return {
-            ...camera,
-            is_public: typeof camera.is_public === 'boolean' ? camera.is_public : false,
-          };
-        });
+        const processedData = data.map((camera: Camera) => ({
+          ...camera,
+          is_public: typeof camera.is_public === 'boolean' ? camera.is_public : false,
+        }));
 
-        // FILTRADO ADICIONAL: Si no hay sesión iniciada, solo muestra cámaras públicas
         if (!isLoggedIn) {
           const publicCamerasOnly = processedData.filter(camera => camera.is_public);
           setCamerasData(publicCamerasOnly);
-          // Asegurarse de que si no hay sesión, la pestaña activa sea siempre "public"
           setViewTab("public");
         } else {
           setCamerasData(processedData);
@@ -72,7 +68,7 @@ const CameraComponent = () => {
       }
     };
     fetchCameras();
-  }, [isLoggedIn]); // Dependencia en isLoggedIn para re-ejecutar cuando cambia el estado de la sesión
+  }, [isLoggedIn]);
 
   const handleGPSChange = (name: string, value: string) => {
     setDatosGPS((prevState) => ({ ...prevState, [name]: value }));
@@ -85,7 +81,7 @@ const CameraComponent = () => {
     setCameraSourceType("RTSP");
     setDatosGPS({ latitude: "", longitude: "" });
     setCameraStatus("inactive");
-    setCameraIsPublic(false); // Resetear también a privada por defecto
+    setCameraIsPublic(false);
     setStorageInfo("");
     setAdditionalData("");
   };
@@ -101,7 +97,7 @@ const CameraComponent = () => {
       longitude: datosGPS.longitude,
       storage_info: storageInfo,
       additional_data: additionalData,
-      is_public: cameraIsPublic, // Incluir el valor booleano de is_public
+      is_public: cameraIsPublic,
     };
 
     console.log("Datos de la nueva cámara (enviados al backend):", newCameraData);
@@ -110,7 +106,6 @@ const CameraComponent = () => {
       const createdCamera = await CameraService.insertCamera(newCameraData);
       console.log("Camera creada (respuesta del backend):", createdCamera);
 
-      // Actualiza la lista sin recargar, usando directamente el valor de cameraIsPublic
       setCamerasData((prev) => [...prev, {
         ...createdCamera,
         is_public: cameraIsPublic
@@ -123,7 +118,31 @@ const CameraComponent = () => {
     }
   };
 
-  // Función para renderizar las tarjetas de cámara según la disponibilidad (pública/privada)
+  const openDeleteModal = (cameraId: number) => {
+    setCameraToDelete(cameraId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setCameraToDelete(null);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteCamera = async () => {
+    if (cameraToDelete !== null) {
+      try {
+        await CameraService.deleteCamera(cameraToDelete);
+        console.log(`Cámara con ID ${cameraToDelete} borrada.`);
+
+        const updatedCameras = camerasData.filter(camera => camera.id !== cameraToDelete);
+        setCamerasData(updatedCameras);
+        closeDeleteModal();
+      } catch (error) {
+        console.error("Error deleting camera:", error);
+      }
+    }
+  };
+
   const renderCameraCards = (tabAvailability: "public" | "private") => (
     <div className="flex flex-wrap justify-center gap-8 mt-6">
       {camerasData
@@ -131,19 +150,30 @@ const CameraComponent = () => {
           return tabAvailability === "public" ? camera.is_public : !camera.is_public;
         })
         .map((camera) => (
-          <Link key={camera.id} to={`/camera-panel-component?camera=${camera.id}`}>
-            <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
-              <CustomCard
-                cameraData={{
-                  id: camera.id,
-                  name: camera.name,
-                  location: camera.location || "Desconocida",
-                  views: "N/A",
-                  url: camera.playback_url,
-                }}
-              />
-            </div>
-          </Link>
+          <div key={camera.id} className="relative">
+            <Link to={`/camera-panel-component?camera=${camera.id}`}>
+              <div className="transform transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+                <CustomCard
+                  cameraData={{
+                    id: camera.id,
+                    name: camera.name,
+                    location: camera.location || "Desconocida",
+                    views: "N/A",
+                    url: camera.playback_url,
+                  }}
+                />
+              </div>
+            </Link>
+            {isLoggedIn && (
+              <Button
+                color="secondary"
+                className="absolute top-2 right-2 z-10 top-3"
+                onClick={() => openDeleteModal(camera.id)}
+              >
+                <RxTrash size={20} color="black"/>
+              </Button>
+            )}
+          </div>
         ))}
     </div>
   );
@@ -152,7 +182,6 @@ const CameraComponent = () => {
     <div className="camera-component mx-6 my-6">
       <Spacer y={5} />
 
-      {/* Se añaden las pestañas para cámaras públicas y privadas */}
       <Tabs
         aria-label="Tipo de cámaras"
         selectedKey={viewTab}
@@ -162,7 +191,7 @@ const CameraComponent = () => {
         <Tab key="public" title="Cámaras Públicas">
           {renderCameraCards("public")}
         </Tab>
-        {isLoggedIn && ( // La pestaña "Cámaras Privadas" solo se muestra si hay sesión iniciada
+        {isLoggedIn && (
           <Tab key="private" title="Cámaras Privadas">
             {renderCameraCards("private")}
           </Tab>
@@ -221,7 +250,7 @@ const CameraComponent = () => {
                 <div className="mb-4">
                   <Input label="Longitud" value={datosGPS.longitude} onChange={(e) => handleGPSChange("longitude", e.target.value)} />
                 </div>
-              
+
                 <div className="mb-4 flex items-center gap-4">
                   <span>Estado Cámara:</span>
                   <Switch
@@ -233,12 +262,12 @@ const CameraComponent = () => {
                 <div className="mb-4">
                   <Input label="Datos de Almacenamiento" value={storageInfo} onChange={(e) => setStorageInfo(e.target.value)} />
                 </div>
-                {/* Switch para la visibilidad de la cámara, ahora usando is_public */}
+
                 <div className="mb-4 flex items-center gap-4">
                   <span>Visibilidad de la cámara:</span>
                   <Switch
-                    isSelected={cameraIsPublic} // Usa cameraIsPublic directamente
-                    onChange={(e) => setCameraIsPublic(e.target.checked)} // Actualiza el booleano
+                    isSelected={cameraIsPublic}
+                    onChange={(e) => setCameraIsPublic(e.target.checked)}
                   />
                   <p className="text-small text-default-500">{cameraIsPublic ? "Pública" : "Privada"}</p>
                   <Tooltip content="Si selecciona 'pública' la cámara será visible para todos los usuarios, en cambio, si selecciona 'privada' sólo será visible para usted.">
@@ -261,6 +290,23 @@ const CameraComponent = () => {
           <ModalFooter className="flex justify-between">
             <Button onClick={() => { setIsModalOpen(false); resetForm(); }}>Cancelar</Button>
             <Button color="primary" onClick={handleAddCamera}>Agregar</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
+        <ModalContent>
+          <ModalHeader>Confirmar Borrado</ModalHeader>
+          <ModalBody>
+            <p>¿Estás seguro de que quieres borrar esta cámara?</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="default" onClick={closeDeleteModal}>
+              Cancelar
+            </Button>
+            <Button color="danger" onClick={handleDeleteCamera}>
+              Borrar
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

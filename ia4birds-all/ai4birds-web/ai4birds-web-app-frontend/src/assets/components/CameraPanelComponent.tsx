@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CustomCard } from './card/CameraPanelCard';
 import CameraService from './services/CameraDataService';
 
-// Define Camera type (igual que en el resto del proyecto)
 type Camera = {
   id: number;
   name: string;
@@ -16,6 +15,7 @@ type Camera = {
   longitude?: string;
   storage_info?: string;
   additional_data?: string;
+  is_public: boolean;
 };
 
 const CameraPanelComponent = () => {
@@ -24,8 +24,8 @@ const CameraPanelComponent = () => {
   const selectedDataFromQuery = Number(queryParam);
   const [selectedCamera, setSelectedCamera] = React.useState<Camera | null>(null);
   const [allCameras, setAllCameras] = React.useState<Camera[]>([]);
+  const navigate = useNavigate();
 
-  // Fetch all cameras once to populate the dropdown
   React.useEffect(() => {
     const fetchCameras = async () => {
       try {
@@ -33,19 +33,20 @@ const CameraPanelComponent = () => {
         setAllCameras(data);
 
         const validCamera = data.find(cam => cam.id === selectedDataFromQuery);
-        const selectedId = validCamera ? selectedDataFromQuery : data[0]?.id || 1;
+        const selectedId = validCamera ? selectedDataFromQuery : data[0]?.id || (data.length > 0 ? data[0].id : null);
 
-        setSearchParams({ camera: selectedId.toString() });
-        fetchCameraById(selectedId);
+        if (selectedId !== null) {
+          setSearchParams({ camera: selectedId.toString() });
+          fetchCameraById(selectedId);
+        }
       } catch (error) {
         console.error("Error fetching cameras:", error);
       }
     };
 
     fetchCameras();
-  }, []);
+  }, [selectedDataFromQuery, setSearchParams]);
 
-  // Fetch a single camera when the param changes
   const fetchCameraById = async (id: number) => {
     try {
       const camera = await CameraService.getCameraById(id);
@@ -61,10 +62,26 @@ const CameraPanelComponent = () => {
     fetchCameraById(selectedId);
   };
 
+  const handleDeleteCamera = async (idToDelete: number, nameToDelete: string) => {
+    if (window.confirm(`¿Estás seguro de que quieres borrar la cámara "${nameToDelete}"?`)) {
+      try {
+        await CameraService.deleteCamera(idToDelete);
+        console.log(`Cámara con ID ${idToDelete} borrada.`);
+        navigate('/camera-component');
+      } catch (error) {
+        console.error("Error deleting camera:", error);
+      }
+    }
+  };
+
   return (
     <div className="camera-panel-container">
-      <div className="w-full flex justify-end">
-        <select onChange={handleDropdownChange} value={selectedCamera?.id || ""} className="mr-6 mb-2 cursor-pointer">
+      <div className="w-full flex justify-end items-center mb-2">
+        <select
+          onChange={handleDropdownChange}
+          value={selectedCamera?.id || ""}
+          className="cursor-pointer mr-6 "
+        >
           {allCameras.map(item => (
             <option key={item.id} value={item.id}>
               {item.name}
@@ -73,7 +90,11 @@ const CameraPanelComponent = () => {
         </select>
       </div>
       <div className="card-container flex-grow mx-5">
-        {selectedCamera && <CustomCard cameraPanelData={selectedCamera} />}
+        {selectedCamera && (
+          <CustomCard cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+        )}
+        {!selectedCamera && allCameras.length > 0 && <p className="text-center text-gray-500">Selecciona una cámara del desplegable.</p>}
+        {!selectedCamera && allCameras.length === 0 && <p className="text-center text-gray-500">No hay cámaras disponibles.</p>}
       </div>
     </div>
   );
