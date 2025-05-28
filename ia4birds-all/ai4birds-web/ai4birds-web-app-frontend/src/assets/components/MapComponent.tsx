@@ -22,7 +22,6 @@ import {Switch} from "@nextui-org/react";
 // import { ImageOverlay } from 'react-leaflet';
 // import Image from '../images/ps-rn2k_cyl_zepa.png';
 
-// Import or define castillaYLeonBorders
 import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 
 const Mapa = () => {
@@ -382,16 +381,14 @@ const Mapa = () => {
   const handleButtonClickEolic = (clickedPoint) => {
     const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers, maxDistance);
   
-    console.log("Puntos dentro de 10km:", nearbyEolicMarkers); // Verifica que no está vacío
-  
-    setSelectedButton(nearbyEolicMarkers); // Guarda solo los puntos cercanos
+    setSelectedButton(nearbyEolicMarkers);
     setSidebarEolicOpen(true);
 
     if (nearbyEolicMarkers.length > 0) {
       setTooltipContent(`Zona de exclusión eólica: ${nearbyEolicMarkers.espacio}`);
-      setTooltipVisible(true); // Show tooltip
+      setTooltipVisible(true);
     } else {
-      setTooltipVisible(false); // Hide tooltip if no markers
+      setTooltipVisible(false);
     }
   };
 
@@ -943,7 +940,7 @@ const Mapa = () => {
 
         {selectedButtonEolicResources && selectedButtonEolicResources.lat && selectedButtonEolicResources.lng && (
           <SideBarEolicResources
-            key={selectedButtonEolicResources.lat + '-' + selectedButtonEolicResources.lng} // Clave única
+            key={selectedButtonEolicResources.lat + '-' + selectedButtonEolicResources.lng}
             isOpen={sidebarEolicResourcesOpen}
             onCancel={()=>setSidebarEolicResourcesOpen(false)}
             eolicResourcesdata={selectedButtonEolicResources}

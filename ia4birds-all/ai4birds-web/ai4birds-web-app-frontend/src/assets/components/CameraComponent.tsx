@@ -182,21 +182,23 @@ const CameraComponent = () => {
     <div className="camera-component mx-6 my-6">
       <Spacer y={5} />
 
-      <Tabs
-        aria-label="Tipo de cámaras"
-        selectedKey={viewTab}
-        onSelectionChange={(key) => setViewTab(String(key))}
-        className="mb-6"
-      >
-        <Tab key="public" title="Cámaras Públicas">
-          {renderCameraCards("public")}
-        </Tab>
-        {isLoggedIn && (
-          <Tab key="private" title="Cámaras Privadas">
-            {renderCameraCards("private")}
+      <div className="text-center mb-6">
+        <Tabs
+          aria-label="Tipo de cámaras"
+          selectedKey={viewTab}
+          onSelectionChange={(key) => setViewTab(String(key))}
+          className="mb-6"
+        >
+          <Tab key="public" title="Cámaras Públicas">
+            {renderCameraCards("public")}
           </Tab>
-        )}
-      </Tabs>
+          {isLoggedIn && (
+            <Tab key="private" title="Cámaras Privadas">
+              {renderCameraCards("private")}
+            </Tab>
+          )}
+        </Tabs>
+      </div>
 
       {isLoggedIn && (
         <div

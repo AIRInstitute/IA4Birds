@@ -14,7 +14,7 @@ export const CustomCardData = ({ panelAdminData }) => {
         <h1 className="font-bold text-xl">Panel de Datos</h1>
       </CardHeader>
       <CardBody className="overflow-auto py-2">
-        <div className="grid grid-cols-2 gap-4 h-[370px]"> {/* Grid para las dos primeras cards */}
+        <div className="grid grid-cols-2 gap-4 h-[370px]">
         {/* <div className="grid grid-cols-2 gap-4 h-[472px]"> */}
           {panelAdminData.slice(0, 2).map((data) => (
             <Card key={data.id} className="w-full py-3">
@@ -41,7 +41,7 @@ export const CustomCardData = ({ panelAdminData }) => {
           ))}
         </div>
         {panelAdminData.length > 2 && (
-          <div className="w-full py-3 mt-4"> {/* Container for the third card to take full width */}
+          <div className="w-full py-3 mt-4">
             <Card>
               <h2 className="p-1 text-center font-bold">{panelAdminData[2].name}</h2>
               <CardBody>
@@ -56,7 +56,7 @@ export const CustomCardData = ({ panelAdminData }) => {
                   ) : (
                     <CopyBlock
                       language="json"
-                      text={JSON.stringify(panelAdminData[2].data, null, 2).slice(0, 1000)} // Fallback para objetos
+                      text={JSON.stringify(panelAdminData[2].data, null, 2).slice(0, 1000)}
                       codeBlock
                       showLineNumbers={false}
                     />
