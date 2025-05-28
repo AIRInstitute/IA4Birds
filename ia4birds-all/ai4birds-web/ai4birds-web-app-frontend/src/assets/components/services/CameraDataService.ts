@@ -37,7 +37,6 @@ class CameraService {
     return response.data;
   }
 
-  // Si en el futuro necesitas este también:
   async getPrivateCameras() {
     const response = await api.get("/camera/private", {
       headers: {
