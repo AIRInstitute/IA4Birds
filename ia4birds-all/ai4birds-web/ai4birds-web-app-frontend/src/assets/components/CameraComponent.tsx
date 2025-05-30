@@ -49,24 +49,21 @@ const CameraComponent = () => {
   useEffect(() => {
     const fetchCameras = async () => {
       try {
-        const data = await CameraService.getAllCamera();
-        const processedData = data.map((camera: Camera) => ({
-          ...camera,
-          is_public: typeof camera.is_public === 'boolean' ? camera.is_public : false,
-        }));
+        let fetchedData: Camera[] = [];
 
         if (!isLoggedIn) {
-          const publicCamerasOnly = processedData.filter(camera => camera.is_public);
-          setCamerasData(publicCamerasOnly);
-          setViewTab("public");
+          fetchedData = await CameraService.getPublicCameras();
         } else {
-          setCamerasData(processedData);
+          fetchedData = await CameraService.getAccessibleCameras();
         }
-        console.log("Datos de cámaras recibidos (procesados y filtrados por sesión):", processedData);
-      } catch (err) {
-        console.error("Error fetching cameras:", err);
+
+        setCamerasData(fetchedData);
+        setViewTab("public");
+      } catch (error) {
+        console.error("Error fetching cameras:", error);
       }
     };
+
     fetchCameras();
   }, [isLoggedIn]);
 

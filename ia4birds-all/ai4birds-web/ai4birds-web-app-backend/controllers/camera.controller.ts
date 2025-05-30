@@ -28,6 +28,24 @@ const getAll = async (req: Request, res: Response) => {
 };
 
 /**
+ * Get all public cameras without requiring authentication
+ * @param {Request} req - Request object
+ * @param {Response} res - Response object
+ * @returns {Camera[]} Array of public cameras
+ */
+const getAllPublicCameras = async (req: Request, res: Response) => {
+  try {
+    const publicCameras = await Camera.findAll({
+      where: { is_public: true },
+    });
+    return res.json(publicCameras);
+  } catch (error) {
+    console.error("Error fetching public cameras:", error);
+    return res.status(500).send("Server error");
+  }
+};
+
+/**
  * Get a camera by its ID
  * @param {Request} req - Request object with camera ID in req.params.id
  * @param {Response} res - Response object
@@ -254,4 +272,4 @@ const remove = async (req: Request, res: Response) => {
   }
 };
 
-export default { getAll, getById, getVisibleCameras, getUserPrivateCameras, create, update, remove };
+export default { getAll, getAllPublicCameras,  getById, getVisibleCameras, getUserPrivateCameras, create, update, remove };

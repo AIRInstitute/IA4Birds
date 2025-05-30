@@ -29,7 +29,8 @@ const CameraPanelComponent = () => {
   React.useEffect(() => {
     const fetchCameras = async () => {
       try {
-        const data = await CameraService.getAllCamera();
+        //const data = await CameraService.getAllCamera();
+        const data = await CameraService.getAccessibleCameras();
         setAllCameras(data);
 
         const validCamera = data.find(cam => cam.id === selectedDataFromQuery);

@@ -7,6 +7,11 @@ class CameraService {
     return response.data;
   }
 
+  async getPublicCameras() {
+    const response = await api.get("/camera/public");
+    return response.data;
+  }
+
   async getCameraById(id: number) {
     const response = await api.get(`/camera/${id}`);
     return response.data;

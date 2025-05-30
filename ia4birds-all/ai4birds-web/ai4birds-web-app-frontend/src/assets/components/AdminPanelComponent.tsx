@@ -68,7 +68,8 @@ const AdminPanelComponent = () => {
 
     const fetchCameras = async () => {
       try {
-        const res = await CameraService.getAllCamera();
+        //const res = await CameraService.getAllCamera();
+        const res = await CameraService.getAccessibleCameras();
         setCameraAdminData(res);
       } catch (err) {
         console.error("Error cargando cámaras:", err);

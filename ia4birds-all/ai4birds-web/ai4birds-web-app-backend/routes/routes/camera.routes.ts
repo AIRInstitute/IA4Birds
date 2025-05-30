@@ -7,6 +7,7 @@ export default () => {
    const cameraRouter: Router = Router();
 
   cameraRouter.get("/", cameraController.getAll);
+  cameraRouter.get("/public", cameraController.getAllPublicCameras);
   cameraRouter.get("/accessible", authMiddleware.verifyToken, cameraController.getVisibleCameras);
   cameraRouter.get("/private", authMiddleware.verifyToken, cameraController.getUserPrivateCameras);
   cameraRouter.get("/:id", cameraController.getById);
