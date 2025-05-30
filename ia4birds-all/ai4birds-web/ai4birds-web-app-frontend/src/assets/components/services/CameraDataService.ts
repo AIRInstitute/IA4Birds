@@ -22,10 +22,15 @@ class CameraService {
     longitude?: string;
     storage_info?: string;
     additional_data?: string;
-    availability?: string;
     is_public: boolean;
   }) {
-    const response = await api.post("/camera", cameraData);
+
+    const response = await api.post("/camera", cameraData, {
+      headers: {
+        'x-access-token': getToken(),
+      },
+    });
+
     return response.data;
   }
 
