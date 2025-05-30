@@ -61,8 +61,8 @@ const getVisibleCameras = async (req: RequestWithSession, res: Response) => {
     const cameras = await Camera.findAll({
       where: {
         [Op.or]: [
-          { is_public: false },
-          { user_id: userId },
+          { is_public: true },
+          { [Op.and]: [{ is_public: false }, { user_id: userId }] }
         ],
       },
     });
