@@ -9,4 +9,4 @@ from flask_restx import Api
 
 api = Api(version='1.0',
 		  title='ai4birds-coordinate-service',
-		  description="Project description")
+		  description="API for ai4birds-coordinate-service",)

@@ -54,12 +54,11 @@ class DataBird(Resource):
         dict: Combined results from both sources.
     """
     def get(self):
-        max_retries = 3
-        backoff_factor = 1
-        ebird_data_raw = EBird_Extractor().ebird_query(max_retries=max_retries, backoff_factor=backoff_factor)
-        xenocanto_data = XenoCanto_Extractor().xenocanto_query(max_retries=max_retries, backoff_factor=backoff_factor)
 
-        results = combine_data(data_ebird=ebird_data_raw, data_xenocanto=xenocanto_data) if ebird_data_raw and xenocanto_data else {"error": "Failed to retrieve data from one or both sources."}
+        ebird_data_raw = EBird_Extractor().ebird_query()
+        xenocanto_data = XenoCanto_Extractor().xenocanto_query()
+
+        results = combine_data(data_ebird=ebird_data_raw, data_xenocanto=xenocanto_data) if (ebird_data_raw and xenocanto_data) else {"error": "Failed to retrieve data from one or both sources."}
         return results
 
 
@@ -72,7 +71,7 @@ class XenoCanto(Resource):
         list: Raw data from XenoCanto.
     """
     def get(self):
-        data = XenoCanto_Extractor().xenocanto_query(max_retries=3, backoff_factor=1)
+        data = XenoCanto_Extractor().xenocanto_query()
         if data:
             model = XenoCantoModel()
             objects = [XenoCantoData.from_dict(item) for item in data]
@@ -89,7 +88,7 @@ class EBird(Resource):
         list or dict: Raw data from eBird or error message.
     """
     def get(self):
-        data = EBird_Extractor().ebird_query(max_retries=3, backoff_factor=1)
+        data = EBird_Extractor().ebird_query()
         if data:
             model = EBirdModel()
             objects = [EBirdData.from_dict(item) for item in data]
@@ -139,7 +138,7 @@ class ExclusionMap(Resource):
             _ = flask_request.get_json()
             params = exclusionmap_parser.parse_args()
             service = CSVToJsonService()
-            data = service.convert(config.EXCLUSION_EOLICA_CSV_PATH, params['page'], params['page_size'])
+            data = service.convert(config.EXCLUSION_EOLICA_CSV_PATH, page=params['page'], page_size=params['page_size'])
             if not data['data']:
                 return jsonify({"message": "Data not found for the specified page parameters"}), 404
             return jsonify(data)
@@ -194,11 +193,12 @@ class StreamExclusionData(Resource):
     @limiter.limit('1000000/hour')
     def post(self):
         try:
+            URL = f'http://{config.BACKEND_URL}/api/data/exclusionmap/stream-exclusion-data?client_id={client_id}'
             streamer = CSVStreamer()
             client_id = flask_request.args.get('id')
             for batch in streamer.stream(config.EXCLUSION_EOLICA_CSV_PATH):
-                url = f'http://{config.BACKEND_URL}/api/data/exclusionmap/stream-exclusion-data?client_id={client_id}'
-                response = requests.post(url, json=batch)
+                
+                response = requests.post(URL, json=batch)
                 if response.status_code != 200:
                     logger.warning(f"Failed to send batch: {response.status_code}")
                 time.sleep(1)
