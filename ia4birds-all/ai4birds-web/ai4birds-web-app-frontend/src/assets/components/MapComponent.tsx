@@ -40,6 +40,8 @@ const Mapa = () => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipContent, setTooltipContent] = useState("");
   const [selectedCircle, setSelectedCircle] = useState(null);
+  const [gridData, setGridData] = useState<GeoJsonObject | null>(null);
+
   const maxDistance = 10000;
 
   const birdData = [
@@ -114,6 +116,7 @@ const Mapa = () => {
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [dataBird, setDataBird] = useState([]);
+  const [showGridLayer, setShowGridLayer] = useState(false);
   
 
   //SSE ServerSent Events
@@ -207,6 +210,19 @@ const Mapa = () => {
     // Esta función se ejecutará cada vez que setEolicMarkers cambie
     setMarkersLoaded(true);
   }, [eolicMarkers]);
+
+  useEffect(() => {
+    fetch('/data/grid_cyl.geojson')
+      .then(res => res.json())
+      .then(data => {
+        console.log("GeoJSON cargado:", data);
+        setGridData(data);
+      })
+      .catch(err => {
+        console.error("Error cargando el GeoJSON:", err);
+      });
+  }, []);
+
 
   //====================================================================
   //EOLIC MARKERS
@@ -524,6 +540,23 @@ const Mapa = () => {
                 </div>
                 )}
               </div>
+
+              <div className="flex items-center gap-2">
+                <TooltipNext placement="right" content="Capa cuadrícula mesoescalar">
+                  <Button
+                    className='camera'
+                    isIconOnly
+                    color={!showGridLayer ? 'primary' : 'danger'}
+                    size='lg'
+                    onClick={() => setShowGridLayer(!showGridLayer)}
+                  >
+                    🟦
+                  </Button>
+                </TooltipNext>
+                {showGridLayer && (
+                  <FaCheck />
+                )}
+              </div>
             </CardBody>
           </Card>
         </div>
@@ -700,6 +733,49 @@ const Mapa = () => {
               /> */}
             {/* )} */}
 
+            {showGridLayer && gridData && (
+              <GeoJSON
+              data={gridData}
+              style={(feature: any) => {
+                const props = feature.properties || {};
+                const coverage = props.coverage ?? 0;
+                const viento = props.viento_medio ?? 0;
+
+                let fillColor = "gray";
+                if (coverage > 25) {
+                  fillColor = "red";
+                } else if (viento < 5.5) {
+                  fillColor = "orange";
+                } else {
+                  fillColor = "green";
+                }
+
+                return {
+                  fillColor,
+                  color: "black",
+                  weight: 0.3,
+                  fillOpacity: 0.6,
+                };
+              }}
+              onEachFeature={(feature, layer) => {
+                const props = feature.properties || {};
+                const especies = props.bird_species?.join(", ") || "[]";
+
+                layer.bindTooltip(
+                  `
+                  FID: ${props.fid ?? "undefined"}<br/>
+                  Viento medio: ${props.viento_medio?.toFixed(2) ?? "N/A"} m/s<br/>
+                  WTG: ${props.wtg_count ?? 0}<br/>
+                  Aves observadas: ${props.bird_count ?? 0}<br/>
+                  Especies: ${especies}<br/>
+                  Cobertura: ${props.coverage?.toFixed(2) ?? "N/A"}
+                  `,
+                  { sticky: true }
+                );
+              }}
+            />
+            )}
+            
             {/* {showMarkersEolic && (
               <ImageOverlay
                 url={Image}  // Ruta local de la imagen
