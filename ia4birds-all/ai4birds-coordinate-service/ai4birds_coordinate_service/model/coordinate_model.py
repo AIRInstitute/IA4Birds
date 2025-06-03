@@ -1,14 +1,12 @@
 import requests
 import json
-
 from ai4birds_coordinate_service import config, logger
 
 class CheckModel:
-
+    HEADERS = {'Content-Type': 'application/json'}
     def get(self, id: int):
-        headers = {'Content-Type': 'application/json'}
         try:
-            response = requests.get(config.CRUD_URL, headers=headers, params={'id': id})
+            response = requests.get(config.CRUD_URL, headers=self.HEADERS, params={'id': id})
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
@@ -21,14 +19,12 @@ class CheckModel:
 
 
     def post(self, data: dict):
-        headers = {'Content-Type': 'application/json'}
-        
         try:
-            response = requests.post(config.CRUD_URL, headers=headers, json=data)
+            response = requests.post(config.CRUD_URL, headers=self.HEADERS, json=data)
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
-            
+
             else:
                 return {"status": "Not found"}, 404
 
@@ -36,10 +32,8 @@ class CheckModel:
             return {"status": f"Server Error {e}"}, 500
 
     def put(self, id: int, data:dict):
-        headers = {'Content-Type': 'application/json'}
-
         try:
-            response = requests.put(config.CRUD_URL, headers=headers, params={'id': id}, json=data)
+            response = requests.put(config.CRUD_URL, headers=self.HEADERS, params={'id': id}, json=data)
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
@@ -52,17 +46,15 @@ class CheckModel:
 
 
     def delete(self, id: int):
-        headers = {'Content-Type': 'application/json'}
-
         try:
-            response = requests.delete(config.CRUD_URL, headers=headers, params={'id': id})
+            response = requests.delete(config.CRUD_URL, headers=self.HEADERS, params={'id': id})
             if response.status_code == 200:
                 response = json.loads(response.content)
                 return response
-            
+
             else:
                 return {"status": "Not found"}, 404
-        
+
         except Exception as e:
             return {"status": f"Server Error {e}"}, 500
 

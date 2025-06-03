@@ -10,7 +10,8 @@ class XenoCantoModel:
         try:
             # Suponiendo que ya tienes el ID de la observación, modificar según necesidad
             recording_query = """
-            INSERT INTO recording (recordingId, location, quality, lat, lng, alt, file, fileName, time, date, observationId) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+            INSERT INTO recording (recordingId, location, quality, lat, lng, alt, file, fileName, time, date, observationId)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
             for rec in xenocanto_data.recordings:
                 recording_values = (rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], rec['fileName'], rec['time'], rec['date'], rec.get('observationId'))
@@ -54,7 +55,7 @@ class XenoCantoModel:
             # Consulta SQL para inserción en lote con manejo de conflictos
             recording_query = """
             INSERT INTO recording (recordingId, location, quality, lat, lng, alt, file, fileName, time, date, observationId)
-            VALUES %s ON CONFLICT (recordingId) DO NOTHING;
+                VALUES %s ON CONFLICT (recordingId) DO NOTHING;
             """
             # Utilizar execute_values del Singleton para realizar las inserciones
             if recording_values:  # Verificar si hay algo que insertar

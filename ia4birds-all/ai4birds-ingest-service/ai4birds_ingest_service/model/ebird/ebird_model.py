@@ -10,14 +10,16 @@ class EBirdModel:
         try:
             # Insertar especie
             species_query = """
-            INSERT INTO species (comName, sciName) VALUES (%s, %s) RETURNING id;
+            INSERT INTO species (comName, sciName)
+                VALUES (%s, %s) RETURNING id;
             """
             species_values = (ebird_data.com_name, ebird_data.sci_name)
             species_id = database.execute(species_query, species_values).fetchone()[0]
 
             # Insertar observaciones
             observation_query = """
-            INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId) VALUES (%s, %s, %s, %s, %s, %s, %s);
+            INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId)
+                VALUES (%s, %s, %s, %s, %s, %s, %s);
             """
             for obs in ebird_data.observations:
                 observation_values = (obs['locationId'], obs['locationName'], obs['lat'], obs['lng'], obs['date'], obs['numObservation'], species_id)
@@ -46,7 +48,10 @@ class EBirdModel:
             species_values = [(data.com_name, data.sci_name) for data in ebird_data_list]
            
             species_query = """
-            INSERT INTO species (comName, sciName) VALUES %s ON CONFLICT (comName, sciName) DO NOTHING RETURNING id, comName, sciName;
+            INSERT INTO species (comName, sciName)
+                VALUES %s
+                    ON CONFLICT (comName, sciName)
+                        DO NOTHING RETURNING id, comName, sciName;
             """
             database.execute_values(species_query, species_values, page_size=100)
             
@@ -68,7 +73,8 @@ class EBirdModel:
             # Insertar observaciones en lotes
             
             observation_query = """
-            INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId) VALUES %s;
+            INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId)
+                VALUES %s;
             """
             database.execute_values(observation_query, observation_values, page_size=100)
             

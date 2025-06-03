@@ -4,7 +4,6 @@
 # Author: AIRInstitute (@AIRInstitute on GitHub)
 from flask import Blueprint, request, jsonify
 import requests
-#from auth.decorators import require_role
 from ...utils.decorators import require_token
 from ai4birds_coordinate_service import config
 from flask_restx import Namespace, Resource
@@ -32,7 +31,6 @@ class EBird(Resource):
         """
 
         try:
-            logger.error(f"{config.URL_INGEST}/ebird/")
             response = requests.get(f"{config.URL_INGEST}/ebird/")
 
             if response.status_code != 200:
@@ -41,7 +39,7 @@ class EBird(Resource):
             data = response.json()
             return data, 200
         
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[eBird] Error response: {response.status_code} - {response.text}")
             return {"error": f"Failed to fetch eBird data: {error_message}"}, response.status_code
@@ -80,7 +78,7 @@ class Xenocanto(Resource):
             data = response.json()
             return data, 200
 
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[XenoCanto] Error response: {response.status_code} - {response.text}")
             return {"error": f"Failed to fetch XenoCanto data: {error_message}"}, response.status_code
@@ -119,7 +117,7 @@ class Sensitivity(Resource):
             data = response.json()
             return data, 200
 
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[Sensitivity] Error response: {response.status_code} - {response.text}")
             return {"error": f"Failed to fetch sensitivity data: {error_message}"}, response.status_code
@@ -151,7 +149,7 @@ class DataBird(Resource):
 
             return response.json(), 200
 
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[DataBird] Error: {response.status_code} - {response.text}")
             return {"error": f"Error retrieving DataBird information: {error_message}"}, response.status_code
@@ -177,7 +175,7 @@ class WindMap(Resource):
                 response.raise_for_status()
             return response.json(), 200
         
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[WindMap] Error: {response.status_code} - {response.text}")
             return {"error": f"Error getting wind map data: {error_message}"}, response.status_code
@@ -203,7 +201,7 @@ class ExclusionMap(Resource):
                 response.raise_for_status()
             return response.json(), 200
         
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[ExclusionMap] Error: {response.status_code} - {response.text}")
             return {"error": f"Error getting exclusion map data: {error_message}"}, response.status_code
@@ -225,11 +223,13 @@ class ExclusionMapZip(Resource):
         """
         try:
             response = requests.get(f"{config.URL_INGEST}/exclusionmap/zip")
-            return (response.content, response.status_code, {
-                "Content-Type": "application/zip",
-                "Content-Disposition": "attachment; filename=data.zip"
+            if response.status_code != 200:
+                response.raise_for_status()
+            return (response.content, 200, {
+            "Content-Type": "application/zip",
+            "Content-Disposition": "attachment; filename=data.zip"
             })
-
+            
         except Exception as e:
             logger.error(f"[ExclusionMapZip] Exception: {e}")
             return {"error": "Failed to download exclusion map ZIP."}, 500
@@ -248,10 +248,11 @@ class ExclusionMapAll(Resource):
             response = requests.get(f"{config.URL_INGEST}/exclusionmap/all")
 
             # Si falla, lanzar excepción controlada
-            response.raise_for_status()
+           
+            if response.status_code != 200:
+                response.raise_for_status()
+            return response.json(), 200
 
-            # Devolver el JSON directamente
-            return response.json(), response.status_code
 
         except requests.exceptions.RequestException as e:
             logger.error(f"[ExclusionMapAll] Request error: {e}")
@@ -274,7 +275,7 @@ class ExclusionMapStream(Resource):
                 response.raise_for_status()
             return response.json(), 200
         
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[ExclusionMapStream] Error: {response.status_code} - {response.text}")
             return {"error": f"Error streaming exclusion data: {error_message}"}, response.status_code
@@ -301,7 +302,7 @@ class DeviceStatus(Resource):
             
             return response.json(), 200
         
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[DeviceStatus] Error: {response.status_code} - {response.text}")
             return {"error": f"Error posting device status: {error_message}"}, response.status_code
@@ -327,7 +328,7 @@ class DeviceStatusLatest(Resource):
                 response.raise_for_status()
             return response.json(), 200
         
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[DeviceStatusLatest] Error: {response.status_code} - {response.text}")
             return {"error": f"Error getting latest device status: {error_message}"}, response.status_code
@@ -353,7 +354,7 @@ class DeviceHealth(Resource):
                 response.raise_for_status()
             return response.json(), 200
         
-        except request.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError as e:
             error_message = response.json().get("error", response.text)
             logger.error(f"[DeviceHealth] Error: {response.status_code} - {response.text}")
             return {"error": f"Error getting device health: {error_message}"}, response.status_code
