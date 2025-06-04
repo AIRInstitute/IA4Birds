@@ -550,7 +550,7 @@ const Mapa = () => {
                     size='lg'
                     onClick={() => setShowGridLayer(!showGridLayer)}
                   >
-                    🟦
+                    <TbCarFan style={{ height: '25px', width: '25px' }} />
                   </Button>
                 </TooltipNext>
                 {showGridLayer && (
@@ -660,8 +660,8 @@ const Mapa = () => {
             {showLegend ? "❌ Cerrar leyenda" : "ℹ️ Leyenda"}
           </button>
 
-          {/* Contenedor de la leyenda */}
-          {showLegend && (
+          {/* Contenedor de la leyenda 1 */}
+          {showLegend && !showGridLayer && (
             <div
               style={{
                 background: "white",
@@ -697,6 +697,34 @@ const Mapa = () => {
               </div>
             </div>
           )}
+          {/* Contenedor de la leyenda 2 */}
+          {showLegend && showGridLayer && (
+            <div
+              style={{
+                background: "white",
+                padding: "10px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                marginTop: "5px",
+                width: "150px",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <p style={{ margin: 0, fontWeight: "bold" }}>Leyenda</p>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginRight: "5px" }}>
+                🟩
+                <span>Disponible y viento favorable</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginRight: "5px" }}>
+                🟨
+                <span>Disponible pero viento &lt;5.5 m/s</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginRight: "5px" }}>
+                🟥
+                <span>No disponible ({'>'}25% solape con exclusión eólica)</span>
+              </div>
+            </div>
+          )}
         </div>
         <div className='map'>
           <MapContainer
@@ -711,6 +739,7 @@ const Mapa = () => {
             />
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
             {/* {(showMarkersEolic || showMarkersEolicResources) &&( */}
+            {(!showGridLayer || !gridData) &&(
               <WMSTileLayer 
                 url="https://idecyl.jcyl.es/geoserver/er/wms"
                 layers="enre_cyl_excl_eoli"
@@ -719,7 +748,7 @@ const Mapa = () => {
                 version="1.3.0"
                 className="hue-rotate-[10deg]"
               />
-            {/* )} */}
+            )}
 
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
             {/* {(showMarkersEolic || showMarkersEolicResources) &&( */}
@@ -847,7 +876,7 @@ const Mapa = () => {
                     opacity: 1,
                     fillOpacity: 0.8,
                   }}>
-                  {birdMarkers.length > 0 && birdMarkers.map((birdMarker, index) => {
+                  {(!showGridLayer || !gridData) && birdMarkers.length > 0 && birdMarkers.map((birdMarker, index) => {
                     if (birdMarker.observations && birdMarker.observations.length > 0 && birdMarker.observations[0].lat) {
                       return (
                         <>

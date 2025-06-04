@@ -208,17 +208,20 @@ const CameraComponent = () => {
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalContent>
-          <ModalHeader>
-            {activeTab === "externa" ? "Añadir cámara externa" : "Añadir cámara propia"}
+          <ModalHeader className="text-center">
+            <h2 className="text-lg font-bold">Añadir Cámara</h2>
           </ModalHeader>
+          {/* <ModalHeader>
+            {activeTab === "externa" ? "Añadir cámara externa" : "Añadir cámara propia"}
+          </ModalHeader> */}
           <ModalBody>
-            <Tabs
+            {/* <Tabs
               aria-label="Opciones de la Cámara"
               className="justify-center"
               selectedKey={activeTab}
               onSelectionChange={(key) => setActiveTab(String(key))}
             >
-              <Tab key="externa" title="Externa">
+              <Tab key="externa" title="Externa"> */}
                 <div className="mb-4">
                   <Input label="Nombre de la Cámara" value={cameraName} onChange={(e) => setCameraName(e.target.value)} />
                 </div>
@@ -275,8 +278,8 @@ const CameraComponent = () => {
                     </span>
                   </Tooltip>
                 </div>
-              </Tab>
-              <Tab key="otro" title="Propia">
+              {/* </Tab> */}
+              {/* <Tab key="otro" title="Propia">
                 <Input
                   label="Información Adicional"
                   value={additionalData}
@@ -284,7 +287,7 @@ const CameraComponent = () => {
                   description="Introduce información adicional sobre la cámara."
                 />
               </Tab>
-            </Tabs>
+            </Tabs> */}
           </ModalBody>
           <ModalFooter className="flex justify-between">
             <Button onClick={() => { setIsModalOpen(false); resetForm(); }}>Cancelar</Button>
