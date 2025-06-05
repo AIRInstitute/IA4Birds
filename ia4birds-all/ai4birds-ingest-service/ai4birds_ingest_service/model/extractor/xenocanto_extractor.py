@@ -1,73 +1,113 @@
-#!/usr/bin/python3
-# Copyright 2023 AIRInstitute
-# See LICENSE for details.
-# Author: AIRInstitute (@AIRInstitute on GitHub)
-import time
-import requests
-from functools import lru_cache
-from ai4birds_ingest_service.log import logger
-from ai4birds_ingest_service import config
+import asyncio
+import aiohttp
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from aiohttp import ClientResponseError
+from ai4birds_ingest_service import config
+from ai4birds_ingest_service.log import logger
 
-class XenoCanto_Extractor():
-    @lru_cache(maxsize=128)
+class XenoCanto_Extractor_Async:
+    BASE_URL = 'http://www.xeno-canto.org/api/2/recordings?query=cnt:spain&page={}'
+
+    def __init__(self, max_concurrent_requests=5):
+        self.semaphore = asyncio.Semaphore(max_concurrent_requests)
+
     @retry(
-        reraise=True,
-        stop=stop_after_attempt(3),  # máximo 3 intentos totales
-        wait=wait_exponential(multiplier=1, min=1, max=60),
-        retry=retry_if_exception_type(requests.exceptions.RequestException)
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=10),
+        retry=retry_if_exception_type(ClientResponseError),
+        reraise=True
     )
-    def xenocanto_query(self):
+
+    async def fetch_page(self, session, page):
         """
-        Query the Xeno-Canto API to obtain recordings of birds specific to Spain,
-        filtering for those located in Castilla y León.
+        Fetch a specific page of recordings from the Xeno-Canto API.
 
         Args:
+            session (aiohttp.ClientSession): The HTTP session to use for the request.
+            page (int): The page number to request.
 
         Returns:
-            all_results: List of dictionaries, where each dictionary contains 
-            the information of a bird recording.
+            dict: A JSON-decoded response containing recordings and pagination info.
         """
-        query = 'cnt:spain'
-        page = 1
-        all_results = []
+        async with self.semaphore:
+            async with session.get(self.BASE_URL.format(page)) as resp:
+                resp.raise_for_status()
+                return await resp.json()
 
-        while True:
-            URL = f'http://www.xeno-canto.org/api/2/recordings?query={query}&page={page}'
-            response = requests.get(URL)
-            response.raise_for_status()
-            data = response.json()
-            
-            all_results.extend(bird for bird in data['recordings'] if 'Castilla y León' in bird.get('loc'))
-            
-            
+    async def xenocanto_query(self):
+        """
+        Query the Xeno-Canto API to obtain recordings of birds specific to Spain,
+        filtering for those located in Castilla y León. Uses asynchronous requests
+        to fetch all pages concurrently for improved performance.
 
-            if page >= data['numPages']:
-                break
-            page += 1
-          
-       
-        return self._format_results(all_results)
+        Returns:
+            list: A list of formatted dictionaries, each representing bird recordings.
+        """
+        async with aiohttp.ClientSession() as session:
+            first_page = await self.fetch_page(session, 1)
+            total_pages = first_page['numPages']
+            all_data = first_page['recordings']
+
+            tasks = []
+            for p in range(2, total_pages + 1):
+                tasks.append(self._safe_fetch_page(session, p))
+
+            results = await asyncio.gather(*tasks)
+
+            # return results, all_data
+
+            for page_data in results:
+                if page_data:
+                    all_data.extend(page_data['recordings'])
+
+            filtered = [r for r in all_data if 'Castilla y León' in r.get('loc')]
+            return self._format_results(filtered)
     
-    def _format_results(self, data):
-        species_list = config.SPECIES_LIST.values()
-        
-        formatted_results = [{
-                    "speciesSciName": f"{bird['gen']} {bird['sp']}",
-                    "recordings": [{
-                        "recordingId": bird['id'],
-                        "location": bird['loc'],
-                        "quality": bird['q'],
-                        "lat": bird['lat'],
-                        "lng": bird['lng'],
-                        "alt": bird['alt'],
-                        "file": bird['file'],
-                        "file-name": bird['file-name'],
-                        "time": bird['time'],
-                        "date": bird['date']
-                    }]
-                }
-            for bird in data
-            if f"{bird['gen']} {bird['sp']}" in species_list]
 
-        return formatted_results
+
+    def join_page_data(self, results, all_data):
+
+        for page_data in results:
+                if page_data:
+                    all_data.extend(page_data['recordings'])
+
+        filtered = [r for r in all_data if 'Castilla y León' in r.get('loc')]
+        return self._format_results(filtered)
+    
+
+    async def _safe_fetch_page(self, session, page):
+        """
+        Wrapper for fetch_page to catch and log errors without stopping the whole process.
+        """
+        try:
+            return await self.fetch_page(session, page)
+        except Exception as e:
+            logger.warning(f"Failed to fetch page {page} after retries: {e}")
+            return None
+
+    def _format_results(self, data):
+        """
+        Format raw bird recordings data to include only species in the configured list.
+
+        Args:
+            data (list): A list of raw recordings dictionaries.
+
+        Returns:
+            list: A list of dictionaries with formatted species and recording details.
+        """
+        species_list = config.SPECIES_LIST.values()
+        return [{
+            "speciesSciName": f"{bird['gen']} {bird['sp']}",
+            "recordings": [{
+                "recordingId": bird['id'],
+                "location": bird['loc'],
+                "quality": bird['q'],
+                "lat": bird['lat'],
+                "lng": bird['lng'],
+                "alt": bird['alt'],
+                "file": bird['file'],
+                "file-name": bird['file-name'],
+                "time": bird['time'],
+                "date": bird['date']
+            }]
+        } for bird in data if f"{bird['gen']} {bird['sp']}" in species_list]
