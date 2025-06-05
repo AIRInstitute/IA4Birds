@@ -1,13 +1,16 @@
 import flask
 import requests
 import time
+import asyncio
+from threading import Thread
 from flask import jsonify, request as flask_request, send_file, Response
 from flask_restx import Resource
 
 from ai4birds_ingest_service import config
-from ai4birds_ingest_service.log import logger
+from ai4birds_ingest_service.log import serve_application_logger
+logger = serve_application_logger()
 from ai4birds_ingest_service.api.v1 import api
-from ai4birds_ingest_service.core import limiter
+from ai4birds_ingest_service.core import limiter, cache
 from ai4birds_ingest_service.utils import handle400error, handle500error
 
 from ai4birds_ingest_service.api.models.ingest_models import (
@@ -23,7 +26,7 @@ from ai4birds_ingest_service.api.parsers.ingest_parsers import (
 )
 
 from ai4birds_ingest_service.model.extractor.ebird_extractor import EBird_Extractor
-from ai4birds_ingest_service.model.extractor.xenocanto_extractor import XenoCanto_Extractor
+from ai4birds_ingest_service.model.extractor.xenocanto_extractor import XenoCanto_Extractor_Async
 from ai4birds_ingest_service.model.extractor.windmap_extractor import WindMap_Extractor
 from ai4birds_ingest_service.model.device_status.device_model import DeviceModel, DeviceData
 from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel, EBirdData
@@ -34,6 +37,18 @@ from ai4birds_ingest_service.model.data_services.csv_to_json_service import CSVT
 from ai4birds_ingest_service.model.data_services.csv_streamer import CSVStreamer
 from ai4birds_ingest_service.model.data_services.zip_generator import ZipGenerator
 
+# Función auxiliar para ejecutar la query en un hilo con su propio event loop
+def run_async_xenocanto(result_dict):
+    try:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        extractor = XenoCanto_Extractor_Async()
+        # Ejecutamos el extractor async sin bloquear el hilo principal de Flask.
+        result_dict['data'] = loop.run_until_complete(extractor.xenocanto_query())
+        loop.close()
+    except Exception as e:
+        logger.error(f"Error ejecutando extracción asincrónica: {e}")
+        result_dict['data'] = {"error": str(e)}
 
 
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
@@ -53,12 +68,33 @@ class DataBird(Resource):
     Returns:
         dict: Combined results from both sources.
     """
+    @cache.cached()
     def get(self):
+        logger.info("Inicio de extracción de datos combinados desde eBird y Xeno-Canto.")
 
+        # Llamada directa a eBird
         ebird_data_raw = EBird_Extractor().ebird_query()
-        xenocanto_data = XenoCanto_Extractor().xenocanto_query()
 
-        results = combine_data(data_ebird=ebird_data_raw, data_xenocanto=xenocanto_data) if (ebird_data_raw and xenocanto_data) else {"error": "Failed to retrieve data from one or both sources."}
+        # Llamada a XenoCanto usando hilo + asyncio
+        result = {}
+        thread = Thread(target=run_async_xenocanto, args=(result,))
+        thread.start()
+        thread.join()
+        xenocanto_data = result.get('data')
+
+        # Validación de error
+        if isinstance(xenocanto_data, dict) and 'error' in xenocanto_data:
+            logger.error("Error al extraer datos de XenoCanto en DataBird: %s", xenocanto_data['error'])
+            return xenocanto_data, 500
+
+        # Combinación de datos
+        if ebird_data_raw and xenocanto_data:
+            results = combine_data(data_ebird=ebird_data_raw, data_xenocanto=xenocanto_data)
+        else:
+            logger.warning("Fallo al recuperar datos de una o ambas fuentes.")
+            results = {"error": "Failed to retrieve data from one or both sources."}
+
+        logger.info("Extracción combinada completada.")
         return results
 
 
@@ -70,13 +106,40 @@ class XenoCanto(Resource):
     Returns:
         list: Raw data from XenoCanto.
     """
+    @cache.cached()
     def get(self):
-        data = XenoCanto_Extractor().xenocanto_query()
-        if data:
-            model = XenoCantoModel()
-            objects = [XenoCantoData.from_dict(item) for item in data]
-            model.add_batch(objects)
-        return data
+        logger.info("Inicio de extracción de datos desde Xeno-Canto.")
+
+        result = {}
+
+        # Se crea un nuevo hilo que, cuando se inicie, ejecutará la función run_async_xenocanto con los argumentos indicados.
+        thread = Thread(target=run_async_xenocanto, args=(result,))
+        # Lanza el hilo y empieza a ejecutar run_async_xenocanto(result) en paralelo al flujo principal de Flask.
+        thread.start()
+        # Bloquea el hilo principal (el de Flask) hasta que el hilo secundario termine.
+        thread.join()  
+
+        data = result.get('data')
+
+        if isinstance(data, dict) and 'error' in data:
+            logger.error("Error al extraer datos de XenoCanto: %s", data['error'])
+            return data, 500
+    
+        # Guardar en la base de datos si se han obtenido datos
+        try:
+            if data:
+                logger.info("Guardando datos en la base de datos...")
+                model = XenoCantoModel()
+                objects = [XenoCantoData.from_dict(item) for item in data]
+                model.add_batch(objects)
+                logger.info("Datos guardados correctamente.")
+        except Exception as e:
+            logger.error(f"Error al guardar los datos de XenoCanto en la base de datos: {e}")
+            return {"error": "Error al guardar en la base de datos."}, 500
+
+        logger.info(f"Extracción completada. Total de especies obtenidas: {len(data)}")
+        return data, 200
+
 
 
 @ns_ebird.route('/')
@@ -87,6 +150,7 @@ class EBird(Resource):
     Returns:
         list or dict: Raw data from eBird or error message.
     """
+    @cache.cached()
     def get(self):
         data = EBird_Extractor().ebird_query()
         if data:
