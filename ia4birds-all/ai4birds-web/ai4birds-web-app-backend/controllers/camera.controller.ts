@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Camera } from "../models/connection";
 import { Op } from "sequelize";
+import { execSync } from "child_process";
 import globalConfig from "../config/global.config";
 
 const fetch = require("node-fetch");
@@ -10,6 +11,24 @@ interface RequestWithSession extends Request {
     id: number;
   };
 }
+
+/**
+ * Extract the HLS stream URL from a YouTube video using yt-dlp
+ * @param {string} youtubeUrl - The original YouTube video URL
+ * @returns {Promise<string | null>} The direct HLS stream URL or null if extraction fails
+ */
+
+async function getYoutubeHlsUrl(youtubeUrl: string): Promise<string | null> {
+  try {
+    const cmd = `yt-dlp -g "${youtubeUrl}"`;
+    const output = execSync(cmd, { encoding: "utf-8" }).trim();
+    return output;
+  } catch (error) {
+    console.error("Error extracting HLS from YouTube:", error);
+    return null;
+  }
+}
+
 
 /**
  * Get all cameras from the database
@@ -153,9 +172,20 @@ const create = async (req: RequestWithSession, res: Response) => {
   }
 
   try {
+
+    let finalSourceUrl = source_url;
+
+    if (source_type === "YouTube") {
+      const hlsUrl = await getYoutubeHlsUrl(source_url);
+      if (!hlsUrl) {
+        return res.status(400).json({ error: "No se pudo extraer la URL HLS de YouTube" });
+      }
+      finalSourceUrl = hlsUrl;
+    }
+
     const camera = await Camera.create({
       name,
-      source_url,
+      source_url: finalSourceUrl,
       location,
       source_type,
       status,
@@ -175,7 +205,7 @@ const create = async (req: RequestWithSession, res: Response) => {
         "Content-Type": "application/json",
         Authorization: `Basic ${Buffer.from("admin:admin").toString("base64")}`,
       },
-      body: JSON.stringify({ source: source_url }),
+      body: JSON.stringify({ source: finalSourceUrl }),
     });
 
     if (!response.ok) {
