@@ -29,6 +29,27 @@ CREATE TABLE "recording" (
   "observationId" int
 );
 
+CREATE TABLE "segment_data" (
+  "id" uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  "camera_id"  varchar,
+  "segment_idx" int,
+  "colatitude" float,
+  "azimuth" float,
+  "zoom_level" int,
+  "average_area" float,
+  "total_big_birds" int,
+  "frames" jsonb,
+  "received_at" timestamp NOT NULL DEFAULT now()
+);
+
+CREATE TABLE "heatmap_image" (
+  "id" uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  "camera_id"  varchar,
+  "heatmap_for" text,
+  "image_url" text,
+  "generated_at" timestamp NOT NULL DEFAULT now()
+);
+
 ALTER TABLE "observation" ADD FOREIGN KEY ("speciesId") REFERENCES "species" ("id");
 
 ALTER TABLE "recording" ADD FOREIGN KEY ("observationId") REFERENCES "observation" ("id");

@@ -7,7 +7,7 @@ import requests
 import typing
 from functools import lru_cache
 from typing import Dict
-from ai4birds_ingest_service.log import logger
+from ai4birds_ingest_service import logger
 
 class WindMap_Extractor():
     @lru_cache(maxsize=128)

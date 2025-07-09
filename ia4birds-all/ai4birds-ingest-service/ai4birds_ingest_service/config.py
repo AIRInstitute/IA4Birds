@@ -58,3 +58,11 @@ CORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_
 
 EXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'
 API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
+
+# MQTT BROKER
+MQTT_BROKER = 'broker.hivemq.com'
+MQTT_PORT = 1883
+
+# MQTT TOPICS
+A4BIRDS_CAMERA_SEGMENT = 'a4birds/cam/segment'
+A4BIRDS_CAMERA_HEATMAP = 'a4birds/cam/heatmap'

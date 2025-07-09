@@ -54,3 +54,20 @@ device_status_model = api.model('DeviceStatus', {
     'storage_status': fields.Float(required=True, description='Available storage in GB', example=15.5),
     'last_update': fields.String(required=True, description='Last update timestamp',example='2024-10-28 15:59:00')
 })
+
+# Modelo para segment data
+segment_data_model = api.model('SegmentData', {
+    'camera_id': fields.String(required=True, description='ID of the camera', example='123456789'),
+    'segment_idx': fields.String(required=True, description='ID of the segment', example='158'),
+    'payload': fields.String(required=True, description='Payload of the segment', example={'data': '1234'}),
+    'received_at': fields.String(required=True, description='Timestamp of the segment', example='2023-10-28 15:59:00')
+})
+
+# Modelo para heatmap data
+heatmap_data_model = api.model('HeatmapData', {
+    'camera_id': fields.String(required=True, description='ID of the camera', example='123456789'),
+    'heatmap_for': fields.String(required=True, description='Range of the segments', example='az30-60'),
+    'image_url': fields.String(required=True, description='URL of the heatmap image', example='https://example.com/image.jpg'),
+    'image_blob': fields.String(required=True, description='Blob of the heatmap image', example='base64 encoded image'),
+    'generated_at': fields.String(required=True, description='Timestamp of the heatmap', example='2023-10-28 15:59:00')
+})

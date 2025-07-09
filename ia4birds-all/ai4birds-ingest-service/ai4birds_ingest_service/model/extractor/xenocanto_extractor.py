@@ -2,8 +2,7 @@ import asyncio
 import aiohttp
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 from aiohttp import ClientResponseError
-from ai4birds_ingest_service import config
-from ai4birds_ingest_service.log import logger
+from ai4birds_ingest_service import config, logger
 
 class XenoCanto_Extractor_Async:
     BASE_URL = 'http://www.xeno-canto.org/api/2/recordings?query=cnt:spain&page={}'

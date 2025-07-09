@@ -17,12 +17,16 @@ from ai4birds_ingest_service.api.models.ingest_models import (
     windmap_model,
     exclusionmap_model,
     exclusionmap_response_model,
-    device_status_model
+    device_status_model,
+    segment_data_model,
+    heatmap_data_model
 )
 from ai4birds_ingest_service.api.parsers.ingest_parsers import (
     location_parser,
     exclusionmap_parser,
-    device_status_parser
+    device_status_parser,
+    segment_data_parser,
+    heatmap_data_parser
 )
 
 from ai4birds_ingest_service.model.extractor.ebird_extractor import EBird_Extractor
@@ -36,6 +40,9 @@ from ai4birds_ingest_service.model.combination_data import combine_data
 from ai4birds_ingest_service.model.data_services.csv_to_json_service import CSVToJsonService
 from ai4birds_ingest_service.model.data_services.csv_streamer import CSVStreamer
 from ai4birds_ingest_service.model.data_services.zip_generator import ZipGenerator
+
+from ai4birds_ingest_service.model.data_segment.data_segment_model import DataSegmentModel
+from ai4birds_ingest_service.model.data_heatmap.data_heatmap_model import DataHeatmapModel
 
 # Función auxiliar para ejecutar la query en un hilo con su propio event loop
 def run_async_xenocanto(result_dict):
@@ -58,6 +65,8 @@ ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map
 ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')
 ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
 ns_device_status = api.namespace('device-status', description='Device status operations')
+ns_segment_data = api.namespace('segment-data', description='Segment data operations')
+ns_heatmap_data = api.namespace('heatmap-data', description='Heatmap data operations')
 
 
 @ns_dataBird.route('/')
@@ -337,3 +346,35 @@ class DeviceHealth(Resource):
     """
     def get(self):
         return {"health_status": DeviceModel().check_health()}, 200
+
+
+@ns_segment_data.route('/<int:id>')
+class SegmentData(Resource):
+    """
+    Retrieves all segment data from the database.
+
+    Returns:
+        dict: All segment data.
+    """
+    def get(self, id):
+        try:
+            data = DataSegmentModel().fetch_content(id)
+            return jsonify({'segment_data': data})
+        except:
+            return handle500error(ns_segment_data)
+
+     
+@ns_heatmap_data.route('/<int:id>')
+class HeatmapData(Resource):
+    """
+    Retrieves last heatmap data from the database.
+
+    Returns:
+        dict: Last heatmap data.
+    """
+    def get(self, id):
+        try:
+            data = DataHeatmapModel().fetch_latest(id)
+            return jsonify({'heatmap_data': data})
+        except:
+            return handle500error(ns_heatmap_data)
