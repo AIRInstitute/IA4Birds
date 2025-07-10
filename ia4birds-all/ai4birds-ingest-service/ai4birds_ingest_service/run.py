@@ -30,9 +30,9 @@ from . import socketio
 app = Flask(__name__)
 app.config['MQTT_BROKER_URL'] = config.MQTT_BROKER
 app.config['MQTT_BROKER_PORT'] = config.MQTT_PORT
-app.config['MQTT_KEEPALIVE'] = 60
-app.config['MQTT_TLS_ENABLED'] = False
-app.config['TIME_WITHOUT_MESSAGE'] = 60
+app.config['MQTT_KEEPALIVE'] = config.MQTT_KEEPALIVE
+app.config['MQTT_TLS_ENABLED'] = config.MQTT_TLS_ENABLED
+app.config['TIME_WITHOUT_MESSAGE'] = config.TIME_WITHOUT_MESSAGE
 
 mqtt = Mqtt(app)
 
@@ -107,22 +107,28 @@ def handle_message(client, userdata:Any, msg:Any):
     payload = msg.payload.decode('utf-8')
     logger.info(f'Received message from topic: {topic}, with payload: {payload}')
 
-    json_data = json.loads(payload)
+    try:
+        json_data = json.loads(payload)
+    except json.JSONDecodeError as e:
+        logger.error(f'Error decoding JSON payload: {e}')
+        return
+    
+    handler_topics = {
+        config.A4BIRDS_CAMERA_SEGMENT: (DataSegment, data_segment),
+        config.A4BIRDS_CAMERA_HEATMAP: (DataHeatmap, data_heatmap),
+    }
 
     try:
-        if topic == config.A4BIRDS_CAMERA_SEGMENT:
-            segment = DataSegment.from_dict(json_data)
-            if segment:
-                data_segment.add(segment)
-            else:
-                logger.warning("Failed to create DataSegment object from payload.")
+        if topic in handler_topics:
+            ModelClass, repository = handler_topics[topic]
+            obj = ModelClass.from_dict(json_data)
 
-        elif topic == config.A4BIRDS_CAMERA_HEATMAP:
-            heatmap = DataHeatmap.from_dict(json_data)
-            if heatmap:
-                data_heatmap.add(heatmap)
+            if obj:
+                repository.add(obj)
             else:
-                logger.warning("Failed to create DataHeatmap object from payload.")
+                logger.warning(f"Failed to create {ModelClass.__name__} object from payload.")
+        else:
+            logger.warning(f"No handler found for topic: {topic}")
 
     except Exception as e:
         logger.error(f'Error handling message: {e}')

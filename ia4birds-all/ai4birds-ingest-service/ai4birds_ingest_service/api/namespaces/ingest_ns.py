@@ -224,8 +224,8 @@ class DeviceHealth(Resource):
     """
     def get(self):
        service = DeviceStatusService()
-        status, code = service.check_health()
-        return status, code
+       status, code = service.check_health()
+       return status, code
 
 
 @ns_segment_data.route('/<int:id>')

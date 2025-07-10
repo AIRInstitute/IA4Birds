@@ -23,8 +23,8 @@ class DataHeatmap:
             'generated_at': self.generated_at
         }
 
-    @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'DataHeatmap':
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'DataHeatmap':
         datatime = datetime.now()
 
         try:
@@ -34,21 +34,20 @@ class DataHeatmap:
 
             if not image_b64:
                 logger.warning('Missing image_blob in DataHeatmap data')
-                return None
+                image_b64 = 'Missing image_blob'
+
+            #determine the root path of the project
+            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+
+            heatmap_dir = os.path.join(project_root, "heatmaps")
+            os.makedirs(heatmap_dir, exist_ok=True)
             
             timestamp = datatime.strftime('%Y%m%d_%H%M%S')
             filename = f"{camera_id}_{heatmap_for}_{timestamp}.png"
 
             # Path
-            project_root = os.getcwd()
-            heatmap_dir = os.path.join(project_root, "ai4birds_ingest_service", "heatmaps")
-            os.makedirs(heatmap_dir, exist_ok=True)
-
             image_abs_path = os.path.join(heatmap_dir, filename)
             image_rel_path = os.path.relpath(image_abs_path, start=project_root)
-
-            # Secure directory
-            os.makedirs(os.path.dirname(image_abs_path), exist_ok=True)
 
             # Save image
             with open(image_abs_path, 'wb') as f:
@@ -56,7 +55,7 @@ class DataHeatmap:
             
             logger.info(f"Image successfully saved to: {image_abs_path}")
 
-            return DataHeatmap(
+            return cls(
                 camera_id = camera_id,
                 heatmap_for = heatmap_for,
                 image_url = image_rel_path,

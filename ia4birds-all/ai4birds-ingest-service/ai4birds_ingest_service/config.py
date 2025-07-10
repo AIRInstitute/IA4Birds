@@ -62,6 +62,9 @@ API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
 # MQTT BROKER
 MQTT_BROKER = 'broker.hivemq.com'
 MQTT_PORT = 1883
+MQTT_KEEPALIVE = 60
+MQTT_TLS_ENABLED = False
+TIME_WITHOUT_MESSAGE = 60
 
 # MQTT TOPICS
 A4BIRDS_CAMERA_SEGMENT = 'a4birds/cam/segment'

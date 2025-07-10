@@ -30,12 +30,12 @@ class DataSegment:
             'received_at': self.received_at
         }
 
-    @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'DataSegment':
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'DataSegment':
         datatime = datetime.now()
 
         try:
-            return DataSegment(
+            return cls(
                 camera_id = data.get('calibration', {}).get('camera_id', None),
                 segment_idx = data.get('calibration', {}).get('segment_idx', None),
                 colatitude = data.get('calibration', {}).get('absolute_colatitude', None),
