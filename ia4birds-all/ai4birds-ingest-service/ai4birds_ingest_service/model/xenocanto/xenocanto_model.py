@@ -1,12 +1,17 @@
 # xenocanto_model.py
-from ai4birds_ingest_service.model.db import PostgresSingleton
 from ai4birds_ingest_service.model.xenocanto.xenocanto_data import XenoCantoData
 from ai4birds_ingest_service import logger
+from ai4birds_ingest_service.model.db import Database, PostgresDatabase
 
 class XenoCantoModel:
+    def __init__(self, database: Database = None):
+        """
+        Initializes the XenoCantoModel with a database instance.
+        """
+        self.database = database or PostgresDatabase()
+
     def add(self, xenocanto_data: XenoCantoData) -> bool:
-        database = PostgresSingleton.getInstance()
-        database.connect()
+        self.database.connect()
         try:
             # Suponiendo que ya tienes el ID de la observación, modificar según necesidad
             recording_query = """
@@ -15,20 +20,19 @@ class XenoCantoModel:
             """
             for rec in xenocanto_data.recordings:
                 recording_values = (rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], rec['fileName'], rec['time'], rec['date'], rec.get('observationId'))
-                database.execute(recording_query, recording_values)
+                self.database.execute(recording_query, recording_values)
 
-            database.commit()
+            self.database.commit()
             return True
         except Exception as e:
             print(f"Error adding XenoCanto data to DB: {e}")
-            database.rollback()
+            self.database.rollback()
             return False
         finally:
-            database.close()
+            self.database.close()
 
     def add_batch(self, xenocanto_data_list):
-        database = PostgresSingleton.getInstance()
-        database.connect()
+        self.database.connect()
         try:
             recording_values = []
             for xenocanto_data in xenocanto_data_list:
@@ -59,21 +63,20 @@ class XenoCantoModel:
             """
             # Utilizar execute_values del Singleton para realizar las inserciones
             if recording_values:  # Verificar si hay algo que insertar
-                database.execute_values(recording_query, recording_values, page_size=100)
+                self.database.execute_values(recording_query, recording_values, page_size=100)
             return True
         except Exception as e:
             logger.error(f"Error adding XenoCanto batch data to DB: {e}")
-            database.rollback()
+            self.database.rollback()
             return False
         finally:
-            database.close()
+            self.database.close()
 
     def fetch_content(self, recording_id: str) -> XenoCantoData:
-        database = PostgresSingleton.getInstance()
-        database.connect()
+        self.database.connect()
         try:
             query = "SELECT * FROM recording WHERE recordingId = %s;"
-            recording = database.execute(query, (recording_id,)).fetchone()
+            recording = self.database.execute(query, (recording_id,)).fetchone()
             if not recording:
                 return None
 
@@ -87,4 +90,4 @@ class XenoCantoModel:
             print(f"Error fetching XenoCanto content from DB: {e}")
             return None
         finally:
-            database.close()
+            self.database.close()

@@ -1,9 +1,18 @@
-from ai4birds_ingest_service.model.db import PostgresSingleton
 from ai4birds_ingest_service.model.device_status.device_data import DeviceData
 from ai4birds_ingest_service import logger
 from datetime import datetime
-
+from ai4birds_ingest_service.database.db import Database, get_database
 class DeviceModel:
+    def __init__(self, database: Database = None):
+        """
+        Initializes the DeviceModel with a database instance.
+        
+        Args:
+            database (Database, optional): A database instance for dependency injection.
+                                           If None, a default one is created.
+        """
+        self.database = database or get_database()
+        
     def add(self, device_data: DeviceData) -> bool:
         """
         Inserts the device data into the device_status table in the database.
@@ -14,8 +23,7 @@ class DeviceModel:
         Returns:
             bool: True if the data was added successfully, False otherwise.
         """
-        database = PostgresSingleton.getInstance()
-        database.connect()
+        
         try:
             # Insertar estado del dispositivo
             device_query = """
@@ -23,16 +31,16 @@ class DeviceModel:
                 VALUES (%s, %s, %s, %s, %s);
             """
             device_values = (device_data.gps_latitude, device_data.gps_longitude, device_data.status, device_data.storage_status, device_data.last_update)
-            database.execute(device_query, device_values)
+            self.database.execute(device_query, device_values)
 
-            database.commit()
+            self.database.commit()
             return True
         except Exception as e:
             logger.error(f"Error adding device data to DB: {e}")
-            database.rollback()
+            self.database.rollback()
             return False
         finally:
-            database.close()
+            self.database.close()
 
     def fetch_latest_status(self) -> DeviceData:
         """
@@ -44,16 +52,15 @@ class DeviceModel:
         Returns:
             DeviceData: The latest device status data, or None if no data is found.
         """
-        database = PostgresSingleton.getInstance()
-        database.connect()
         try:
+            self.database.connect()
             query = """
             SELECT gps_latitude, gps_longitude, status, storage_status, last_update
                 FROM device_status
                     ORDER BY last_update DESC
                         LIMIT 1;
             """
-            result = database.execute(query).fetchone()
+            result = self.database.execute(query).fetchone()
             if result:
                 return DeviceData(
                     gps_latitude=result[0],
@@ -67,7 +74,7 @@ class DeviceModel:
             logger.error(f"Error fetching latest device status from DB: {e}")
             return None
         finally:
-            database.close()
+            self.database.close()
 
     def check_health(self, threshold_hours: int = 24) -> str:
         """

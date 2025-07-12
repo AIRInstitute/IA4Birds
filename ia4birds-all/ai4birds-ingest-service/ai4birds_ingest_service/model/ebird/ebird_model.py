@@ -1,20 +1,28 @@
 # ebird_model.py
-from ai4birds_ingest_service.model.db import PostgresSingleton
 from ai4birds_ingest_service.model.ebird.ebird_data import EBirdData
 from ai4birds_ingest_service import logger
-
+from ai4birds_ingest_service.model.db import Database, PostgresDatabase
 class EBirdModel:
+    def __init__(self, database: Database = None):
+        """
+        Initializes the EBirdModel with a database instance.
+        
+        Args:
+            database (Database, optional): A database instance for dependency injection.
+                                           If None, a default one is created.
+        """
+        self.database = database or PostgresDatabase()
+
     def add(self, ebird_data: EBirdData) -> bool:
-        database = PostgresSingleton.getInstance()
-        database.connect()
         try:
             # Insertar especie
+            self.database.connect()
             species_query = """
             INSERT INTO species (comName, sciName)
                 VALUES (%s, %s) RETURNING id;
             """
             species_values = (ebird_data.com_name, ebird_data.sci_name)
-            species_id = database.execute(species_query, species_values).fetchone()[0]
+            species_id = self.database.execute(species_query, species_values).fetchone()[0]
 
             # Insertar observaciones
             observation_query = """
@@ -23,22 +31,21 @@ class EBirdModel:
             """
             for obs in ebird_data.observations:
                 observation_values = (obs['locationId'], obs['locationName'], obs['lat'], obs['lng'], obs['date'], obs['numObservation'], species_id)
-                database.execute(observation_query, observation_values)
+                self.database.execute(observation_query, observation_values)
 
-            database.commit()
+            self.database.commit()
             return True
         except Exception as e:
             print(f"Error adding EBird data to DB: {e}")
-            database.rollback()
+            self.database.rollback()
             return False
         finally:
-            database.close()
+            self.database.close()
 
     def add_batch(self, ebird_data_list):
-        database = PostgresSingleton.getInstance()
-        database.connect()
+        self.database.connect()
 
-        if not database.conn or not database.cur:
+        if not self.database.conn or not self.database.cur:
             logger.error("Database connection failed, cannot proceed with insertion.")
             return False
 
@@ -53,9 +60,9 @@ class EBirdModel:
                     ON CONFLICT (comName, sciName)
                         DO NOTHING RETURNING id, comName, sciName;
             """
-            database.execute_values(species_query, species_values, page_size=100)
-            
-            species_ids = database.fetchall()
+            self.database.execute_values(species_query, species_values, page_size=100)
+
+            species_ids = self.database.fetchall()
 
             logger.info(f"Size of species_ids RETURN: {len(species_ids)}")
             # Crear un mapa de ID de especies basado en comName y sciName
@@ -76,34 +83,33 @@ class EBirdModel:
             INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId)
                 VALUES %s;
             """
-            database.execute_values(observation_query, observation_values, page_size=100)
-            
+            self.database.execute_values(observation_query, observation_values, page_size=100)
+
             return True
         except Exception as e:
-            print(f"Error in add_batch: {e}")
-            database.rollback()
+            logger.error(f"Error in add_batch: {e}")
+            self.database.rollback()
             return False
         finally:
-            database.close()
+            self.database.close()
 
     def fetch_content(self, species_id: int) -> EBirdData:
-        database = PostgresSingleton.getInstance()
-        database.connect()
+        self.database.connect()
         try:
             query = "SELECT * FROM species WHERE id = %s;"
-            species = database.execute(query, (species_id,)).fetchone()
+            species = self.database.execute(query, (species_id,)).fetchone()
             if not species:
                 return None
             
             query = "SELECT * FROM observation WHERE speciesId = %s;"
-            observations = database.execute(query, (species_id,)).fetchall()
+            observations = self.database.execute(query, (species_id,)).fetchall()
             formatted_observations = [{
                 'locationId': obs[1], 'locationName': obs[2], 'lat': obs[3], 'lng': obs[4], 'date': obs[5], 'numObservation': obs[6]
             } for obs in observations]
             
             return EBirdData(species_code=species[0], com_name=species[1], sci_name=species[2], observations=formatted_observations)
         except Exception as e:
-            print(f"Error fetching EBird content from DB: {e}")
+            logger.error(f"Error fetching EBird content from DB: {e}")
             return None
         finally:
-            database.close()
+            self.database.close()
