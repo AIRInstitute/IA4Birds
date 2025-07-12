@@ -43,14 +43,8 @@ class EBirdModel:
             self.database.close()
 
     def add_batch(self, ebird_data_list):
-        self.database.connect()
-
-        if not self.database.conn or not self.database.cur:
-            logger.error("Database connection failed, cannot proceed with insertion.")
-            return False
-
         try:
-            
+            self.database.connect()
             # Preparar los valores para la inserción de especies
             species_values = [(data.com_name, data.sci_name) for data in ebird_data_list]
            
@@ -94,8 +88,9 @@ class EBirdModel:
             self.database.close()
 
     def fetch_content(self, species_id: int) -> EBirdData:
-        self.database.connect()
         try:
+            self.database.connect()
+            # Fetch species data
             query = "SELECT * FROM species WHERE id = %s;"
             species = self.database.execute(query, (species_id,)).fetchone()
             if not species:

@@ -1,7 +1,7 @@
 from ai4birds_ingest_service.model.device_status.device_data import DeviceData
 from ai4birds_ingest_service import logger
 from datetime import datetime
-from ai4birds_ingest_service.database.db import Database, get_database
+from ai4birds_ingest_service.database.db import Database, PostgresDatabase
 class DeviceModel:
     def __init__(self, database: Database = None):
         """
@@ -11,8 +11,8 @@ class DeviceModel:
             database (Database, optional): A database instance for dependency injection.
                                            If None, a default one is created.
         """
-        self.database = database or get_database()
-        
+        self.database = database or PostgresDatabase()
+
     def add(self, device_data: DeviceData) -> bool:
         """
         Inserts the device data into the device_status table in the database.
@@ -25,6 +25,7 @@ class DeviceModel:
         """
         
         try:
+            self.database.connect()
             # Insertar estado del dispositivo
             device_query = """
             INSERT INTO device_status (gps_latitude, gps_longitude, status, storage_status, last_update)

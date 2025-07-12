@@ -11,8 +11,8 @@ class XenoCantoModel:
         self.database = database or PostgresDatabase()
 
     def add(self, xenocanto_data: XenoCantoData) -> bool:
-        self.database.connect()
         try:
+            self.database.connect()
             # Suponiendo que ya tienes el ID de la observación, modificar según necesidad
             recording_query = """
             INSERT INTO recording (recordingId, location, quality, lat, lng, alt, file, fileName, time, date, observationId)
@@ -32,8 +32,8 @@ class XenoCantoModel:
             self.database.close()
 
     def add_batch(self, xenocanto_data_list):
-        self.database.connect()
         try:
+            self.database.connect()
             recording_values = []
             for xenocanto_data in xenocanto_data_list:
                 for rec in xenocanto_data.recordings:
@@ -73,8 +73,8 @@ class XenoCantoModel:
             self.database.close()
 
     def fetch_content(self, recording_id: str) -> XenoCantoData:
-        self.database.connect()
         try:
+            self.database.connect()
             query = "SELECT * FROM recording WHERE recordingId = %s;"
             recording = self.database.execute(query, (recording_id,)).fetchone()
             if not recording:

@@ -1,4 +1,4 @@
-from ai4birds_ingest_service.database.db import Database, get_database
+from ai4birds_ingest_service.database.db import Database, PostgresDatabase
 from ai4birds_ingest_service.log import logger
 
 
@@ -12,7 +12,7 @@ class DataCombinationModel:
             database (Database, optional): A database instance for dependency injection.
                                            If None, a default one is created.
         """
-        self.database = database or get_database()
+        self.database = database or PostgresDatabase()
 
     def add(self, data_combination: dict) -> bool:
         """

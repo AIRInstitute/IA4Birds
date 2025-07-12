@@ -129,14 +129,3 @@ class PostgresDatabase(Database):
             tuple: A tuple containing the fetched row.
         """
         return self.cur.fetchone()
-
-def get_database() -> Database:
-    """
-    Gets a database instance.
-
-    Returns:
-        Database: A database instance (PostgresDatabase).
-    """
-    db_instance = PostgresDatabase()
-    db_instance.connect()
-    return db_instance
