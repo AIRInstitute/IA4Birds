@@ -40,3 +40,7 @@ celery[redis]
 tenacity
 aiohttp>=3.8.0
 flask[async]
+pytest
+pytest-mock
+paho-mqtt
+flask-mqtt

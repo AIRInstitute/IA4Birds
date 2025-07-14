@@ -6,8 +6,7 @@
 import requests, json
 import time
 from functools import lru_cache
-from ai4birds_ingest_service.log import logger
-from ai4birds_ingest_service import config
+from ai4birds_ingest_service import config, logger
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 class EBird_Extractor:

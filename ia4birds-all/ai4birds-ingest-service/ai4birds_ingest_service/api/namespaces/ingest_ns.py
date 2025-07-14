@@ -13,13 +13,17 @@ from ai4birds_ingest_service.api.models.ingest_models import (
     windmap_model,
     exclusionmap_model,
     exclusionmap_response_model,
-    device_status_model
+    device_status_model,
+    segment_data_model,
+    heatmap_data_model
 )
 from ai4birds_ingest_service.api.parsers.ingest_parsers import (
     location_parser,
     exclusionmap_parser,
     exclusionmap_parser_get,
-    device_status_parser
+    device_status_parser,
+    segment_data_parser,
+    heatmap_data_parser
 )
 
 # Import services
@@ -31,6 +35,9 @@ from ai4birds_ingest_service.services.exclusionmap_service import ExclusionMapSe
 from ai4birds_ingest_service.services.sensitivity_service import SensitivityService
 from ai4birds_ingest_service.services.device_status_service import DeviceStatusService
 
+from ai4birds_ingest_service.model.data_segment.data_segment_model import DataSegmentModel
+from ai4birds_ingest_service.model.data_heatmap.data_heatmap_model import DataHeatmapModel
+
 # Define namespaces
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
 ns_ebird = api.namespace('ebird', description='eBird requests')
@@ -39,6 +46,8 @@ ns_exclusionmap = api.namespace('exclusionmap', description='Eolic exclusion map
 ns_sensitivity = api.namespace('sensitivity', description='Sensitivity of birds in the region of Castilla y Leon')
 ns_dataBird = api.namespace('dataBird', description='Returns observations and recordings of birds in the region of Castilla y Leon')
 ns_device_status = api.namespace('device-status', description='Device status operations')
+ns_segment_data = api.namespace('segment-data', description='Segment data operations')
+ns_heatmap_data = api.namespace('heatmap-data', description='Heatmap data operations')
 
 
 @ns_dataBird.route('/')
@@ -214,6 +223,38 @@ class DeviceHealth(Resource):
     Checks the current health status of the device system.
     """
     def get(self):
-        service = DeviceStatusService()
-        status, code = service.check_health()
-        return status, code
+       service = DeviceStatusService()
+       status, code = service.check_health()
+       return status, code
+
+
+@ns_segment_data.route('/<int:id>')
+class SegmentData(Resource):
+    """
+    Retrieves all segment data from the database.
+
+    Returns:
+        dict: All segment data.
+    """
+    def get(self, id):
+        try:
+            data = DataSegmentModel().fetch_content(id)
+            return jsonify({'segment_data': data})
+        except:
+            return handle500error(ns_segment_data)
+
+     
+@ns_heatmap_data.route('/<int:id>')
+class HeatmapData(Resource):
+    """
+    Retrieves last heatmap data from the database.
+
+    Returns:
+        dict: Last heatmap data.
+    """
+    def get(self, id):
+        try:
+            data = DataHeatmapModel().fetch_latest(id)
+            return jsonify({'heatmap_data': data})
+        except:
+            return handle500error(ns_heatmap_data)
