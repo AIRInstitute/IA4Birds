@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/button";
 import Hls from "hls.js";
 import { RxTrash } from "react-icons/rx";
 
-export const CustomCard = ({ cameraPanelData, onDelete }) => {
+export const CustomCardCamera = ({ cameraPanelData, onDelete }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoUrl = cameraPanelData.playback_url;
 
