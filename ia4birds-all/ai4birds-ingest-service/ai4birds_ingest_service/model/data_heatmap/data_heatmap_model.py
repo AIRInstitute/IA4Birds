@@ -27,7 +27,7 @@ class DataHeatmapModel:
         return result
     
     def fetch_latest(self, id: int) -> object:
-        query = """SELECT * FROM heatmap_image WHERE id = ? ORDER BY generated_at DESC LIMIT 1; """
+        query = """SELECT * FROM heatmap_image WHERE camera_id = %s ORDER BY generated_at DESC LIMIT 1; """
         values = (id,)
         database = PostgresSingleton.getInstance()
         database.connect()
@@ -35,9 +35,24 @@ class DataHeatmapModel:
         try:
             database.execute(query, values)
             result = database.fetchone()
+
+            if result:
+                column_names = [column[0] for column in database.cur.description]
+                row = dict(zip(column_names, result))
+
+                heatmap_data = DataHeatmap(
+                    camera_id = row['camera_id'],
+                    heatmap_for = row['heatmap_for'],
+                    image_url = row['image_url'],
+                    generated_at = row['generated_at']
+                )
+                heatmap_data.id = row['id']
+                heatmap_data = heatmap_data.to_dict()
+            else:
+                heatmap_data = {}
         except Exception as e:
             logger.error(f"Error fectch content in DataHeatmap to DB: {e}") 
-            result = None
+            heatmap_data = None
         finally:
             database.close()
-        return result
+        return heatmap_data
