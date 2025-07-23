@@ -228,7 +228,7 @@ class DeviceHealth(Resource):
        return status, code
 
 
-@ns_segment_data.route('/<string:camera_id>')
+@ns_segment_data.route('/<int:id>')
 class SegmentData(Resource):
     """
     Retrieves all segment data from the database.
@@ -236,17 +236,15 @@ class SegmentData(Resource):
     Returns:
         dict: All segment data.
     """
-    def get(self, camera_id):
+    def get(self, id):
         try:
-            data = DataSegmentModel().fetch_content(camera_id)
+            data = DataSegmentModel().fetch_content(id)
             return jsonify({'segment_data': data})
-    
-        except Exception as e:
-            logger.error(f"SegmentData Error: {e}")
+        except:
             return handle500error(ns_segment_data)
 
      
-@ns_heatmap_data.route('/<string:camera_id>')
+@ns_heatmap_data.route('/<int:id>')
 class HeatmapData(Resource):
     """
     Retrieves last heatmap data from the database.
@@ -254,9 +252,9 @@ class HeatmapData(Resource):
     Returns:
         dict: Last heatmap data.
     """
-    def get(self, camera_id):
+    def get(self, id):
         try:
-            data = DataHeatmapModel().fetch_latest(camera_id)
+            data = DataHeatmapModel().fetch_latest(id)
             return jsonify({'heatmap_data': data})
         except:
             return handle500error(ns_heatmap_data)

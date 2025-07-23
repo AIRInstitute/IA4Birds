@@ -19,19 +19,26 @@ class DataHeatmap:
             'camera_id': self.camera_id,
             'heatmap_for': self.heatmap_for,
             'image_url': self.image_url,
+            'image_blob': self.image_blob,
             'generated_at': self.generated_at
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any], image_bytes: bytes) -> 'DataHeatmap':
+    def from_dict(cls, data: Dict[str, Any]) -> 'DataHeatmap':
         datatime = datetime.now()
 
         try:
+            image_b64 = data.get('image_blob')
             camera_id = data.get('camera_id', 'Unknown')
             heatmap_for = data.get('heatmap_for', 'Unknown')
 
+            if not image_b64:
+                logger.warning('Missing image_blob in DataHeatmap data')
+                image_b64 = 'Missing image_blob'
+
             #determine the root path of the project
-            project_root = './ai4birds_ingest_service/'
+            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+
             heatmap_dir = os.path.join(project_root, "heatmaps")
             os.makedirs(heatmap_dir, exist_ok=True)
             
@@ -44,7 +51,7 @@ class DataHeatmap:
 
             # Save image
             with open(image_abs_path, 'wb') as f:
-                f.write(image_bytes)
+                f.write(base64.b64decode(image_b64))
             
             logger.info(f"Image successfully saved to: {image_abs_path}")
 

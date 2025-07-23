@@ -68,9 +68,4 @@ TIME_WITHOUT_MESSAGE = 60
 
 # MQTT TOPICS
 A4BIRDS_CAMERA_SEGMENT = 'a4birds/cam/segment'
-A4BIRDS_CAMERA_HEATMAP_METADATA = 'a4birds/cam/heatmap/metadata/#'
-A4BIRDS_CAMERA_HEATMAP_IMAGE = 'a4birds/cam/heatmap/image/#'
-
-#MQTT TOPICS_PREFIX
-A4BIRDS_CAMERA_HEATMAP_METADATA_PREFIX = 'a4birds/cam/heatmap/metadata/'
-A4BIRDS_CAMERA_HEATMAP_IMAGE_PREFIX = 'a4birds/cam/heatmap/image/'
+A4BIRDS_CAMERA_HEATMAP = 'a4birds/cam/heatmap'

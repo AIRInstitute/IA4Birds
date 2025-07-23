@@ -4,7 +4,6 @@
 # Author: AIRInstitute (@AIRInstitute on GitHub)
 
 import json
-from datetime import datetime
 
 #from flask_socketio import SocketIO
 from typing import Any, Dict
@@ -40,8 +39,6 @@ mqtt = Mqtt(app)
 #models
 data_segment = DataSegmentModel()
 data_heatmap = DataHeatmapModel()
-
-heatmap_buffer = {}
 
 # socketio = SocketIO(app)
 
@@ -86,8 +83,7 @@ def handle_connect(client, userdata:Any, flags: Dict[str, Any], rc: int):
     logger.info(f'Connected to MQTT broker: {config.MQTT_BROKER}, with result code: {rc}')
     topics = [
         config.A4BIRDS_CAMERA_SEGMENT,
-        config.A4BIRDS_CAMERA_HEATMAP_METADATA,
-        config.A4BIRDS_CAMERA_HEATMAP_IMAGE
+        config.A4BIRDS_CAMERA_HEATMAP
     ]
 
     for topic in topics:
@@ -108,72 +104,35 @@ def handle_message(client, userdata:Any, msg:Any):
     This function is called when a message is received from the MQTT broker.
     """
     topic = msg.topic
-    heatmap_id = topic.split('/')[-1]
-    logger.info(f'Received message from topic: {topic}')
+    payload = msg.payload.decode('utf-8')
+    logger.info(f'Received message from topic: {topic}, with payload: {payload}')
 
     try:
-        if topic == config.A4BIRDS_CAMERA_SEGMENT:
-            try:
-                payload = msg.payload.decode('utf-8')
-                json_data = json.loads(payload)
-
-                logger.info(f'Received segment data: {json_data}')
-                obj = DataSegment.from_dict(json_data)
-
-                if obj:
-                    data_segment.add(obj)
-                else:
-                    logger.warning(f'Failed to create DataSegment object from payload.')
-            except Exception as e:
-                logger.error(f'Error handling segment: {e}')
-            return
-
-        elif topic.startswith(config.A4BIRDS_CAMERA_HEATMAP_METADATA_PREFIX):
-            try:
-                payload = msg.payload.decode('utf-8')
-                json_data = json.loads(payload)
-
-                heatmap_buffer.setdefault(heatmap_id, {})["metadata"] = json_data
-                heatmap_buffer[heatmap_id]["time"] = datetime.now()
-                logger.info(f'Stored metadata for heatmap_id: {heatmap_id}')
-            except Exception as e:
-                logger.error(f'Error handling heatmap metadata: {e}')
-                return
+        json_data = json.loads(payload)
+    except json.JSONDecodeError as e:
+        logger.error(f'Error decoding JSON payload: {e}')
+        return
     
-        elif topic.startswith(config.A4BIRDS_CAMERA_HEATMAP_IMAGE_PREFIX):
-            try:
+    handler_topics = {
+        config.A4BIRDS_CAMERA_SEGMENT: (DataSegment, data_segment),
+        config.A4BIRDS_CAMERA_HEATMAP: (DataHeatmap, data_heatmap),
+    }
 
-                image_bytes = msg.payload
-                
-                heatmap_buffer.setdefault(heatmap_id, {})["image"] = image_bytes
-                heatmap_buffer[heatmap_id]["time"] = datetime.now()
-                logger.info(f"Received heatmap image for {heatmap_id}")
-            except Exception as e:
-                logger.error(f'Error handling heatmap image: {e}')
-                return
+    try:
+        if topic in handler_topics:
+            ModelClass, repository = handler_topics[topic]
+            obj = ModelClass.from_dict(json_data)
 
+            if obj:
+                repository.add(obj)
+            else:
+                logger.warning(f"Failed to create {ModelClass.__name__} object from payload.")
         else:
             logger.warning(f"No handler found for topic: {topic}")
 
-
-        buffer = heatmap_buffer.get(heatmap_id, {})
-        if "metadata" in buffer and "image" in buffer:
-            try:
-                heatmap_data = buffer["metadata"]
-                heatmap_image = buffer["image"]
-                obj = DataHeatmap.from_dict(heatmap_data, heatmap_image)
-                if obj:
-                    data_heatmap.add(obj)
-                else:
-                    logger.warning(f'Failed to create DataHeatmap object from payload.')
-            except Exception as e:
-                logger.error(f'Error handling heatmap data: {e}')
-                return
-            finally:
-                del heatmap_buffer[heatmap_id]
-
     except Exception as e:
         logger.error(f'Error handling message: {e}')
+        logger.error(f'Payload: {payload}')
 
 
 def initialize_app(flask_app):
@@ -187,7 +146,8 @@ def initialize_app(flask_app):
 
     limiter.exempt(v1)
 
-    cache.init_app(flask_app)
+    cache.init_app(flask_app) 
+    #cache.init_app(flask_app)
 
     for ns in namespaces:
         api.add_namespace(ns)

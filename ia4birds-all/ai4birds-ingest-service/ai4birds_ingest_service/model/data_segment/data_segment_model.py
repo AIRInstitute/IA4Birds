@@ -27,37 +27,17 @@ class DataSegmentModel:
         return result
     
     def fetch_content(self, id: int) -> object:
-        query = """SELECT * FROM segment_data WHERE camera_id = %s ORDER BY received_at DESC LIMIT 1; """
+        query = """SELECT * FROM segment_data WHERE id = ?;"""
         values = (id,)
         database = PostgresSingleton.getInstance()
         database.connect()
 
         try:
             database.execute(query, values)
-            result = database.fetchone()
-
-            if result:
-                column_names = [column[0] for column in database.cur.description]
-                row = dict(zip(column_names, result))
-
-                segment_data = DataSegment(
-                    camera_id = row['camera_id'],
-                    segment_idx = row['segment_idx'],
-                    colatitude = row['colatitude'],
-                    azimuth = row['azimuth'],
-                    zoom_level = row['zoom_level'],
-                    average_area = row['average_area'],
-                    total_big_birds = row['total_big_birds'],
-                    frames = row['frames'],
-                    received_at = row['received_at']
-                )
-                segment_data.id = row['id']
-                segment_data = segment_data.to_dict()
-            else:
-                segment_data = {}
+            result = True
         except Exception as e:
             logger.error(f"Error fectch content in DataSegment to DB: {e}") 
-            segment_data = None
+            result = False
         finally:
             database.close()
-        return segment_data
+        return result
