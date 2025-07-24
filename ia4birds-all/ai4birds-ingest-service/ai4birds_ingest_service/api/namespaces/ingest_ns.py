@@ -37,6 +37,7 @@ from ai4birds_ingest_service.services.device_status_service import DeviceStatusS
 
 from ai4birds_ingest_service.model.data_segment.data_segment_model import DataSegmentModel
 from ai4birds_ingest_service.model.data_heatmap.data_heatmap_model import DataHeatmapModel
+from ai4birds_ingest_service.model.bird_statistics.bird_statistics_model import BirdStatisticsModel
 
 # Define namespaces
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
@@ -48,6 +49,7 @@ ns_dataBird = api.namespace('dataBird', description='Returns observations and re
 ns_device_status = api.namespace('device-status', description='Device status operations')
 ns_segment_data = api.namespace('segment-data', description='Segment data operations')
 ns_heatmap_data = api.namespace('heatmap-data', description='Heatmap data operations')
+ns_bird_statistics = api.namespace('bird-statistics', description='Bird statistics operations')
 
 
 @ns_dataBird.route('/')
@@ -260,3 +262,36 @@ class HeatmapData(Resource):
             return jsonify({'heatmap_data': data})
         except:
             return handle500error(ns_heatmap_data)
+
+
+@ns_bird_statistics.route('/<string:camera_id>/<string:bird_name>')
+class BirdStatistics(Resource):
+    """
+    Retrieves all bird statistics from camera_id and bird_name.
+
+    Returns:
+        dict: All bird statistics.
+    """
+    def get(self, camera_id, bird_name):
+        try:
+            data = BirdStatisticsModel().fetch_content(camera_id, bird_name)
+            return jsonify({'bird_statistics': data})
+        except:
+            return handle500error(ns_bird_statistics)
+        
+@ns_bird_statistics.route('/<string:camera_id>')
+class BirdStatisticsByCamera(Resource):
+    """
+    Retrieves all bird statistics from camera_id.
+
+    Returns:
+        dict: All camera statistics.
+    """
+
+    def get(self, camera_id):
+        try:
+            data = BirdStatisticsModel().fetch_content_by_camera(camera_id)
+            return jsonify({'camera_statistics': data})
+        except:
+            return handle500error(ns_bird_statistics)
+

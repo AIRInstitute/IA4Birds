@@ -16,7 +16,7 @@ class DataHeatmapModel:
         database.connect()
         try:
             database.execute(heatmap_query, heatmap_values)
-            logger.info(f'Inserted heatmap data to DB successfully, with values: {heatmap_values}')
+            logger.info(f'Inserted heatmap data to DB successfully')
             result = True
         except Exception as e:
             logger.error(f"Error adding DataHeatmap to DB: {e}")
