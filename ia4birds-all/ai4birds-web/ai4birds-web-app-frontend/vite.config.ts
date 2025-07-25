@@ -14,4 +14,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  server: {
+    allowedHosts: ['ia4birds-platform.air-institute.com'],
+  },
 });
