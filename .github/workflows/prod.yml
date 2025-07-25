@@ -40,16 +40,20 @@ jobs:
     needs: copy_file
     runs-on: [self-hosted, linux, x64, prod]
     steps:
+      - name: Ensure external volume exists
+        run: |
+          docker volume inspect ia4birds_videos_data >/dev/null 2>&1 || docker volume create ia4birds_videos_data
+
       - name: Build Custom Kong Image
         run: sudo docker build -t custom-kong-gstreamer:latest .
       
       - name: Build the docker-compose excluding rtsp-stream and nginx if they exist
         run: |
           RTSP_EXISTS=$(sudo docker ps -a --format '{{.Names}}' | grep -w "rtsp-stream" || echo "no")
-          NGINX_EXISTS=$(sudo docker ps -a --format '{{.Names}}' | grep -w "nginx-hls" || echo "no")
+          NGINX_EXISTS=$(sudo docker ps -a --format '{{.Names}}' | grep -w "nginx" || echo "no")
 
           if [[ "$RTSP_EXISTS" != "no" && "$NGINX_EXISTS" != "no" ]]; then
-            sudo docker compose up -d --remove-orphans --no-recreate rtsp-stream nginx-hls
+            sudo docker compose up -d --remove-orphans --no-recreate rtsp-stream nginx
           fi
           
           sudo docker compose up -d --remove-orphans

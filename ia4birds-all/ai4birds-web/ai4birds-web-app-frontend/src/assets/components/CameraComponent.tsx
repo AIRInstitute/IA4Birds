@@ -29,6 +29,7 @@ type Camera = {
 };
 
 const CameraComponent = () => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cameraName, setCameraName] = useState("");
   const [cameraLocation, setCameraLocation] = useState("");
@@ -55,6 +56,7 @@ const CameraComponent = () => {
           fetchedData = await CameraService.getPublicCameras();
         } else {
           fetchedData = await CameraService.getAccessibleCameras();
+
         }
 
         setCamerasData(fetchedData);

@@ -92,17 +92,18 @@ services:
       - bird-net
 
   ai4birds-ingest-service:
-    build: ./ia4birds-all/ai4birds-ingest-service
-    container_name: ai4birds-ingest
-    mem_limit: 6g
-    env_file:
-      - /etc/envs/.env
-    volumes:
-      - /home/bisite/exclusion_eolica.csv:/home/exclusion_eolica.csv
-    ports:
-      - 5002:5000
-    networks:
-      - bird-net
+      build: ./ia4birds-all/ai4birds-ingest-service
+      container_name: ai4birds-ingest
+      mem_limit: 6g
+      memswap_limit: 6g
+      env_file: 
+        - /etc/envs/.env
+      volumes:
+        - /home/bisite/exclusion_eolica.csv:/home/exclusion_eolica.csv
+      ports:
+        - 5002:5000
+      networks:
+        - bird-net 
 
   redis:
     image: redis:6.2-alpine
@@ -190,3 +191,4 @@ volumes:
   cache:
     driver: local
   camara-config:
+
