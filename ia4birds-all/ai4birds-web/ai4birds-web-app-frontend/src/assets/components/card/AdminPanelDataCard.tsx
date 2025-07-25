@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const CustomCardData = ({ panelAdminData }) => {
   if (!panelAdminData || panelAdminData.length === 0) {
-    return <p>Cargando datos...</p>; // Fallback for no data
+    return <p>Cargando datos...</p>;
   }
 
   return (
@@ -14,15 +14,16 @@ export const CustomCardData = ({ panelAdminData }) => {
         <h1 className="font-bold text-xl">Panel de Datos</h1>
       </CardHeader>
       <CardBody className="overflow-auto py-2">
-        <div className="flex gap-4 h-full">
-          {panelAdminData.map((data) => (
+        <div className="grid grid-cols-2 gap-4 h-[370px]">
+        {/* <div className="grid grid-cols-2 gap-4 h-[472px]"> */}
+          {panelAdminData.slice(0, 2).map((data) => (
             <Card key={data.id} className="w-full py-3">
               <h2 className="p-1 text-center font-bold">{data.name}</h2>
               <CardBody>
                 <div className="max-w-full overflow-x-auto">
                   <CopyBlock
                     language="json"
-                    text={JSON.stringify(data.data, null, 2)} // Use current data entry
+                    text={JSON.stringify(data.data, null, 2)}
                     codeBlock
                     showLineNumbers={false}
                   />
@@ -30,7 +31,7 @@ export const CustomCardData = ({ panelAdminData }) => {
                 <div className="w-full flex justify-end">
                   <Link
                     to={`/data-panel-component?data=${data.id}`}
-                    className="text-blue-500 underline"
+                    className="text-blue-500 underline text-sm"
                   >
                     Ver más...
                   </Link>
@@ -39,6 +40,40 @@ export const CustomCardData = ({ panelAdminData }) => {
             </Card>
           ))}
         </div>
+        {panelAdminData.length > 2 && (
+          <div className="w-full py-3 mt-4">
+            <Card>
+              <h2 className="p-1 text-center font-bold">{panelAdminData[2].name}</h2>
+              <CardBody>
+                <div className="max-w-full overflow-x-auto h-[206px]">
+                  {Array.isArray(panelAdminData[2].data) ? (
+                    <CopyBlock
+                      language="json"
+                      text={JSON.stringify(panelAdminData[2].data.slice(0, 20), null, 2)}
+                      codeBlock
+                      showLineNumbers={false}
+                    />
+                  ) : (
+                    <CopyBlock
+                      language="json"
+                      text={JSON.stringify(panelAdminData[2].data, null, 2).slice(0, 1000)}
+                      codeBlock
+                      showLineNumbers={false}
+                    />
+                  )}
+                </div>
+                <div className="w-full flex justify-end">
+                  <Link
+                    to={`/data-panel-component?data=${panelAdminData[2].id}`}
+                    className="text-blue-500 underline text-sm"
+                  >
+                    Ver más...
+                  </Link>
+                </div>
+              </CardBody>
+            </Card>
+          </div>
+        )}
       </CardBody>
     </Card>
   );

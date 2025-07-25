@@ -51,7 +51,7 @@ export const FrequencyWindSpeed: React.FC<FrequencyWindSpeedProps> = ({ eolicWin
       },
       labels: {
         formatter: function (val: number) {
-          return val.toFixed(1); // Formateo a 1 decimal
+          return val.toFixed(1);
         }
       },
     },
@@ -61,7 +61,7 @@ export const FrequencyWindSpeed: React.FC<FrequencyWindSpeedProps> = ({ eolicWin
     tooltip: {
       y: {
         formatter: function (val: number) {
-          return val.toFixed(1) + " m/s"; // Formateo a 1 decimal
+          return val.toFixed(1) + " m/s";
         }
       }
     } 

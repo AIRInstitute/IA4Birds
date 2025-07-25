@@ -1,9 +1,11 @@
 import dotenv from "dotenv";
-dotenv.config({ path: "/home/node/app/ai4birds-web-app-backend/.env" });
+// Solo cargar .env si no estás en producción (por ejemplo, local)
+// if (process.env.NODE_ENV !== "production") {
+//     dotenv.config();
+// }
 
 function toBoolean(value: string | undefined): boolean | undefined {
-    if (value == undefined) return undefined;
-
+    if (value === undefined) return undefined;
     return value === "true";
 }
 
@@ -18,8 +20,8 @@ const globalConfig = {
     frontendURL: process.env.FRONTEND_URL || "http://212.128.154.81",
     backendURL: process.env.BACKEND_URL || "http://212.128.154.81:5030",
     pythonURL:
-        process.env.PYTHON_URL ||
-        "http://ia4birds-pre.der.usal.es:5002/ai4birds-ingest-service/v1",
+        process.env.PYTHON_COORDINATE_URL ||
+        "http://ia4birds-pre.der.usal.es:5001/ai4birds-coordinate-service/v1",
     smtp: {
         host: process.env.SMTP_HOST || "smtp.gmail.com",
         port: Number(process.env.SMTP_PORT) || 587,
@@ -38,6 +40,8 @@ const globalConfig = {
         key: process.env.SSL_KEY || "key",
     },
     whiteList: process.env.WHITE_LIST || [],
+    mediamtxApi: process.env.MEDIAMTX_API || "http://mediamtx:9997",
+    streamBaseURL: process.env.STREAM_BASE_URL || "http://localhost:8888"
 };
 
 console.log(globalConfig.whiteList);

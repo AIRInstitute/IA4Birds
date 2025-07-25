@@ -7,7 +7,7 @@ import requests
 import typing
 from functools import lru_cache
 from typing import Dict
-from ai4birds_ingest_service.log import logger
+from ai4birds_ingest_service import logger
 
 class WindMap_Extractor():
     @lru_cache(maxsize=128)
@@ -29,10 +29,11 @@ class WindMap_Extractor():
         """
 
         # Endpoints
-        wind_profile_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WIND_PROFILE/?lat={lat}&lon={lon}&z={z}"
-        daily_wind_temp_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WS/?lat={lat}&lon={lon}&z={z}"
-        weibull_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WEIBULL/?lat={lat}&lon={lon}&z={z}"
-        wind_rose_endpoint = f"https://www.mapaeolicoiberico.com/api/v1/meso/WINDROSE/?lat={lat}&lon={lon}&z={z}"  
+        BASE_URL = "https://www.mapaeolicoiberico.com/api/v1/meso"
+        wind_profile_endpoint = f"{BASE_URL}/WIND_PROFILE/?lat={lat}&lon={lon}&z={z}"
+        daily_wind_temp_endpoint = f"{BASE_URL}/WS/?lat={lat}&lon={lon}&z={z}"
+        weibull_endpoint = f"{BASE_URL}/WEIBULL/?lat={lat}&lon={lon}&z={z}"
+        wind_rose_endpoint = f"{BASE_URL}/WINDROSE/?lat={lat}&lon={lon}&z={z}"
 
         # Get data from endpoints
         try:
@@ -82,8 +83,8 @@ class WindMap_Extractor():
         Returns:
             str: Ruta del archivo CSV descargado.
         """
-        url = f"https://www.mapaeolicoiberico.com/api/v1/downloadDataFree?lat={lat}&lon={lon}"
-        response = requests.get(url, stream=True)
+        URL = f"https://www.mapaeolicoiberico.com/api/v1/downloadDataFree?lat={lat}&lon={lon}"
+        response = requests.get(URL, stream=True)
 
         # Check request status
         if response.status_code == 200:

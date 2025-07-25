@@ -3,17 +3,18 @@ import { useSearchParams } from "react-router-dom";
 import { CustomCard } from "./card/DataPanelCard";
 import bird from './services/BirdDataService';
 import xenocanto from './services/XenocantoDataService';
+import exclusionData from './services/ExclusionEolicService';
 
 const DataPanelComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get("data");
-  const selectedDataFromQuery = Number(queryParam); // Convert queryParam to a number
+  const selectedDataFromQuery = Number(queryParam);
   const [selectedData, setSelectedData] = React.useState(selectedDataFromQuery || 1);
-  const [dataPanelData, setDataPanelData] = React.useState(null); // Data to render
-  const [isLoading, setIsLoading] = React.useState(true); // Loading state
-  const [error, setError] = React.useState(""); // Error state
+  const [dataPanelData, setDataPanelData] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState("");
 
-  // Fetch data based on the selected data
+
   React.useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -21,11 +22,17 @@ const DataPanelComponent = () => {
       try {
         let response;
         if (selectedData === 1) {
-          response = await xenocanto.getXenocanto(); // Fetch Xenocanto data
+          response = await xenocanto.getXenocanto();
         } else if (selectedData === 2) {
-          response = await bird.getExclusionMap(); // Fetch eBird data
+          response = await bird.getExclusionMap();
+        }else if (selectedData === 3) {
+          response = await exclusionData.getExclusionMapAll();
         }
-        setDataPanelData(response.data); // Set fetched data
+        if (response?.data) {
+          setDataPanelData(response.data.data || response.data);
+        } else {
+          throw new Error("Respuesta inválida");
+        }
       } catch (err) {
         setError("Error en la obtención de datos. Vuelva a intentarlo más tarde.");
         console.error("Error fetching data: ", err);
@@ -37,11 +44,11 @@ const DataPanelComponent = () => {
     fetchData();
   }, [selectedData]);
 
-  // Handle dropdown change
+
   const handleDropdownChange = (event) => {
     const selectedId = Number(event.target.value);
     setSelectedData(selectedId);
-    setSearchParams({ data: selectedId.toString() }); // Update queryParam
+    setSearchParams({ data: selectedId.toString() });
   };
 
   return (
@@ -54,6 +61,7 @@ const DataPanelComponent = () => {
         >
           <option value={1}>Xenocanto</option>
           <option value={2}>eBird</option>
+          <option value={3}>Eolic Exclusion</option>
         </select>
       </div>
       <div className="card-container flex-grow mx-5">

@@ -1,10 +1,12 @@
 import Redis from 'ioredis';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: "/home/node/app/ai4birds-web-app-backend/.env" });
 
 const redis = new Redis({
-  host: 'ia4birds-platform.air-institute.com',
-  port: 6379,
-  // username: 'kommandant',
-  password: '¿-K4pel1a_su0M1'
+  host: process.env.REDIS_HOST || 'redis',
+  port: Number(process.env.REDIS_PORT) || 6379,
+  password: process.env.REDIS_PASSWORD,
 });
 
 redis.on('connect', () => {

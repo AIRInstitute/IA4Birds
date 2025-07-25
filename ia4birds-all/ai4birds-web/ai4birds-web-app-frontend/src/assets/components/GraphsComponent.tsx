@@ -1,6 +1,5 @@
 import React from "react";
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Spinner, getKeyValue, Spacer, Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nextui-org/react";
-import HeaderComponent from '../components/HeaderComponent';
 import {BlogCard} from "./card/BlogCard";
 
 const GraphsComponent = () =>{

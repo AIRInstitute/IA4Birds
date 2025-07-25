@@ -1,6 +1,4 @@
 import { useState,useEffect } from 'react';
-import { Divider } from "@nextui-org/divider";
-import { Link } from "@nextui-org/link";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 import { RxCross1 } from "react-icons/rx";
@@ -41,7 +39,6 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
   }
 
     useEffect(() => {
-        // Esta función se ejecutará cada vez que eolicResourcesdata cambie
         if (eolicResourcesdata && eolicResourcesdata.lat && eolicResourcesdata.lng) {
           getEolicResources();
       } else {
@@ -49,7 +46,6 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
       }
       }, [eolicResourcesdata]);
 
-    //FUNCIÓN QUE PONE ESTILOS AL 
     const renderIndicator = (onClickHandler, isSelected) => {
         const customStyle = {
           background: isSelected ? '#55436F' : '#ccc', 
@@ -57,8 +53,8 @@ const SidebarEolicResources = ({isOpen, onCancel,eolicResourcesdata}) => {
           height: '10px', 
           borderRadius: '50%', 
           display: 'inline-block', 
-          margin: '0 5px', // Margen entre los puntos
-          cursor: 'pointer', // Cambiar el cursor al pasar sobre los puntos
+          margin: '0 5px',
+          cursor: 'pointer',
         };
     
         return (

@@ -5,7 +5,6 @@ import { CardHeader, CardBody, Card } from "@nextui-org/card";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import AuthDataService from "../services/AuthDataService";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 export const CustomCard = () => {
     const [email, setEmail] = React.useState('');
@@ -56,7 +55,6 @@ export const CustomCard = () => {
         const ocupationParam = params.get('ocupation');
         const entityParam = params.get('entity');
  
-        //Decodifica los valores de la URL
         if (emailParam) setEmail(decodeURIComponent(emailParam));
         if (descriptionParam) setDescription(decodeURIComponent(descriptionParam));
         if (organizationParam) setOrganization(decodeURIComponent(organizationParam));

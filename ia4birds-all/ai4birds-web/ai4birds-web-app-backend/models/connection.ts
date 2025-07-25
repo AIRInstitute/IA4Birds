@@ -3,6 +3,7 @@ import { Sequelize, Dialect, Op } from "sequelize";
 import config from "../config/db.config";
 
 import userModel from "./models/user.models";
+import cameraModel from "./models/cameras.models"
 
 const sequelize = new Sequelize(
     config.database,
@@ -18,6 +19,17 @@ const sequelize = new Sequelize(
 );
 
 const User = userModel(sequelize);
+const Camera = cameraModel(sequelize);
+
+Camera.belongsTo(User, {
+  foreignKey: "user_id",
+  as: "user",
+});
+
+User.hasMany(Camera, {
+  foreignKey: "user_id",
+  as: "cameras",
+});
 
 async function testConnection() {
     try {
@@ -32,4 +44,4 @@ async function testConnection() {
     }
 }
 
-export { User, testConnection };
+export { User, Camera, testConnection };

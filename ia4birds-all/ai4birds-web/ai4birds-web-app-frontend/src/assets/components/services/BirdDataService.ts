@@ -1,4 +1,5 @@
 import api from "./main";
+import { getToken } from "@/utils/utils";
 
 class BirdDataService {
     
@@ -16,7 +17,7 @@ class BirdDataService {
     async getExclusionMap() {
          const response = await api.get("/data/ebird", {
             headers: {
-        //         "x-access-token": getToken(),
+                 "x-access-token": getToken(),
               },
         })
         return response;
@@ -25,7 +26,7 @@ class BirdDataService {
     async getDataBird() {
         const response = await api.get("/data/dataBird", {
             headers: {
-        //         "x-access-token": getToken(),
+                 "x-access-token": getToken(),
                 },
         })
         return response;

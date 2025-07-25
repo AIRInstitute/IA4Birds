@@ -4,6 +4,8 @@ import { CustomCardCamera } from './card/AdminPanelCameraCard';
 import { CustomCardData } from './card/AdminPanelDataCard';
 import bird from './services/BirdDataService';
 import xenocanto from './services/XenocantoDataService';
+import CameraService from "./services/CameraDataService";
+import eolic from './services/ExclusionEolicService';
 
 const AdminPanelComponent = () => {
   interface PanelAdminData {
@@ -12,63 +14,108 @@ const AdminPanelComponent = () => {
     data: any;
   }
 
-  const [panelAdminData, setPanelAdminData] = useState<PanelAdminData[]>([]);
-  const [cameraAdminData] = useState([
-    { id: 1, name: 'Cámara 1', location: '', views: '273 visitas', gpsData: "Latitud: 40.416775, Longitud: -3.703790", storageData: "15.5", status: "Activa", url: '/public/playVideo.png' },
-    { id: 2, name: 'Cámara 2', location: '', views: '100 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
-    { id: 3, name: 'Cámara 3', location: '', views: '50 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
-    { id: 4, name: 'Cámara 4', location: '', views: '500 visitas', gpsData: "N/A", storageData: "N/A", status: "Inactiva", url: '/public/playVideo.png' },
-  ]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [xenocantoData, setXenocantoData] = useState<PanelAdminData | null>(null);
+  const [ebirdData, setEbirdData] = useState<PanelAdminData | null>(null);
+  const [eolicData, setEolicData] = useState<PanelAdminData | null>(null);
+  const [cameraAdminData, setCameraAdminData] = useState<any[]>([]);
+
+  const [loadingXeno, setLoadingXeno] = useState(true);
+  const [loadingEbird, setLoadingEbird] = useState(true);
+  const [loadingEolic, setLoadingEolic] = useState(true);
+  const [loadingCamera, setLoadingCamera] = useState(true);
+
+  const [errorXeno, setErrorXeno] = useState<string | null>(null);
+  const [errorEbird, setErrorEbird] = useState<string | null>(null);
+  const [errorEolic, setErrorEolic] = useState<string | null>(null);
+  const [errorCamera, setErrorCamera] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchXenocanto = async () => {
       try {
-        const exclusionResponse = await bird.getExclusionMap();
-        const xenocantoResponse = await xenocanto.getXenocanto();
-
-        setPanelAdminData([
-          {
-            id: 1,
-            name: 'Xenocanto',
-            data: xenocantoResponse.data, 
-          },
-          {
-            id: 2,
-            name: 'eBird',
-            data: exclusionResponse.data, 
-          },
-        ]);
+        const res = await xenocanto.getXenocanto();
+        setXenocantoData({ id: 1, name: 'Xenocanto', data: res.data });
       } catch (err) {
-        // console.error("Error fetching data:", err);
-        // setError("Failed to fetch data");
+        console.error("Error cargando Xenocanto:", err);
+        setErrorXeno("No se han podido obtener los datos de Xenocanto");
       } finally {
-        setLoading(false);
+        setLoadingXeno(false);
       }
     };
 
-    fetchData();
+    const fetchEbird = async () => {
+      try {
+        const res = await bird.getExclusionMap();
+        setEbirdData({ id: 2, name: 'eBird', data: res.data });
+      } catch (err) {
+        console.error("Error cargando eBird:", err);
+        setErrorEbird("No se han podido obtener los datos de eBird");
+      } finally {
+        setLoadingEbird(false);
+      }
+    };
+
+    const fetchEolic = async () => {
+      try {
+        const res = await eolic.getExclusionMapAll();
+        setEolicData({ id: 3, name: 'Exclusión Eólica', data: res.data });
+      } catch (err) {
+        console.error("Error cargando Exclusión Eólica:", err);
+        setErrorEolic("No se han podido obtener los datos de Exclusión Eólica");
+      } finally {
+        setLoadingEolic(false);
+      }
+    };
+
+    const fetchCameras = async () => {
+      try {
+        //const res = await CameraService.getAllCamera();
+        const res = await CameraService.getAccessibleCameras();
+        setCameraAdminData(res);
+      } catch (err) {
+        console.error("Error cargando cámaras:", err);
+        setErrorCamera("No se han podido obtener los datos de las cámaras");
+      } finally {
+        setLoadingCamera(false);
+      }
+    };
+
+
+
+    fetchXenocanto();
+    fetchEbird();
+    fetchEolic();
+    fetchCameras();
   }, []);
-
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
 
   return (
     <div className="admin-panel">
       <Spacer y={5} />
       <div className="flex justify-between gap-2 w-full px-6 lg:flex-row flex-col">
+
+        {/* Cámaras */}
         <div className="card-container flex-grow lg:w-1/2 w-full">
-          <CustomCardCamera cameraAdminData={cameraAdminData} />
+          {loadingCamera ? (
+            <p>Cargando cámaras...</p>
+          ) : errorCamera ? (
+            <p>{errorCamera}</p>
+          ) : (
+            <CustomCardCamera cameraAdminData={cameraAdminData} />
+          )}
         </div>
 
-        <div className="card-container flex-grow lg:w-1/2 w-full">
-          <CustomCardData panelAdminData={panelAdminData} />
+        {/* Datos científicos */}
+        <div className="card-container flex-grow lg:w-1/2 w-full space-y-4">
+          {loadingXeno && loadingEbird && loadingEolic ? (
+            <p>Cargando datos científicos...</p>
+          ) : (
+            <CustomCardData
+              panelAdminData={[
+                xenocantoData || { id: 1, name: 'Xenocanto', data: { error: errorXeno || 'No disponible' } },
+                ebirdData || { id: 2, name: 'eBird', data: { error: errorEbird || 'No disponible' } },
+                eolicData || { id: 3, name: 'Exclusión Eólica', data: { error: errorEolic || 'No disponible' } },
+              ]}
+            />
+          )}
         </div>
       </div>
     </div>

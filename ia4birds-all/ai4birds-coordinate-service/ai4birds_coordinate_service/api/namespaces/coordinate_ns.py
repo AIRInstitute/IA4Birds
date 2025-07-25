@@ -2,125 +2,114 @@
 # Copyright 2023 AIRInstitute
 # See LICENSE for details.
 # Author: AIRInstitute (@AIRInstitute on GitHub)
-import requests
-from flask import json
-from flask_restx import Resource
-from ai4birds_coordinate_service.api.v1 import api 
-from ai4birds_coordinate_service.api.models.coordinate_models import get_input_model, post_input_model, put_input_model, delete_input_model, output_model
-from ai4birds_coordinate_service.api.parsers.coordinate_parsers import get_parser, post_parser, put_parser, delete_parser 
-from ai4birds_coordinate_service.utils import handle400error, handle404error, handle500error
-from ai4birds_coordinate_service.model.coordinate_model import CheckModel, XenoCanto, EBird, WindMap, ExclusionMap
+from flask import request
+from ...utils.decorators import require_token
+from flask_restx import Namespace, Resource
+from ai4birds_coordinate_service.services import bird_data_service, map_service, device_service
 
-ns = api.namespace('IngestApi', description='Coordinate endpoints')
-ebird_ns = api.namespace('EBird', description='EBird requests')
-xenocanto_ns = api.namespace('XenoCanto', description='XenoCanto requests') 
-windmap_ns = api.namespace('WindMap', description='Windmap requests')
-exclusionmap_ns = api.namespace('ExclusionMap', description='ExclusionMap requests')
+coordinate_ns = Namespace("coordinate", description="Coordinate API Gateway")
 
-@ns.route('/')
-class Coordinate(Resource):
-    @ns.expect(get_parser)
+# -------------------- ENDPOINT PRIVADOS --------------------
+
+@coordinate_ns.route("/ebird")
+class EBird(Resource):
+    @require_token()
     def get(self):
-        try :
-            args = get_parser.parse_args()
-            id = args['id']
-        except Exception as e:
-            return handle400error(ns, e)
+        """
+        Retrieves bird observation data from the eBird API in Castilla y León.
         
-        model = CheckModel()
-        return model.get(id) 
-    
-    @ns.expect(post_input_model)
+        Authentication:
+            This endpoint is private and requires a valid JWT access token.
+        """
+        data, status_code = bird_data_service.get_ebird_data()
+        return data, status_code
+
+@coordinate_ns.route("/xenocanto")
+class Xenocanto(Resource):
+    @require_token()
+    def get(self):
+        """
+        Retrieves bird sound recordings from the XenoCanto API in Castilla y León.
+        
+        Authentication:
+            This endpoint is private and requires a valid JWT access token.
+        """
+        data, status_code = bird_data_service.get_xenocanto_data()
+        return data, status_code
+        
+@coordinate_ns.route("/sensitivity")
+class Sensitivity(Resource):
+    @require_token()
+    def get(self):
+        """
+        Retrieves bird sensitivity zone data in Castilla y León.
+        
+        Authentication:
+            This endpoint is private and requires a valid JWT access token.
+        """
+        data, status_code = bird_data_service.get_sensitivity_data()
+        return data, status_code
+        
+# -------------------- ENDPOINTS PUBLICOS --------------------
+
+@coordinate_ns.route("/dataBird")
+class DataBird(Resource):
+    def get(self):
+        """Forwards GET request to the ingestion API for combined eBird and XenoCanto data."""
+        data, status_code = bird_data_service.get_combined_bird_data()
+        return data, status_code
+
+@coordinate_ns.route("/windmap")
+class WindMap(Resource):
     def post(self):
-        try:
-            args = post_parser.parse_args()
-            data = {
-                "data": {
-                    "key1": args['param1'],
-                    "key2": args['param2']
-                }
-            }
-        except Exception as e:
-            return handle400error(ns, e)
-        
-        model = CheckModel()
-        return model.post(data)
-        
+        """Forwards wind map POST request to ingestion API."""
+        data, status_code = map_service.post_wind_map_data(request.get_json())
+        return data, status_code
 
-    @ns.expect(put_input_model)
-    def put(self):
-        try:
-            args = put_parser.parse_args()
-            id = args['id']
-            data = {
-                "data": {
-                    "key1": args['param1'],
-                    "key2": args['param2']
-                }
-            }
-        except Exception as e:
-            return handle400error(ns, e)
-        
-        model = CheckModel()
-        return model.put(id, data)
-        
-
-    @ns.expect(delete_parser)
-    def delete(self):
-        try:
-            args = delete_parser.parse_args()
-            id = args['id']
-        
-        except Exception as e:
-            return handle400error(ns, e)
-        
-        model = CheckModel()
-        return model.delete(id)
-
-@ebird_ns.route('/')
-class EBirdCoordinate(Resource):
-    """
-    Gets data from the last 30 days in Castilla y León using eBird API.
-
-    Returns:
-        :return: Data from eBird API.
-        :rtype: dict
-    """
-    def get(self):
-        return EBird.get()
-
-@xenocanto_ns.route('/')
-class XenoCantoCoordinate(Resource):
-    """
-    Gets data from XencoCanto API in Castilla y León.
-
-    Returns:
-        :return: Data from XenoCanto API.
-        :rtype: dict
-    """
-    def get(self):
-        return XenoCanto.get()
-
-@windmap_ns.route('/')
-class WindMapCoordinate(Resource):
-    """
-    Obtain wind map data with coordinates.
-
-    Returns:
-        :return: Result of the wind map extraction.
-        :rtype: dict
-    """
-    def get(self, lat: float, lon: float, z: int):
-        return WindMap.get(lat, lon, z)
-
-@exclusionmap_ns.route('/')
+@coordinate_ns.route("/exclusionmap")
 class ExclusionMap(Resource):
-    """
-    Saves a file *.shp for the eolic exclusion map.
+    def post(self):
+        """Forwards exclusion map POST request to ingestion API."""
+        data, status_code = map_service.post_exclusion_map_data(request.get_json()) 
+        return data, status_code
 
-    Returns:
-        :return: Message indicating the completion of the download.
-        :rtype: str
-    """
+@coordinate_ns.route("/exclusionmap/zip")
+class ExclusionMapZip(Resource):
     def get(self):
-        return ExclusionMap.get()
+        """Forwards exclusion map ZIP request to ingestion API."""
+        return map_service.get_exclusion_map_zip()
+        
+@coordinate_ns.route("/exclusionmap/all")
+class ExclusionMapAll(Resource):
+    def get(self):
+        """Forwards exclusion map full JSON data from ingestion API."""
+        data, status_code = map_service.get_all_exclusion_map_data()
+        return data, status_code
+
+@coordinate_ns.route("/exclusionmap/stream-exclusion-data")
+class ExclusionMapStream(Resource):
+    def post(self):
+        """Forwards exclusion map streaming request to ingestion API."""
+        data, status_code = map_service.stream_exclusion_data(request.get_json())
+        return data, status_code
+
+@coordinate_ns.route("/device-status")
+class DeviceStatus(Resource):
+    def post(self):
+        """Forwards device status POST request to ingestion API."""
+        data, status_code = device_service.post_device_status(request.get_json())
+        return data, status_code
+
+@coordinate_ns.route("/device-status/latest")
+class DeviceStatusLatest(Resource):
+    def get(self):
+        """Forwards request to get the latest device status."""
+        data, status_code = device_service.get_latest_device_status()
+        return data, status_code
+
+@coordinate_ns.route("/device-status/health")
+class DeviceHealth(Resource):
+    def get(self):
+        """Forwards request to get device health status."""
+        data, status_code = device_service.get_device_health()
+        return data, status_code

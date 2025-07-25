@@ -12,6 +12,7 @@ COPY controllers /home/node/app/controllers
 COPY middleware /home/node/app/middleware
 COPY models /home/node/app/models
 COPY routes /home/node/app/routes
+COPY scripts /home/node/app/scripts
 COPY utils /home/node/app/utils
 COPY documentation /home/node/app/documentation
 COPY app.ts /home/node/app/app.ts
@@ -27,6 +28,9 @@ FROM node:18.12.1-alpine
 
 # Establece el directorio de trabajo
 WORKDIR /home/node/app
+
+# Instala Python y pip para yt-dlp
+RUN apk add --no-cache python3 py3-pip && pip3 install yt-dlp
 
 # Copia los archivos compilados desde el contenedor builder
 COPY --from=builder /home/node/app /home/node/app

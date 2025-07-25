@@ -232,6 +232,303 @@
           "500": { "description": "Internal server error" }
         }
       }
+    },
+    "/camera": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Get all cameras",
+        "responses": {
+          "200": {
+            "description": "List of all cameras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Camera"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Create a new camera",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": {
+                    "type": "string",
+                    "example": "camara_postman"
+                  },
+                  "url_origen": {
+                    "type": "string",
+                    "example": "rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp"
+                  },
+                  "ubicacion": {
+                    "type": "string",
+                    "example": "Sala de pruebas"
+                  }
+                },
+                "required": [
+                  "nombre",
+                  "url_origen",
+                  "ubicacion"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Camera created successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/camera/accessible": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Get public cameras and user's private cameras",
+        "description": "Returns all cameras that are public or private cameras owned by the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of accessible cameras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Camera"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/camera/private": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Get private cameras of the authenticated user",
+        "description": "Returns only the private cameras owned by the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of user's private cameras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Camera"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/camera/{id}": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Get camera by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Camera data"
+          },
+          "404": {
+            "description": "Camera not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Update camera by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": {
+                    "type": "string"
+                  },
+                  "url_origen": {
+                    "type": "string"
+                  },
+                  "tipo_fuente": {
+                    "type": "string",
+                    "enum": [
+                      "RTSP",
+                      "RTMP",
+                      "HLS",
+                      "WebRTC",
+                      "YouTube",
+                      "Twitch",
+                      "MJPEG",
+                      "DASH",
+                      "Otro"
+                    ]
+                  },
+                  "ubicacion": {
+                    "type": "string"
+                  },
+                  "estado": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "nombre",
+                  "url_origen",
+                  "tipo_fuente",
+                  "ubicacion",
+                  "estado"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Camera updated successfully"
+          },
+          "404": {
+            "description": "Camera not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Camera"
+        ],
+        "summary": "Delete camera by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Camera deleted successfully"
+          },
+          "404": {
+            "description": "Camera not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Camera": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "tipo_fuente": {
+            "type": "string"
+          },
+          "url_origen": {
+            "type": "string"
+          },
+          "url_reproduccion": {
+            "type": "string"
+          },
+          "estado": {
+            "type": "string"
+          },
+          "ubicacion": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

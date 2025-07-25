@@ -21,12 +21,12 @@ export const Weibull: React.FC<FrequencyWindSpeedProps> = ({ eolicWindMapData })
     {
       name: 'Densidad',
       type: 'line',
-      data: [] as number [] // Datos de densidad serán dinámicos
+      data: [] as number []
     }, 
     {
       name: 'Frecuencia',
       type: 'column',
-      data:  [] as number [] // Datos de frecuencia serán dinámicos
+      data:  [] as number []
     }
   ]);
   const [options, setOptions] = useState<any>({
@@ -42,7 +42,7 @@ export const Weibull: React.FC<FrequencyWindSpeedProps> = ({ eolicWindMapData })
           },
           dataLabels: {
             enabled: true,
-            enabledOnSeries: [0, 1] // Habilita etiquetas en ambas series
+            enabledOnSeries: [0, 1]
           },
           xaxis: {
             categories: [0,
@@ -124,7 +124,7 @@ export const Weibull: React.FC<FrequencyWindSpeedProps> = ({ eolicWindMapData })
               19,
               19.25,
               19.5,
-              19.75], // Valores de velocidad
+              19.75],
             title: {
               text: 'Velocidad (m/s)'
             },

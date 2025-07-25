@@ -4,7 +4,6 @@ import { Button, ButtonGroup} from "@nextui-org/button";
 import {Input} from "@nextui-org/input";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { RxEyeOpen, RxEyeClosed } from "react-icons/rx";
-import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom"; 
 
 import user from "../services/UserDataService";
@@ -13,7 +12,7 @@ import user from "../services/UserDataService";
 export const CustomCard = ()=> {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [token, setToken] = useState(""); // Token from the query
+  const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);

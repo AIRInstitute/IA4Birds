@@ -23,11 +23,11 @@ class ExclusionMap_extractor():
             None
         """
         # Endpoint
-        exclusion_map_endpoint = "https://idecyl.jcyl.es/geoserver/er/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=er:enre_cyl_excl_eoli&srsName=EPSG:25830&outputFormat=SHAPE-ZIP"
+        URL_EXCLUSION_MAP = "https://idecyl.jcyl.es/geoserver/er/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=er:enre_cyl_excl_eoli&srsName=EPSG:25830&outputFormat=SHAPE-ZIP"
         
         # Get data from the endpoint
         try:
-            response = requests.get(exclusion_map_endpoint)        
+            response = requests.get(URL_EXCLUSION_MAP)        
         except Exception as e:
             logger.error(f"Error while downloading *.zip file: {e}")
             return None
@@ -58,9 +58,9 @@ class ExclusionMap_extractor():
         return None
     @staticmethod
     def download_and_extract_shp():
-        endpoint = "https://idecyl.jcyl.es/geoserver/er/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=er:enre_cyl_excl_eoli&srsName=EPSG:25830&outputFormat=SHAPE-ZIP"
+        URL_IDECYL= "https://idecyl.jcyl.es/geoserver/er/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=er:enre_cyl_excl_eoli&srsName=EPSG:25830&outputFormat=SHAPE-ZIP"
         try:
-            response = requests.get(endpoint, stream=True)
+            response = requests.get(URL_IDECYL, stream=True)
             if response.status_code == 200:
                 temp_dir = tempfile.mkdtemp()
                 zip_path = os.path.join(temp_dir, 'exclusion_map.zip')

@@ -252,6 +252,56 @@ const getExclusionMapData = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * Get cached or fresh exclusion map data from the Python backend
+ *
+ * - Checks Redis for cached data (key: "exclusionMapAll")
+ * - If no cache is found, fetches data from the Python service at /exclusionmap/all
+ * - Limits the `data` array to the first 100 elements for performance
+ * - The result is cached in Redis for 1 hour (3600 seconds)
+ *
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ * @returns {Promise<Response>} JSON object containing exclusion map data
+ */
+const getExclusionMapAll = async (req: Request, res: Response) => {
+  try {
+    const cacheKey = "exclusionMapAll";
+    const cachedData = await redis.get(cacheKey);
 
-// };
-export { getWindMapData, getExclusionMapData, getExclusionMapDataStreaming, addFact };
+    if (cachedData) {
+      return res.status(200).json(JSON.parse(cachedData));
+    }
+
+    const response = await axios.get(`${globalConfig.pythonURL}/exclusionmap/all`);
+
+    if (response.status !== 200) {
+      throw new Error("No se pudieron obtener los datos del mapa de exclusión eólica.");
+    }
+
+    const exclusionMapData = response.data;
+
+    // Si `data` es un array, limitar a 100 elementos y cachear el resultado
+    if (Array.isArray(exclusionMapData.data)) {
+      const limitedData = {
+        ...exclusionMapData,
+        data: exclusionMapData.data.slice(0, 100),
+      };
+
+      await redis.set(cacheKey, JSON.stringify(limitedData), "EX", 3600);
+      return res.status(200).json(limitedData);
+    } else {
+      console.warn("La propiedad 'data' no es un array.");
+      await redis.set(cacheKey, JSON.stringify(exclusionMapData), "EX", 3600);
+      return res.status(200).json(exclusionMapData);
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({
+      message: globalMessages[500].INTERNAL_SERVER_ERROR,
+    });
+  }
+};
+
+
+export { getWindMapData, getExclusionMapData, getExclusionMapDataStreaming, addFact, getExclusionMapAll };
