@@ -29,6 +29,9 @@ FROM node:18.12.1-alpine
 # Establece el directorio de trabajo
 WORKDIR /home/node/app
 
+# Instala Python y pip para yt-dlp
+RUN apk add --no-cache python3 py3-pip && pip3 install yt-dlp
+
 # Copia los archivos compilados desde el contenedor builder
 COPY --from=builder /home/node/app /home/node/app
 

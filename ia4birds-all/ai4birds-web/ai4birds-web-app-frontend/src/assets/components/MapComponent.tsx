@@ -22,7 +22,6 @@ import {Switch} from "@nextui-org/react";
 // import { ImageOverlay } from 'react-leaflet';
 // import Image from '../images/ps-rn2k_cyl_zepa.png';
 
-// Import or define castillaYLeonBorders
 import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 
 const Mapa = () => {
@@ -41,6 +40,8 @@ const Mapa = () => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipContent, setTooltipContent] = useState("");
   const [selectedCircle, setSelectedCircle] = useState(null);
+  const [gridData, setGridData] = useState<GeoJsonObject | null>(null);
+
   const maxDistance = 10000;
 
   const birdData = [
@@ -115,6 +116,7 @@ const Mapa = () => {
   const [selectedButtonBirds, setSelectedButtonBirds] = useState('');
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [dataBird, setDataBird] = useState([]);
+  const [showGridLayer, setShowGridLayer] = useState(false);
   
 
   //SSE ServerSent Events
@@ -208,6 +210,19 @@ const Mapa = () => {
     // Esta función se ejecutará cada vez que setEolicMarkers cambie
     setMarkersLoaded(true);
   }, [eolicMarkers]);
+
+  useEffect(() => {
+    fetch('/data/grid_cyl.geojson')
+      .then(res => res.json())
+      .then(data => {
+        console.log("GeoJSON cargado:", data);
+        setGridData(data);
+      })
+      .catch(err => {
+        console.error("Error cargando el GeoJSON:", err);
+      });
+  }, []);
+
 
   //====================================================================
   //EOLIC MARKERS
@@ -382,16 +397,14 @@ const Mapa = () => {
   const handleButtonClickEolic = (clickedPoint) => {
     const nearbyEolicMarkers = getNearbyEolicMarkers(clickedPoint, eolicMarkers, maxDistance);
   
-    console.log("Puntos dentro de 10km:", nearbyEolicMarkers); // Verifica que no está vacío
-  
-    setSelectedButton(nearbyEolicMarkers); // Guarda solo los puntos cercanos
+    setSelectedButton(nearbyEolicMarkers);
     setSidebarEolicOpen(true);
 
     if (nearbyEolicMarkers.length > 0) {
       setTooltipContent(`Zona de exclusión eólica: ${nearbyEolicMarkers.espacio}`);
-      setTooltipVisible(true); // Show tooltip
+      setTooltipVisible(true);
     } else {
-      setTooltipVisible(false); // Hide tooltip if no markers
+      setTooltipVisible(false);
     }
   };
 
@@ -527,6 +540,23 @@ const Mapa = () => {
                 </div>
                 )}
               </div>
+
+              <div className="flex items-center gap-2">
+                <TooltipNext placement="right" content="Capa cuadrícula mesoescalar">
+                  <Button
+                    className='camera'
+                    isIconOnly
+                    color={!showGridLayer ? 'primary' : 'danger'}
+                    size='lg'
+                    onClick={() => setShowGridLayer(!showGridLayer)}
+                  >
+                    <TbCarFan style={{ height: '25px', width: '25px' }} />
+                  </Button>
+                </TooltipNext>
+                {showGridLayer && (
+                  <FaCheck />
+                )}
+              </div>
             </CardBody>
           </Card>
         </div>
@@ -630,8 +660,8 @@ const Mapa = () => {
             {showLegend ? "❌ Cerrar leyenda" : "ℹ️ Leyenda"}
           </button>
 
-          {/* Contenedor de la leyenda */}
-          {showLegend && (
+          {/* Contenedor de la leyenda 1 */}
+          {showLegend && !showGridLayer && (
             <div
               style={{
                 background: "white",
@@ -667,6 +697,34 @@ const Mapa = () => {
               </div>
             </div>
           )}
+          {/* Contenedor de la leyenda 2 */}
+          {showLegend && showGridLayer && (
+            <div
+              style={{
+                background: "white",
+                padding: "10px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                marginTop: "5px",
+                width: "150px",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <p style={{ margin: 0, fontWeight: "bold" }}>Leyenda</p>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginRight: "5px" }}>
+                🟩
+                <span>Disponible y viento favorable</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginRight: "5px" }}>
+                🟨
+                <span>Disponible pero viento &lt;5.5 m/s</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginRight: "5px" }}>
+                🟥
+                <span>No disponible ({'>'}25% solape con exclusión eólica)</span>
+              </div>
+            </div>
+          )}
         </div>
         <div className='map'>
           <MapContainer
@@ -681,6 +739,7 @@ const Mapa = () => {
             />
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
             {/* {(showMarkersEolic || showMarkersEolicResources) &&( */}
+            {(!showGridLayer || !gridData) &&(
               <WMSTileLayer 
                 url="https://idecyl.jcyl.es/geoserver/er/wms"
                 layers="enre_cyl_excl_eoli"
@@ -689,7 +748,7 @@ const Mapa = () => {
                 version="1.3.0"
                 className="hue-rotate-[10deg]"
               />
-            {/* )} */}
+            )}
 
             <GeoJSON data={castillaYLeonBorders as GeoJsonObject} style={{ color: 'black', weight: 1, fill: false }} />
             {/* {(showMarkersEolic || showMarkersEolicResources) &&( */}
@@ -703,6 +762,49 @@ const Mapa = () => {
               /> */}
             {/* )} */}
 
+            {showGridLayer && gridData && (
+              <GeoJSON
+              data={gridData}
+              style={(feature: any) => {
+                const props = feature.properties || {};
+                const coverage = props.coverage ?? 0;
+                const viento = props.viento_medio ?? 0;
+
+                let fillColor = "gray";
+                if (coverage > 25) {
+                  fillColor = "red";
+                } else if (viento < 5.5) {
+                  fillColor = "orange";
+                } else {
+                  fillColor = "green";
+                }
+
+                return {
+                  fillColor,
+                  color: "black",
+                  weight: 0.3,
+                  fillOpacity: 0.6,
+                };
+              }}
+              onEachFeature={(feature, layer) => {
+                const props = feature.properties || {};
+                const especies = props.bird_species?.join(", ") || "[]";
+
+                layer.bindTooltip(
+                  `
+                  FID: ${props.fid ?? "undefined"}<br/>
+                  Viento medio: ${props.viento_medio?.toFixed(2) ?? "N/A"} m/s<br/>
+                  WTG: ${props.wtg_count ?? 0}<br/>
+                  Aves observadas: ${props.bird_count ?? 0}<br/>
+                  Especies: ${especies}<br/>
+                  Cobertura: ${props.coverage?.toFixed(2) ?? "N/A"}
+                  `,
+                  { sticky: true }
+                );
+              }}
+            />
+            )}
+            
             {/* {showMarkersEolic && (
               <ImageOverlay
                 url={Image}  // Ruta local de la imagen
@@ -774,7 +876,7 @@ const Mapa = () => {
                     opacity: 1,
                     fillOpacity: 0.8,
                   }}>
-                  {birdMarkers.length > 0 && birdMarkers.map((birdMarker, index) => {
+                  {(!showGridLayer || !gridData) && birdMarkers.length > 0 && birdMarkers.map((birdMarker, index) => {
                     if (birdMarker.observations && birdMarker.observations.length > 0 && birdMarker.observations[0].lat) {
                       return (
                         <>
@@ -943,7 +1045,7 @@ const Mapa = () => {
 
         {selectedButtonEolicResources && selectedButtonEolicResources.lat && selectedButtonEolicResources.lng && (
           <SideBarEolicResources
-            key={selectedButtonEolicResources.lat + '-' + selectedButtonEolicResources.lng} // Clave única
+            key={selectedButtonEolicResources.lat + '-' + selectedButtonEolicResources.lng}
             isOpen={sidebarEolicResourcesOpen}
             onCancel={()=>setSidebarEolicResourcesOpen(false)}
             eolicResourcesdata={selectedButtonEolicResources}

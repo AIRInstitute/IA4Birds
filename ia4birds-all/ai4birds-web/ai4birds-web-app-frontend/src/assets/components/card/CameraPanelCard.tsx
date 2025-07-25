@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
+import { Button } from "@nextui-org/button";
 import Hls from "hls.js";
+import { RxTrash } from "react-icons/rx";
 
-export const CustomCard = ({ cameraPanelData }) => {
+export const CustomCardCamera = ({ cameraPanelData, onDelete }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoUrl = cameraPanelData.playback_url;
 
@@ -15,6 +17,7 @@ export const CustomCard = ({ cameraPanelData }) => {
   const status = cameraPanelData.status || "No disponible";
   const name = cameraPanelData.name?.trim() || "Cámara sin nombre";
   const location = cameraPanelData.location || "Ubicación desconocida";
+  const isPublic = cameraPanelData.is_public ? "Pública" : "Privada";
 
   useEffect(() => {
     if (Hls.isSupported() && videoRef.current) {
@@ -32,11 +35,24 @@ export const CustomCard = ({ cameraPanelData }) => {
     }
   }, [videoUrl]);
 
+  const handleDeleteClick = () => {
+    if (onDelete && cameraPanelData.id) {
+      onDelete(cameraPanelData.id, cameraPanelData.name);
+    }
+  };
+
   return (
     <Card className="py-4">
-      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        <p className="text-tiny uppercase font-bold">{location}</p>
-        <h4 className="font-bold text-large">{name}</h4>
+      <CardHeader className="pb-0 pt-2 px-4 flex items-center justify-between">
+        <div>
+          <p className="text-tiny uppercase font-bold">{location}</p>
+          <h4 className="font-bold text-large">{name}</h4>
+        </div>
+        {onDelete && (
+          <Button isIconOnly color="secondary" onClick={handleDeleteClick}>
+            <RxTrash size={20} color="black" />
+          </Button>
+        )}
       </CardHeader>
       <CardBody className="overflow-visible py-2 flex">
         <div className="flex gap-4">
@@ -58,6 +74,7 @@ export const CustomCard = ({ cameraPanelData }) => {
               <p><strong>Datos GPS:</strong> {gpsData}</p>
               <p><strong>Estado cámara:</strong> {status}</p>
               <p><strong>Datos de almacenamiento:</strong> {storageInfo}</p>
+              <p><strong>Visibilidad:</strong> {isPublic}</p>
             </div>
           </div>
         </div>

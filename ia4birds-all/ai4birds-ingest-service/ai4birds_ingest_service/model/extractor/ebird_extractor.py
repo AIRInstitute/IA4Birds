@@ -6,12 +6,18 @@
 import requests, json
 import time
 from functools import lru_cache
-from ai4birds_ingest_service.log import logger
-from ai4birds_ingest_service import config
+from ai4birds_ingest_service import config, logger
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 class EBird_Extractor:
     @lru_cache(maxsize=128)
-    def ebird_query(self, max_retries=3, backoff_factor=1):
+    @retry(
+        reraise=True,  # para que la excepción suba después de agotar reintentos
+        stop=stop_after_attempt(3),  # máximo 3 intentos
+        wait=wait_exponential(multiplier=1, min=1, max=10),  # backoff exponencial entre 1s y 10s
+        retry=retry_if_exception_type(requests.exceptions.RequestException)
+    )
+    def ebird_query(self):
         """
         Queries the eBird API for recent observations of birds 
         in the region of Castilla y León, Spain.
@@ -20,39 +26,31 @@ class EBird_Extractor:
         Uses a custom API token for authentication.
 
         Args:
-            :param max_retries: maximum number of retries.
-            :type max_retries: int
-            :param backoff_factor: backoff factor.
-            :type backoff_factor: int
+           
 
         Returns:
             If the query is successful, returns a list of observations in JSON format. 
             If the query fails returns None.
         """
         regionCode = 'ES-CL'
-        headers = {'X-eBirdApiToken': config.EBIRD_PASSWORD}
+        HEADERS = {'X-eBirdApiToken': config.EBIRD_PASSWORD}
         # Last 30 days 
-        url = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
-        for attempt in range(max_retries):
-            try:
-                
-                response = requests.get(url, headers=headers)
-                
-                response.raise_for_status()
-                
-                return self._format_results(json.loads(response.text))
-            except requests.exceptions.RequestException as e:
-                logger.error(f'Error get query: {e}')
-                time.sleep(backoff_factor * (2 ** attempt))  # Exponential backoff
+        URL = f'https://api.ebird.org/v2/data/obs/{regionCode}/recent?back=30'
+
+
+        response = requests.get(URL, headers=HEADERS)
+
+        response.raise_for_status()
+        
+        return self._format_results(json.loads(response.text))
+        
         return None
 
     def _format_results(self, data):
         species_list = config.SPECIES_LIST.values()
-        formatted_results = []
         
-        for observation in data:
-            if observation['sciName'] in species_list:
-                formatted_results.append({
+        formatted_results = [ 
+                {
                     "speciesSciName": observation['sciName'],
                     "speciesCode": observation['speciesCode'],
                     "comName": observation['comName'],
@@ -65,5 +63,5 @@ class EBird_Extractor:
                         "date": observation['obsDt'],
                         "numObservation": observation.get('howMany', None)
                     }]
-                })
-        return formatted_results 
+                } for observation in data if observation['sciName'] in species_list]
+        return formatted_results

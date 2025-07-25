@@ -12,7 +12,7 @@ import user from "../services/UserDataService";
 export const CustomCard = ()=> {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [token, setToken] = useState(""); // Token from the query
+  const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);

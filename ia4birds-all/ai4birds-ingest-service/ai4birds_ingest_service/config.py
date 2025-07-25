@@ -51,10 +51,26 @@ SPECIES_LIST = {
 }
 
 # EBird password
-EBIRD_PASSWORD = 'v1kfvin2apud'
+EBIRD_PASSWORD = os.getenv('EBIRD_PASSWORD', 'v1kfvin2apud')
 
 # Files paths
 CORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_DN.csv'
 
 EXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'
 API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
+
+# MQTT BROKER
+MQTT_BROKER = 'broker.hivemq.com'
+MQTT_PORT = 1883
+MQTT_KEEPALIVE = 60
+MQTT_TLS_ENABLED = False
+TIME_WITHOUT_MESSAGE = 60
+
+# MQTT TOPICS
+A4BIRDS_CAMERA_SEGMENT = 'a4birds/cam/segment'
+A4BIRDS_CAMERA_HEATMAP_METADATA = 'a4birds/cam/heatmap/metadata/#'
+A4BIRDS_CAMERA_HEATMAP_IMAGE = 'a4birds/cam/heatmap/image/#'
+
+#MQTT TOPICS_PREFIX
+A4BIRDS_CAMERA_HEATMAP_METADATA_PREFIX = 'a4birds/cam/heatmap/metadata/'
+A4BIRDS_CAMERA_HEATMAP_IMAGE_PREFIX = 'a4birds/cam/heatmap/image/'

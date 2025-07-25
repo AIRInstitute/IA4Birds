@@ -20,7 +20,7 @@ class DeviceModel:
             # Insertar estado del dispositivo
             device_query = """
             INSERT INTO device_status (gps_latitude, gps_longitude, status, storage_status, last_update)
-            VALUES (%s, %s, %s, %s, %s);
+                VALUES (%s, %s, %s, %s, %s);
             """
             device_values = (device_data.gps_latitude, device_data.gps_longitude, device_data.status, device_data.storage_status, device_data.last_update)
             database.execute(device_query, device_values)
@@ -28,7 +28,7 @@ class DeviceModel:
             database.commit()
             return True
         except Exception as e:
-            print(f"Error adding device data to DB: {e}")
+            logger.error(f"Error adding device data to DB: {e}")
             database.rollback()
             return False
         finally:
@@ -49,9 +49,9 @@ class DeviceModel:
         try:
             query = """
             SELECT gps_latitude, gps_longitude, status, storage_status, last_update
-            FROM device_status
-            ORDER BY last_update DESC
-            LIMIT 1;
+                FROM device_status
+                    ORDER BY last_update DESC
+                        LIMIT 1;
             """
             result = database.execute(query).fetchone()
             if result:
@@ -64,7 +64,7 @@ class DeviceModel:
                 )
             return None
         except Exception as e:
-            print(f"Error fetching latest device status from DB: {e}")
+            logger.error(f"Error fetching latest device status from DB: {e}")
             return None
         finally:
             database.close()
