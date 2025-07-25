@@ -29,6 +29,7 @@ def cleanup_db():
     yield
     db = PostgresSingleton.getInstance()
     db.connect()
+    db.execute("DELETE FROM bird_statistics WHERE camera_id = 'CAM123'")
     db.execute("DELETE FROM segment_data WHERE camera_id = 'CAM123'")
     db.execute("DELETE FROM heatmap_image WHERE camera_id = 'CAM456'")
     db.close()

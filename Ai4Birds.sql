@@ -50,6 +50,18 @@ CREATE TABLE "heatmap_image" (
   "generated_at" timestamp NOT NULL DEFAULT now()
 );
 
+CREATE TABLE "bird_statistics" (
+  "id" uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  "camera_id"  varchar NOT NULL,
+  "bird_name" varchar NOT NULL,
+  "count" int NOT NULL DEFAULT 1,
+  "last_seen" timestamp NOT NULL DEFAULT now(),
+  "created_at" timestamp NOT NULL DEFAULT now(),
+  CONSTRAINT "unique_camera_bird" UNIQUE ("camera_id", "bird_name")
+);
+
 ALTER TABLE "observation" ADD FOREIGN KEY ("speciesId") REFERENCES "species" ("id");
 
 ALTER TABLE "recording" ADD FOREIGN KEY ("observationId") REFERENCES "observation" ("id");
+
+ALTER TABLE "segment_data" ADD FOREIGN KEY ("camera_id") REFERENCES "bird_statistics" ("camera_id");

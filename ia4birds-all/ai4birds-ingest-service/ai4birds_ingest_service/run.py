@@ -24,6 +24,7 @@ from ai4birds_ingest_service.model.data_segment.data_segment import DataSegment
 from ai4birds_ingest_service.model.data_segment.data_segment_model import DataSegmentModel
 from ai4birds_ingest_service.model.data_heatmap.data_heatmap import DataHeatmap
 from ai4birds_ingest_service.model.data_heatmap.data_heatmap_model import DataHeatmapModel
+from ai4birds_ingest_service.model.bird_statistics.bird_statistics_model import BirdStatisticsModel
 
 
 from . import socketio
@@ -40,6 +41,7 @@ mqtt = Mqtt(app)
 #models
 data_segment = DataSegmentModel()
 data_heatmap = DataHeatmapModel()
+bird_statistics = BirdStatisticsModel()
 
 heatmap_buffer = {}
 
@@ -116,12 +118,12 @@ def handle_message(client, userdata:Any, msg:Any):
             try:
                 payload = msg.payload.decode('utf-8')
                 json_data = json.loads(payload)
-
-                logger.info(f'Received segment data: {json_data}')
                 obj = DataSegment.from_dict(json_data)
 
                 if obj:
                     data_segment.add(obj)
+                    bird_statistics.process_statistics(obj)
+
                 else:
                     logger.warning(f'Failed to create DataSegment object from payload.')
             except Exception as e:
@@ -135,7 +137,6 @@ def handle_message(client, userdata:Any, msg:Any):
 
                 heatmap_buffer.setdefault(heatmap_id, {})["metadata"] = json_data
                 heatmap_buffer[heatmap_id]["time"] = datetime.now()
-                logger.info(f'Stored metadata for heatmap_id: {heatmap_id}')
             except Exception as e:
                 logger.error(f'Error handling heatmap metadata: {e}')
                 return
@@ -147,7 +148,6 @@ def handle_message(client, userdata:Any, msg:Any):
                 
                 heatmap_buffer.setdefault(heatmap_id, {})["image"] = image_bytes
                 heatmap_buffer[heatmap_id]["time"] = datetime.now()
-                logger.info(f"Received heatmap image for {heatmap_id}")
             except Exception as e:
                 logger.error(f'Error handling heatmap image: {e}')
                 return

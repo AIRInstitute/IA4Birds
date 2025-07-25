@@ -16,7 +16,7 @@ class DataSegmentModel:
         database.connect()
         try:
             database.execute(segment_query, segment_values)
-            logger.info(f'Inserted segment data to DB successfully, with values: {segment_values}')
+            logger.info(f'Inserted segment data to DB successfully')
             result = True
         except Exception as e:
             logger.error(f"Error adding DataSegment to DB: {e}")
