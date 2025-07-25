@@ -46,7 +46,6 @@ jobs:
       - name: List running containers
         run: sudo docker ps
 
-
   scan_with_trivy:
     name: scan with trivy
     needs: docker_compose
