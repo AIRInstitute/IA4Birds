@@ -21,6 +21,7 @@ type Camera = {
 };
 
 const CameraPanelComponent = () => {
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('camera');
   const selectedDataFromQuery = Number(queryParam);
@@ -37,6 +38,7 @@ const CameraPanelComponent = () => {
 
         const validCamera = data.find(cam => cam.id === selectedDataFromQuery);
         const selectedId = validCamera ? selectedDataFromQuery : data[0]?.id || (data.length > 0 ? data[0].id : null);
+
 
         if (selectedId !== null) {
           setSearchParams({ camera: selectedId.toString() });

@@ -1,9 +1,11 @@
 import dotenv from "dotenv";
-dotenv.config({ path: "/home/node/app/ai4birds-web-app-backend/.env" });
+// Solo cargar .env si no estás en producción (por ejemplo, local)
+// if (process.env.NODE_ENV !== "production") {
+//     dotenv.config();
+// }
 
 function toBoolean(value: string | undefined): boolean | undefined {
-    if (value == undefined) return undefined;
-
+    if (value === undefined) return undefined;
     return value === "true";
 }
 
@@ -38,10 +40,8 @@ const globalConfig = {
         key: process.env.SSL_KEY || "key",
     },
     whiteList: process.env.WHITE_LIST || [],
-    //AÑADIR AL .ENV DE LOS SERVIDORES ****
     mediamtxApi: process.env.MEDIAMTX_API || "http://mediamtx:9997",
     streamBaseURL: process.env.STREAM_BASE_URL || "http://localhost:8888"
-
 };
 
 console.log(globalConfig.whiteList);
