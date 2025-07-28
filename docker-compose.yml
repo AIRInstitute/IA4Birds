@@ -153,6 +153,21 @@ services:
     networks:
       - bird-net
 
+
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - ${MQTT_PORTS}
+    volumes:
+      - ${MQTT_CONFIG_VOLUME}
+      - ${MQTT_DATA_VOLUME}
+      - ${MQTT_LOG_VOLUME}
+    env_file:
+      - /etc/envs/.env
+    networks:
+      - bird-net
+
+
   celery-worker:
     build: ./ia4birds-all/ai4birds-ingest-service
     container_name: celery-worker
