@@ -60,8 +60,8 @@ EXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'
 API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
 
 # MQTT BROKER
-MQTT_BROKER = 'broker.hivemq.com'
-MQTT_PORT = 1883
+MQTT_BROKER = os.getenv('MQTT_HOST', 'localhost')
+MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
 MQTT_KEEPALIVE = 60
 MQTT_TLS_ENABLED = False
 TIME_WITHOUT_MESSAGE = 60
