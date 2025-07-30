@@ -1,6 +1,12 @@
 FROM debian:bullseye-slim
 
 WORKDIR /app
+
+# Instala los certificados de autoridades reconocidas
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates tzdata \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY mediamtx /app/mediamtx
 COPY mediamtx.yml /app/mediamtx.yml
 
