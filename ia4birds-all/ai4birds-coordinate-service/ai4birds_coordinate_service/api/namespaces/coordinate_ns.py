@@ -5,7 +5,10 @@
 from flask import request
 from ...utils.decorators import require_token
 from flask_restx import Namespace, Resource
-from ai4birds_coordinate_service.services import bird_data_service, map_service, device_service
+from ai4birds_coordinate_service.api.v1 import api
+from ai4birds_coordinate_service.core import limiter
+from ai4birds_coordinate_service.services import bird_data_service, map_service, device_service, mqtt_service, statistics_service
+from ai4birds_coordinate_service.api.parsers.coordinate_parsers import segment_data_parser, heatmap_data_parser, bird_statistics_parser, bird_statistics_by_camera_parser
 
 coordinate_ns = Namespace("coordinate", description="Coordinate API Gateway")
 
@@ -48,6 +51,90 @@ class Sensitivity(Resource):
             This endpoint is private and requires a valid JWT access token.
         """
         data, status_code = bird_data_service.get_sensitivity_data()
+        return data, status_code
+    
+@coordinate_ns.route("/segment-data")
+class SegmentData(Resource):
+    @api.expect(segment_data_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @limiter.limit('1000000/hour')
+
+    @require_token()
+    def get(self):
+        """
+        Retrieves segment data for a given camera ID.
+
+        Authentication:
+            This endpoint is private and requires a valid JWT access token.
+        """
+        params = segment_data_parser.parse_args()
+
+        data, status_code = mqtt_service.get_segment_data(params['camera_id'])
+        return data, status_code
+    
+@coordinate_ns.route("/heatmap-data")
+class HeatmapData(Resource):
+    @api.expect(heatmap_data_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @limiter.limit('1000000/hour')
+
+    @require_token()
+    def get(self):
+        """
+        Retrieves heatmap data for a given camera ID.
+
+        Authentication:
+            This endpoint is private and requires a valid JWT access token.
+        """
+        params = heatmap_data_parser.parse_args()
+
+        data, status_code = mqtt_service.get_heatmap_data(params['camera_id'])
+        return data, status_code
+
+@coordinate_ns.route("/bird-statistics")
+class BirdStatistics(Resource):
+    @api.expect(bird_statistics_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @limiter.limit('1000000/hour')
+
+    @require_token()
+    def get(self):
+        """
+        Retrieves bird statistics for a given camera ID and bird name.
+
+        Authentication:
+            This endpoint is private and requires a valid JWT access token.
+        """
+        params = bird_statistics_parser.parse_args()
+
+        data, status_code = statistics_service.get_bird_statistics(params['camera_id'], params['bird_name'])
+        return data, status_code
+    
+@coordinate_ns.route("/bird-statistics/by-camera")
+class BirdStatisticsByCamera(Resource):
+    @api.expect(bird_statistics_by_camera_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @limiter.limit('1000000/hour')
+
+    @require_token()
+    def get(self):
+        """
+        Retrieves bird statistics for a given camera ID.
+
+        Authentication:
+            This endpoint is private and requires a valid JWT access token.
+        """
+        params = bird_statistics_by_camera_parser.parse_args()
+
+        data, status_code = statistics_service.get_bird_statistics_by_camera(params['camera_id'])
         return data, status_code
         
 # -------------------- ENDPOINTS PUBLICOS --------------------

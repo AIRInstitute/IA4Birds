@@ -26,7 +26,7 @@ class DataSegmentModel:
 
         return result
     
-    def fetch_content(self, id: int) -> object:
+    def fetch_content(self, id: str) -> object:
         query = """SELECT * FROM segment_data WHERE camera_id = %s ORDER BY received_at DESC LIMIT 1; """
         values = (id,)
         database = PostgresSingleton.getInstance()

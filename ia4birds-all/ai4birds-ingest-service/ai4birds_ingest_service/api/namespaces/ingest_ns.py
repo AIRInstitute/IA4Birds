@@ -2,9 +2,7 @@ import flask
 from flask import jsonify, request as flask_request, send_file, Response
 from flask_restx import Resource
 
-from ai4birds_ingest_service import config
-from ai4birds_ingest_service.log import serve_application_logger
-logger = serve_application_logger()
+from ai4birds_ingest_service import config, logger
 from ai4birds_ingest_service.api.v1 import api
 from ai4birds_ingest_service.core import limiter, cache
 from ai4birds_ingest_service.utils import handle400error, handle500error
@@ -14,8 +12,9 @@ from ai4birds_ingest_service.api.models.ingest_models import (
     exclusionmap_model,
     exclusionmap_response_model,
     device_status_model,
-    segment_data_model,
-    heatmap_data_model
+    segment_data_output_model,
+    heatmap_data_output_model,
+    bird_statistics_output_model
 )
 from ai4birds_ingest_service.api.parsers.ingest_parsers import (
     location_parser,
@@ -23,7 +22,9 @@ from ai4birds_ingest_service.api.parsers.ingest_parsers import (
     exclusionmap_parser_get,
     device_status_parser,
     segment_data_parser,
-    heatmap_data_parser
+    heatmap_data_parser,
+    bird_statistics_parser,
+    bird_statistics_by_camera_parser
 )
 
 # Import services
@@ -34,10 +35,9 @@ from ai4birds_ingest_service.services.windmap_service import WindMapService
 from ai4birds_ingest_service.services.exclusionmap_service import ExclusionMapService
 from ai4birds_ingest_service.services.sensitivity_service import SensitivityService
 from ai4birds_ingest_service.services.device_status_service import DeviceStatusService
-
-from ai4birds_ingest_service.model.data_segment.data_segment_model import DataSegmentModel
-from ai4birds_ingest_service.model.data_heatmap.data_heatmap_model import DataHeatmapModel
-from ai4birds_ingest_service.model.bird_statistics.bird_statistics_model import BirdStatisticsModel
+from ai4birds_ingest_service.services.data_segment_service import DataSegmentService
+from ai4birds_ingest_service.services.data_heatmap_service import DataHeatmapService
+from ai4birds_ingest_service.services.bird_statistics_service import BirdStatisticsService
 
 # Define namespaces
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
@@ -230,7 +230,7 @@ class DeviceHealth(Resource):
        return status, code
 
 
-@ns_segment_data.route('/<string:camera_id>')
+@ns_segment_data.route('/')
 class SegmentData(Resource):
     """
     Retrieves all segment data from the database.
@@ -238,17 +238,25 @@ class SegmentData(Resource):
     Returns:
         dict: All segment data.
     """
-    def get(self, camera_id):
+    @api.expect(segment_data_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @api.response(200, 'Successful', model=segment_data_output_model)
+    @limiter.limit('1000000/hour')
+    def get(self):
         try:
-            data = DataSegmentModel().fetch_content(camera_id)
-            return jsonify({'segment_data': data})
-    
+            params = segment_data_parser.parse_args()
+
+            service = DataSegmentService()
+            data, status_code = service.get_data_segment(params['camera_id'])
+            return {'segment_data': data}, status_code
         except Exception as e:
             logger.error(f"SegmentData Error: {e}")
             return handle500error(ns_segment_data)
 
      
-@ns_heatmap_data.route('/<string:camera_id>')
+@ns_heatmap_data.route('/')
 class HeatmapData(Resource):
     """
     Retrieves last heatmap data from the database.
@@ -256,15 +264,24 @@ class HeatmapData(Resource):
     Returns:
         dict: Last heatmap data.
     """
-    def get(self, camera_id):
+    @api.expect(heatmap_data_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @api.response(200, 'Successful', model=heatmap_data_output_model)
+    @limiter.limit('1000000/hour')
+    def get(self):
         try:
-            data = DataHeatmapModel().fetch_latest(camera_id)
-            return jsonify({'heatmap_data': data})
+            params = heatmap_data_parser.parse_args()
+
+            service = DataHeatmapService()
+            data, status_code = service.get_latest_heatmap(params['camera_id'])
+            return {'heatmap_data': data}, status_code
         except:
             return handle500error(ns_heatmap_data)
 
 
-@ns_bird_statistics.route('/<string:camera_id>/<string:bird_name>')
+@ns_bird_statistics.route('/')
 class BirdStatistics(Resource):
     """
     Retrieves all bird statistics from camera_id and bird_name.
@@ -272,14 +289,23 @@ class BirdStatistics(Resource):
     Returns:
         dict: All bird statistics.
     """
-    def get(self, camera_id, bird_name):
+    @api.expect(bird_statistics_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @api.response(200, 'Successful', model=bird_statistics_output_model)
+    @limiter.limit('1000000/hour')
+    def get(self):
         try:
-            data = BirdStatisticsModel().fetch_content(camera_id, bird_name)
-            return jsonify({'bird_statistics': data})
+            params = bird_statistics_parser.parse_args()
+
+            service = BirdStatisticsService()
+            data, status_code = service.get_latest_statistics(params['camera_id'], params['bird_name'])
+            return {'bird_statistics': data}, status_code
         except:
             return handle500error(ns_bird_statistics)
         
-@ns_bird_statistics.route('/<string:camera_id>')
+@ns_bird_statistics.route('/by-camera')
 class BirdStatisticsByCamera(Resource):
     """
     Retrieves all bird statistics from camera_id.
@@ -287,11 +313,19 @@ class BirdStatisticsByCamera(Resource):
     Returns:
         dict: All camera statistics.
     """
-
-    def get(self, camera_id):
+    @api.expect(bird_statistics_by_camera_parser, validate=True)
+    @api.response(404, 'Data not found')
+    @api.response(500, 'Unhandled errors')
+    @api.response(400, 'Invalid parameters')
+    @api.response(200, 'Successful', model=bird_statistics_output_model)
+    @limiter.limit('1000000/hour')
+    def get(self):
         try:
-            data = BirdStatisticsModel().fetch_content_by_camera(camera_id)
-            return jsonify({'camera_statistics': data})
+            params = bird_statistics_by_camera_parser.parse_args()
+
+            service = BirdStatisticsService()
+            data, status_code = service.get_latest_statistics_by_camera(params['camera_id'])
+            return {'camera_statistics': data}, status_code
         except:
             return handle500error(ns_bird_statistics)
 
