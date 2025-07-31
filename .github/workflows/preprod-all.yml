@@ -25,6 +25,14 @@ jobs:
       - name: Clear all Docker
         run: sudo docker system prune --all -f || true
 
+  copy_file:
+    name: copy file
+    needs: check_out
+    runs-on: [self-hosted, linux, x64, prod]
+    steps:
+      - name: copy file
+        run: cp /etc/envs/.env .
+
   docker_compose:
     name: docker compose
     needs: check_out
