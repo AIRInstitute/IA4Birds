@@ -14,4 +14,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  server: {
+    allowedHosts: ['ia4birds-pre.der.usal.es'],
+  },
 });

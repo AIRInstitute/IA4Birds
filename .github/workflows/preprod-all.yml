@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      
       - name: Stop old containers except rtsp-stream and nginx-hls
         run: sudo docker ps -a --format '{{.ID}} {{.Names}}' | awk '!/rtsp-stream|nginx-hls/ {print $1}' | xargs -r sudo docker stop
         continue-on-error: true
