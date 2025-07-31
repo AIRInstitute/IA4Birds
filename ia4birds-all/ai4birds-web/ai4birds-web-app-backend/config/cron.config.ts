@@ -20,7 +20,7 @@ function isLastDayOfMonth(): boolean {
 cron.schedule('0 0 * * *', async () => {
     if (isLastDayOfMonth()) {
         try {
-            const response = await axios.get<DataBird>(`${globalConfig.pythonURL}/dataBird/`);
+            const response = await axios.get<DataBird>(`${globalConfig.pythonURL}/dataBird`);
             const dataBirdData = response.data;
 
             await redis.set('dataBirdKey', JSON.stringify(dataBirdData));

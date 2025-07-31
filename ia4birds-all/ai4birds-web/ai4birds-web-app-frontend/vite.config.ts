@@ -15,6 +15,6 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ['ia4birds-pre.der.usal.es'],
+    allowedHosts: ['ia4birds-platform.air-institute.com'],
   },
 });
