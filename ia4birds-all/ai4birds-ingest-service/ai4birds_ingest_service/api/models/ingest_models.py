@@ -56,18 +56,31 @@ device_status_model = api.model('DeviceStatus', {
 })
 
 # Modelo para segment data
-segment_data_model = api.model('SegmentData', {
-    'camera_id': fields.String(required=True, description='ID of the camera', example='123456789'),
-    'segment_idx': fields.String(required=True, description='ID of the segment', example='158'),
-    'payload': fields.String(required=True, description='Payload of the segment', example={'data': '1234'}),
+segment_data_output_model = api.model('SegmentData', {
+    'camera_id': fields.String(required=True, description='ID of the camera', example='CAM123'),
+    'segment_idx': fields.Integer(required=True, description='ID of the segment', example=158),
+    'colatitude': fields.Float(required=True, description='Latitude of the segment', example=41.85563222906876),
+    'azimuth': fields.Float(required=True, description='Longitude of the segment', example=-5.5495918821608665),
+    'zoom_level': fields.Integer(required=True, description='Zoom level of the segment', example=50),
+    'average_area': fields.Float(required=True, description='Average area of the segment', example=1941.26),
+    'total_big_birds': fields.Integer(required=True, description='Total number of big birds in the segment', example=10),
+    'frames': fields.String(required=True, description='Payload of the segment', example={'data': '1234'}),
     'received_at': fields.String(required=True, description='Timestamp of the segment', example='2023-10-28 15:59:00')
 })
 
 # Modelo para heatmap data
-heatmap_data_model = api.model('HeatmapData', {
-    'camera_id': fields.String(required=True, description='ID of the camera', example='123456789'),
+heatmap_data_output_model = api.model('HeatmapData', {
+    'camera_id': fields.String(required=True, description='ID of the camera', example='CAM456'),
     'heatmap_for': fields.String(required=True, description='Range of the segments', example='az30-60'),
-    'image_url': fields.String(required=True, description='URL of the heatmap image', example='https://example.com/image.jpg'),
-    'image_blob': fields.String(required=True, description='Blob of the heatmap image', example='base64 encoded image'),
+    'image_url': fields.String(required=True, description='URL of the heatmap image', example='"heatmaps/CAM456_az30-60_20250724_114257.png"'),
     'generated_at': fields.String(required=True, description='Timestamp of the heatmap', example='2023-10-28 15:59:00')
+})
+
+#Modelo para bird statistics
+bird_statistics_output_model = api.model('BirdStatistics', {
+    'camera_id': fields.String(required=True, description='ID of the camera', example='CAM123'),
+    'bird_name': fields.String(required=True, description='Name of the bird', example='buitre_negro'),
+    'count': fields.Integer(required=True, description='Number of birds seen', example=10),
+    'last_seen': fields.String(required=True, description='Timestamp of the last seen bird', example='2023-10-28 15:59:00'),
+    'created_at': fields.String(required=True, description='Timestamp of the bird statistics', example='2023-10-28 15:59:00')
 })

@@ -29,14 +29,15 @@ device_status_parser.add_argument('last_update', type=str, required=True, help='
 # Add arguments to the segment data parser
 segment_data_parser = reqparse.RequestParser()
 segment_data_parser.add_argument('camera_id', type=str, required=True, help='ID of the camera')
-segment_data_parser.add_argument('segment_idx', type=str, required=True, help='ID of the segment')
-segment_data_parser.add_argument('payload', type=str, required=True, help='Payload of the segment')
-segment_data_parser.add_argument('received_at', type=str, required=True, help='Timestamp of the segment')
 
 # Add arguments to the heatmap data parser
 heatmap_data_parser = reqparse.RequestParser()
 heatmap_data_parser.add_argument('camera_id', type=str, required=True, help='ID of the camera')
-heatmap_data_parser.add_argument('heatmap_for', type=str, required=True, help='Range of the segments')
-heatmap_data_parser.add_argument('image_url', type=str, required=True, help='URL of the heatmap image')
-heatmap_data_parser.add_argument('image_blob', type=str, required=True, help='Blob of the heatmap image')
-heatmap_data_parser.add_argument('generated_at', type=str, required=True, help='Timestamp of the heatmap')
+
+#Add arguments to the bird statistics parser
+bird_statistics_parser = reqparse.RequestParser()
+bird_statistics_parser.add_argument('camera_id', type=str, required=True, help='ID of the camera')
+bird_statistics_parser.add_argument('bird_name', type=str, required=True, help='Name of the bird')
+
+bird_statistics_by_camera_parser = reqparse.RequestParser()
+bird_statistics_by_camera_parser.add_argument('camera_id', type=str, required=True, help='ID of the camera')
