@@ -11,6 +11,7 @@ jobs:
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - uses: actions/checkout@v1
+
       
       - name: Stop old containers except rtsp-stream and nginx-hls
         run: sudo docker ps -a --format '{{.ID}} {{.Names}}' | awk '!/rtsp-stream|nginx-hls/ {print $1}' | xargs -r sudo docker stop
@@ -24,6 +25,14 @@ jobs:
         continue-on-error: true
       - name: Clear all Docker
         run: sudo docker system prune --all -f || true
+
+  copy_file:
+    name: copy file
+    needs: check_out
+    runs-on: [self-hosted, linux, x64, prod]
+    steps:
+      - name: copy file
+        run: cp /etc/envs/.env .
 
   docker_compose:
     name: docker compose

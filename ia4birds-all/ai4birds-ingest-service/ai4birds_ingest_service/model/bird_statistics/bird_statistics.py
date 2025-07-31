@@ -18,8 +18,8 @@ class BirdStatistics:
             'camera_id': self.camera_id,
             'bird_name': self.bird_name,
             'count': self.count,
-            'last_seen': self.last_seen,
-            'created_at': self.created_at
+            'last_seen': self.last_seen.isoformat() if isinstance(self.last_seen, datetime) else self.last_seen,
+            'created_at': self.created_at.isoformat() if isinstance(self.created_at, datetime) else self.created_at
         }
 
     @classmethod
