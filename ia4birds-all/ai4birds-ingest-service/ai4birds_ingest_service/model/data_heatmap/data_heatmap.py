@@ -19,7 +19,7 @@ class DataHeatmap:
             'camera_id': self.camera_id,
             'heatmap_for': self.heatmap_for,
             'image_url': self.image_url,
-            'generated_at': self.generated_at
+            'generated_at': self.generated_at.isoformat() if isinstance(self.generated_at, datetime) else self.generated_at
         }
 
     @classmethod

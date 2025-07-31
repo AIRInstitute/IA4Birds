@@ -27,7 +27,7 @@ class DataSegment:
             'average_area': self.average_area,
             'total_big_birds': self.total_big_birds,
             'frames': self.frames,
-            'received_at': self.received_at
+            'received_at': self.received_at.isoformat() if isinstance(self.received_at, datetime) else self.received_at
         }
 
     @classmethod
