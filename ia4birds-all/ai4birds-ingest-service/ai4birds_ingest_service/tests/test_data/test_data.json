@@ -1,16 +1,14 @@
 {
     "segment_data": [ 
         {
-            "calibration": {
-                "camera_id": "CAM123",
-                "segment_idx": 1,
-                "absolute_colatitude": 92.25,
-                "absolute_azimuth": 87.50999999999999,
-                "zoom_level": 17,
-                "average_area": 1941.2667833562925,
-                "total_big_birds": 310,
-                "horario": "Morning"
-            },
+            "camera_id": "CAM123",
+            "segment_idx": 1,
+            "absolute_colatitude": 92.25,
+            "absolute_azimuth": 87.50999999999999,
+            "zoom_level": 17,
+            "average_area": 1941.2667833562925,
+            "total_big_birds": 310,
+            "horario": "Morning",
             "frames": {
                 "1357": [],
                 "1358": [

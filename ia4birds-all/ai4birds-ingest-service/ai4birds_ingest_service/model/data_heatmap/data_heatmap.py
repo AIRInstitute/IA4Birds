@@ -5,7 +5,7 @@ import base64
 from datetime import datetime
 from typing import Dict, Any
 
-from ai4birds_ingest_service import logger
+from ai4birds_ingest_service import config, logger
 
 class DataHeatmap:
     def __init__(self, camera_id: int, heatmap_for: str, image_url: str, generated_at: str) -> None:
@@ -31,16 +31,16 @@ class DataHeatmap:
             heatmap_for = data.get('heatmap_for', 'Unknown')
 
             #determine the root path of the project
-            project_root = './ai4birds_ingest_service/'
-            heatmap_dir = os.path.join(project_root, "heatmaps")
-            os.makedirs(heatmap_dir, exist_ok=True)
+            os.makedirs(config.HEATMAP_PATH, exist_ok=True)
             
             timestamp = datatime.strftime('%Y%m%d_%H%M%S')
-            filename = f"{camera_id}_{heatmap_for}_{timestamp}.png"
+            filename = f"{camera_id}_{timestamp}.png"
 
             # Path
-            image_abs_path = os.path.join(heatmap_dir, filename)
-            image_rel_path = os.path.relpath(image_abs_path, start=project_root)
+            image_abs_path = os.path.join(config.HEATMAP_PATH, filename)
+            image_rel_path = config.HEATMAP_ENDPOINT + filename
+
+            logger.info(f"image_rel_path: {image_rel_path}")
 
             # Save image
             with open(image_abs_path, 'wb') as f:
