@@ -11,7 +11,6 @@ dotenv_path = '/etc/envs/.env'
 load_dotenv(dotenv_path)
 
 # api config
-# PORT = 5001
 PORT = 5000
 HOST = '0.0.0.0'
 URL_PREFIX = '/ai4birds-ingest-service/v1'
@@ -25,7 +24,6 @@ DB_CONFIG={
     'password' : os.getenv('POSTGRES_INGEST_PASSWORD'),
     'database' : os.getenv('POSTGRES_INGEST_DB')
 }
-
 
 BACKEND_URL = os.getenv('BACKEND_URL')
 
@@ -58,10 +56,16 @@ CORRDENADAS_CSV_PATH = './ai4birds_ingest_service/utils/Corrdenadas_lat_long_SE_
 
 EXCLUSION_EOLICA_CSV_PATH = '/home/exclusion_eolica.csv'
 API_SPEC_PATH = '/app/ai4birds_ingest_service/doc/api-spec.yaml'
+HEATMAP_PATH = "./ai4birds_ingest_service/heatmaps"
 
-# MQTT BROKER
-MQTT_BROKER = 'broker.hivemq.com'
-MQTT_PORT = 1883
+# MQTT BROKER TEST
+# MQTT_BROKER = 'broker.hivemq.com'
+# MQTT_PORT = 1883
+
+#MQTT BROKER PROD
+MQTT_BROKER = '212.128.141.36'
+MQTT_PORT = 5083
+
 MQTT_KEEPALIVE = 60
 MQTT_TLS_ENABLED = False
 TIME_WITHOUT_MESSAGE = 60

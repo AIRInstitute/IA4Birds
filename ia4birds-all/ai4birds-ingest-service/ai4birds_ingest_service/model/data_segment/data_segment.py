@@ -36,13 +36,13 @@ class DataSegment:
 
         try:
             return cls(
-                camera_id = data.get('calibration', {}).get('camera_id', None),
-                segment_idx = data.get('calibration', {}).get('segment_idx', None),
-                colatitude = data.get('calibration', {}).get('absolute_colatitude', None),
-                azimuth = data.get('calibration', {}).get('absolute_azimuth', None),
-                zoom_level = data.get('calibration', {}).get('zoom_level', None),
-                average_area = data.get('calibration', {}).get('average_area', None),
-                total_big_birds = data.get('calibration', {}).get('total_big_birds', None),
+                camera_id = data.get('camera_id', None),
+                segment_idx = data.get('segment_idx', None),
+                colatitude = data.get('absolute_colatitude', None),
+                azimuth = data.get('absolute_azimuth', None),
+                zoom_level = data.get('zoom_level', None),
+                average_area = data.get('average_area', None),
+                total_big_birds = data.get('total_big_birds', None),
                 frames = json.dumps(data.get('frames', {})),
                 received_at = datatime
             )

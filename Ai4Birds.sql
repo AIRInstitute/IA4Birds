@@ -63,5 +63,3 @@ CREATE TABLE "bird_statistics" (
 ALTER TABLE "observation" ADD FOREIGN KEY ("speciesId") REFERENCES "species" ("id");
 
 ALTER TABLE "recording" ADD FOREIGN KEY ("observationId") REFERENCES "observation" ("id");
-
-ALTER TABLE "segment_data" ADD FOREIGN KEY ("camera_id") REFERENCES "bird_statistics" ("camera_id");

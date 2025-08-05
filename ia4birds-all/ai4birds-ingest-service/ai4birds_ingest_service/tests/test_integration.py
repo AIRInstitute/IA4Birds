@@ -62,7 +62,7 @@ def test_bird_statistics_update(mqtt_client, test_payload):
     db = PostgresSingleton.getInstance()
     db.connect()
 
-    camera_id = test_payload["calibration"]["camera_id"]
+    camera_id = test_payload["camera_id"]
     frames = test_payload["frames"]
 
     bird_names_detected = set()
