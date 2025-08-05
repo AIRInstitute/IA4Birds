@@ -50,11 +50,46 @@ CREATE TABLE IF NOT EXISTS users (
     active BOOLEAN DEFAULT FALSE
 );
 
+-- Estado del dispositivo
 CREATE TABLE IF NOT EXISTS device_status (
     id SERIAL PRIMARY KEY,
     gps_latitude DECIMAL(9,6) NOT NULL,
     gps_longitude DECIMAL(9,6) NOT NULL,
-    status VARCHAR(255) NOT NULL,  -- Estado del dispositivo
-    storage_status DECIMAL(5,2) NOT NULL,  -- Almacenamiento libre en GB, con dos decimales
-    last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Última vez que se recibió la actualización
+    status VARCHAR(255) NOT NULL,
+    storage_status DECIMAL(5,2) NOT NULL,
+    last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Estadísticas de aves
+CREATE TABLE IF NOT EXISTS bird_statistics (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    camera_id VARCHAR NOT NULL,
+    bird_name VARCHAR NOT NULL,
+    count INT NOT NULL DEFAULT 1,
+    last_seen TIMESTAMP NOT NULL DEFAULT now(),
+    created_at TIMESTAMP NOT NULL DEFAULT now(),
+    CONSTRAINT unique_camera_bird UNIQUE (camera_id, bird_name)
+);
+
+-- Segmentos de datos
+CREATE TABLE IF NOT EXISTS segment_data (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    camera_id VARCHAR,
+    segment_idx INT,
+    colatitude FLOAT,
+    azimuth FLOAT,
+    zoom_level INT,
+    average_area FLOAT,
+    total_big_birds INT,
+    frames JSONB,
+    received_at TIMESTAMP NOT NULL DEFAULT now(),
+);
+
+-- Imágenes de mapas de calor
+CREATE TABLE IF NOT EXISTS heatmap_image (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    camera_id VARCHAR,
+    heatmap_for TEXT,
+    image_url TEXT,
+    generated_at TIMESTAMP NOT NULL DEFAULT now()
 );

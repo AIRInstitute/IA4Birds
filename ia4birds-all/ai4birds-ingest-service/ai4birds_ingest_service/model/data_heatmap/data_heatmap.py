@@ -34,11 +34,13 @@ class DataHeatmap:
             os.makedirs(config.HEATMAP_PATH, exist_ok=True)
             
             timestamp = datatime.strftime('%Y%m%d_%H%M%S')
-            filename = f"{camera_id}_{heatmap_for}_{timestamp}.png"
+            filename = f"{camera_id}_{timestamp}.png"
 
             # Path
             image_abs_path = os.path.join(config.HEATMAP_PATH, filename)
-            image_rel_path = filename
+            image_rel_path = config.HEATMAP_ENDPOINT + filename
+
+            logger.info(f"image_rel_path: {image_rel_path}")
 
             # Save image
             with open(image_abs_path, 'wb') as f:
