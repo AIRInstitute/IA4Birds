@@ -11,12 +11,8 @@ jobs:
     runs-on: [self-hosted, linux, x64, pre]
     steps:
       - uses: actions/checkout@v1
-      # - name: Stop old containers
-      #   run: sudo docker stop $(docker ps -a -q)
-      #   continue-on-error: true
-      # - name: Remove old containers
-      #   run: sudo docker rm $(docker ps -a -q)
-      #   continue-on-error: true
+
+      
       - name: Stop old containers except rtsp-stream and nginx-hls
         run: sudo docker ps -a --format '{{.ID}} {{.Names}}' | awk '!/rtsp-stream|nginx-hls/ {print $1}' | xargs -r sudo docker stop
         continue-on-error: true
@@ -30,17 +26,21 @@ jobs:
       - name: Clear all Docker
         run: sudo docker system prune --all -f || true
 
+  copy_file:
+    name: copy file
+    needs: check_out
+    runs-on: [self-hosted, linux, x64, prod]
+    steps:
+      - name: copy file
+        run: cp /etc/envs/.env .
+
   docker_compose:
     name: docker compose
     needs: check_out
     runs-on: [self-hosted, linux, x64, pre]
     steps:
-      - name: Build Custom Kong Image
-        run: sudo docker build -t custom-kong-gstreamer:latest .
-      # - name: Build the docker-compose
-      #   run: sudo docker compose -f "docker-compose.yml" up -d
-      - name: Build the docker-compose excluding rtsp-stream and nginx
-        run: sudo docker compose up --env-file /etc/envs/.env -d --remove-orphans --no-recreate rtsp-stream nginx && sudo docker compose up -d --remove-orphans
+      - name: Build and run docker-compose
+        run: docker compose -f docker-compose.yml --env-file /etc/envs/.env up -d --build --remove-orphans
 
       - name: List running containers
-        run: sudo docker ps
+        run: docker ps

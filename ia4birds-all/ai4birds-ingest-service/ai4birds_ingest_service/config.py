@@ -63,9 +63,9 @@ HEATMAP_ENDPOINT = os.getenv('HEATMAP_ENDPOINT', 'http://localhost:5002/ai4birds
 # MQTT_BROKER = 'broker.hivemq.com'
 # MQTT_PORT = 1883
 
-#MQTT BROKER PROD
-MQTT_BROKER = os.getenv('MQTT_HOST', '212.128.141.36')
-MQTT_PORT = os.getenv('MQTT_PORT', 5083)
+# MQTT BROKER
+MQTT_BROKER = os.getenv('MQTT_HOST', 'localhost')
+MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
 
 MQTT_KEEPALIVE = 60
 MQTT_TLS_ENABLED = False

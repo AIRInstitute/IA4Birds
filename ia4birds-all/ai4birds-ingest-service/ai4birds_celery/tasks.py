@@ -2,7 +2,7 @@ from ai4birds_ingest_service.model.extractor.ebird_extractor import EBird_Extrac
 from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel
 from ai4birds_ingest_service.model.ebird.ebird_data import EBirdData
 
-from ai4birds_ingest_service.model.extractor.xenocanto_extractor import XenoCanto_Extractor 
+from ai4birds_ingest_service.model.extractor.xenocanto_extractor import XenoCanto_Extractor_Async 
 from ai4birds_ingest_service.model.xenocanto.xenocanto_model import XenoCantoModel
 from ai4birds_ingest_service.model.xenocanto.xenocanto_data import XenoCantoData
 
@@ -32,7 +32,7 @@ def ebird_extract() -> None:
         logger.warning("No data found in eBird API.")
 
 def xenocanto_extract() -> None:
-    xc_extractor = XenoCanto_Extractor()
+    xc_extractor = XenoCanto_Extractor_Async()
     xc_model = XenoCantoModel()
 
     logger.info("Fetching Xenocanto data...")

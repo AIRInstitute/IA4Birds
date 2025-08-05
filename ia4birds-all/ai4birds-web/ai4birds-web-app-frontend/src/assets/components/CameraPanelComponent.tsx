@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { CustomCard } from './card/CameraPanelCard';
+import { CustomCardCamera } from './card/CameraPanelCard';
+import { CustomCardCameraTable } from './card/CameraPanelCardTable';
+import { CustomCardCameraHeatMap } from './card/CameraPanelCardHeatMap';
 import CameraService from './services/CameraDataService';
 
 type Camera = {
@@ -19,6 +21,7 @@ type Camera = {
 };
 
 const CameraPanelComponent = () => {
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('camera');
   const selectedDataFromQuery = Number(queryParam);
@@ -35,6 +38,7 @@ const CameraPanelComponent = () => {
 
         const validCamera = data.find(cam => cam.id === selectedDataFromQuery);
         const selectedId = validCamera ? selectedDataFromQuery : data[0]?.id || (data.length > 0 ? data[0].id : null);
+
 
         if (selectedId !== null) {
           setSearchParams({ camera: selectedId.toString() });
@@ -92,7 +96,11 @@ const CameraPanelComponent = () => {
       </div>
       <div className="card-container flex-grow mx-5">
         {selectedCamera && (
-          <CustomCard cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+          <>
+            <CustomCardCamera cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+            <CustomCardCameraTable cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+            <CustomCardCameraHeatMap cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+          </>
         )}
         {!selectedCamera && allCameras.length > 0 && <p className="text-center text-gray-500">Selecciona una cámara del desplegable.</p>}
         {!selectedCamera && allCameras.length === 0 && <p className="text-center text-gray-500">No hay cámaras disponibles.</p>}

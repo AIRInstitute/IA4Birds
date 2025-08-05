@@ -40,19 +40,8 @@ jobs:
     needs: copy_file
     runs-on: [self-hosted, linux, x64, prod]
     steps:
-      - name: Build Custom Kong Image
-        run: sudo docker build -t custom-kong-gstreamer:latest .
-      
-      - name: Build the docker-compose excluding rtsp-stream and nginx if they exist
-        run: |
-          RTSP_EXISTS=$(sudo docker ps -a --format '{{.Names}}' | grep -w "rtsp-stream" || echo "no")
-          NGINX_EXISTS=$(sudo docker ps -a --format '{{.Names}}' | grep -w "nginx-hls" || echo "no")
-
-          if [[ "$RTSP_EXISTS" != "no" && "$NGINX_EXISTS" != "no" ]]; then
-            sudo docker compose up -d --remove-orphans --no-recreate rtsp-stream nginx-hls
-          fi
-          
-          sudo docker compose up -d --remove-orphans
+      - name: Build and run docker-compose
+        run: docker compose -f docker-compose.yml --env-file /etc/envs/.env up -d --build --remove-orphans
 
       - name: List running containers
         run: sudo docker ps
