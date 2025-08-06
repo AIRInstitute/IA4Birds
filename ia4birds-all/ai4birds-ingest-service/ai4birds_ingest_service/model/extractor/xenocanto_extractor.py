@@ -112,7 +112,7 @@ class XenoCanto_Extractor_Async:
                     continue
 
                 # Asegúrate de que los campos críticos están presentes
-                required_fields = ['id', 'loc', 'q', 'lat', 'lng', 'alt', 'file', 'file-name', 'time', 'date']
+                required_fields = ['id', 'loc', 'q', 'lat', 'lon', 'alt', 'file', 'file-name', 'time', 'date']
                 if not all(field in bird and bird[field] not in [None, ''] for field in required_fields):
                     logger.warning(f"Skipping incomplete bird record: {bird}")
                     continue
@@ -124,7 +124,7 @@ class XenoCanto_Extractor_Async:
                         "location": bird.get('loc'),
                         "quality": bird.get('q'),
                         "lat": bird.get('lat'),
-                        "lng": bird.get('lng'),
+                        "lon": bird.get('lon'),
                         "alt": bird.get('alt'),
                         "file": bird.get('file'),
                         "file-name": bird.get('file-name'),
