@@ -30,6 +30,14 @@ class XenoCanto_Extractor_Async:
         """
         async with self.semaphore:
             async with session.get(self.BASE_URL.format(page)) as resp:
+                if resp.status == 429:
+                    raise ClientResponseError(
+                        request_info=resp.request_info,
+                        history=resp.history,
+                        status=resp.status,
+                        message="Too Many Requests",
+                        headers=resp.headers
+                    )
                 resp.raise_for_status()
                 return await resp.json()
 
@@ -95,18 +103,37 @@ class XenoCanto_Extractor_Async:
             list: A list of dictionaries with formatted species and recording details.
         """
         species_list = config.SPECIES_LIST.values()
-        return [{
-            "speciesSciName": f"{bird['gen']} {bird['sp']}",
-            "recordings": [{
-                "recordingId": bird['id'],
-                "location": bird['loc'],
-                "quality": bird['q'],
-                "lat": bird['lat'],
-                "lng": bird['lng'],
-                "alt": bird['alt'],
-                "file": bird['file'],
-                "file-name": bird['file-name'],
-                "time": bird['time'],
-                "date": bird['date']
-            }]
-        } for bird in data if f"{bird['gen']} {bird['sp']}" in species_list]
+        formatted_results = []
+
+        for bird in data:
+            try:
+                sci_name = f"{bird.get('gen')} {bird.get('sp')}"
+                if sci_name not in species_list:
+                    continue
+
+                # Asegúrate de que los campos críticos están presentes
+                required_fields = ['id', 'loc', 'q', 'lat', 'lng', 'alt', 'file', 'file-name', 'time', 'date']
+                if not all(field in bird and bird[field] not in [None, ''] for field in required_fields):
+                    logger.warning(f"Skipping incomplete bird record: {bird}")
+                    continue
+
+                formatted_results.append({
+                    "speciesSciName": sci_name,
+                    "recordings": [{
+                        "recordingId": bird.get('id'),
+                        "location": bird.get('loc'),
+                        "quality": bird.get('q'),
+                        "lat": bird.get('lat'),
+                        "lng": bird.get('lng'),
+                        "alt": bird.get('alt'),
+                        "file": bird.get('file'),
+                        "file-name": bird.get('file-name'),
+                        "time": bird.get('time'),
+                        "date": bird.get('date')
+                    }]
+                })
+            except Exception as e:
+                logger.warning(f"Error formatting bird record: {e} | Record: {bird}")
+
+        return formatted_results
+
