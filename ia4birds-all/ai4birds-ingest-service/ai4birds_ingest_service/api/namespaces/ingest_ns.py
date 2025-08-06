@@ -1,4 +1,5 @@
 import flask
+import os
 from flask import jsonify, request as flask_request, send_file, Response
 from flask_restx import Resource
 
@@ -38,7 +39,7 @@ from ai4birds_ingest_service.services.device_status_service import DeviceStatusS
 from ai4birds_ingest_service.services.data_segment_service import DataSegmentService
 from ai4birds_ingest_service.services.data_heatmap_service import DataHeatmapService
 from ai4birds_ingest_service.services.bird_statistics_service import BirdStatisticsService
-
+from ai4birds_ingest_service.services.heatmap_files_service import HeatmapFilesService
 # Define namespaces
 ns_xenocanto = api.namespace('xenocanto', description='Xenocanto requests')
 ns_ebird = api.namespace('ebird', description='eBird requests')
@@ -50,7 +51,7 @@ ns_device_status = api.namespace('device-status', description='Device status ope
 ns_segment_data = api.namespace('segment-data', description='Segment data operations')
 ns_heatmap_data = api.namespace('heatmap-data', description='Heatmap data operations')
 ns_bird_statistics = api.namespace('bird-statistics', description='Bird statistics operations')
-
+ns_heatmap_files = api.namespace('heatmap-files', description='Heatmap files operations')
 
 @ns_dataBird.route('/')
 class DataBird(Resource):
@@ -328,4 +329,55 @@ class BirdStatisticsByCamera(Resource):
             return {'camera_statistics': data}, status_code
         except:
             return handle500error(ns_bird_statistics)
+        
+
+@ns_heatmap_files.route('/download/<string:filename>')
+class HeatmapFileDownload(Resource):
+    """
+    Returns heatmap file as direct download/streaming response.
+    """
+    @limiter.limit('1000000/hour')
+    def get(self, filename):
+        """
+        Download a specific heatmap file directly.
+        
+        Args:
+            filename (str): Name of the heatmap file to download
+            
+        Returns:
+            Flask Response: Direct file response or error
+        """
+        try:
+            service = HeatmapFilesService()
+            return service.get_heatmap_file_response(filename)
+                
+        except Exception as e:
+            logger.error(f"HeatmapFileDownload Error: {e}")
+            return {'error': str(e)}, 500
+
+
+@ns_heatmap_files.route('/files')
+class HeatmapFilesList(Resource):
+    """
+    Lists all available heatmap files in the directory.
+    """
+    @limiter.limit('1000000/hour')
+    def get(self):
+        """
+        Get a list of all available heatmap files.
+        
+        Returns:
+            dict: List of available heatmap files with metadata
+        """
+        try:
+            logger.info("Creating HeatmapFilesService instance in endpoint")
+            service = HeatmapFilesService()
+            logger.info(f"Service directory: {service.heatmaps_directory}")
+            logger.info(f"Directory exists: {os.path.exists(service.heatmaps_directory)}")
+            result, status_code = service.list_heatmap_files()
+            return result, status_code
+            
+        except Exception as e:
+            logger.error(f"HeatmapFilesList Error: {e}")
+            return {'error': str(e)}, 500
 

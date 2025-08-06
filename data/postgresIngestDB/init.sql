@@ -90,10 +90,6 @@ CREATE TABLE IF NOT EXISTS segment_data (
     total_big_birds INT,
     frames JSONB,
     received_at TIMESTAMP NOT NULL DEFAULT now(),
-    CONSTRAINT fk_camera_segment
-        FOREIGN KEY (camera_id)
-        REFERENCES bird_statistics(camera_id)
-        ON DELETE CASCADE
 );
 
 -- Imágenes de mapas de calor

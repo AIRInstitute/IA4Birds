@@ -2,7 +2,7 @@
 # Copyright 2023 AIRInstitute
 # See LICENSE for details.
 # Author: AIRInstitute (@AIRInstitute on GitHub)
-from ai4birds_ingest_service.api.namespaces.ingest_ns import ns_ebird, ns_xenocanto, ns_windmap, ns_exclusionmap, ns_sensitivity, ns_dataBird, ns_device_status, ns_segment_data, ns_heatmap_data, ns_bird_statistics
+from ai4birds_ingest_service.api.namespaces.ingest_ns import ns_ebird, ns_xenocanto, ns_windmap, ns_exclusionmap,ns_sensitivity, ns_dataBird, ns_device_status, ns_segment_data, ns_heatmap_data, ns_bird_statistics, ns_heatmap_files
 
 __author__ = 'AIRInstitute'
 __version__ = '1.0'
@@ -19,3 +19,4 @@ namespaces.append(ns_device_status)
 namespaces.append(ns_segment_data)
 namespaces.append(ns_heatmap_data)
 namespaces.append(ns_bird_statistics)
+namespaces.append(ns_heatmap_files)
