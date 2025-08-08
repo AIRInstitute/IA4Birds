@@ -65,6 +65,15 @@ class CameraService {
     });
     return response.data;
   }
+
+  async getSegmentData(cameraId: string) {
+    const response = await api.get(`/ai4birds-ingest-service/v1/segment-data/?camera_id=${cameraId}`, {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    });
+    return response.data;
+  }
 }
 
 export default new CameraService();

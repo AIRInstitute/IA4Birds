@@ -5,40 +5,43 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from 
 import Hls from "hls.js";
 import { RxTrash } from "react-icons/rx";
 import { Tabs, Tab } from "@nextui-org/tabs";
+import { useDetectionData } from "../../../hooks/useDetectionData";
 
 export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
+    const { detectionData, loading, error } = useDetectionData(cameraPanelData?.id?.toString());
+    
     const handleDeleteClick = () => {
         if (onDelete && cameraPanelData.id) {
             onDelete(cameraPanelData.id, cameraPanelData.name);
         }
     };
 
-    const detectionData = [
-        {
-            frame: "00:01:23",
-            idAve: "AVE001",
-            coordenadas: "X: 245, Y: 180",
-            area: "45.2 px²",
-            especieProbable: "Cardenal Rojo",
-            confianza: "87.3%"
-        },
-        {
-            frame: "00:02:15",
-            idAve: "AVE002",
-            coordenadas: "X: 320, Y: 220",
-            area: "62.8 px²",
-            especieProbable: "Gorrión Común",
-            confianza: "92.1%"
-        },
-        {
-            frame: "00:03:42",
-            idAve: "AVE003",
-            coordenadas: "X: 180, Y: 150",
-            area: "38.5 px²",
-            especieProbable: "Petirrojo",
-            confianza: "79.6%"
-        }
-    ];
+    // const detectionData = [
+    //     {
+    //         frame: "00:01:23",
+    //         idAve: "AVE001",
+    //         coordenadas: "X: 245, Y: 180",
+    //         area: "45.2 px²",
+    //         especieProbable: "Cardenal Rojo",
+    //         confianza: "87.3%"
+    //     },
+    //     {
+    //         frame: "00:02:15",
+    //         idAve: "AVE002",
+    //         coordenadas: "X: 320, Y: 220",
+    //         area: "62.8 px²",
+    //         especieProbable: "Gorrión Común",
+    //         confianza: "92.1%"
+    //     },
+    //     {
+    //         frame: "00:03:42",
+    //         idAve: "AVE003",
+    //         coordenadas: "X: 180, Y: 150",
+    //         area: "38.5 px²",
+    //         especieProbable: "Petirrojo",
+    //         confianza: "79.6%"
+    //     }
+    // ];
 
     const speciesData = [
         {
@@ -87,37 +90,58 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                         className="mb-6"
                     >
                         <Tab title="Detecciones">
-                            <Table aria-label="Tabla de detecciones de aves">
-                                <TableHeader>
-                                    <TableColumn>Frame</TableColumn>
-                                    <TableColumn>ID Ave</TableColumn>
-                                    <TableColumn>Coordenadas</TableColumn>
-                                    <TableColumn>Área</TableColumn>
-                                    <TableColumn>Especie Probable</TableColumn>
-                                    <TableColumn>Confianza</TableColumn>
-                                </TableHeader>
-                                <TableBody>
-                                    {detectionData.map((item, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{item.frame}</TableCell>
-                                            <TableCell>{item.idAve}</TableCell>
-                                            <TableCell>{item.coordenadas}</TableCell>
-                                            <TableCell>{item.area}</TableCell>
-                                            <TableCell>{item.especieProbable}</TableCell>
-                                            <TableCell>
-                                                <span className={`px-2 py-1 rounded-full text-xs ${parseFloat(item.confianza) > 85
-                                                        ? 'bg-green-100 text-green-800'
-                                                        : parseFloat(item.confianza) > 70
-                                                            ? 'bg-yellow-100 text-yellow-800'
-                                                            : 'bg-red-100 text-red-800'
-                                                    }`}>
-                                                    {item.confianza}
-                                                </span>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                            {loading ? (
+                                <div className="flex justify-center items-center p-8">
+                                    <div className="text-center">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                                        <p className="text-gray-600">Cargando detecciones...</p>
+                                    </div>
+                                </div>
+                            ) : error ? (
+                                <div className="flex justify-center items-center p-8">
+                                    <div className="text-center">
+                                        <p className="text-yellow-600 mb-2">⚠️ {error}</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <Table aria-label="Tabla de detecciones de aves">
+                                    <TableHeader>
+                                        <TableColumn>Frame</TableColumn>
+                                        <TableColumn>ID Ave</TableColumn>
+                                        <TableColumn>Coordenadas</TableColumn>
+                                        <TableColumn>Área</TableColumn>
+                                        <TableColumn>Especie Probable</TableColumn>
+                                        <TableColumn>Confianza</TableColumn>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {detectionData.length > 0 ? detectionData.map((item, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell>{item.frame}</TableCell>
+                                                <TableCell>{item.idAve}</TableCell>
+                                                <TableCell>{item.coordenadas}</TableCell>
+                                                <TableCell>{item.area}</TableCell>
+                                                <TableCell>{item.especieProbable}</TableCell>
+                                                <TableCell>
+                                                    <span className={`px-2 py-1 rounded-full text-xs ${parseFloat(item.confianza) > 85
+                                                            ? 'bg-green-100 text-green-800'
+                                                            : parseFloat(item.confianza) > 70
+                                                                ? 'bg-yellow-100 text-yellow-800'
+                                                                : 'bg-red-100 text-red-800'
+                                                        }`}>
+                                                        {item.confianza}
+                                                    </span>
+                                                </TableCell>
+                                            </TableRow>
+                                        )) : (
+                                            <TableRow>
+                                                <TableCell colSpan={6} className="text-center text-gray-500">
+                                                    No hay detecciones disponibles para esta cámara
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            )}
                         </Tab>
                         <Tab title="Especies">
                             <Table aria-label="Tabla de especies detectadas">
