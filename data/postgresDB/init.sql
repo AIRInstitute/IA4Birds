@@ -2,7 +2,7 @@
 CREATE TYPE entity_enum AS ENUM ('public', 'private', 'external');
 
 CREATE TYPE camera_source_enum AS ENUM (
-  'RTSP', 'RTMP', 'HLS', 'WebRTC', 'YouTube', 'Twitch', 'MJPEG', 'DASH', 'Other'
+  'RTSP', 'RTMP', 'HLS', 'YouTube'
 );
 
 CREATE TYPE camera_status_enum AS ENUM ('active', 'inactive', 'pending');

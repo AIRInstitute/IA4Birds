@@ -98,8 +98,12 @@ const CameraPanelComponent = () => {
         {selectedCamera && (
           <>
             <CustomCardCamera cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
-            <CustomCardCameraTable cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
-            <CustomCardCameraHeatMap cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+            {selectedCamera.id === 1 && (
+              <>
+                <CustomCardCameraTable cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+                <CustomCardCameraHeatMap cameraPanelData={selectedCamera} onDelete={handleDeleteCamera} />
+              </>
+            )}
           </>
         )}
         {!selectedCamera && allCameras.length > 0 && <p className="text-center text-gray-500">Selecciona una cámara del desplegable.</p>}

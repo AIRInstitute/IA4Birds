@@ -434,12 +434,7 @@
                       "RTSP",
                       "RTMP",
                       "HLS",
-                      "WebRTC",
-                      "YouTube",
-                      "Twitch",
-                      "MJPEG",
-                      "DASH",
-                      "Otro"
+                      "YouTube"
                     ]
                   },
                   "ubicacion": {
