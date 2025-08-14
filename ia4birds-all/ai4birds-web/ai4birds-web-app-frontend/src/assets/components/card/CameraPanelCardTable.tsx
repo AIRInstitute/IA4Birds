@@ -143,7 +143,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                     <TableColumn>Última Detección</TableColumn>
                                 </TableHeader>
                                 <TableBody>
-                                    {speciesStats.map((item, index) => (
+                                    {speciesStats.camera_statistics.map((item, index) => (
                                         <TableRow key={index}>
                                             <TableCell className="capitalize">{item.bird_name.replace(/_/g, " ")}</TableCell>
                                             <TableCell>
