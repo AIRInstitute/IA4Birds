@@ -35,7 +35,7 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
     setError(null);
     
     try {
-      const response = await fetch(`/api/cameras/${cameraPanelData.id}/heatmap`);
+      //const response = await fetch(`/api/cameras/${cameraPanelData.id}/heatmap`);
       const heatmapData = await BirdCoordinateService.getHeatmapData(cameraId)
 
       if (!heatmapData?.image_url) {
@@ -44,8 +44,10 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
         return;
       }
 
-      setHeatmapMetadata(heatmapData);
-      setHeatmapImageUrl(heatmapData.image_url);
+      console.log("heatmap Data:", heatmapData); 
+  
+      setHeatmapMetadata(heatmapData.heatmap_data);
+      setHeatmapImageUrl(heatmapData.heatmap_data.image_url);
       
       
     } catch (error) {

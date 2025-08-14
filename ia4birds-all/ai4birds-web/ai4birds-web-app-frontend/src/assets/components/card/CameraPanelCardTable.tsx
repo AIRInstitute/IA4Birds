@@ -141,6 +141,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                         <Tab title="Especies">
                             <Table aria-label="Tabla de especies detectadas">
                                 <TableHeader>
+                                    <TableColumn>Cámara</TableColumn>
                                     <TableColumn>Nombre Común</TableColumn>
                                     <TableColumn>Detecciones</TableColumn>
                                     <TableColumn>Última Detección</TableColumn>
