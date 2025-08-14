@@ -95,8 +95,10 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
             });
         });
     };
-
+    console.log("Llamando a parseDetections con frames:", segmentData?.frames);
     const detectionData = segmentData ? parseDetections(segmentData.frames) : [];
+    console.log("detectionData:", detectionData);
+
 
     if (!isMainCamera) return null;
 
