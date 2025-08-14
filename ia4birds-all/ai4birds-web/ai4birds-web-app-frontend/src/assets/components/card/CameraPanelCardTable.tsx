@@ -53,10 +53,14 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
     const parseDetections = (frames: SegmentData["frames"]): ParsedDetection[] => {
         if (!frames) return [];
 
+        console.log("Raw frames received in parseDetections:", frames);
+
+
         return Object.entries(frames).flatMap(([frameNumber, detections]) => {
             if (!Array.isArray(detections)) return [];
 
             return detections.map((detection) => {
+                console.log(`Parsing detection in frame ${frameNumber}:`, detection);
                 const distances = detection.distances || {};
                 const speciesEntries = Object.entries(distances);
 
@@ -76,7 +80,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                     confianza = (100 - bestDistance).toFixed(1);
                 }
 
-                return {
+                const parsed = {
                     frame: frameNumber,
                     idAve: `AVE${String(detection.id_ave).padStart(3, "0")}`,
                     coordenadas: `X1: ${Math.round(detection.coordenadas[0])}, Y1: ${Math.round(detection.coordenadas[1])}`,
@@ -84,6 +88,10 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                     especieProbable: probableSpecies,
                     confianza,
                 };
+
+                console.log("Parsed detection:", parsed);
+
+                return parsed;
             });
         });
     };
