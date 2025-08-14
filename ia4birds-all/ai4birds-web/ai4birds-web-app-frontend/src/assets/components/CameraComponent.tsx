@@ -17,7 +17,7 @@ type Camera = {
   id: number;
   name: string;
   source_url: string;
-  source_type: "RTSP" | "RTMP" | "HLS" | "WebRTC" | "YouTube" | "Twitch" | "MJPEG" | "DASH" | "Other";
+  source_type: "RTSP" | "RTMP" | "HLS" | "YouTube";
   location?: string;
   playback_url?: string;
   status: "active" | "inactive" | "pending";
@@ -238,12 +238,7 @@ const CameraComponent = () => {
                     <SelectItem key="RTSP" value="RTSP">RTSP</SelectItem>
                     <SelectItem key="RTMP" value="RTMP">RTMP</SelectItem>
                     <SelectItem key="HLS" value="HLS">HLS</SelectItem>
-                    <SelectItem key="WebRTC" value="WebRTC">WebRTC</SelectItem>
                     <SelectItem key="YouTube" value="YouTube">YouTube</SelectItem>
-                    <SelectItem key="Twitch" value="Twitch">Twitch</SelectItem>
-                    <SelectItem key="MJPEG" value="MJPEG">MJPEG</SelectItem>
-                    <SelectItem key="DASH" value="DASH">DASH</SelectItem>
-                    <SelectItem key="Other" value="Other">Other</SelectItem>
                   </Select>
                 </div>
 

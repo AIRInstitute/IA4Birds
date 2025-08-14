@@ -6,6 +6,7 @@ const insertDefaultCamera = async () => {
   const name = "camara_air";
   const source_url = "rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp";
   const location = "Air Institute";
+  const camera_id = "AXIS_Q6225-LE_PTZ";
 
   try {
     const existing = await Camera.findOne({ where: { name } });
@@ -45,7 +46,8 @@ const insertDefaultCamera = async () => {
       storage_info: null,
       additional_data: null,
       is_public: true,
-      user_id: 1
+      user_id: 1,
+      camera_id
     });
 
     console.log("Default camera registered in MediaMTX and database.");
