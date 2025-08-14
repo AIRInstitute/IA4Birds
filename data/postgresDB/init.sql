@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- Tabla cameras
 CREATE TABLE IF NOT EXISTS cameras (
     id SERIAL PRIMARY KEY,
+    camera_id VARCHAR,
     user_id INT NOT NULL,
     name VARCHAR NOT NULL,
     source_type camera_source_enum NOT NULL,

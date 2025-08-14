@@ -6,6 +6,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextu
 import Hls from "hls.js";
 import { RxTrash, RxMagnifyingGlass, RxZoomIn, RxZoomOut, RxReset } from "react-icons/rx";
 import heatmapImage from "../../images/heatmap.png";
+import BirdCoordinateService from "../services/BirdCoordinateService";
 
 export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
   const [heatmapImageUrl, setHeatmapImageUrl] = useState<string | null>(null);
@@ -17,6 +18,7 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
+  const [heatmapMetadata, setHeatmapMetadata] = useState(null);
 
   const handleDeleteClick = () => {
     if (onDelete && cameraPanelData.id) {
@@ -26,41 +28,31 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
 
   // Aqui obtengo url de back para el heatmap
   const fetchHeatmap = async () => {
-    if (!cameraPanelData?.id) return;
+    const cameraId = cameraPanelData?.camera_id; 
+    if (!cameraId) return;
     
     setIsLoading(true);
     setError(null);
     
     try {
       const response = await fetch(`/api/cameras/${cameraPanelData.id}/heatmap`);
-      
-      if (!response.ok) {
-        // BORRAR ESTE IF CUANDO EXISTA EL ENDPOINT, ES PARA QUE NO APAREZCA UN ERROR YA QUE ACTUALMETNE NO ESTÁ HECHO EN BACK
-        if (response.status === 404) {
-          console.log("Endpoint de heatmap no disponible, usando imagen local");
-          setHeatmapImageUrl(heatmapImage);
-          return;
-        }
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
-      }
-      
-      // BORRAR ESTE CONST E IF CUANDO EXISTA EL ENDPOINT, ES PARA QUE NO APAREZCA UN ERROR YA QUE ACTUALMETNE NO ESTÁ HECHO EN BACK
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        console.log("Respuesta no es JSON, usando imagen local");
-        setHeatmapImageUrl(heatmapImage);
+      const heatmapData = await BirdCoordinateService.getHeatmapData(cameraId)
+
+      if (!heatmapData?.image_url) {
+        setError("No se encontró la imagen del mapa de calor");
+        setHeatmapImageUrl(null);
         return;
       }
+
+      setHeatmapMetadata(heatmapData);
+      setHeatmapImageUrl(heatmapData.image_url);
       
-      const data = await response.json();
-      setHeatmapImageUrl(data.heatmapUrl);
       
     } catch (error) {
       console.error("Error fetching heatmap:", error);
+      setError("No se pudo cargar el mapa de calor");
+      setHeatmapImageUrl(null);
 
-      // DESCOMENTAR ESTA LÍNEA CUANDO EXISTA EL ENDPOINT
-      // setError(error instanceof Error ? error.message : "Error desconocido");
-      setHeatmapImageUrl(heatmapImage);
     } finally {
       setIsLoading(false);
     }
@@ -75,7 +67,7 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
         URL.revokeObjectURL(heatmapImageUrl);
       }
     };
-  }, [cameraPanelData?.id]);
+  }, [cameraPanelData?.camera_id]);
 
   const handleRefresh = () => {
     fetchHeatmap();
@@ -184,11 +176,12 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
                   </Button>
                 </div>
               </div>
-              <div className="mt-4 text-sm text-gray-600 text-center max-w-md">
-                <p><strong>Descripción:</strong> Mapa de calor que muestra las zonas de mayor actividad de aves detectadas por la cámara.</p>
-                <p><strong>Última actualización:</strong> {new Date().toLocaleString()}</p>
-                <p className="text-xs text-gray-400 mt-1">Haz clic en la imagen para ampliar</p>
-              </div>
+              {heatmapMetadata && (
+                <div className="mt-4 text-sm text-gray-600 text-center max-w-md">
+                  <p><strong>Descripción:</strong> {heatmapMetadata.heatmap_for}</p>
+                  <p><strong>Última generación:</strong> {new Date(heatmapMetadata.generated_at).toLocaleString()}</p>
+                </div>
+              )}
             </div>
           )}
           

@@ -1,77 +1,93 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
-import { Button } from "@nextui-org/button";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/table";
-import Hls from "hls.js";
-import { RxTrash } from "react-icons/rx";
 import { Tabs, Tab } from "@nextui-org/tabs";
+import BirdCoordinateService from "../services/BirdCoordinateService";
 
 export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
-    const handleDeleteClick = () => {
-        if (onDelete && cameraPanelData.id) {
-            onDelete(cameraPanelData.id, cameraPanelData.name);
-        }
+    const [segmentData, setSegmentData] = useState<SegmentData | null>(null);
+    const [speciesStats, setSpeciesStats] = useState([]);
+    const isMainCamera = cameraPanelData?.camera_id === "AXIS_Q6225-LE_PTZ";
+
+    type Detection = {
+        id_ave: number;
+        area: number;
+        coordenadas: [number, number, number, number];
+        distances?: Record<string, [number, number]>;
+     };
+
+    type SegmentData = {
+        frames: Record<string, Detection[]>;
     };
 
-    const detectionData = [
-        {
-            frame: "00:01:23",
-            idAve: "AVE001",
-            coordenadas: "X: 245, Y: 180",
-            area: "45.2 px²",
-            especieProbable: "Cardenal Rojo",
-            confianza: "87.3%"
-        },
-        {
-            frame: "00:02:15",
-            idAve: "AVE002",
-            coordenadas: "X: 320, Y: 220",
-            area: "62.8 px²",
-            especieProbable: "Gorrión Común",
-            confianza: "92.1%"
-        },
-        {
-            frame: "00:03:42",
-            idAve: "AVE003",
-            coordenadas: "X: 180, Y: 150",
-            area: "38.5 px²",
-            especieProbable: "Petirrojo",
-            confianza: "79.6%"
-        }
-    ];
+    type ParsedDetection = {
+        frame: string;
+        idAve: string;
+        coordenadas: string;
+        area: string;
+        especieProbable: string;
+        confianza: string;
+    };
 
-    const speciesData = [
-        {
-            nombreComun: "Cardenal Rojo",
-            nombreCientifico: "Cardinalis cardinalis",
-            estadoConservacion: "Preocupación Menor",
-            detecciones: 15
-        },
-        {
-            nombreComun: "Gorrión Común",
-            nombreCientifico: "Passer domesticus",
-            estadoConservacion: "Preocupación Menor",
-            detecciones: 8
-        },
-        {
-            nombreComun: "Petirrojo",
-            nombreCientifico: "Erithacus rubecula",
-            estadoConservacion: "Preocupación Menor",
-            detecciones: 3
-        },
-        {
-            nombreComun: "Jilguero Europeo",
-            nombreCientifico: "Carduelis carduelis",
-            estadoConservacion: "Preocupación Menor",
-            detecciones: 12
-        },
-        {
-            nombreComun: "Mirlo Común",
-            nombreCientifico: "Turdus merula",
-            estadoConservacion: "Preocupación Menor",
-            detecciones: 6
-        }
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!isMainCamera) return;
+
+            try {
+                const segment = await BirdCoordinateService.getSegmentData(cameraPanelData.camera_id);
+                const stats = await BirdCoordinateService.getBirdStatistics(cameraPanelData.camera_id);
+
+                setSegmentData(segment); // segment_data
+                setSpeciesStats(stats);  // camera_statistics
+            } catch (error) {
+                console.error("Error cargando datos de cámara:", error);
+            }
+        };
+
+        fetchData();
+    }, [cameraPanelData.camera_id, isMainCamera]);
+
+    const parseDetections = (frames: SegmentData["frames"]): ParsedDetection[] => {
+        if (!frames) return [];
+
+        return Object.entries(frames).flatMap(([frameNumber, detections]) => {
+            if (!Array.isArray(detections)) return [];
+
+            return detections.map((detection) => {
+                const distances = detection.distances || {};
+                const speciesEntries = Object.entries(distances);
+
+                let probableSpecies = "Desconocida";
+                let confianza = "0";
+
+                if (speciesEntries.length > 0) {
+                    const [bestSpecies] = speciesEntries.reduce((best, current) =>
+                    current[1][0] < best[1][0] ? current : best
+                    );
+
+                    const bestDistance = Math.min(
+                    ...speciesEntries.map(([_, values]) => values[0])
+                    );
+
+                    probableSpecies = bestSpecies.replace(/_/g, " ");
+                    confianza = (100 - bestDistance).toFixed(1);
+                }
+
+                return {
+                    frame: frameNumber,
+                    idAve: `AVE${String(detection.id_ave).padStart(3, "0")}`,
+                    coordenadas: `X1: ${Math.round(detection.coordenadas[0])}, Y1: ${Math.round(detection.coordenadas[1])}`,
+                    area: `${detection.area.toFixed(1)} px²`,
+                    especieProbable: probableSpecies,
+                    confianza,
+                };
+            });
+        });
+    };
+
+    const detectionData = segmentData ? parseDetections(segmentData.frames) : [];
+
+    if (!isMainCamera) return null;
 
     return (
         <Card className="py-4 mt-4">
@@ -82,10 +98,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
             </CardHeader>
             <CardBody className="overflow-visible py-2">
                 <div>
-                    <Tabs
-
-                        className="mb-6"
-                    >
+                    <Tabs className="mb-6">
                         <Tab title="Detecciones">
                             <Table aria-label="Tabla de detecciones de aves">
                                 <TableHeader>
@@ -103,15 +116,18 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                             <TableCell>{item.idAve}</TableCell>
                                             <TableCell>{item.coordenadas}</TableCell>
                                             <TableCell>{item.area}</TableCell>
-                                            <TableCell>{item.especieProbable}</TableCell>
+                                            <TableCell className="capitalize">{item.especieProbable}</TableCell>
                                             <TableCell>
-                                                <span className={`px-2 py-1 rounded-full text-xs ${parseFloat(item.confianza) > 85
-                                                        ? 'bg-green-100 text-green-800'
-                                                        : parseFloat(item.confianza) > 70
+                                                <span
+                                                    className={`px-2 py-1 rounded-full text-xs ${
+                                                        parseFloat(item.confianza) > 85
+                                                            ? 'bg-green-100 text-green-800'
+                                                            : parseFloat(item.confianza) > 70
                                                             ? 'bg-yellow-100 text-yellow-800'
                                                             : 'bg-red-100 text-red-800'
-                                                    }`}>
-                                                    {item.confianza}
+                                                    }`}
+                                                >
+                                                    {item.confianza}%
                                                 </span>
                                             </TableCell>
                                         </TableRow>
@@ -123,34 +139,30 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                             <Table aria-label="Tabla de especies detectadas">
                                 <TableHeader>
                                     <TableColumn>Nombre Común</TableColumn>
-                                    <TableColumn>Nombre Científico</TableColumn>
-                                    <TableColumn>Estado de Conservación</TableColumn>
                                     <TableColumn>Detecciones</TableColumn>
+                                    <TableColumn>Última Detección</TableColumn>
                                 </TableHeader>
                                 <TableBody>
-                                    {speciesData.map((item, index) => (
+                                    {speciesStats.map((item, index) => (
                                         <TableRow key={index}>
-                                            <TableCell>{item.nombreComun}</TableCell>
-                                            <TableCell className="italic">{item.nombreCientifico}</TableCell>
+                                            <TableCell className="capitalize">{item.bird_name.replace(/_/g, " ")}</TableCell>
                                             <TableCell>
-                                                <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                                                    {item.estadoConservacion}
-                                                </span>
+                                                <span className="font-semibold text-blue-600">{item.count}</span>
                                             </TableCell>
                                             <TableCell>
-                                                    <span className="font-semibold text-blue-600">
-                                                        {item.detecciones}
-                                                    </span>
+                                                {new Date(item.last_seen).toLocaleString("es-ES", {
+                                                    day: "2-digit",
+                                                    month: "2-digit",
+                                                    year: "numeric",
+                                                    hour: "2-digit",
+                                                    minute: "2-digit"
+                                                })}
                                             </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </Tab>
-                        <Tab title="Estadísticas">
-
-                        </Tab>
-
                     </Tabs>
                 </div>
             </CardBody>
