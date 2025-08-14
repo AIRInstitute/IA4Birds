@@ -13,7 +13,7 @@ class Camera extends Model<InferAttributes<Camera>, InferCreationAttributes<Came
   declare id: CreationOptional<number>;
   declare user_id: ForeignKey<number>;
   declare name: string;
-  declare source_type: "RTSP" | "RTMP" | "HLS" | "WebRTC" | "YouTube" | "Twitch" | "MJPEG" | "DASH" | "Other";
+  declare source_type: "RTSP" | "RTMP" | "HLS" | "YouTube";
   declare source_url: string;
   declare playback_url: CreationOptional<string>;
   declare status: CreationOptional<"active" | "inactive" | "pending">;
@@ -23,6 +23,7 @@ class Camera extends Model<InferAttributes<Camera>, InferCreationAttributes<Came
   declare storage_info: CreationOptional<string>;
   declare additional_data: CreationOptional<string>;
   declare is_public: CreationOptional<boolean>;
+  declare camera_id: CreationOptional<string>;
 }
 
 export default (sequelize: Sequelize) => {
@@ -46,7 +47,7 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
       },
       source_type: {
-        type: DataTypes.ENUM("RTSP", "RTMP", "HLS", "WebRTC", "YouTube", "Twitch", "MJPEG", "DASH", "Other"),
+        type: DataTypes.ENUM("RTSP", "RTMP", "HLS", "YouTube"),
         allowNull: false,
       },
       source_url: {
@@ -86,6 +87,10 @@ export default (sequelize: Sequelize) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      camera_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {
