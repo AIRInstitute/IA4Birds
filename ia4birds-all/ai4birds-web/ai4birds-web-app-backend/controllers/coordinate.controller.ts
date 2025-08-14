@@ -24,7 +24,7 @@ export const getSegmentData = async (req: Request, res: Response) => {
     const cached = await redis.get(cacheKey);
     if (cached) return res.status(200).json(JSON.parse(cached));
 
-    const url = `${globalConfig.pythonURL}/coordinate/segment-data?camera_id=${cameraId}`;
+    const url = `${globalConfig.pythonURL}/segment-data?camera_id=${cameraId}`;
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -47,7 +47,7 @@ export const getBirdStatistics = async (req: Request, res: Response) => {
     const cached = await redis.get(cacheKey);
     if (cached) return res.status(200).json(JSON.parse(cached));
 
-    const url = `${globalConfig.pythonURL}/coordinate/bird-statistics/by-camera?camera_id=${cameraId}`;
+    const url = `${globalConfig.pythonURL}/bird-statistics/by-camera?camera_id=${cameraId}`;
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -70,7 +70,7 @@ export const getHeatmapData = async (req: Request, res: Response) => {
     const cached = await redis.get(cacheKey);
     if (cached) return res.status(200).json(JSON.parse(cached));
 
-    const url = `${globalConfig.pythonURL}/coordinate/heatmap-data?camera_id=${cameraId}`;
+    const url = `${globalConfig.pythonURL}/heatmap-data?camera_id=${cameraId}`;
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` }
     });
