@@ -40,7 +40,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                 console.log("Segment Data:", segment); 
                 console.log("Bird Statistics:", stats);
 
-                setSegmentData(segment); // segment_data
+                setSegmentData(segment.segment_data); // segment_data
                 setSpeciesStats(stats);  // camera_statistics
             } catch (error) {
                 console.error("Error cargando datos de cámara:", error);
