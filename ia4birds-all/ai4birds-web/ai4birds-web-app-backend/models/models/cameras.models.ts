@@ -23,6 +23,7 @@ class Camera extends Model<InferAttributes<Camera>, InferCreationAttributes<Came
   declare storage_info: CreationOptional<string>;
   declare additional_data: CreationOptional<string>;
   declare is_public: CreationOptional<boolean>;
+  declare camera_id: CreationOptional<string>;
 }
 
 export default (sequelize: Sequelize) => {
