@@ -37,6 +37,9 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                 const segment = await BirdCoordinateService.getSegmentData(cameraPanelData.camera_id);
                 const stats = await BirdCoordinateService.getBirdStatistics(cameraPanelData.camera_id);
 
+                console.log("Segment Data:", segment); 
+                console.log("Bird Statistics:", stats);
+
                 setSegmentData(segment); // segment_data
                 setSpeciesStats(stats);  // camera_statistics
             } catch (error) {
@@ -143,23 +146,20 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                     <TableColumn>Última Detección</TableColumn>
                                 </TableHeader>
                                 <TableBody>
-                                    {speciesStats.camera_statistics.map((item, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell className="capitalize">{item.bird_name.replace(/_/g, " ")}</TableCell>
-                                            <TableCell>
-                                                <span className="font-semibold text-blue-600">{item.count}</span>
-                                            </TableCell>
-                                            <TableCell>
-                                                {new Date(item.last_seen).toLocaleString("es-ES", {
-                                                    day: "2-digit",
-                                                    month: "2-digit",
-                                                    year: "numeric",
-                                                    hour: "2-digit",
-                                                    minute: "2-digit"
-                                                })}
-                                            </TableCell>
+                                    {Array.isArray(speciesStats?.camera_statistics) ? (
+                                        speciesStats.camera_statistics.map((item, index) => (
+                                            <TableRow key={index}>
+                                            <TableCell>{item.camera_id}</TableCell>
+                                            <TableCell>{item.bird_name}</TableCell>
+                                            <TableCell>{item.count}</TableCell>
+                                            <TableCell>{new Date(item.last_seen).toLocaleString()}</TableCell>
+                                            </TableRow>
+                                        ))
+                                        ) : (
+                                        <TableRow>
+                                            <TableCell colSpan={4}>Cargando estadísticas...</TableCell>
                                         </TableRow>
-                                    ))}
+                                    )}
                                 </TableBody>
                             </Table>
                         </Tab>
