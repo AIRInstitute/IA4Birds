@@ -87,6 +87,10 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
+      camera_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       tableName: "cameras",
