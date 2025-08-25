@@ -7,6 +7,7 @@ from ai4birds_ingest_service.model.xenocanto.xenocanto_model import XenoCantoMod
 from ai4birds_ingest_service.model.xenocanto.xenocanto_data import XenoCantoData
 
 from ai4birds_ingest_service.log import logger
+import asyncio
 
 from .app import celery
 
@@ -36,7 +37,8 @@ def xenocanto_extract() -> None:
     xc_model = XenoCantoModel()
 
     logger.info("Fetching Xenocanto data...")
-    data = xc_extractor.xenocanto_query()
+    # Execute the async function properly
+    data = asyncio.run(xc_extractor.xenocanto_query())
     if data:
         xc_model.add_batch([XenoCantoData.from_dict(item) for item in data])
         logger.info("Successfully stored Xenocanto data in the database.")

@@ -178,6 +178,7 @@ services:
     depends_on:
       - ai4birds-ingest-service
       - redis
+      - postgresql-ingest
     networks:
       - redis-net
       - bird-net
@@ -191,6 +192,7 @@ services:
     depends_on:
       - ai4birds-ingest-service
       - celery-worker
+      - postgresql-ingest
     networks:
       - redis-net
       - bird-net
