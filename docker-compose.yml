@@ -174,8 +174,7 @@ services:
 
   mosquitto:
     image: eclipse-mosquitto
-    ports:
-      - ${MQTT_PORTS}
+    container_name: mosquitto
     volumes:
       - ${MQTT_CONFIG_VOLUME}
       - ${MQTT_DATA_VOLUME}
