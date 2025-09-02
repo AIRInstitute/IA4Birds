@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   postgresql:
@@ -76,6 +74,7 @@ services:
   webserver:
     depends_on:
       - frontend
+      - backend
     build:
       context: .
       dockerfile: nginx_dockerfile/Dockerfile
