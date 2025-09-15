@@ -271,7 +271,7 @@ const Mapa = () => {
         //const events = new EventSource('http://localhost:5030/api/data/exclusionmap/stream-exclusion-data');
         //const events = new EventSource('http://212.128.154.81:5030/api/data/exclusionmap/stream-exclusion-data');
         //const events = new EventSource(`http://${process.env.BACKEND_URL}/api/data/exclusionmap/stream-exclusion-data`);
-        const events = new EventSource(`http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_HTTP_PORT}/api/data/exclusionmap/stream-exclusion-data`);
+        const events = new EventSource(`https://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_HTTP_PORT}/api/data/exclusionmap/stream-exclusion-data`);
 
         events.onmessage = (event) => {
           const parsedData = JSON.parse(event.data);
