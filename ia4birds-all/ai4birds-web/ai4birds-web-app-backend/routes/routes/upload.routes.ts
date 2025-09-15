@@ -5,46 +5,46 @@ import * as dataCyLController from '../../controllers/dataCyL.controller'
 import * as mapController from '../../controllers/map.controller'
 
 export default () => {
-    const dataRouter: Router = Router();
+    const uploadRoutes: Router = Router();
 
-    dataRouter.get(
+    uploadRoutes.get(
         "/xenocanto",
         authMiddleware.verifyToken,
         dataCyLController.getXenoCantoRecordings
     )
-    dataRouter.get(
+    uploadRoutes.get(
         "/ebird",
         authMiddleware.verifyToken,
         dataCyLController.getEBirdData
     )
-    dataRouter.get(
+    uploadRoutes.get(
         "/dataBird",
         dataCyLController.getDataBird
     )
-    dataRouter.post(
+    uploadRoutes.post(
         "/windmap",
         mapController.getWindMapData
     )
-    dataRouter.get(
+    uploadRoutes.get(
         "/sensitivity",
         authMiddleware.verifyToken,
         dataCyLController.getSensitivityData
     )
-    dataRouter.get(
+    uploadRoutes.get(
         "/exclusionmap/zip",
         mapController.getExclusionMapData
     )
-    dataRouter.get(
+    uploadRoutes.get(
         "/exclusionmap/all",
         mapController.getExclusionMapAll
     )
-    dataRouter.get(
+    uploadRoutes.get(
         "/exclusionmap/stream-exclusion-data",
         mapController.getExclusionMapDataStreaming
     )
-    dataRouter.post(
+    uploadRoutes.post(
         "/exclusionmap/stream-exclusion-data",
         mapController.addFact
     )
-    return dataRouter;
+    return uploadRoutes;
 };
