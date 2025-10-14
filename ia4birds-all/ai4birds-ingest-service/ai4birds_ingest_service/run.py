@@ -34,9 +34,11 @@ app.config['MQTT_BROKER_URL'] = config.MQTT_BROKER
 app.config['MQTT_BROKER_PORT'] = config.MQTT_PORT
 app.config['MQTT_KEEPALIVE'] = config.MQTT_KEEPALIVE
 app.config['MQTT_TLS_ENABLED'] = config.MQTT_TLS_ENABLED
+app.config['MQTT_TRANSPORT'] = config.MQTT_TRANSPORT
 app.config['TIME_WITHOUT_MESSAGE'] = config.TIME_WITHOUT_MESSAGE
 
 mqtt = Mqtt(app)
+mqtt.client.ws_set_options(path="/mqtt")
 
 #models
 data_segment = DataSegmentModel()
