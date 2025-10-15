@@ -160,12 +160,13 @@ services:
     build: ./mediamtx-custom
     container_name: mediamtx
     ports:
-      - "8554:8554"
-      - "9997:9997"
-      - "8888:8888"
-      - "8889:8889"
-      - "8890:8890/udp"
-      - "8189:8189"
+      - "8554:8554"        # RTSP
+      - "9997:9997"        # RTMP / API
+      - "8889:8889"        # RTMP (in)
+      - "8890:8890/udp"    # UDP (SRT / RTP)
+      - "8189:8189"        # Control API (REST)
+    expose:
+      - "8888"             # HLS (solo accesible desde NGINX)
     volumes:
       - camara-config:/app/config
     networks:
