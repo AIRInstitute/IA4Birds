@@ -8,7 +8,7 @@ import os
 
 
 # api config
-PORT = 5000
+PORT = 5002
 HOST = '0.0.0.0'
 URL_PREFIX = '/ai4birds-coordinate-service/v1'
 DEBUG_MODE = True
