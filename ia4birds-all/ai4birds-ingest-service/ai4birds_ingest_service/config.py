@@ -65,10 +65,10 @@ HEATMAP_ENDPOINT = os.getenv('HEATMAP_ENDPOINT', 'http://localhost:5002/ai4birds
 
 # MQTT BROKER
 MQTT_BROKER = os.getenv('MQTT_HOST', 'localhost')
-MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
+MQTT_PORT = int(os.getenv('MQTT_PORT', 9001))
 
 MQTT_KEEPALIVE = 30
-MQTT_TLS_ENABLED = True
+MQTT_TLS_ENABLED = False
 MQTT_TRANSPORT = "websockets"
 TIME_WITHOUT_MESSAGE = 30
 

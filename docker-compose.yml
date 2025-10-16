@@ -182,6 +182,9 @@ services:
       - ${MQTT_LOG_VOLUME}
     env_file:
       - /etc/envs/.env
+    ports:
+      - "5083:1883"
+      - "9001:9001"
     networks:
       - bird-net
 
