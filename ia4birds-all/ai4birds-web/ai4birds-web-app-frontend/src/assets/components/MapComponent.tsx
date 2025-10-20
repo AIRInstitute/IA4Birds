@@ -24,6 +24,14 @@ import {Switch} from "@nextui-org/react";
 
 import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 
+type BirdMarker = {
+  speciesCode: string;
+  comName: string;
+  sciName: string;
+  observations: { lat: number, lng: number }[];
+  recordings: any[]; 
+}
+
 const Mapa = () => {
   const [showMarkersEolic, setShowMarkersEolic] = useState(false);
   const [showMarkersEolicResources, setShowMarkersEolicResources] = useState(false);
@@ -33,7 +41,7 @@ const Mapa = () => {
   const [selectedBirds, setSelectedBirds] = useState<string[]>([]);
   const [streamingEolicData, setstreamingEolicData] = useState(false);
   const [eolicMarkers, setEolicMarkers] = useState<{ coordenadas: L.LatLng[], espacio?: string }[]>([]);
-  const [birdMarkers, setBirdsMarkers] = useState<{ observations: { lat: number, lng: number }[] }[]>([]);
+  const [birdMarkers, setBirdsMarkers] = useState<BirdMarker[]>([]);
   const [eolicResourcesMarkers, setEolicResourcesMarkers] = useState<{ lat: number, lng: number }[]>([]);
   const [clickedLatLng, setClickedLatLng] = useState<L.LatLng | null>(null);
   const [showFilter, setShowFilter] = useState(false);
@@ -882,7 +890,7 @@ const Mapa = () => {
                     opacity: 1,
                     fillOpacity: 0.8,
                   }}>
-                  {(!showGridLayer || !gridData) && birdMarkers.length > 0 && birdMarkers.map((birdMarker, index) => {
+                  {/* {(!showGridLayer || !gridData) && birdMarkers.length > 0 && birdMarkers.map((birdMarker, index) => {
                     if (birdMarker.observations && birdMarker.observations.length > 0 && birdMarker.observations[0].lat) {
                       return (
                         <>
@@ -897,7 +905,24 @@ const Mapa = () => {
                       );
                     }
                     return null;
-                  })}
+                  })} */}
+
+                  {(!showGridLayer || !gridData) &&
+                    birdMarkers
+                      .filter(birdMarker =>
+                        selectedBirds.length === 0 || selectedBirds.includes(birdMarker.comName)
+                      )
+                      .map((birdMarker, index) => (
+                        <Marker
+                          key={index}
+                          position={[birdMarker.observations[0].lat, birdMarker.observations[0].lng]}
+                          icon={IconCrow}
+                          eventHandlers={{ click: () => handleButtonClickBirds(index) }}
+                        >
+                          <Popup>{birdMarker.speciesCode || `Ave ${index + 1}`}</Popup>
+                        </Marker>
+                     ))
+                  }
                 </MarkerClusterGroup>
 
                 {/* <MarkerClusterGroup

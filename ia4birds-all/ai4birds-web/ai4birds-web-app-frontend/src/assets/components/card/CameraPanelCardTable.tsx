@@ -6,7 +6,7 @@ import BirdCoordinateService from "../services/BirdCoordinateService";
 
 export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
     const [segmentData, setSegmentData] = useState<SegmentData | null>(null);
-    const [speciesStats, setSpeciesStats] = useState([]);
+    const [speciesStats, setSpeciesStats] = useState<SpeciesStats | null>(null);
     const isMainCamera = cameraPanelData?.camera_id === "AXIS_Q6225-LE_PTZ";
 
     type Detection = {
@@ -18,6 +18,17 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
 
     type SegmentData = {
         frames: Record<string, Detection[]>;
+    };
+
+    type CameraStatistics = {
+        camera_id: string;
+        bird_name: string;
+        count: number;
+        last_seen: string;
+    };
+
+    type SpeciesStats = {
+        camera_statistics: CameraStatistics[];
     };
 
     type ParsedDetection = {

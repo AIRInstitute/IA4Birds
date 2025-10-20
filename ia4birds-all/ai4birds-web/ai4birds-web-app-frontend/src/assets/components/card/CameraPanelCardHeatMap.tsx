@@ -8,6 +8,11 @@ import { RxTrash, RxMagnifyingGlass, RxZoomIn, RxZoomOut, RxReset } from "react-
 import heatmapImage from "../../images/heatmap.png";
 import BirdCoordinateService from "../services/BirdCoordinateService";
 
+interface HeatmapMetadata {
+  heatmap_for: string;
+  generated_at: string;
+}
+
 export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
   const [heatmapImageUrl, setHeatmapImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +23,7 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
-  const [heatmapMetadata, setHeatmapMetadata] = useState(null);
+  const [heatmapMetadata, setHeatmapMetadata] = useState<HeatmapMetadata | null>(null);
 
   const handleDeleteClick = () => {
     if (onDelete && cameraPanelData.id) {
