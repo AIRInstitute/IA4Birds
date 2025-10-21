@@ -27,6 +27,7 @@ import castillaYLeonBorders from "../coordMap/CastillaYLeon.json";
 type BirdMarker = {
   speciesCode: string;
   comName: string;
+  spanishName: string;
   sciName: string;
   observations: { lat: number, lng: number }[];
   recordings: any[]; 
@@ -76,6 +77,26 @@ const Mapa = () => {
     "Águila pescadora",
     "Urogallo común",
   ];
+
+  const birdNameMap = {
+    "Buitre negro": "Cinereous Vulture",
+    "Águila imperial ibérica": "Spanish Eagle",
+    "Águila real": "Golden Eagle",
+    "Águila perdicera": "Bonelli's Eagle",
+    "Alondra ricotí": "Common albatross",
+    "Cigüeña negra": "Black Stork",
+    "Cigüeña blanca": "White Stork",
+    "Aguilucho pálido": "Hen Harrier",
+    "Aguilucho cenizo": "Montagu's Harrier",
+    "Cernícalo primilla": "Lesser Kestrel",
+    "Grulla común": "Common crane",
+    "Quebrantahuesos": "Bearded Vulture",
+    "Buitre leonado": "Eurasian Griffon",
+    "Milano real": "Red kite",
+    "Alimoche común": "Egyptian Vulture",
+    "Águila pescadora": "Osprey",
+    "Urogallo común": "Common capercaillie",
+  }
 
   // const bounds: [[number, number], [number, number]] = [
   //   [39.95, -7.20], // Esquina suroeste
@@ -135,10 +156,11 @@ const Mapa = () => {
 
   // Función para alternar la selección de una ave individual
   const toggleBirdSelection = (bird) => {
+    const birdInSpanish = birdNameMap[bird] || bird;
     setSelectedBirds((prevSelected) => {
-      const newSelectedBirds = prevSelected.includes(bird)
-        ? prevSelected.filter((b) => b !== bird)
-        : [...prevSelected, bird];
+      const newSelectedBirds = prevSelected.includes(birdInSpanish)
+        ? prevSelected.filter((b) => b !== birdInSpanish)
+        : [...prevSelected, birdInSpanish];
       
       // Si no quedan aves seleccionadas, desactivamos el Switch de "Aves protegidas"
       if (newSelectedBirds.length === 0) {
@@ -367,10 +389,16 @@ const Mapa = () => {
     BirdDataService.getDataBird().then((response) => {
       setMarkersLoaded(true);
       if (response.status === 200) {
-        //console.log("bird Response", response.data)
-        return setBirdsMarkers(response.data);
-      }
-      else {
+        console.log("bird Response", response.data)
+        const updatedBirdMarkers = response.data.map((birdMarker) => {
+          const spanishName = birdNameMap[birdMarker.comName] || birdMarker.comName;
+          return {
+            ...birdMarker,
+            spanishName,
+          };
+        });
+        setBirdsMarkers(updatedBirdMarkers);
+      } else {
         throw new Error(response.data);
       }
     });
@@ -911,7 +939,7 @@ const Mapa = () => {
                     birdMarkers
                       .filter(
                         birdMarker =>
-                          (selectedBirds.length === 0 || selectedBirds.includes(birdMarker.comName)) &&
+                          (selectedBirds.length === 0 || selectedBirds.includes(birdMarker.spanishName)) &&
                           birdMarker.observations &&
                           birdMarker.observations.length > 0 &&
                           birdMarker.observations[0].lat !== undefined &&
