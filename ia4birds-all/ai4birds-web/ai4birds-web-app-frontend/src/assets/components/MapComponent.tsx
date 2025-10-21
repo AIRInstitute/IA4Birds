@@ -158,9 +158,9 @@ const Mapa = () => {
   const toggleBirdSelection = (bird) => {
     const birdInSpanish = birdNameMap[bird] || bird;
     setSelectedBirds((prevSelected) => {
-      const newSelectedBirds = prevSelected.includes(birdInSpanish)
-        ? prevSelected.filter((b) => b !== birdInSpanish)
-        : [...prevSelected, birdInSpanish];
+      const newSelectedBirds = prevSelected.includes(bird)
+        ? prevSelected.filter((b) => b !== bird)
+        : [...prevSelected, bird];
       
       // Si no quedan aves seleccionadas, desactivamos el Switch de "Aves protegidas"
       if (newSelectedBirds.length === 0) {
@@ -952,7 +952,7 @@ const Mapa = () => {
                           icon={IconCrow}
                           eventHandlers={{ click: () => handleButtonClickBirds(index) }}
                         >
-                          <Popup>{birdMarker.speciesCode || `Ave ${index + 1}`}</Popup>
+                          <Popup>{`Ave ${index + 1}`}</Popup>
                         </Marker>
                      ))
                   }
