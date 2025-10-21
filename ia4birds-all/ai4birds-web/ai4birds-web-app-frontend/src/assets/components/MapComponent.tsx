@@ -156,11 +156,12 @@ const Mapa = () => {
 
   // Función para alternar la selección de una ave individual
   const toggleBirdSelection = (bird) => {
-    const birdInSpanish = birdNameMap[bird] || bird;
     setSelectedBirds((prevSelected) => {
       const newSelectedBirds = prevSelected.includes(bird)
         ? prevSelected.filter((b) => b !== bird)
         : [...prevSelected, bird];
+
+      console.log("Updated selected birds:", newSelectedBirds);
       
       // Si no quedan aves seleccionadas, desactivamos el Switch de "Aves protegidas"
       if (newSelectedBirds.length === 0) {
@@ -392,11 +393,13 @@ const Mapa = () => {
         console.log("bird Response", response.data)
         const updatedBirdMarkers = response.data.map((birdMarker) => {
           const spanishName = birdNameMap[birdMarker.comName] || birdMarker.comName;
+          console.log("Spanish name map", birdMarker.comName, "->", spanishName);
           return {
             ...birdMarker,
             spanishName,
           };
         });
+        console.log("Updated bird markers:", updatedBirdMarkers);
         setBirdsMarkers(updatedBirdMarkers);
       } else {
         throw new Error(response.data);
@@ -937,14 +940,17 @@ const Mapa = () => {
 
                   {(!showGridLayer || !gridData) &&
                     birdMarkers
-                      .filter(
-                        birdMarker =>
+                      .filter((birdMarker) => {
+                        console.log("Filtering bird:", birdMarker.spanishName);
+                        console.log("Selected birds:", selectedBirds); 
+                        return (
                           (selectedBirds.length === 0 || selectedBirds.includes(birdMarker.spanishName)) &&
                           birdMarker.observations &&
                           birdMarker.observations.length > 0 &&
                           birdMarker.observations[0].lat !== undefined &&
                           birdMarker.observations[0].lng !== undefined
-                      )
+                        );
+                      })
                       .map((birdMarker, index) => (
                         <Marker
                           key={index}
@@ -955,7 +961,7 @@ const Mapa = () => {
                           <Popup>{`Ave ${index + 1}`}</Popup>
                         </Marker>
                      ))
-                  }
+                    }
                 </MarkerClusterGroup>
 
                 {/* <MarkerClusterGroup
