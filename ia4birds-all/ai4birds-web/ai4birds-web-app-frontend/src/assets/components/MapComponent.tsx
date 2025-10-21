@@ -160,8 +160,6 @@ const Mapa = () => {
       const newSelectedBirds = prevSelected.includes(bird)
         ? prevSelected.filter((b) => b !== bird)
         : [...prevSelected, bird];
-
-      console.log("Updated selected birds:", newSelectedBirds);
       
       // Si no quedan aves seleccionadas, desactivamos el Switch de "Aves protegidas"
       if (newSelectedBirds.length === 0) {
@@ -390,16 +388,14 @@ const Mapa = () => {
     BirdDataService.getDataBird().then((response) => {
       setMarkersLoaded(true);
       if (response.status === 200) {
-        console.log("bird Response", response.data)
+        //console.log("bird Response", response.data)
         const updatedBirdMarkers = response.data.map((birdMarker) => {
           const spanishName = birdNameMap[birdMarker.comName] || birdMarker.comName;
-          console.log("Spanish name map", birdMarker.comName, "->", spanishName);
           return {
             ...birdMarker,
             spanishName,
           };
         });
-        console.log("Updated bird markers:", updatedBirdMarkers);
         setBirdsMarkers(updatedBirdMarkers);
       } else {
         throw new Error(response.data);
@@ -941,8 +937,6 @@ const Mapa = () => {
                   {(!showGridLayer || !gridData) &&
                     birdMarkers
                       .filter((birdMarker) => {
-                        console.log("Filtering bird:", birdMarker.spanishName);
-                        console.log("Selected birds:", selectedBirds); 
                         return (
                           (selectedBirds.length === 0 || selectedBirds.includes(birdMarker.spanishName)) &&
                           birdMarker.observations &&
