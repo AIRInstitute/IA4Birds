@@ -9,6 +9,10 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
     const [speciesStats, setSpeciesStats] = useState<SpeciesStats | null>(null);
     const isMainCamera = cameraPanelData?.camera_id === "AXIS_Q6225-LE_PTZ";
 
+    const [detectionPage, setDetectionPage] = useState(1);
+    const [speciesPage, setSpeciesPage] = useState(1);
+    const rowsPerPage = 10;
+
     type Detection = {
         id_ave: number;
         area: number;
@@ -57,7 +61,8 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                 console.error("Error cargando datos de cámara:", error);
             }
         };
-
+        setDetectionPage(1);
+        setSpeciesPage(1);
         fetchData();
     }, [cameraPanelData.camera_id, isMainCamera]);
 
@@ -110,6 +115,18 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
     const detectionData = segmentData ? parseDetections(segmentData.frames) : [];
     console.log("detectionData:", detectionData);
 
+    const detectionPages = Math.ceil(detectionData.length / rowsPerPage);
+    const paginatedData = detectionData.slice(
+        (detectionPage - 1) * rowsPerPage, 
+        detectionPage * rowsPerPage
+    );
+
+    const speciesData = Array.isArray(speciesStats?.camera_statistics) ? speciesStats.camera_statistics : [];
+    const speciesPages = Math.ceil(speciesData.length / rowsPerPage);
+    const paginatedSpeciesStats = speciesData.slice(
+        (speciesPage - 1) * rowsPerPage, 
+        speciesPage * rowsPerPage
+    );
 
     if (!isMainCamera) return null;
 
@@ -124,7 +141,33 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                 <div>
                     <Tabs className="mb-6">
                         <Tab title="Detecciones">
-                            <Table aria-label="Tabla de detecciones de aves">
+                            <Table aria-label="Tabla de detecciones de aves"
+                                    bottomContent={
+                                        detectionPages > 1 ?(
+                                            <div className="flex w-full justify-center mt-3">
+                                                <nav className="flex gap-2">
+                                                    <button
+                                                        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                                                        onClick={() => setDetectionPage((p) => Math.max(p - 1, 1))}
+                                                        disabled={detectionPage === 1}
+                                                    >
+                                                        Anterior
+                                                    </button>
+                                                    <span className="px-3 py-1">
+                                                        Página {detectionPage} de {detectionPages}
+                                                    </span>
+                                                    <button
+                                                        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                                                        onClick={() => setDetectionPage((p) => Math.min(p + 1, detectionPages))}
+                                                        disabled={detectionPage === detectionPages}
+                                                    >
+                                                    Siguiente
+                                                    </button>
+                                                </nav>
+                                            </div>
+                                        ) : null
+                                    }
+                                >
                                 <TableHeader>
                                     <TableColumn>Frame</TableColumn>
                                     <TableColumn>ID Ave</TableColumn>
@@ -134,8 +177,8 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                     <TableColumn>Confianza</TableColumn>
                                 </TableHeader>
                                 <TableBody>
-                                    {detectionData.map((item, index) => (
-                                        <TableRow key={index}>
+                                    {paginatedData.map((item, index) => (
+                                        <TableRow className="hover:bg-gray-50 transition" key={index}>
                                             <TableCell>{item.frame}</TableCell>
                                             <TableCell>{item.idAve}</TableCell>
                                             <TableCell>{item.coordenadas}</TableCell>
@@ -160,7 +203,33 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                             </Table>
                         </Tab>
                         <Tab title="Especies">
-                            <Table aria-label="Tabla de especies detectadas">
+                            <Table aria-label="Tabla de especies detectadas"
+                                    bottomContent={
+                                        speciesPages > 1 ? (
+                                            <div className="flex w-full justify-center mt-3">
+                                                <nav className="flex gap-2">
+                                                    <button
+                                                        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition disabled:opacity-50"
+                                                        onClick={() => setSpeciesPage((p) => Math.max(p - 1, 1))}
+                                                        disabled={speciesPage === 1}
+                                                    >
+                                                        Anterior
+                                                    </button>
+                                                    <span className="px-3 py-1">
+                                                        Página {speciesPage} de {speciesPages}
+                                                    </span>
+                                                    <button
+                                                        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition disabled:opacity-50"
+                                                        onClick={() => setSpeciesPage((p) => Math.min(p + 1, speciesPages))}
+                                                        disabled={speciesPage === speciesPages}
+                                                    >
+                                                        Siguiente
+                                                    </button>
+                                                </nav>
+                                            </div>
+                                        ) : null
+                                    }
+                                >
                                 <TableHeader>
                                     <TableColumn>Cámara</TableColumn>
                                     <TableColumn>Nombre Común</TableColumn>
@@ -168,9 +237,9 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                     <TableColumn>Última Detección</TableColumn>
                                 </TableHeader>
                                 <TableBody>
-                                    {Array.isArray(speciesStats?.camera_statistics) ? (
-                                        speciesStats.camera_statistics.map((item, index) => (
-                                            <TableRow key={index}>
+                                    {paginatedSpeciesStats.length > 0 ? (
+                                        paginatedSpeciesStats.map((item, index) => (
+                                            <TableRow className="hover:bg-gray-50 transition" key={index}>
                                             <TableCell>{item.camera_id}</TableCell>
                                             <TableCell>{item.bird_name}</TableCell>
                                             <TableCell>{item.count}</TableCell>
@@ -178,7 +247,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                             </TableRow>
                                         ))
                                         ) : (
-                                        <TableRow>
+                                        <TableRow className="hover:bg-gray-50 transition">
                                             <TableCell colSpan={4}>Cargando estadísticas...</TableCell>
                                         </TableRow>
                                     )}
