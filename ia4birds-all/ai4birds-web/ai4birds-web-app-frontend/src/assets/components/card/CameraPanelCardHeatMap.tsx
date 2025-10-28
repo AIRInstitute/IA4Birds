@@ -41,7 +41,9 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
     
     try {
       //const response = await fetch(`/api/cameras/${cameraPanelData.id}/heatmap`);
-      const heatmapData = await BirdCoordinateService.getHeatmapData(cameraId)
+      const resp = await BirdCoordinateService.getHeatmapData(cameraId)
+
+      const heatmapData = resp?.heatmap_data;
 
       if (!heatmapData?.image_url) {
         setError("No se encontró la imagen del mapa de calor");
