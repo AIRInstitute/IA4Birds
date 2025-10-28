@@ -53,8 +53,8 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
 
       console.log("heatmap Data:", heatmapData); 
   
-      setHeatmapMetadata(heatmapData.heatmap_data);
-      setHeatmapImageUrl(heatmapData.heatmap_data.image_url);
+      setHeatmapMetadata(heatmapData);
+      setHeatmapImageUrl(heatmapData.image_url);
       
       
     } catch (error) {
