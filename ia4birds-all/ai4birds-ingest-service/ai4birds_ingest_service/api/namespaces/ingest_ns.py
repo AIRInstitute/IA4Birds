@@ -65,15 +65,33 @@ class DataBird(Resource):
         return result, status_code
 
 
+# @ns_xenocanto.route('/')
+# class XenoCanto(Resource):
+#     """
+#     Retrieves bird recordings from XenoCanto and stores them in the database.
+#     """
+#     @cache.cached()
+#     def get(self):
+#         service = XenoCantoService()
+#         data, status_code = service.get_xenocanto_data()
+#         return data, status_code
+
 @ns_xenocanto.route('/')
 class XenoCanto(Resource):
-    """
-    Retrieves bird recordings from XenoCanto and stores them in the database.
-    """
-    @cache.cached()
     def get(self):
+        cache_key = "xenocanto:v1:cnt_spain:castilla_y_leon"
+
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return cached_data, 200
+
         service = XenoCantoService()
         data, status_code = service.get_xenocanto_data()
+
+        # Solo cachea si OK
+        if status_code == 200:
+            #cache.set(cache_key, data, timeout=60 * 60)  # 1 hora
+            cache.set(cache_key, data, timeout=15 * 60)   # 15 minutos
         return data, status_code
 
 
