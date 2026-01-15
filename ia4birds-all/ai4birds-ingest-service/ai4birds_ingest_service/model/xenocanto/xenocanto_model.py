@@ -37,7 +37,7 @@ class XenoCantoModel:
                         # Corregir el nombre de clave y realizar conversiones
                         file_name = rec.get('fileName', rec.get('file-name', 'defaultFileName'))  # Soporte para ambos nombres de clave
                         lat = float(rec['lat']) if rec['lat'] else 0.0
-                        lng = float(rec['lng']) if rec['lon'] else 0.0
+                        lng = float(rec['lon']) if rec['lon'] else 0.0
                         alt = int(rec['alt']) if rec['alt'] else 0
 
                         # Añadir a la lista de valores
