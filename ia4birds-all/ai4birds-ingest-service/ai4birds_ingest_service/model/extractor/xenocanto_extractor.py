@@ -57,10 +57,10 @@ class XenoCanto_Extractor_Async:
                 "page": page,               # 1..numPages
             }
 
-            full_url = str(aiohttp.client.URL(self.BASE_URL).with_query(params))
-            logger.info(f"[XenoCanto] Final request URL: {full_url}")
+            url = f"{self.BASE_URL}?query={self.query}&key={self.api_key}&per_page={self.per_page}&page={page}"
+            logger.info(f"[XenoCanto] GET {url}")
 
-            async with session.get(self.BASE_URL, params=params) as resp:
+            async with session.get(url) as resp:
                 # Explicit 429 handling so tenacity retries
                 if resp.status == 429:
                     raise ClientResponseError(
