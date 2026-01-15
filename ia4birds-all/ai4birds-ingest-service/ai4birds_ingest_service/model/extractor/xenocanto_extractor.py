@@ -25,7 +25,7 @@ class XenoCanto_Extractor_Async:
         self.per_page = int(getattr(config, "XENOCANTO_PER_PAGE", 100))
         self.per_page = max(50, min(self.per_page, 500))  # enforce 50..500
 
-        self.query = getattr(config, "XENOCANTO_QUERY", "cnt:spain+grp:birds")
+        self.query = getattr(config, "XENOCANTO_QUERY", "cnt:spain grp:birds")
 
         self._headers = {
             "User-Agent": "ai4birds-ingest-service/1.0 (+contact: air-institute)",
@@ -195,5 +195,5 @@ class XenoCanto_Extractor_Async:
         logger.info(f"[XenoCanto] Species intersection count: {len(intersection)}")
         logger.info(f"[XenoCanto] Species intersection sample: {list(intersection)[:10]}")
 
-        
+
         return formatted_results

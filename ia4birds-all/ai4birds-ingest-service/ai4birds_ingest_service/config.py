@@ -84,4 +84,4 @@ A4BIRDS_CAMERA_HEATMAP_IMAGE_PREFIX = 'a4birds/cam/heatmap/image/'
 # Xeno-Canto API v3
 XENOCANTO_API_KEY = os.getenv('XENOCANTO_API_KEY')
 XENOCANTO_PER_PAGE = int(os.getenv('XENOCANTO_PER_PAGE', 100))  # 50..500
-XENOCANTO_QUERY = os.getenv('XENOCANTO_QUERY', 'cnt:spain+grp:birds')
+XENOCANTO_QUERY = os.getenv('XENOCANTO_QUERY', 'cnt:spain grp:birds')
