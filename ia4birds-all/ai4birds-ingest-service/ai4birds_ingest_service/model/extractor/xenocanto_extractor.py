@@ -25,7 +25,7 @@ class XenoCanto_Extractor_Async:
         self.per_page = int(getattr(config, "XENOCANTO_PER_PAGE", 100))
         self.per_page = max(50, min(self.per_page, 500))  # enforce 50..500
 
-        self.query = getattr(config, "XENOCANTO_QUERY", "cnt:spain grp:birds")
+        self.query = getattr(config, "XENOCANTO_QUERY", "cnt:spain+grp:birds")
 
         self._headers = {
             "User-Agent": "ai4birds-ingest-service/1.0 (+contact: air-institute)",
@@ -56,6 +56,9 @@ class XenoCanto_Extractor_Async:
                 "per_page": self.per_page,  # 50..500
                 "page": page,               # 1..numPages
             }
+
+            full_url = str(aiohttp.client.URL(self.BASE_URL).with_query(params))
+            logger.info(f"[XenoCanto] Final request URL: {full_url}")
 
             async with session.get(self.BASE_URL, params=params) as resp:
                 # Explicit 429 handling so tenacity retries
