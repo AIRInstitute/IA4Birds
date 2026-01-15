@@ -14,7 +14,7 @@ class XenoCantoModel:
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
             for rec in xenocanto_data.recordings:
-                recording_values = (rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lng'], rec['alt'], rec['file'], rec['fileName'], rec['time'], rec['date'], rec.get('observationId'))
+                recording_values = (rec['recordingId'], rec['location'], rec['quality'], rec['lat'], rec['lon'], rec['alt'], rec['file'], rec['fileName'], rec['time'], rec['date'], rec.get('observationId'))
                 database.execute(recording_query, recording_values)
 
             database.commit()
@@ -37,7 +37,7 @@ class XenoCantoModel:
                         # Corregir el nombre de clave y realizar conversiones
                         file_name = rec.get('fileName', rec.get('file-name', 'defaultFileName'))  # Soporte para ambos nombres de clave
                         lat = float(rec['lat']) if rec['lat'] else 0.0
-                        lng = float(rec['lng']) if rec['lng'] else 0.0
+                        lng = float(rec['lng']) if rec['lon'] else 0.0
                         alt = int(rec['alt']) if rec['alt'] else 0
 
                         # Añadir a la lista de valores
