@@ -116,7 +116,20 @@ class XenoCanto_Extractor_Async:
                     if page_data:
                         all_data.extend(page_data.get("recordings", []))
 
-            filtered = [r for r in all_data if "Castilla y León" in (r.get("loc") or "")]
+            filtered = [
+                r for r in all_data 
+                if any (
+                    region in (r.get("loc") or "") 
+                    for region in ("Castilla y León", "Castile and León")
+                )
+            ]
+
+            logger.info(f"[XenoCanto] Total records fetched: {len(all_data)}")
+            logger.info(f"[XenoCanto] Records after loc filter: {len(filtered)}")
+
+            if filtered:
+                logger.info(f"[XenoCanto] Example loc: {filtered[0].get('loc')}")
+
             return self._format_results(filtered)
 
     async def _safe_fetch_page(self, session: aiohttp.ClientSession, page: int):
@@ -135,12 +148,16 @@ class XenoCanto_Extractor_Async:
 
         IMPORTANT: parse fields are the same as your v2 code; v3 keeps these fields.
         """
+        logger.info(f"[XenoCanto] Records entering format: {len(data)}")
         species_list = set(config.SPECIES_LIST.values())
         formatted_results = []
+
+        seen_species = set()
 
         for bird in data:
             try:
                 sci_name = f"{bird.get('gen')} {bird.get('sp')}".strip()
+                seen_species.add(sci_name)
                 if sci_name not in species_list:
                     continue
 
@@ -167,4 +184,16 @@ class XenoCanto_Extractor_Async:
             except Exception as e:
                 logger.warning(f"Error formatting bird record: {e} | Record: {bird}")
 
+        logger.info(f"[XenoCanto] Species found in API (sample): {list(seen_species)[:20]}")
+        
+        species_list = set(config.SPECIES_LIST.values())
+
+        logger.info(f"[XenoCanto] SPECIES_LIST contains {len(species_list)} species")
+        logger.info(f"[XenoCanto] SPECIES_LIST sample: {list(species_list)[:20]}")
+
+        intersection = seen_species.intersection(species_list)
+        logger.info(f"[XenoCanto] Species intersection count: {len(intersection)}")
+        logger.info(f"[XenoCanto] Species intersection sample: {list(intersection)[:10]}")
+
+        
         return formatted_results
