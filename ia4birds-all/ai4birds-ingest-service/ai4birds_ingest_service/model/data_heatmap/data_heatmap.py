@@ -34,7 +34,7 @@ class DataHeatmap:
             os.makedirs(config.HEATMAP_PATH, exist_ok=True)
             
             timestamp = datatime.strftime('%Y%m%d_%H%M%S')
-            filename = f"{camera_id}_{timestamp}.png"
+            filename = f"{camera_id}_{timestamp}.jpg"
 
             # Path
             image_abs_path = os.path.join(config.HEATMAP_PATH, filename)
