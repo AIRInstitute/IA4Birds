@@ -149,11 +149,14 @@ def handle_message(client, userdata:Any, msg:Any):
             
                 heatmap_buffer.setdefault(trace_id, {})["metadata"] = json_data
                 heatmap_buffer[trace_id]["time"] = datetime.now()
-
                 logger.info(f"[HEATMAP-METADATA] trace_id={trace_id} received")
+
+                # Intentar procesar si ya está la imagen
+                _try_process_heatmap(trace_id)
+
             except Exception as e:
                 logger.error(f'Error handling heatmap metadata: {e}')
-                return
+            return
 
         # =========================
         # HEATMAP IMAGE
@@ -163,7 +166,7 @@ def handle_message(client, userdata:Any, msg:Any):
                 image_bytes = msg.payload
                 trace_id = None
 
-                for hid in heatmap_buffer.keys():
+                for hid in sorted(heatmap_buffer.keys(), key=lambda x: heatmap_buffer[x].get("time", datetime.min), reverse=True):
                     if "metadata" in heatmap_buffer[hid] and "image" not in heatmap_buffer[hid]:
                         trace_id = hid
                         break
@@ -172,36 +175,41 @@ def handle_message(client, userdata:Any, msg:Any):
                     logger.warning('Heatmap image received withpout matching metadata (trace_id)')
                     return
                 
-                heatmap_buffer.setdefault(trace_id, {})["image"] = image_bytes
+                heatmap_buffer[trace_id]["image"] = image_bytes
                 heatmap_buffer[trace_id]["time"] = datetime.now()
-
                 logger.info(f"[HEATMAP-IMAGE] trace_id={trace_id} received | size={len(image_bytes)} bytes")
+
+                # Intentar procesar
+                _try_process_heatmap(trace_id)
+
             except Exception as e:
                 logger.error(f'Error handling heatmap image: {e}')
-                return
-
-        else:
-            logger.warning(f"No handler found for topic: {topic}")
             return
-
-
-        buffer = heatmap_buffer.get(trace_id, {})
-        if "metadata" in buffer and "image" in buffer:
-            try:
-                obj = DataHeatmap.from_dict(buffer["metadata"], buffer["image"])
-                if obj:
-                    data_heatmap.add(obj)
-                    logger.info(f'[HEATMAP] trace_id={trace_id} added successfully')
-                else:
-                    logger.warning(f'Failed to create DataHeatmap object from payload. | trace_id={trace_id}')
-            except Exception as e:
-                logger.error(f'Error processing heatmap data: | trace_id={trace_id}: {e}')
-                return
-            finally:
-                del heatmap_buffer[trace_id]
+        
+        logger.warning(f"No handler for topic: {topic}")
 
     except Exception as e:
         logger.error(f'Error handling message: {e}')
+
+
+def _try_process_heatmap(trace_id: str):
+    """ Intenta procesar heatmap si tiene metadata + imagen """
+    buffer = heatmap_buffer.get(trace_id, {})
+
+    if "metadata" in buffer and "image" in buffer:
+        try:
+            obj = DataHeatmap.from_dict(buffer["metadata"], buffer["image"])
+            if obj:
+                data_heatmap.add(obj)
+                logger.info(f'[HEATMAP] trace_id={trace_id} processed successfully')
+            else:
+                logger.warning(f'Failed to create DataHeatmap object from payload. | trace_id={trace_id}')
+        except Exception as e:
+            logger.error(f'Error processing heatmap data: | trace_id={trace_id}: {e}')
+        finally:
+            if trace_id in heatmap_buffer:
+                del heatmap_buffer[trace_id]
+
 
 
 def initialize_app(flask_app):
