@@ -112,10 +112,12 @@ def handle_message(client, userdata:Any, msg:Any):
     This function is called when a message is received from the MQTT broker.
     """
     topic = msg.topic
-    heatmap_id = topic.split('/')[-1]
     logger.info(f'Received message from topic: {topic}')
 
     try:
+        # =========================
+        # SEGMENT
+        # =========================
         if topic == config.A4BIRDS_CAMERA_SEGMENT:
             try:
                 payload = msg.payload.decode('utf-8')
@@ -132,47 +134,71 @@ def handle_message(client, userdata:Any, msg:Any):
                 logger.error(f'Error handling segment: {e}')
             return
 
-        elif topic.startswith(config.A4BIRDS_CAMERA_HEATMAP_METADATA_PREFIX):
+        # =========================
+        # HEATMAP METADATA
+        # =========================
+        elif topic.startswith(config.A4BIRDS_CAMERA_HEATMAP_METADATA):
             try:
                 payload = msg.payload.decode('utf-8')
                 json_data = json.loads(payload)
+                trace_id = json_data.get('trace_id')
 
-                heatmap_buffer.setdefault(heatmap_id, {})["metadata"] = json_data
-                heatmap_buffer[heatmap_id]["time"] = datetime.now()
+                if not trace_id:
+                    logger.warning(f'No trace_id found in heatmap metadata')
+                    return
+            
+                heatmap_buffer.setdefault(trace_id, {})["metadata"] = json_data
+                heatmap_buffer[trace_id]["time"] = datetime.now()
+
+                logger.info(f"[HEATMAP-METADATA] trace_id={trace_id} received")
             except Exception as e:
                 logger.error(f'Error handling heatmap metadata: {e}')
                 return
-    
-        elif topic.startswith(config.A4BIRDS_CAMERA_HEATMAP_IMAGE_PREFIX):
-            try:
 
+        # =========================
+        # HEATMAP IMAGE
+        # =========================
+        elif topic.startswith(config.A4BIRDS_CAMERA_HEATMAP_IMAGE):
+            try:
                 image_bytes = msg.payload
+                trace_id = None
+
+                for hid in heatmap_buffer.keys():
+                    if "metadata" in heatmap_buffer[hid] and "image" not in heatmap_buffer[hid]:
+                        trace_id = hid
+                        break
                 
-                heatmap_buffer.setdefault(heatmap_id, {})["image"] = image_bytes
-                heatmap_buffer[heatmap_id]["time"] = datetime.now()
+                if not trace_id:
+                    logger.warning('Heatmap image received withpout matching metadata (trace_id)')
+                    return
+                
+                heatmap_buffer.setdefault(trace_id, {})["image"] = image_bytes
+                heatmap_buffer[trace_id]["time"] = datetime.now()
+
+                logger.info(f"[HEATMAP-IMAGE] trace_id={trace_id} received | size={len(image_bytes)} bytes")
             except Exception as e:
                 logger.error(f'Error handling heatmap image: {e}')
                 return
 
         else:
             logger.warning(f"No handler found for topic: {topic}")
+            return
 
 
-        buffer = heatmap_buffer.get(heatmap_id, {})
+        buffer = heatmap_buffer.get(trace_id, {})
         if "metadata" in buffer and "image" in buffer:
             try:
-                heatmap_data = buffer["metadata"]
-                heatmap_image = buffer["image"]
-                obj = DataHeatmap.from_dict(heatmap_data, heatmap_image)
+                obj = DataHeatmap.from_dict(buffer["metadata"], buffer["image"])
                 if obj:
                     data_heatmap.add(obj)
+                    logger.info(f'[HEATMAP] trace_id={trace_id} added successfully')
                 else:
-                    logger.warning(f'Failed to create DataHeatmap object from payload.')
+                    logger.warning(f'Failed to create DataHeatmap object from payload. | trace_id={trace_id}')
             except Exception as e:
-                logger.error(f'Error handling heatmap data: {e}')
+                logger.error(f'Error processing heatmap data: | trace_id={trace_id}: {e}')
                 return
             finally:
-                del heatmap_buffer[heatmap_id]
+                del heatmap_buffer[trace_id]
 
     except Exception as e:
         logger.error(f'Error handling message: {e}')
