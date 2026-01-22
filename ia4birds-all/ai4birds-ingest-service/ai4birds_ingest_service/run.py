@@ -4,6 +4,7 @@
 # Author: AIRInstitute (@AIRInstitute on GitHub)
 
 import json
+import threading
 from datetime import datetime
 
 #from flask_socketio import SocketIO
@@ -125,11 +126,7 @@ def handle_message(client, userdata:Any, msg:Any):
                 obj = DataSegment.from_dict(json_data)
 
                 if obj:
-                    data_segment.add(obj)
-                    bird_statistics.process_statistics(obj)
-
-                else:
-                    logger.warning(f'Failed to create DataSegment object from payload.')
+                    threading.Thread(target=save_segment_task, args=(obj,), daemon=True).start()
             except Exception as e:
                 logger.error(f'Error handling segment: {e}')
             return
@@ -210,6 +207,13 @@ def _try_process_heatmap(trace_id: str):
             if trace_id in heatmap_buffer:
                 del heatmap_buffer[trace_id]
 
+def save_segment_task(obj):
+    """Función para ejecutar en un hilo separado"""
+    try:
+        data_segment.add(obj)
+        bird_statistics.process_statistics(obj)
+    except Exception as e:
+        logger.error(f"Error en hilo de procesamiento de segmento: {e}")
 
 
 def initialize_app(flask_app):
