@@ -5,6 +5,7 @@
 
 import json
 import threading
+import queue
 from datetime import datetime
 
 #from flask_socketio import SocketIO
@@ -47,6 +48,7 @@ data_heatmap = DataHeatmapModel()
 bird_statistics = BirdStatisticsModel()
 
 heatmap_buffer = {}
+segment_queue = queue.Queue()
 
 # socketio = SocketIO(app)
 
@@ -126,7 +128,7 @@ def handle_message(client, userdata:Any, msg:Any):
                 obj = DataSegment.from_dict(json_data)
 
                 if obj:
-                    threading.Thread(target=save_segment_task, args=(obj,), daemon=True).start()
+                    segment_queue.put(obj)
             except Exception as e:
                 logger.error(f'Error handling segment: {e}')
             return
@@ -190,7 +192,7 @@ def handle_message(client, userdata:Any, msg:Any):
 
 
 def _try_process_heatmap(trace_id: str):
-    """ Intenta procesar heatmap si tiene metadata + imagen """
+    """Attempt to process heatmap if it has metadata + image"""
     buffer = heatmap_buffer.get(trace_id, {})
 
     if "metadata" in buffer and "image" in buffer:
@@ -207,13 +209,20 @@ def _try_process_heatmap(trace_id: str):
             if trace_id in heatmap_buffer:
                 del heatmap_buffer[trace_id]
 
-def save_segment_task(obj):
-    """Función para ejecutar en un hilo separado"""
+def segment_processor_worker():
+    """Thread worker that processes segments and sequentially saves them to the database"""
+    while True:
+        obj = segment_queue.get()
+        if obj is None:
+            break
     try:
         data_segment.add(obj)
         bird_statistics.process_statistics(obj)
+        logger.info(f"Segment processed in worker. Remaining: {segment_queue.qsize()}")
     except Exception as e:
-        logger.error(f"Error en hilo de procesamiento de segmento: {e}")
+        logger.error(f"Error processing segment in worker: {e}")
+    finally:
+        segment_queue.task_done()
 
 
 def initialize_app(flask_app):
@@ -250,6 +259,9 @@ def main():
     # Inicializar SocketIO con la aplicación Flask cors_allowed_origins="*"
     socketio.init_app(app)
     
+    worker_thread = threading.Thread(target=segment_processor_worker, daemon=True)
+    worker_thread.start()
+
     # Ejecutar la aplicación con SocketIO
     socketio.run(app, host=config.HOST, port=config.PORT, debug=config.DEBUG_MODE, allow_unsafe_werkzeug=True)
     print(f'Ejecutado socket')
