@@ -26,9 +26,9 @@ class DataHeatmapModel:
 
         return result
     
-    def fetch_latest(self, id: int) -> object:
+    def fetch_latest(self, camera_id: str) -> object:
         query = """SELECT * FROM heatmap_image WHERE camera_id = %s ORDER BY generated_at DESC LIMIT 1; """
-        values = (id,)
+        values = (camera_id,)
         database = PostgresSingleton.getInstance()
         database.connect()
 
