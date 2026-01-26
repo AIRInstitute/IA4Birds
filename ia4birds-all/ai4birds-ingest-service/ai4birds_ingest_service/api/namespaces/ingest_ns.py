@@ -296,7 +296,8 @@ class HeatmapData(Resource):
             service = DataHeatmapService()
             data, status_code = service.get_latest_heatmap(params['camera_id'])
             return {'heatmap_data': data}, status_code
-        except:
+        except Exception as e:
+            logger.error(f"HeatmapData Error: {e}")
             return handle500error(ns_heatmap_data)
 
 

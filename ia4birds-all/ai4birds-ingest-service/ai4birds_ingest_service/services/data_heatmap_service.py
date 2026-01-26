@@ -41,19 +41,18 @@ class DataHeatmapService:
             return {"error": f"Failed to add data heatmap: {str(e)}"}, 500
     
 
-    def get_latest_heatmap(self, id: int) -> object:
+    def get_latest_heatmap(self, camera_id: str) -> object:
         """Get latest data heatmap by camera_id.
 
         Args:
-            id (int): Camera ID
-
+            camera_id (str): Camera ID
         Returns:
             tuple: Data heatmap and status code
         """
         logger.info("Getting latest data heatmap")
         
         try:
-            data = self.model.fetch_latest(id)
+            data = self.model.fetch_latest(camera_id)
             return (data, 200) if data else ({"error": "No data found"}, 404)
         except Exception as e:
             logger.error(f"Error retrieving latest heatmap data: {e}")
