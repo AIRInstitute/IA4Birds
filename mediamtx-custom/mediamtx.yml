@@ -719,6 +719,8 @@ paths:
   # example:
   # my_camera:
   #   source: rtsp://my_camera
+  camara_air:
+    source: rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp
 
   # Settings under path "all_others" are applied to all paths that
   # do not match another entry.

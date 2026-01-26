@@ -20,9 +20,9 @@ export const getSegmentData = async (req: Request, res: Response) => {
   try {
     const cameraId = getCameraIdFromQuery(req);
     const token = getTokenFromHeader(req);
-    const cacheKey = `coordinate_segment_data_${cameraId}`;
-    const cached = await redis.get(cacheKey);
-    if (cached) return res.status(200).json(JSON.parse(cached));
+    // const cacheKey = `coordinate_segment_data_${cameraId}`;
+    // const cached = await redis.get(cacheKey);
+    // if (cached) return res.status(200).json(JSON.parse(cached));
 
     const url = `${globalConfig.pythonURL}/segment-data?camera_id=${cameraId}`;
     const response = await axios.get(url, {
@@ -31,7 +31,7 @@ export const getSegmentData = async (req: Request, res: Response) => {
 
     console.log("Segment Data Response:", JSON.stringify(response.data, null, 2));
 
-    await redis.set(cacheKey, JSON.stringify(response.data), "EX", 3600);
+    // await redis.set(cacheKey, JSON.stringify(response.data), "EX", 3600);
     return res.status(200).json(response.data);
   } catch (error) {
     console.error("Error getting segment data:", error);
@@ -43,9 +43,9 @@ export const getBirdStatistics = async (req: Request, res: Response) => {
   try {
     const cameraId = getCameraIdFromQuery(req);
     const token = getTokenFromHeader(req);
-    const cacheKey = `coordinate_bird_statistics_${cameraId}`;
-    const cached = await redis.get(cacheKey);
-    if (cached) return res.status(200).json(JSON.parse(cached));
+    // const cacheKey = `coordinate_bird_statistics_${cameraId}`;
+    // const cached = await redis.get(cacheKey);
+    // if (cached) return res.status(200).json(JSON.parse(cached));
 
     const url = `${globalConfig.pythonURL}/bird-statistics/by-camera?camera_id=${cameraId}`;
     const response = await axios.get(url, {
@@ -54,7 +54,7 @@ export const getBirdStatistics = async (req: Request, res: Response) => {
 
     console.log("Bird Statistics Response:", JSON.stringify(response.data, null, 2));
 
-    await redis.set(cacheKey, JSON.stringify(response.data), "EX", 3600);
+    // await redis.set(cacheKey, JSON.stringify(response.data), "EX", 3600);
     return res.status(200).json(response.data);
   } catch (error) {
     console.error("Error getting bird statistics:", error);
@@ -66,9 +66,9 @@ export const getHeatmapData = async (req: Request, res: Response) => {
   try {
     const cameraId = getCameraIdFromQuery(req);
     const token = getTokenFromHeader(req);
-    const cacheKey = `coordinate_heatmap_data_${cameraId}`;
-    const cached = await redis.get(cacheKey);
-    if (cached) return res.status(200).json(JSON.parse(cached));
+    // const cacheKey = `coordinate_heatmap_data_${cameraId}`;
+    // const cached = await redis.get(cacheKey);
+    // if (cached) return res.status(200).json(JSON.parse(cached));
 
     const url = `${globalConfig.pythonURL}/heatmap-data?camera_id=${cameraId}`;
     const response = await axios.get(url, {
@@ -77,7 +77,7 @@ export const getHeatmapData = async (req: Request, res: Response) => {
 
     console.log("Heatmap Data Response:", JSON.stringify(response.data, null, 2));
 
-    await redis.set(cacheKey, JSON.stringify(response.data), "EX", 3600);
+    // await redis.set(cacheKey, JSON.stringify(response.data), "EX", 3600);
     return res.status(200).json(response.data);
   } catch (error) {
     console.error("Error getting heatmap data:", error);
