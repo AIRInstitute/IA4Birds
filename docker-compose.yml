@@ -6,11 +6,8 @@ services:
     env_file:
       - /etc/envs/.env
     volumes:
+      - /etc/ai4birds-db/data:/var/lib/postgresql/data
       - ./data/postgresDB/init.sql:/docker-entrypoint-initdb.d/init.sql
-    # environment:
-    #   - POSTGRES_USER=${POSTGRES_USER}
-    #   - POSTGRES_DB=${POSTGRES_DB}
-    #   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - bird-net
 

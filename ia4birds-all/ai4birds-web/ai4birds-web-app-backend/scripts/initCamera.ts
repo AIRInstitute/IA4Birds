@@ -7,6 +7,8 @@ const insertDefaultCamera = async () => {
   const source_url = "rtsp://root:Airinstitute00@10.189.0.88:10554/axis-media/media.amp";
   const location = "Air Institute";
   const camera_id = "AXIS_Q6225-LE_PTZ";
+  const latitude = "40.9649681";
+  const longitude = "-5.6630253";
 
   try {
     const existing = await Camera.findOne({ where: { name } });
@@ -39,10 +41,10 @@ const insertDefaultCamera = async () => {
       source_type: "RTSP",
       source_url,
       location,
-      status: "pending",
+      status: "active",
       playback_url,
-      latitude: null,
-      longitude: null,
+      latitude,
+      longitude,
       storage_info: null,
       additional_data: null,
       is_public: true,
