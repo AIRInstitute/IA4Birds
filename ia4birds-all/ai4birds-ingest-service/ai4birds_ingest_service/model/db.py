@@ -1,13 +1,11 @@
-#!/usr/bin/python3
-# Copyright 2023 AIRInstitute
-# See LICENSE for details.
-
 import psycopg2
+import threading
 from psycopg2.extras import execute_values
-from ai4birds_ingest_service import config,logger
+from ai4birds_ingest_service import config, logger
 
 class PostgresSingleton:
     __instance = None
+
     def __init__(self):
         self.host = config.DB_CONFIG['host']
         self.port = config.DB_CONFIG['port']
@@ -15,67 +13,100 @@ class PostgresSingleton:
         self.password = config.DB_CONFIG['password']
         self.database = config.DB_CONFIG['database']
 
-
-        # Inicialización de las variables conn y cur para evitar errores de acceso antes de conectar
-        self.conn = None
-        self.cur = None
-
+        # conexión/cursor por hilo
+        self._local = threading.local()
 
     @staticmethod
     def getInstance() -> 'PostgresSingleton':
-        if PostgresSingleton.__instance == None:
+        if PostgresSingleton.__instance is None:
             PostgresSingleton.__instance = PostgresSingleton()
         return PostgresSingleton.__instance
 
+    def _get_conn(self):
+        return getattr(self._local, "conn", None)
+
+    def _get_cur(self):
+        return getattr(self._local, "cur", None)
+
     def connect(self):
         try:
-            if self.conn is None or self.conn.closed:
-                self.conn = psycopg2.connect(
-                    host=self.host, 
-                    port=self.port, 
-                    user=self.user, 
-                    password=self.password, 
+            conn = self._get_conn()
+            if conn is None or conn.closed:
+                conn = psycopg2.connect(
+                    host=self.host,
+                    port=self.port,
+                    user=self.user,
+                    password=self.password,
                     database=self.database
                 )
-                self.cur = self.conn.cursor()
-                logger.info('Database connection established')
+                cur = conn.cursor()
+                self._local.conn = conn
+                self._local.cur = cur
+                logger.info("Database connection established (thread-local)")
             else:
-                logger.info('Reusing existing database connection')
+                # si el cursor se cerró por alguna razón, recrearlo
+                cur = self._get_cur()
+                if cur is None or cur.closed:
+                    self._local.cur = conn.cursor()
+                logger.info("Reusing existing database connection (thread-local)")
         except Exception as e:
-            logger.error(f'Error database connection: {e}')
-            self.conn = None
-            self.cur = None  # Aseguramos que no se usen cursores nulos después
+            logger.error(f"Error database connection: {e}")
+            self._local.conn = None
+            self._local.cur = None
+
+    @property
+    def conn(self):
+        return self._get_conn()
+
+    @property
+    def cur(self):
+        return self._get_cur()
 
     def close(self):
-        self.cur.close()
-        self.conn.close()
+        cur = self._get_cur()
+        conn = self._get_conn()
+        try:
+            if cur and not cur.closed:
+                cur.close()
+        except Exception:
+            pass
+        try:
+            if conn and not conn.closed:
+                conn.close()
+        except Exception:
+            pass
+        self._local.cur = None
+        self._local.conn = None
 
     def execute(self, sql, params=None):
+        self.connect()
         try:
             self.cur.execute(sql, params)
             self.conn.commit()
         except Exception as e:
-            #print("Error executing SQL statement: " + str(e))
-            logger.error(f'Error executing SQL statement: ' + str(e))
+            logger.error(f"Error executing SQL statement: {e}")
+            if self.conn:
+                self.conn.rollback()
+            raise
 
     def executemany(self, sql, params=None):
+        self.connect()
         try:
             self.cur.executemany(sql, params)
             self.conn.commit()
         except Exception as e:
-            #print("Error executingMany SQL statement: " + str(e))
-            logger.error(f'Error executingMany SQL statement: ' + str(e))
+            logger.error(f"Error executingMany SQL statement: {e}")
+            if self.conn:
+                self.conn.rollback()
+            raise
 
     def execute_values(self, sql, data_list, page_size=100):
-        if not self.conn or not self.cur:
-            logger.error('Database connection is not established. Cannot execute query.')
-            raise Exception("Database connection is not established.")
-        
+        self.connect()
         try:
             execute_values(self.cur, sql, data_list, page_size=page_size)
             self.conn.commit()
         except Exception as e:
-            logger.error(f'Error executing Values: {e}')
+            logger.error(f"Error executing Values: {e}")
             if self.conn:
                 self.conn.rollback()
             raise
