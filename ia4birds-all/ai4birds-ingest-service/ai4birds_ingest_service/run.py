@@ -215,14 +215,14 @@ def segment_processor_worker():
         obj = segment_queue.get()
         if obj is None:
             break
-    try:
-        data_segment.add(obj)
-        bird_statistics.process_statistics(obj)
-        logger.info(f"Segment processed in worker. Remaining: {segment_queue.qsize()}")
-    except Exception as e:
-        logger.error(f"Error processing segment in worker: {e}")
-    finally:
-        segment_queue.task_done()
+        try:
+            data_segment.add(obj)
+            bird_statistics.process_statistics(obj)
+            logger.info(f"Segment processed in worker. Remaining: {segment_queue.qsize()}")
+        except Exception as e:
+            logger.error(f"Error processing segment in worker: {e}")
+        finally:
+            segment_queue.task_done()
 
 
 def initialize_app(flask_app):
