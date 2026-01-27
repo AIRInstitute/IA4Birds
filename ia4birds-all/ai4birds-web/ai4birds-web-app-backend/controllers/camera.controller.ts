@@ -198,7 +198,8 @@ const create = async (req: RequestWithSession, res: Response) => {
     });
 
     // MediaMTX config
-    const apiUrl = `${globalConfig.mediamtxApi}/v3/config/paths/add/${name}`;
+    const safeName = encodeURIComponent(name);
+    const apiUrl = `${globalConfig.mediamtxApi}/v3/config/paths/add/${safeName}`;
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
@@ -213,7 +214,7 @@ const create = async (req: RequestWithSession, res: Response) => {
       return res.status(500).json({ error: "Failed to register camera with MediaMTX" });
     }
 
-    const playback_url = `${globalConfig.streamBaseURL}/${name}/index.m3u8`;
+    const playback_url = `${globalConfig.streamBaseURL}/${safeName}/index.m3u8`;
     await camera.update({ playback_url });
 
     return res.status(201).json(camera);
@@ -279,7 +280,8 @@ const remove = async (req: Request, res: Response) => {
     if (!camera) return res.status(404).json({ error: "Camera not found" });
 
     // Eliminar path de MediaMTX
-    const apiUrl = `${globalConfig.mediamtxApi}/v3/config/paths/remove/${camera.name}`;
+    const safeName = encodeURIComponent(camera.name);
+    const apiUrl = `${globalConfig.mediamtxApi}/v3/config/paths/remove/${safeName}`;
     const response = await fetch(apiUrl, {
       method: "DELETE",
       headers: {
