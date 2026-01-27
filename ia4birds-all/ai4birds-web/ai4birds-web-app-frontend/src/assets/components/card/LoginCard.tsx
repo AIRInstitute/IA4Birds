@@ -16,7 +16,6 @@ export const CustomCard = ()=> {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
   
-    const notify = () => toast.success('Inicio de sesión correcto');
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -43,7 +42,8 @@ export const CustomCard = ()=> {
         .then((response) => {
             console.log("RESPONSE: ", response);
             if (response.data.accessToken) {
-                notify();
+                toast.success('Inicio de sesión correcto', {id: 'auth-toast'});
+
                 const userObject = {
                     id: response.data.id,
                     name: response.data.name,

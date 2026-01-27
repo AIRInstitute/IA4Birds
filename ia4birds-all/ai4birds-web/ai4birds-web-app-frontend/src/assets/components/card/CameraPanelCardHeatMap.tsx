@@ -188,7 +188,12 @@ export const CustomCardCameraHeatMap = ({ cameraPanelData, onDelete }) => {
               {heatmapMetadata && (
                 <div className="mt-4 text-sm text-gray-600 text-center max-w-md">
                   <p><strong>Descripción:</strong> {heatmapMetadata.heatmap_for}</p>
-                  <p><strong>Última generación:</strong> {new Date(heatmapMetadata.generated_at).toLocaleString()}</p>
+                  <p><strong>Última generación:</strong> {(() => {
+                      const date = new Date(heatmapMetadata.generated_at);
+                      date.setHours(date.getHours() + 1);
+                      return date.toLocaleString();
+                    })()}
+                  </p>
                 </div>
               )}
             </div>

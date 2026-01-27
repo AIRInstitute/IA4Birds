@@ -243,7 +243,12 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                             <TableCell>{item.camera_id}</TableCell>
                                             <TableCell>{item.bird_name}</TableCell>
                                             <TableCell>{item.count}</TableCell>
-                                            <TableCell>{new Date(item.last_seen).toLocaleString()}</TableCell>
+                                            <TableCell>{(() => {
+                                                const date = new Date(item.last_seen);
+                                                date.setHours(date.getHours() + 1);
+                                                return date.toLocaleString();
+                                            })()}
+                                            </TableCell>
                                             </TableRow>
                                         ))
                                         ) : (
