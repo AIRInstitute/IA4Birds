@@ -37,8 +37,8 @@ function App() {
 
   return (
     <>
-    <Toaster position='top-center'/>
-     <Router>
+    <Router>
+      <Toaster position='top-center'/>
       <HeaderComponent/>
       <Routes>
         <Route path="/" element={<CameraComponent/>}>

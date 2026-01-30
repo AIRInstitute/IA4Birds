@@ -42,6 +42,7 @@ export const CustomCard = ()=> {
         .then((response) => {
             console.log("RESPONSE: ", response);
             if (response.data.accessToken) {
+                toast.dismiss('auth-toast');
                 toast.success('Inicio de sesión correcto', {id: 'auth-toast'});
 
                 const userObject = {
