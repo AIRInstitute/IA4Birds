@@ -19,10 +19,12 @@ CREATE TABLE IF NOT EXISTS observation (
     date TIMESTAMP,
     numObservation INT,
     speciesId INT NULL,
+    subId VARCHAR(255),
     CONSTRAINT fk_species
         FOREIGN KEY (speciesId) 
         REFERENCES species(id)
-        ON DELETE SET NULL
+        ON DELETE SET NULL,
+    CONSTRAINT observation_subid_speciesid_unique UNIQUE (subId, speciesId)
 );
 
 -- Grabaciones
@@ -89,7 +91,7 @@ CREATE TABLE IF NOT EXISTS segment_data (
     average_area FLOAT,
     total_big_birds INT,
     frames JSONB,
-    received_at TIMESTAMP NOT NULL DEFAULT now(),
+    received_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 -- Imágenes de mapas de calor
