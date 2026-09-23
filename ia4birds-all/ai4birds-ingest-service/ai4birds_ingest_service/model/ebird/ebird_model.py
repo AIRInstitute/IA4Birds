@@ -43,44 +43,54 @@ class EBirdModel:
             return False
 
         try:
-            
-            # Preparar los valores para la inserción de especies
-            species_values = [(data.com_name, data.sci_name) for data in ebird_data_list]
-           
+            if not ebird_data_list:
+                return True
+
+            # Insertar especies nuevas (sin duplicados dentro del lote)
+            species_values = list({(data.com_name, data.sci_name) for data in ebird_data_list})
+
             species_query = """
             INSERT INTO species (comName, sciName)
                 VALUES %s
-                    ON CONFLICT (comName, sciName)
-                        DO NOTHING RETURNING id, comName, sciName;
+                    ON CONFLICT (comName, sciName) DO NOTHING;
             """
             database.execute_values(species_query, species_values, page_size=100)
-            
-            species_ids = database.fetchall()
 
-            logger.info(f"Size of species_ids RETURN: {len(species_ids)}")
-            # Crear un mapa de ID de especies basado en comName y sciName
-            species_id_map = {name: id for id, name, _ in species_ids}
+            # RETURNING solo devuelve las filas nuevas: se consultan todas las del lote
+            database.execute(
+                "SELECT id, comName, sciName FROM species WHERE (comName, sciName) IN %s;",
+                (tuple(species_values),))
+            species_id_map = {(com_name, sci_name): id for id, com_name, sci_name in database.fetchall()}
 
             logger.info(f"Size of species_id_map: {len(species_id_map)}")
             # Preparar datos de observaciones para inserción en lotes
             observation_values = []
+            skipped = 0
             for data in ebird_data_list:
                 specie_id = species_id_map.get((data.com_name, data.sci_name))
                 for obs in data.observations:
+                    # (subId, speciesId) identifica la observación; sin ellos no se puede deduplicar
+                    if specie_id is None or not obs.get('subId'):
+                        skipped += 1
+                        continue
                     observation_values.append(
-                        (obs['locationId'], obs['locationName'], obs['lat'], obs['lng'], obs['date'], obs['numObservation'], specie_id))
+                        (obs['locationId'], obs['locationName'], obs['lat'], obs['lng'], obs['date'], obs['numObservation'], specie_id, obs['subId']))
 
-            # Insertar observaciones en lotes
-            
-            observation_query = """
-            INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId)
-                VALUES %s;
-            """
-            database.execute_values(observation_query, observation_values, page_size=100)
-            
+            if skipped:
+                logger.warning(f"Skipped {skipped} observations without speciesId or subId")
+
+            if observation_values:
+                observation_query = """
+                INSERT INTO observation (locationId, locationName, lat, lng, date, numObservation, speciesId, subId)
+                    VALUES %s
+                        ON CONFLICT (subId, speciesId) DO NOTHING;
+                """
+                database.execute_values(observation_query, observation_values, page_size=100)
+
+            logger.info(f"Processed {len(observation_values)} eBird observations (existing ones ignored)")
             return True
         except Exception as e:
-            print(f"Error in add_batch: {e}")
+            logger.error(f"Error in add_batch: {e}")
             database.rollback()
             return False
         finally:

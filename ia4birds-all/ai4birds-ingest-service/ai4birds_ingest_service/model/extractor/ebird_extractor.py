@@ -56,6 +56,7 @@ class EBird_Extractor:
                     "comName": observation['comName'],
                     "observations": [{
                         "obsDt": observation['obsDt'],
+                        "subId": observation.get('subId'),
                         "locationId": observation['locId'],
                         "locationName": observation['locName'],
                         "lat": observation['lat'],
