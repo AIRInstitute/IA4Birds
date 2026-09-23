@@ -173,8 +173,10 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                     <TableColumn>ID Ave</TableColumn>
                                     <TableColumn>Coordenadas</TableColumn>
                                     <TableColumn>Área</TableColumn>
+                                    {/* Oculto temporalmente
                                     <TableColumn>Especie Probable</TableColumn>
                                     <TableColumn>Confianza</TableColumn>
+                                    */}
                                 </TableHeader>
                                 <TableBody>
                                     {paginatedData.map((item, index) => (
@@ -183,6 +185,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                             <TableCell>{item.idAve}</TableCell>
                                             <TableCell>{item.coordenadas}</TableCell>
                                             <TableCell>{item.area}</TableCell>
+                                            {/* Oculto temporalmente
                                             <TableCell className="capitalize">{item.especieProbable}</TableCell>
                                             <TableCell>
                                                 <span
@@ -197,6 +200,7 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                                     {item.confianza}%
                                                 </span>
                                             </TableCell>
+                                            */}
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -234,7 +238,9 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                     <TableColumn>Cámara</TableColumn>
                                     <TableColumn>Nombre Común</TableColumn>
                                     <TableColumn>Detecciones</TableColumn>
+                                    {/* Oculto temporalmente
                                     <TableColumn>Última Detección</TableColumn>
+                                    */}
                                 </TableHeader>
                                 <TableBody>
                                     {paginatedSpeciesStats.length > 0 ? (
@@ -243,17 +249,19 @@ export const CustomCardCameraTable = ({ cameraPanelData, onDelete }) => {
                                             <TableCell>{item.camera_id}</TableCell>
                                             <TableCell>{item.bird_name}</TableCell>
                                             <TableCell>{item.count}</TableCell>
+                                            {/* Oculto temporalmente
                                             <TableCell>{(() => {
                                                 const date = new Date(item.last_seen);
                                                 date.setHours(date.getHours() + 1);
                                                 return date.toLocaleString();
                                             })()}
                                             </TableCell>
+                                            */}
                                             </TableRow>
                                         ))
                                         ) : (
                                         <TableRow className="hover:bg-gray-50 transition">
-                                            <TableCell colSpan={4}>Cargando estadísticas...</TableCell>
+                                            <TableCell colSpan={3}>Cargando estadísticas...</TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
