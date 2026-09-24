@@ -1,3 +1,5 @@
+import asyncio
+
 from ai4birds_ingest_service.model.extractor.ebird_extractor import EBird_Extractor
 from ai4birds_ingest_service.model.ebird.ebird_model import EBirdModel
 from ai4birds_ingest_service.model.ebird.ebird_data import EBirdData
@@ -13,11 +15,12 @@ from .app import celery
 # Extraer datos de eBird y Xenocanto
 @celery.task(name='ai4birds_celery.tasks.extract')
 def extract():
-    try:
-        ebird_extract()
-        xenocanto_extract()
-    except Exception as e:
-        logger.error(f"Error in task: {e}")
+    # Cada fuente por separado: un fallo en eBird no debe impedir la de Xenocanto
+    for extractor in (ebird_extract, xenocanto_extract):
+        try:
+            extractor()
+        except Exception as e:
+            logger.error(f"Error in task {extractor.__name__}: {e}")
     
 def ebird_extract() -> None:
     eb_extractor = EBird_Extractor()
@@ -32,11 +35,19 @@ def ebird_extract() -> None:
         logger.warning("No data found in eBird API.")
 
 def xenocanto_extract() -> None:
-    xc_extractor = XenoCanto_Extractor_Async()
-    xc_model = XenoCantoModel()
+    # El loop debe existir antes de crear el extractor: en Python 3.8 su
+    # asyncio.Semaphore se asocia al loop activo al instanciarse
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        xc_extractor = XenoCanto_Extractor_Async()
+        xc_model = XenoCantoModel()
 
-    logger.info("Fetching Xenocanto data...")
-    data = xc_extractor.xenocanto_query()
+        logger.info("Fetching Xenocanto data...")
+        data = loop.run_until_complete(xc_extractor.xenocanto_query())
+    finally:
+        loop.close()
+        asyncio.set_event_loop(None)
     if data:
         xc_model.add_batch([XenoCantoData.from_dict(item) for item in data])
         logger.info("Successfully stored Xenocanto data in the database.")
