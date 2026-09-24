@@ -1,1 +1,4 @@
 /ia4birds-all/ai4birds-ingest-service/.ia4birds
+
+# Variables de entorno con credenciales (en prod viven en /etc/envs/.env)
+.env
