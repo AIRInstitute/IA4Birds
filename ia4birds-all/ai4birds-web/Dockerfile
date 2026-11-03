@@ -1,4 +1,4 @@
-FROM node:18.12.1-alpine as builder
+FROM node:22.23.4-alpine as builder
 WORKDIR /home/node/app
 
 # Build frontend
@@ -14,7 +14,7 @@ WORKDIR /home/node/app/ai4birds-web-app-backend
 RUN npm install
 RUN npm run build
 
-FROM node:18.12.1-alpine as production
+FROM node:22.23.4-alpine as production
 WORKDIR /home/node/app
 COPY --from=builder /home/node/app/ ./
 
