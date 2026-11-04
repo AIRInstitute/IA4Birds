@@ -10,7 +10,7 @@ jobs:
     name: check out
     runs-on: [self-hosted, linux, x64, prod]  
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v7
 
       - name: Stop old containers except rtsp-stream and nginx-hls (if exist)
         run: sudo docker ps -a --format '{{.ID}} {{.Names}}' | awk '!/rtsp-stream|nginx-hls/ {print $1}' | xargs -r sudo docker stop

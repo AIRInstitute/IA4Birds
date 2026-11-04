@@ -134,25 +134,6 @@ services:
       - bird-net
       - redis-net
 
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    container_name: redis-commander
-    env_file:
-      - /etc/envs/.env
-    environment:
-      REDIS_HOSTS: redis
-      REDIS_HOST: redis
-      REDIS_PORT: redis:6379
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      HTTP_USER: ${REDIS_COMMANDER_USER}
-      HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD}
-    ports:
-      - 8081:8081
-    depends_on:
-      - redis
-    networks:
-      - redis-net
-
   mediamtx:
     build: ./mediamtx-custom
     container_name: mediamtx
